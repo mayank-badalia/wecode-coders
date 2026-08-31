@@ -34,7 +34,14 @@ page.on("console", (m) => {
 
 await page.goto(`http://localhost:3000${route}`, { waitUntil: "networkidle" });
 await page.evaluate(() => document.fonts.ready);
-await page.waitForTimeout(3200); // let any loader finish
+// Wait for the loader to actually clear rather than guessing a delay.
+await page
+  .waitForFunction(() => {
+    const el = document.querySelector(".loader-root");
+    return !el || getComputedStyle(el).display === "none";
+  }, { timeout: 8000 })
+  .catch(() => {});
+await page.waitForTimeout(1600);
 
 const docHeight = await page.evaluate(
   () => document.documentElement.scrollHeight,
