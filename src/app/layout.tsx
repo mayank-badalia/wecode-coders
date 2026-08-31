@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Footer } from "@/components/site/Footer";
 import { Grain } from "@/components/site/Grain";
 import { Grid } from "@/components/site/Grid";
+import { Nav } from "@/components/site/Nav";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { archivo, fraunces, jetbrainsMono } from "@/lib/fonts";
 import "./globals.css";
@@ -22,7 +24,9 @@ export default function RootLayout({
         <MotionProvider>
           <Grain />
           <Grid />
+          <Nav />
           {children}
+          <Footer />
         </MotionProvider>
       </body>
     </html>

@@ -22,6 +22,7 @@ const ALLOWED = [
   "src/components/site/Footer",
   "src/components/site/EventRail",
   "src/components/site/NavOverlay",
+  "src/components/site/Nav",
   "src/components/site/BurstBreak",
   "src/components/site/Timeline",
   "src/components/motion/Transition",
