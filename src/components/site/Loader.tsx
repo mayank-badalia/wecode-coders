@@ -203,29 +203,57 @@ export function Loader() {
           padding: "0 6vw",
         }}
       >
+        {/*
+          Sized to the viewport rather than to a fixed fraction: at min(62vw,
+          70vh) the mark floated small in the middle of a large screen with the
+          construction barely legible. It now fills the measure the way a title
+          page would.
+        */}
         <Logo
           className="loader-logo"
           idPrefix="loader"
           tone="brand"
           decorative
-          style={{ width: "min(62vw, 70vh)", height: "auto" }}
+          style={{ width: "min(82vw, 118vh)", height: "auto" }}
         />
       </div>
 
-      <span
-        className="loader-counter"
+      <div
         style={{
           position: "absolute",
           left: "clamp(1rem, 4vw, 3rem)",
-          bottom: "clamp(1rem, 4vw, 3rem)",
-          fontFamily: "var(--font-mono)",
-          fontSize: "clamp(2rem, 6vw, 4rem)",
+          right: "clamp(1rem, 4vw, 3rem)",
+          bottom: "clamp(1rem, 3.5vw, 2.4rem)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          gap: "1rem",
           color: "var(--blush)",
-          fontVariantNumeric: "tabular-nums",
+          fontFamily: "var(--font-mono)",
         }}
       >
-        00
-      </span>
+        <span
+          className="loader-counter"
+          style={{
+            fontSize: "clamp(1.8rem, 5vw, 3.4rem)",
+            fontVariantNumeric: "tabular-nums",
+            lineHeight: 1,
+          }}
+        >
+          00
+        </span>
+        <span
+          style={{
+            fontSize: "clamp(0.58rem, 0.85vw, 0.72rem)",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            opacity: 0.75,
+            paddingBottom: "0.3em",
+          }}
+        >
+          Independent builder culture — Pune, India
+        </span>
+      </div>
     </div>
   );
 }

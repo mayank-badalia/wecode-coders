@@ -73,10 +73,13 @@ remembered.
 
 ## The 70/30 rule
 
-Violet, pink and lime are only allowed in the burst zones: the loader, the tape
-stack, the transition panel, the nav and its overlay, a full-bleed event card,
-the events page, one block on About, and the footer. Everywhere else is paper,
-ink and terracotta. That ratio *is* the design.
+Blush and acid are only allowed in the burst zones: the loader, the tape stack,
+the transition panel, the nav and its overlay, a full-bleed event card, the
+events page, one block on About, and the footer. Everywhere else is paper, ink
+and signal red. That ratio *is* the design.
+
+Deep ink is deliberately not rationed — it is the dark ground everywhere, and
+it replaced the violet that used to fill those surfaces.
 
 `scripts/check-burst.mjs` fails the build if a burst colour appears anywhere
 else, and it runs as part of `npm run check`. If it flags a file, the question
