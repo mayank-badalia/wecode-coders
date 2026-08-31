@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/site/Footer";
+import { Loader, LOADER_PREPAINT_SCRIPT } from "@/components/site/Loader";
 import { Grain } from "@/components/site/Grain";
 import { Grid } from "@/components/site/Grid";
 import { Nav } from "@/components/site/Nav";
@@ -20,8 +21,12 @@ export default function RootLayout({
       lang="en"
       className={`${fraunces.variable} ${archivo.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: LOADER_PREPAINT_SCRIPT }} />
+      </head>
       <body>
         <MotionProvider>
+          <Loader />
           <Grain />
           <Grid />
           <Nav />

@@ -43,3 +43,12 @@ body {
   background: var(--color-terracotta);
   color: var(--color-paper);
 }
+
+/*
+  Hidden before first paint on a repeat visit or under reduced motion, by the
+  script in the document head. Doing this in CSS rather than in React is what
+  keeps the markup identical on server and client.
+*/
+html[data-wcc-seen="1"] .loader-root {
+  display: none !important;
+}
