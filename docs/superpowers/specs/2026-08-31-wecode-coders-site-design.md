@@ -84,18 +84,19 @@ complete list of burst zones, and there are no others:
 2. Tape marquee stack
 3. Page-transition panel
 4. Event card at >=90% expansion, and event card hover states
-5. The `/events` WebGL page
-6. The single full-bleed interruption block on `/about`
-7. Footer
+5. The nav overlay menu
+6. The `/events` WebGL page
+7. The single full-bleed interruption block on `/about`
+8. Footer
 
 Everything else on every page is paper / ink / terracotta only. This is the
 70/30 split made mechanical.
 
 **Enforcement:** `scripts/check-burst.mjs` greps the component tree for burst
 token usage and fails if it appears outside the allowed files
-(`components/site/{Loader,TapeStack,Footer}`, `components/motion/Transition*`,
-`components/canvas/**`, `components/poster/**`, and the two named blocks in
-`EventRail` and `about`). Wired into CI and the pre-deploy check.
+(`components/site/{Loader,TapeStack,Footer,NavOverlay,BurstBreak,Timeline,EventRail}`,
+`components/motion/Transition*`, `components/canvas/**`, `components/poster/**`,
+`app/about/**`, `app/events/**`). Wired into CI and the pre-deploy check.
 
 ### 4.2 Typography
 
