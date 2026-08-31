@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MotionProvider } from "@/components/motion/MotionProvider";
 import { archivo, fraunces, jetbrainsMono } from "@/lib/fonts";
 import "./globals.css";
 
@@ -15,7 +16,9 @@ export default function RootLayout({
       lang="en"
       className={`${fraunces.variable} ${archivo.variable} ${jetbrainsMono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }
