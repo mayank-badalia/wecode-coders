@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { forwardRef } from "react";
+import { forwardRef, useRef } from "react";
+import { TransitionLink } from "@/components/motion/TransitionLink";
 import { Poster } from "@/components/poster/Poster";
 import { formatEventDate } from "@/lib/format";
 import type { Event } from "@/lib/types";
@@ -17,9 +17,15 @@ import { Arrow } from "./Arrow";
 */
 export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: number; total: number }>(
   function EventRailCard({ event, index, total }, ref) {
+    const card = useRef<HTMLDivElement>(null);
+
     return (
       <div
-        ref={ref}
+        ref={(node) => {
+          card.current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref) ref.current = node;
+        }}
         className="rail-card"
         data-slug={event.slug}
         style={{
@@ -126,8 +132,20 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
               {event.summary}
             </p>
 
-            <Link
+            {/*
+              The panel grows from exactly where the card is at the moment of
+              the click, so entering the event page is physically continuous
+              with the card rather than an unrelated wipe.
+            */}
+            <TransitionLink
               href={`/events/${event.slug}`}
+              label={event.title}
+              getFromRect={() => {
+                const el = card.current;
+                if (!el) return undefined;
+                const r = el.getBoundingClientRect();
+                return { top: r.top, left: r.left, width: r.width, height: r.height };
+              }}
               className="rail-link"
               style={{
                 marginTop: "1.2em",
@@ -146,7 +164,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
             >
               View event
               <Arrow style={{ width: 15, height: 15 }} />
-            </Link>
+            </TransitionLink>
           </div>
         </div>
       </div>

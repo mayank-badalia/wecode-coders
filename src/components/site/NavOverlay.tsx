@@ -1,7 +1,7 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
-import Link from "next/link";
+import { TransitionLink } from "@/components/motion/TransitionLink";
 import { useEffect, useRef } from "react";
 import { gsap } from "@/components/motion/gsap";
 import { useLenis, useReducedMotion } from "@/components/motion/MotionProvider";
@@ -150,8 +150,9 @@ export function NavOverlay({ open, onClose, links }: NavOverlayProps) {
       <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
         {links.map((l) => (
           <li key={l.href} style={{ overflow: "hidden" }}>
-            <Link
+            <TransitionLink
               href={l.href}
+              label={l.label}
               onClick={onClose}
               className="overlay-item"
               style={{
@@ -183,7 +184,7 @@ export function NavOverlay({ open, onClose, links }: NavOverlayProps) {
                 direction="up-right"
                 style={{ width: "0.32em", height: "0.32em", opacity: 0.8 }}
               />
-            </Link>
+            </TransitionLink>
           </li>
         ))}
       </ul>

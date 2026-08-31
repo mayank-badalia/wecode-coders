@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TransitionLink } from "@/components/motion/TransitionLink";
 import { Arrow } from "@/components/site/Arrow";
 
 export default function NotFound() {
@@ -66,9 +66,10 @@ export default function NotFound() {
           { label: "Events", href: "/events" },
           { label: "About", href: "/about" },
         ].map((l) => (
-          <Link
+          <TransitionLink
             key={l.href}
             href={l.href}
+            label={l.label}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -85,7 +86,7 @@ export default function NotFound() {
           >
             {l.label}
             <Arrow style={{ width: 15, height: 15 }} />
-          </Link>
+          </TransitionLink>
         ))}
       </div>
     </main>

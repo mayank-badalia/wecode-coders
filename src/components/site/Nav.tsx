@@ -1,7 +1,7 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
-import Link from "next/link";
+import { TransitionLink } from "@/components/motion/TransitionLink";
 import { useRef, useState } from "react";
 import { gsap, ScrollTrigger, SplitText } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
@@ -65,9 +65,10 @@ function RollLink({
   );
 
   return (
-    <Link
+    <TransitionLink
       ref={root}
       href={href}
+      label={label}
       style={{
         display: "inline-flex",
         alignItems: "baseline",
@@ -112,7 +113,7 @@ function RollLink({
           {label}
         </span>
       </span>
-    </Link>
+    </TransitionLink>
   );
 }
 
@@ -215,8 +216,9 @@ export function Nav() {
           mixBlendMode: "normal",
         }}
       >
-        <Link
+        <TransitionLink
           href="/"
+          label="Home"
           aria-label="We Code Coders, home"
           style={{ position: "relative", display: "block", pointerEvents: "auto", width: 132, height: 44 }}
         >
@@ -236,7 +238,7 @@ export function Nav() {
           >
             <Arrow direction="up-right" strokeWidth={2} style={{ width: "100%", height: "100%" }} />
           </span>
-        </Link>
+        </TransitionLink>
 
         <nav
           aria-label="Primary"

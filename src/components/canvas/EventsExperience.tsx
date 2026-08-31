@@ -2,8 +2,9 @@
 
 import { Canvas, useThree } from "@react-three/fiber";
 import { useGSAP } from "@gsap/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { TransitionLink } from "@/components/motion/TransitionLink";
+import { useTransition } from "@/components/motion/TransitionProvider";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "@/components/motion/gsap";
 import { useLenis, useReducedMotion } from "@/components/motion/MotionProvider";
@@ -85,6 +86,7 @@ function useCanRunWebGL(reduced: boolean) {
 
 export function EventsExperience({ events }: { events: Event[] }) {
   const router = useRouter();
+  const { playExit, isBusy } = useTransition();
   const [focused, setFocused] = useState(0);
   const reduced = useReducedMotion();
   const webgl = useCanRunWebGL(reduced);
@@ -175,7 +177,8 @@ export function EventsExperience({ events }: { events: Event[] }) {
       if ((e.target as HTMLElement | null)?.closest("a")) return;
 
       const target = events[focusedRef.current];
-      if (target) router.push(`/events/${target.slug}`);
+      if (!target || isBusy()) return;
+      void playExit(target.title).then(() => router.push(`/events/${target.slug}`));
     };
 
     el.addEventListener("pointerdown", down);
@@ -188,7 +191,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
       el.removeEventListener("pointerup", up);
       el.removeEventListener("pointercancel", up);
     };
-  }, [webgl, step, events, router]);
+  }, [webgl, step, events, router, playExit, isBusy]);
 
   // Keyboard: arrow keys rotate the ring, so it is operable without a pointer.
   useEffect(() => {
@@ -323,8 +326,9 @@ export function EventsExperience({ events }: { events: Event[] }) {
             readers, so the same destination is offered as an anchor.
           */}
           <div style={{ overflow: "hidden", marginTop: "1.2em" }}>
-            <Link
+            <TransitionLink
               href={`/events/${event.slug}`}
+              label={event.title}
               className="panel-line"
               style={{
                 ...mono,
@@ -340,7 +344,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
             >
               View event
               <Arrow style={{ width: 15, height: 15 }} />
-            </Link>
+            </TransitionLink>
           </div>
         </div>
       )}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { TransitionLink } from "@/components/motion/TransitionLink";
 import { EventsExperience } from "@/components/canvas/EventsExperience";
 import { getAllEvents } from "@/lib/events";
 import { formatEventDate } from "@/lib/format";
@@ -29,10 +29,10 @@ export default function EventsPage() {
         <ul>
           {events.map((e) => (
             <li key={e.slug}>
-              <Link href={`/events/${e.slug}`}>
+              <TransitionLink href={`/events/${e.slug}`} label={e.title}>
                 {e.title} — {formatEventDate(e.startsAt, e.endsAt)}, {e.venue.city}.{" "}
                 {e.summary}
-              </Link>
+              </TransitionLink>
             </li>
           ))}
         </ul>

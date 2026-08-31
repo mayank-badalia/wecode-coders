@@ -1,7 +1,7 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
-import Link from "next/link";
+import { TransitionLink } from "@/components/motion/TransitionLink";
 import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
@@ -131,8 +131,9 @@ export function Footer() {
               { label: "About", href: "/about" },
             ].map((l) => (
               <li key={l.href} style={{ marginBottom: "0.7em" }}>
-                <Link
+                <TransitionLink
                   href={l.href}
+                  label={l.label}
                   style={{
                     color: "inherit",
                     textDecoration: "none",
@@ -143,7 +144,7 @@ export function Footer() {
                 >
                   <Arrow style={{ width: 14, height: 14 }} />
                   {l.label}
-                </Link>
+                </TransitionLink>
               </li>
             ))}
           </ul>

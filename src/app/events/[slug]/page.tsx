@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { TransitionLink } from "@/components/motion/TransitionLink";
 import { notFound } from "next/navigation";
 import { Poster } from "@/components/poster/Poster";
 import { Arrow } from "@/components/site/Arrow";
@@ -271,8 +271,9 @@ export default async function EventPage({ params }: Params) {
               padding: "0 clamp(1.25rem, 2vw, 2rem) clamp(4rem, 12vh, 8rem)",
             }}
           >
-            <Link
+            <TransitionLink
               href={`/events/${next.slug}`}
+              label={next.title}
               style={{
                 display: "block",
                 textDecoration: "none",
@@ -298,7 +299,7 @@ export default async function EventPage({ params }: Params) {
                 {next.title}
                 <Arrow style={{ width: "0.5em", height: "0.5em" }} />
               </span>
-            </Link>
+            </TransitionLink>
           </nav>
         )}
       </article>
