@@ -15,6 +15,18 @@ type PosterProps = {
   event: Event;
   className?: string;
   priority?: boolean;
+  /**
+   * Set false where the surrounding surface already sets the title — the
+   * event rail, for instance, where showing both reads as a duplication
+   * rather than a composition.
+   */
+  showTitle?: boolean;
+  /**
+   * Cover the container instead of holding a 3:4 ratio. The event rail sizes
+   * its cards from scroll position, so their aspect changes continuously and
+   * a fixed ratio leaves a band of bare card showing.
+   */
+  fill?: boolean;
 };
 
 /*
@@ -28,12 +40,21 @@ type PosterProps = {
 
   Setting `posterImage` on an event overrides all of this with a real image.
 */
-export function Poster({ event, className, priority = false }: PosterProps) {
+export function Poster({
+  event,
+  className,
+  priority = false,
+  showTitle = true,
+  fill = false,
+}: PosterProps) {
+  const frame = fill
+    ? ({ position: "absolute", inset: 0 } as const)
+    : ({ position: "relative", aspectRatio: "3 / 4" } as const);
   if (event.posterImage) {
     return (
       <div
         className={`burst ${className ?? ""}`}
-        style={{ position: "relative", aspectRatio: "3 / 4", overflow: "hidden" }}
+        style={{ ...frame, overflow: "hidden" }}
       >
         <Image
           src={event.posterImage}
@@ -84,8 +105,7 @@ export function Poster({ event, className, priority = false }: PosterProps) {
     <div
       className={`burst ${className ?? ""}`}
       style={{
-        position: "relative",
-        aspectRatio: "3 / 4",
+        ...frame,
         overflow: "hidden",
         backgroundColor: ground.bg,
         color: ground.fg,
@@ -143,6 +163,7 @@ export function Poster({ event, className, priority = false }: PosterProps) {
       />
 
       {/* title */}
+      {showTitle ? (
       <h3
         style={{
           position: "relative",
@@ -181,8 +202,10 @@ export function Poster({ event, className, priority = false }: PosterProps) {
           );
         })}
       </h3>
+      ) : null}
 
       {/* metadata */}
+      {showTitle ? (
       <div
         style={{
           position: "relative",
@@ -204,6 +227,7 @@ export function Poster({ event, className, priority = false }: PosterProps) {
           {event.venue.city} — {event.format.replace("-", " ")}
         </span>
       </div>
+      ) : null}
 
       {/* grain */}
       <div

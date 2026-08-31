@@ -1,3 +1,4 @@
+import { EventRail } from "@/components/site/EventRail";
 import { Hero } from "@/components/site/Hero";
 import { Manifesto } from "@/components/site/Manifesto";
 import { TapeStack } from "@/components/site/TapeStack";
@@ -8,7 +9,8 @@ export default function Home() {
       <Hero />
       <TapeStack />
       <Manifesto />
-      {/* Event rail and timeline land next. */}
+      <EventRail />
+      {/* Timeline lands next. */}
     </main>
   );
 }

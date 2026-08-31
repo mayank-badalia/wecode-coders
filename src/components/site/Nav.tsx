@@ -74,6 +74,7 @@ function RollLink({
         gap: "0.5em",
         textDecoration: "none",
         color: "inherit",
+        whiteSpace: "nowrap",
       }}
     >
       <span
@@ -123,29 +124,33 @@ export function Nav() {
   const reduced = useReducedMotion();
 
   /*
-    Nav colour is driven by whichever section is currently under the bar,
-    not by mix-blend-mode: difference.
+    Nav colour is driven by whatever is actually beneath the bar.
 
-    Difference is the usual trick and it is wrong here: over a saturated
-    violet it produces a muddy olive rather than an inversion, because the
-    blend is per-channel arithmetic and not a perceptual flip. Sections opt in
-    with data-nav-theme="dark" and the nav switches to the burst palette,
-    which gives exact, designed colours on every ground.
+    Two techniques were tried and rejected. mix-blend-mode: difference
+    produces a muddy olive over saturated violet rather than an inversion,
+    because the blend is per-channel arithmetic and not a perceptual flip.
+    Pre-positioned ScrollTriggers per section then went stale: they are
+    created at mount, before the event rail's pin exists, so every position
+    below the pin is wrong and the nav latched to the wrong theme.
+
+    Hit-testing the point under the bar is immune to both. It costs one
+    elementsFromPoint per frame and is always correct regardless of pinning,
+    refresh order or dynamically added sections.
   */
   useGSAP(() => {
-    const sections = gsap.utils.toArray<HTMLElement>("[data-nav-theme='dark']");
-    if (sections.length === 0) return;
+    let current = false;
 
-    const triggers = sections.map((section) =>
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top top+=48",
-        end: "bottom top+=48",
-        onToggle: (self) => setOnDark(self.isActive),
-      }),
-    );
+    const sample = () => {
+      const probe = document.elementFromPoint(24, 40);
+      const dark = probe?.closest("[data-nav-theme='dark']") != null;
+      if (dark !== current) {
+        current = dark;
+        setOnDark(dark);
+      }
+    };
 
-    return () => triggers.forEach((t) => t.kill());
+    gsap.ticker.add(sample);
+    return () => gsap.ticker.remove(sample);
   }, []);
 
   useGSAP(
@@ -230,6 +235,7 @@ export function Nav() {
         <nav
           aria-label="Primary"
           style={{
+            whiteSpace: "nowrap",
             display: "flex",
             alignItems: "baseline",
             gap: "clamp(1.2rem, 3vw, 2.6rem)",
@@ -241,9 +247,11 @@ export function Nav() {
             pointerEvents: "auto",
           }}
         >
-          {LINKS.map((l) => (
-            <RollLink key={l.href} {...l} />
-          ))}
+          <span className="nav-links">
+            {LINKS.map((l) => (
+              <RollLink key={l.href} {...l} />
+            ))}
+          </span>
 
           <button
             ref={menuButton}

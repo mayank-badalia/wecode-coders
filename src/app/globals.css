@@ -52,3 +52,70 @@ body {
 html[data-wcc-seen="1"] .loader-root {
   display: none !important;
 }
+
+/*
+  Desktop rail gutter. Set here rather than inline so the touch media query
+  below can override it — an inline padding cannot be overridden by a rule,
+  and the leftover 27vw pushed every stacked card off the right edge on
+  mobile.
+*/
+.rail-track {
+  padding: 0 27vw;
+}
+
+.nav-links {
+  display: inline-flex;
+  gap: inherit;
+  align-items: baseline;
+}
+
+/*
+  Event rail — touch and narrow viewports.
+
+  The desktop rail is a pinned horizontal track. On touch there is no pin and
+  no horizontal translation, so the track has to become a vertical stack;
+  leaving it as a row left five of seven cards off-screen and unreachable.
+  The growth behaviour is unchanged — EventRail feeds vertical distance from
+  the viewport centre through the same railMetrics function.
+
+  Done in CSS rather than JS so the layout is correct on first paint, before
+  any matchMedia callback has run.
+*/
+@media (max-width: 900px), (pointer: coarse) {
+  .rail-section {
+    height: auto;
+    overflow: visible;
+  }
+
+  .rail-viewport {
+    position: relative;
+    inset: auto;
+    overflow: visible;
+  }
+
+  .rail-track {
+    flex-direction: column;
+    align-items: center;
+    padding: 12vh 1rem;
+    gap: 8vh;
+  }
+
+  /*
+    Below this width the two nav labels and the menu button cannot sit on one
+    line; they wrapped and the roll-up hover layers collided into unreadable
+    overlaps. The overlay menu carries both links, so the bar keeps only the
+    mark and the trigger.
+  */
+  .nav-links {
+    display: none;
+  }
+
+  .rail-chrome-top {
+    position: relative;
+    padding-top: 5rem;
+  }
+
+  .rail-progress-bar {
+    display: none;
+  }
+}
