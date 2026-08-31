@@ -1,26 +1,45 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-paper: #f4f1ea;
+  --color-paper-2: #eae5da;
+  --color-ink: #131c33;
+  --color-ink-60: rgba(19, 28, 51, 0.6);
+  --color-terracotta: #d2543f;
+
+  --font-display: var(--font-archivo), "Arial Narrow", Helvetica, sans-serif;
+  --font-editorial: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/*
+  The burst palette is deliberately scoped. Outside a .burst ancestor these
+  custom properties are undefined, so reaching for violet in an editorial
+  section renders an invalid colour and fails visibly in review. This is the
+  70/30 ratio made mechanical rather than left to taste — see spec 4.1, and
+  scripts/check-burst.mjs which enforces the file-level half of the rule.
+*/
+.burst {
+  --violet: #4b3bf0;
+  --pink: #f5c9d0;
+  --lime: #c9f73d;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-editorial);
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-terracotta);
+  color: var(--color-paper);
 }
