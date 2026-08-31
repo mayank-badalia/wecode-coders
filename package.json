@@ -11,7 +11,9 @@
     "test:watch": "vitest",
     "check:burst": "node scripts/check-burst.mjs",
     "check:links": "node scripts/check-links.mjs",
-    "check": "tsc --noEmit && eslint . && vitest run && node scripts/check-burst.mjs"
+    "check": "tsc --noEmit && eslint . && vitest run && node scripts/check-burst.mjs",
+    "filmstrip": "node scripts/filmstrip.mjs",
+    "gen:logo": "node scripts/gen-logo.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

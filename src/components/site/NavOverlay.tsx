@@ -112,6 +112,13 @@ export function NavOverlay({ open, onClose, links }: NavOverlayProps) {
       aria-modal="true"
       aria-label="Site menu"
       aria-hidden={!open}
+      /*
+        Focusable content inside an aria-hidden container is a real defect: a
+        keyboard user tabs into links a screen reader has been told do not
+        exist. inert removes the closed overlay from the tab order and the
+        accessibility tree together.
+      */
+      inert={!open}
       style={{
         position: "fixed",
         inset: 0,

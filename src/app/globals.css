@@ -188,3 +188,36 @@ html[data-wcc-seen="1"] .loader-root {
   color: var(--color-paper);
   z-index: 200;
 }
+
+/*
+  A visible focus ring on everything focusable, without exception.
+
+  Several controls sit on violet and several on paper, so the ring is drawn
+  with currentColor plus a contrasting offset ring — it stays visible on any
+  ground. :focus-visible rather than :focus, so a mouse click does not leave a
+  ring behind.
+*/
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.burst :focus-visible {
+  outline-color: var(--lime);
+}
+
+/*
+  Respect the system setting even for anything not routed through
+  gsap.matchMedia — a belt-and-braces stop for CSS transitions.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
