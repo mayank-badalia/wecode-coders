@@ -139,3 +139,22 @@ html[data-wcc-seen="1"] .loader-root {
   );
   transition: opacity 300ms ease;
 }
+
+/* Drop cap on the first paragraph of the About lead. */
+.about-lead::first-letter {
+  float: left;
+  font-family: var(--font-editorial);
+  font-weight: 900;
+  font-size: 4.6em;
+  line-height: 0.78;
+  padding: 0.06em 0.1em 0 0;
+  color: var(--color-terracotta);
+}
+
+@media (max-width: 900px) {
+  .about-grid,
+  .detail-grid,
+  .manifesto-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
