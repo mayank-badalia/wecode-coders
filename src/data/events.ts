@@ -35,7 +35,7 @@ export const events: Event[] = [
       { label: "Attended", value: "19" },
       { label: "Things shown", value: "11" },
     ],
-    posterSeed: 1017,
+    posterSeed: 1001,
   },
   {
     slug: "build-night-01",
@@ -59,7 +59,7 @@ export const events: Event[] = [
       { label: "Attended", value: "34" },
       { label: "Laptops open", value: "34" },
     ],
-    posterSeed: 2288,
+    posterSeed: 2000,
   },
   {
     slug: "first-light",
@@ -83,7 +83,7 @@ export const events: Event[] = [
       { label: "Projects shown", value: "16" },
       { label: "That actually ran", value: "16" },
     ],
-    posterSeed: 3141,
+    posterSeed: 3000,
   },
   {
     slug: "shaders-at-dawn",
@@ -103,7 +103,7 @@ export const events: Event[] = [
     ],
     forWho: "Anyone comfortable with a for-loop who has never written a shader.",
     tags: ["glsl", "webgl", "graphics", "hands-on"],
-    posterSeed: 4272,
+    posterSeed: 4000,
   },
   {
     slug: "type-and-motion",
@@ -123,7 +123,7 @@ export const events: Event[] = [
     ],
     forWho: "Front-end developers who suspect their work looks generic and cannot say why.",
     tags: ["typography", "motion", "css", "critique"],
-    posterSeed: 5390,
+    posterSeed: 5004,
   },
   {
     slug: "ship-or-sink",
@@ -143,7 +143,7 @@ export const events: Event[] = [
     ],
     forWho: "Anyone who can get something onto the internet in a weekend, or wants to find out if they can.",
     tags: ["hackathon", "36-hours", "deploy-or-bust", "no-judges"],
-    posterSeed: 6428,
+    posterSeed: 6011,
   },
   {
     slug: "no-gatekeepers",
@@ -163,6 +163,6 @@ export const events: Event[] = [
     ],
     forWho: "First-timers especially. Everyone else, on the condition that they help.",
     tags: ["hackathon", "beginner-friendly", "weekend"],
-    posterSeed: 7536,
+    posterSeed: 7003,
   },
 ];
