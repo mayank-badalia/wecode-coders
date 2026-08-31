@@ -72,8 +72,10 @@ export function EventRail() {
           if (detail) gsap.set(detail, { opacity: m.detail });
 
           const link = card.querySelector<HTMLElement>(".rail-link");
-          // An unreadable card must not be clickable.
+          // An unreadable card must not be clickable, and the cursor bubble
+          // must not offer to open it either.
           if (link) link.style.pointerEvents = m.interactive ? "auto" : "none";
+          card.setAttribute("data-cursor-active", m.interactive ? "true" : "false");
 
           // A full-bleed card is a dark ground, so the nav must read light
           // over it. The nav hit-tests for this attribute every frame.
@@ -174,6 +176,7 @@ export function EventRail() {
             if (wash) gsap.set(wash, { opacity: 0.3 + m.wash * 0.45 });
             const link = card.querySelector<HTMLElement>(".rail-link");
             if (link) link.style.pointerEvents = "auto";
+            card.setAttribute("data-cursor-active", "true");
 
             card.classList.toggle("burst", m.interactive);
             if (m.interactive) card.setAttribute("data-nav-theme", "dark");

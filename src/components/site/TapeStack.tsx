@@ -206,6 +206,10 @@ export function TapeStack() {
           <Marquee
             speed={tape.speed}
             direction={tape.direction}
+            // Negative rise sends the content up-and-right as x decreases,
+            // so each tape reads as travelling diagonally from the bottom
+            // left toward the top right rather than sliding flat.
+            rise={tape.direction === 1 ? -0.12 : 0.12}
             style={{
               background: tape.bg,
               color: tape.fg,

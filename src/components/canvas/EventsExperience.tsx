@@ -88,6 +88,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
   const router = useRouter();
   const { playExit, isBusy } = useTransition();
   const [focused, setFocused] = useState(0);
+  const [inside, setInside] = useState(0);
   const reduced = useReducedMotion();
   const webgl = useCanRunWebGL(reduced);
   const stage = useRef<HTMLDivElement>(null);
@@ -137,7 +138,10 @@ export function EventsExperience({ events }: { events: Event[] }) {
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      input.current.scroll += e.deltaY * 0.00055;
+      // Scrolling down carries the posters to the right, scrolling up to the
+      // left — the direction the content travels, not the direction the
+      // wheel turns.
+      input.current.scroll -= e.deltaY * 0.0024;
       requestFrame.current?.();
     };
 
@@ -147,7 +151,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
     };
     const onTouchMove = (e: TouchEvent) => {
       const y = e.touches[0]?.clientY ?? 0;
-      input.current.scroll += (lastTouchY - y) * 0.0016;
+      input.current.scroll -= (lastTouchY - y) * 0.006;
       lastTouchY = y;
       requestFrame.current?.();
     };
@@ -292,6 +296,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
             events={events}
             focused={focused}
             onFocusChange={setFocused}
+            onInsideChange={setInside}
             consumeInput={consumeInput}
           />
         </Canvas>
@@ -412,7 +417,8 @@ export function EventsExperience({ events }: { events: Event[] }) {
           pointerEvents: "none",
         }}
       >
-        Drag or scroll <Arrow style={{ width: 14, height: 14, display: "inline-block", verticalAlign: "middle" }} />
+        {inside > 0.65 ? "You are inside the ring" : "Drag or scroll"}{" "}
+        <Arrow style={{ width: 14, height: 14, display: "inline-block", verticalAlign: "middle" }} />
       </div>
     </div>
   );

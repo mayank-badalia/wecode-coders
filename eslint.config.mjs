@@ -35,6 +35,18 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    /*
+      WebGL scene code drives external GPU resources — shader uniforms, camera
+      transforms, geometry — by mutating them every frame. That is the only way
+      three.js works, and those objects are not React state: nothing renders
+      from them. react-hooks/immutability cannot tell the difference, so it is
+      switched off for the canvas layer only. Everything outside this folder
+      still has it on.
+    */
+    files: ["src/components/canvas/**"],
+    rules: { "react-hooks/immutability": "off" },
+  },
+  {
     // The registration point itself must import gsap directly.
     files: ["src/components/motion/gsap.ts"],
     rules: { "no-restricted-imports": "off" },

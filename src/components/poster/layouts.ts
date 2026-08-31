@@ -30,3 +30,17 @@ export const GRAIN_URL = `data:image/svg+xml;utf8,${encodeURIComponent(
      <rect width="180" height="180" filter="url(#n)"/>
    </svg>`,
 )}`;
+
+import { createRng, pick } from "@/lib/seededRandom";
+import type { Event } from "@/lib/types";
+
+/**
+ * The ground an event's generated poster lands on.
+ *
+ * Draws the first value from the same seeded sequence Poster uses, so hover
+ * states, cursor bubbles and canvas tints all match the poster the visitor is
+ * actually looking at instead of one shared accent.
+ */
+export function groundFor(event: Event): Ground {
+  return pick(createRng(event.posterSeed), GROUNDS);
+}

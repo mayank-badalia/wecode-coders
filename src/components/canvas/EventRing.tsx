@@ -3,32 +3,26 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+import { groundFor } from "@/components/poster/layouts";
+import { posterToCanvas } from "@/components/poster/posterCanvas";
 import { angularDistance, nearestSlot, slotAngle } from "@/lib/ring";
 import type { Event } from "@/lib/types";
-import { posterToCanvas } from "@/components/poster/posterCanvas";
-import { ringFragment, ringVertex } from "./ringShader";
+import { ringFragment, ringVertex, worldFragment, worldVertex } from "./ringShader";
 
-/*
-  The camera sits outside the ring looking in, not at its centre.
+const RADIUS = 3.4;
+/** How much the ring expands once the camera is at its centre. */
+const INSIDE_RADIUS_GAIN = 1.5;
+const PLANE_W = 2.15;
+const PLANE_H = 2.85;
+const SNAP_SPEED = 0.04;
+const TAU = Math.PI * 2;
 
-  From the centre, seven slots sit 51.4deg apart while even an 85deg lens only
-  reaches ~56deg horizontally, so every neighbour fell outside the frustum and
-  the "ring" read as one poster floating in the dark. From outside, the front
-  arc of the cylinder is visible at once and the thing reads as a carousel
-  turning in space, which is what it is.
-*/
-const RADIUS = 3.2;
-const PLANE_W = 2.1;
-const PLANE_H = 2.8;
-export const CAMERA_Z = RADIUS + 4.6;
-const SNAP_SPEED = 0.05;
+/** Where the camera sits before it travels inside. */
+export const CAMERA_Z = RADIUS + 4.9;
 
 export type RingInput = {
-  /** Radians of drag accumulated since the last read. */
   drag: number;
-  /** Radians per second contributed by scroll since the last read. */
   scroll: number;
-  /** Whole slots to advance, from keyboard input. */
   nudge: number;
   dragging: boolean;
 };
@@ -37,13 +31,8 @@ type EventRingProps = {
   events: Event[];
   focused: number;
   onFocusChange: (index: number) => void;
-  /**
-   * Returns the input accumulated since the last call and clears it.
-   *
-   * The ring reads input rather than reaching into refs it does not own —
-   * whoever owns the pointer and scroll listeners owns their state, and this
-   * is the seam between them.
-   */
+  /** Reports 0 outside the ring, 1 once the camera is at its centre. */
+  onInsideChange?: (inside: number) => void;
   consumeInput: () => RingInput;
 };
 
@@ -51,19 +40,24 @@ export function EventRing({
   events,
   focused,
   onFocusChange,
+  onInsideChange,
   consumeInput,
 }: EventRingProps) {
   const group = useRef<THREE.Group>(null);
+  const world = useRef<THREE.Mesh>(null);
   const rotation = useRef(0);
   const velocity = useRef(0);
-  const settling = useRef(false);
-  const { invalidate } = useThree();
+  const settled = useRef(false);
+  const inside = useRef(0);
+  const reportedInside = useRef(-1);
+  const invalidate = useThree((state) => state.invalidate);
 
   const textures = useMemo(
     () =>
       events.map((e) => {
         const tex = new THREE.CanvasTexture(posterToCanvas(e));
         tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 4;
         tex.needsUpdate = true;
         return tex;
       }),
@@ -72,21 +66,41 @@ export function EventRing({
 
   const materials = useMemo(
     () =>
-      textures.map(
-        (tex) =>
-          new THREE.ShaderMaterial({
-            vertexShader: ringVertex,
-            fragmentShader: ringFragment,
-            uniforms: {
-              uTex: { value: tex },
-              uVelocity: { value: 0 },
-              uDistance: { value: 1 },
-              uFocus: { value: 0 },
-              uCurve: { value: 0.05 },
-            },
-          }),
-      ),
-    [textures],
+      textures.map((tex, i) => {
+        const ground = groundFor(events[i]!);
+        return new THREE.ShaderMaterial({
+          vertexShader: ringVertex,
+          fragmentShader: ringFragment,
+          // Double-sided so the posters stay visible once the camera is inside
+          // the ring and looking at their backs.
+          side: THREE.DoubleSide,
+          uniforms: {
+            uTex: { value: tex },
+            uVelocity: { value: 0 },
+            uDistance: { value: 1 },
+            uFocus: { value: 0 },
+            uCurve: { value: 0.05 },
+            uAccent: { value: new THREE.Color(ground.bg) },
+          },
+        });
+      }),
+    [textures, events],
+  );
+
+  const worldMaterial = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        vertexShader: worldVertex,
+        fragmentShader: worldFragment,
+        side: THREE.BackSide,
+        uniforms: {
+          uOffset: { value: 0 },
+          uInside: { value: 0 },
+          uBase: { value: new THREE.Color("#142139") },
+          uLine: { value: new THREE.Color("#F3EFE5") },
+        },
+      }),
+    [],
   );
 
   // Three does not free GPU memory on its own; without this, navigating away
@@ -95,46 +109,108 @@ export function EventRing({
     return () => {
       textures.forEach((t) => t.dispose());
       materials.forEach((m) => m.dispose());
+      worldMaterial.dispose();
     };
-  }, [textures, materials]);
+  }, [textures, materials, worldMaterial]);
 
-  useFrame((_, rawDelta) => {
+  // The camera comes from the frame state rather than from a render-time
+  // capture: it is external scene state the loop drives, not React state.
+  useFrame((state, rawDelta) => {
     const dt = Math.min(rawDelta, 0.05);
     const input = consumeInput();
 
     if (input.dragging) {
       velocity.current = input.drag / Math.max(dt, 0.0001);
       rotation.current += input.drag;
-      settling.current = false;
+      settled.current = false;
     } else {
       velocity.current += input.scroll;
 
-      // A key press is an angular impulse rather than a jump, so the ring
-      // travels to the next slot the same way a flick would. Without this the
-      // ring's own slot detection immediately overwrote any focus set from
-      // outside, and arrow keys did nothing.
       if (input.nudge !== 0) {
-        velocity.current -= input.nudge * 2.6;
-        settling.current = false;
+        velocity.current -= input.nudge * 2.4;
+        settled.current = false;
       }
 
       rotation.current += velocity.current * dt;
-      // Exponential damping, so the coast-down feels the same at any frame rate.
-      velocity.current *= Math.exp(-dt / 0.35);
+      velocity.current *= Math.exp(-dt / 0.4);
 
       if (Math.abs(velocity.current) < SNAP_SPEED) {
-        // Ease to the nearest slot once the spin has decayed.
         const slot = nearestSlot(-rotation.current, events.length);
         const target = -slotAngle(slot, events.length);
-        const turns = Math.round((rotation.current - target) / (Math.PI * 2));
-        const goal = target + turns * Math.PI * 2;
-        rotation.current += (goal - rotation.current) * Math.min(1, dt * 6);
+        const turns = Math.round((rotation.current - target) / TAU);
+        const goal = target + turns * TAU;
+        rotation.current += (goal - rotation.current) * Math.min(1, dt * 5);
         velocity.current *= 0.9;
-        settling.current = true;
+        settled.current = true;
       }
     }
 
-    if (group.current) group.current.rotation.y = rotation.current;
+    if (group.current) {
+      group.current.rotation.y = rotation.current;
+      // Push the posters back as the camera arrives, so standing at the centre
+      // reads as being surrounded rather than as being pinned against them.
+      const scale = 1 + inside.current * (INSIDE_RADIUS_GAIN - 1);
+      group.current.scale.set(scale, 1 + inside.current * 0.12, scale);
+    }
+
+    /*
+      After one full turn the camera travels from outside the ring to its
+      centre, so the posters end up surrounding the visitor — in front, behind
+      and to both sides — rather than always being viewed from the outside.
+      It is driven by accumulated rotation, so it is reversible: scrolling back
+      pulls the camera out again.
+    */
+    /*
+      One full revolution earns the trip inside. Measured, not guessed: at the
+      first gain the ring moved ~0.8 rad per scroll burst, so a visitor needed
+      roughly nineteen bursts to get here and nobody ever would.
+    */
+    const turnsDone = Math.abs(rotation.current) / TAU;
+    const targetInside = Math.min(1, Math.max(0, (turnsDone - 1) / 0.32));
+    inside.current += (targetInside - inside.current) * Math.min(1, dt * 2.4);
+
+    const cam = state.camera as THREE.PerspectiveCamera;
+    cam.position.z = CAMERA_Z * (1 - inside.current) + 0.001;
+    cam.position.y = 0.15 * (1 - inside.current);
+
+    /*
+      Turn to face the focused slot on the way in.
+
+      Slot 0 sits at +Z, which is behind a camera looking down -Z, so arriving
+      at the centre without this put the focused poster at the visitor's back
+      and left a hole where it should have been.
+    */
+    cam.rotation.y = inside.current * Math.PI;
+
+    // And open up the lens: at the outside framing everything within arm's
+    // reach fills the frame as an unreadable slab.
+    const fov = 46 + inside.current * 36;
+    if (Math.abs(cam.fov - fov) > 0.01) {
+      cam.fov = fov;
+      cam.updateProjectionMatrix();
+    }
+
+    worldMaterial.uniforms.uOffset!.value = rotation.current / TAU;
+    worldMaterial.uniforms.uInside!.value = inside.current;
+    if (world.current) world.current.rotation.y = rotation.current * 0.35;
+
+    // Dev-only readout, used to tune the scroll gain and the inside ramp
+    // against measured values rather than guesses.
+    if (process.env.NODE_ENV !== "production") {
+      (window as unknown as Record<string, unknown>).__ring = {
+        rotation: rotation.current,
+        turns: turnsDone,
+        target: targetInside,
+        inside: inside.current,
+        velocity: velocity.current,
+      };
+    }
+
+    const rounded = Math.round(inside.current * 20) / 20;
+    if (rounded !== reportedInside.current) {
+      reportedInside.current = rounded;
+      onInsideChange?.(rounded);
+    }
 
     const slot = nearestSlot(-rotation.current, events.length);
     if (slot !== focused) onFocusChange(slot);
@@ -142,42 +218,44 @@ export function EventRing({
     materials.forEach((mat, i) => {
       const planeAngle = slotAngle(i, events.length);
       const dist = angularDistance(planeAngle, -rotation.current) / Math.PI;
-      mat.uniforms.uDistance!.value = Math.min(1, dist * 2.2);
+      // Inside the ring everything is close, so the falloff is gentler and
+      // the posters behind the visitor stay legible.
+      const spread = 2.2 - inside.current * 1.35;
+      mat.uniforms.uDistance!.value = Math.min(1, dist * spread);
       mat.uniforms.uFocus!.value = i === slot ? 1 : 0;
       mat.uniforms.uVelocity!.value = velocity.current;
     });
 
-    // frameloop is "demand": keep asking for frames only while something moves.
-    if (Math.abs(velocity.current) > 0.001 || !settling.current) invalidate();
+    if (
+      Math.abs(velocity.current) > 0.001 ||
+      !settled.current ||
+      Math.abs(targetInside - inside.current) > 0.001
+    ) {
+      invalidate();
+    }
   });
 
   return (
-    <group ref={group}>
-      {events.map((event, i) => {
-        const angle = slotAngle(i, events.length);
-        /*
-          Slot 0 sits at +Z, nearest the camera, with each plane rotated so its
-          front face points outward along the radius — toward the viewer rather
-          than toward the axis. Facing them inward left the whole ring
-          back-face culled and the canvas rendered empty.
-        */
-        return (
-          <mesh
-            key={event.slug}
-            position={[Math.sin(angle) * RADIUS, 0, Math.cos(angle) * RADIUS]}
-            rotation={[0, angle, 0]}
-            material={materials[i]}
-            onPointerOver={() => {
-              if (i === focused) document.body.style.cursor = "pointer";
-            }}
-            onPointerOut={() => {
-              document.body.style.cursor = "";
-            }}
-          >
-            <planeGeometry args={[PLANE_W, PLANE_H, 24, 1]} />
-          </mesh>
-        );
-      })}
-    </group>
+    <>
+      <mesh ref={world} material={worldMaterial}>
+        <cylinderGeometry args={[26, 26, 34, 64, 1, true]} />
+      </mesh>
+
+      <group ref={group}>
+        {events.map((event, i) => {
+          const angle = slotAngle(i, events.length);
+          return (
+            <mesh
+              key={event.slug}
+              position={[Math.sin(angle) * RADIUS, 0, Math.cos(angle) * RADIUS]}
+              rotation={[0, angle, 0]}
+              material={materials[i]}
+            >
+              <planeGeometry args={[PLANE_W, PLANE_H, 28, 1]} />
+            </mesh>
+          );
+        })}
+      </group>
+    </>
   );
 }

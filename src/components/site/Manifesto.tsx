@@ -2,7 +2,6 @@
 
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
-import { Counter } from "@/components/motion/Counter";
 import { gsap, ScrollTrigger, SplitText } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
 import { getSite } from "@/lib/events";
@@ -300,34 +299,6 @@ export function Manifesto() {
         ))}
       </ul>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-          gap: "clamp(1rem, 4vw, 3rem)",
-          marginTop: "clamp(3.5rem, 10vh, 6rem)",
-          paddingTop: "1.4rem",
-          borderTop: "1px solid var(--color-ink)",
-        }}
-      >
-        {site.stats.map((s) => (
-          <div key={s.label}>
-            <p
-              style={{
-                margin: 0,
-                fontFamily: "var(--font-display)",
-                fontWeight: 700,
-                fontSize: "clamp(2.4rem, 7vw, 5.2rem)",
-                lineHeight: 1,
-                letterSpacing: "-0.02em",
-              }}
-            >
-              <Counter to={Number(s.value)} />
-            </p>
-            <p style={{ ...mono, margin: "0.6em 0 0", color: "var(--color-ink-60)" }}>{s.label}</p>
-          </div>
-        ))}
-      </div>
     </section>
   );
 }

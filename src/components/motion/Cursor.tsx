@@ -31,24 +31,61 @@ export function Cursor() {
 
       let active: Element | null = null;
 
+      const hide = () => {
+        if (!active) return;
+        active = null;
+        gsap.to(el, { scale: 0, autoAlpha: 0, duration: 0.28, ease: "power2.in" });
+      };
+
+      const show = (target: Element) => {
+        active = target;
+        if (label) label.textContent = target.getAttribute("data-cursor") ?? "";
+        // Each event carries its own accent, so the bubble picks up the colour
+        // of the thing being hovered rather than being one flat red everywhere.
+        const accent = target.getAttribute("data-cursor-color");
+        gsap.to(el, {
+          scale: 1,
+          autoAlpha: 1,
+          backgroundColor: accent ?? "var(--color-signal)",
+          color: target.getAttribute("data-cursor-ink") ?? "#F3EFE5",
+          duration: 0.35,
+          ease: "back.out(1.7)",
+        });
+      };
+
       const onMove = (e: PointerEvent) => {
         toX(e.clientX);
         toY(e.clientY);
 
-        const hit = (e.target as Element | null)?.closest("[data-cursor]") ?? null;
-        if (hit === active) return;
-        active = hit;
+        /*
+          Resolved from the point under the pointer rather than from
+          event.target. The rail cards sit under a full-bleed wash and the
+          events canvas swallows the target entirely, so target-based matching
+          left the bubble showing after the pointer had already left.
+        */
+        const under = document.elementFromPoint(e.clientX, e.clientY);
+        const hit = under?.closest("[data-cursor]") ?? null;
 
-        if (hit) {
-          if (label) label.textContent = hit.getAttribute("data-cursor") ?? "";
-          gsap.to(el, { scale: 1, autoAlpha: 1, duration: 0.35, ease: "back.out(1.7)" });
-        } else {
-          gsap.to(el, { scale: 0, autoAlpha: 0, duration: 0.25, ease: "power2.in" });
-        }
+        // An element can opt out while it is not actually interactive.
+        const live = hit && hit.getAttribute("data-cursor-active") !== "false" ? hit : null;
+
+        if (live === active) return;
+        if (live) show(live);
+        else hide();
       };
 
       window.addEventListener("pointermove", onMove, { passive: true });
-      return () => window.removeEventListener("pointermove", onMove);
+      // Leaving the window or tabbing away must not strand the bubble.
+      window.addEventListener("pointerdown", onMove, { passive: true });
+      document.addEventListener("pointerleave", hide);
+      window.addEventListener("blur", hide);
+
+      return () => {
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerdown", onMove);
+        document.removeEventListener("pointerleave", hide);
+        window.removeEventListener("blur", hide);
+      };
     },
     { scope: root, dependencies: [reduced] },
   );

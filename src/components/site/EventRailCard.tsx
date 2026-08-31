@@ -2,6 +2,7 @@
 
 import { forwardRef, useRef } from "react";
 import { TransitionLink } from "@/components/motion/TransitionLink";
+import { groundFor } from "@/components/poster/layouts";
 import { Poster } from "@/components/poster/Poster";
 import { formatEventDate } from "@/lib/format";
 import type { Event } from "@/lib/types";
@@ -18,6 +19,14 @@ import { Arrow } from "./Arrow";
 export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: number; total: number }>(
   function EventRailCard({ event, index, total }, ref) {
     const card = useRef<HTMLDivElement>(null);
+    const ground = groundFor(event);
+
+    const fromRect = () => {
+      const el = card.current;
+      if (!el) return undefined;
+      const r = el.getBoundingClientRect();
+      return { top: r.top, left: r.left, width: r.width, height: r.height };
+    };
 
     return (
       <div
@@ -29,12 +38,20 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
         className="rail-card"
         data-slug={event.slug}
         data-cursor="Open"
+        data-cursor-active="false"
+        data-cursor-color={ground.bg}
+        data-cursor-ink={ground.fg}
         style={{
           position: "relative",
           flexShrink: 0,
           overflow: "hidden",
           borderRadius: 18,
           background: "var(--color-ink)",
+          // Each card carries its own accent so hover states, the cursor
+          // bubble and the wash all match the poster in front of the visitor
+          // rather than sharing one flat colour.
+          ["--card-accent" as string]: ground.bg,
+          ["--card-ink" as string]: ground.fg,
         }}
       >
         <div className="rail-poster" style={{ position: "absolute", inset: 0 }}>
@@ -56,7 +73,22 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
             inset: 0,
             opacity: 0,
             background:
-              "linear-gradient(to top, color-mix(in srgb, #131C33 88%, transparent) 0%, color-mix(in srgb, #131C33 30%, transparent) 55%, transparent 100%)",
+              "linear-gradient(to top, color-mix(in srgb, #142139 90%, transparent) 0%, color-mix(in srgb, #142139 34%, transparent) 58%, transparent 100%)",
+          }}
+        />
+
+        {/* Accent flood, revealed on hover and withdrawn on leave. */}
+        <div
+          className="rail-flood"
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "var(--card-accent)",
+            opacity: 0,
+            mixBlendMode: "multiply",
+            transform: "scaleY(0)",
+            transformOrigin: "bottom center",
           }}
         />
 
@@ -133,28 +165,14 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
               {event.summary}
             </p>
 
-            {/*
-              The panel grows from exactly where the card is at the moment of
-              the click, so entering the event page is physically continuous
-              with the card rather than an unrelated wipe.
-            */}
-            <TransitionLink
-              href={`/events/${event.slug}`}
-              label={event.title}
-              getFromRect={() => {
-                const el = card.current;
-                if (!el) return undefined;
-                const r = el.getBoundingClientRect();
-                return { top: r.top, left: r.left, width: r.width, height: r.height };
-              }}
-              className="rail-link"
+            <span
+              className="rail-cta"
               style={{
                 marginTop: "1.2em",
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "0.6em",
                 color: "var(--color-paper)",
-                textDecoration: "none",
                 fontFamily: "var(--font-mono)",
                 fontSize: "0.78rem",
                 letterSpacing: "0.14em",
@@ -165,9 +183,35 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
             >
               View event
               <Arrow style={{ width: 15, height: 15 }} />
-            </TransitionLink>
+            </span>
           </div>
         </div>
+
+        {/*
+          The whole card is the link, not a small label inside it.
+
+          Only the label was clickable before, so clicking the card — the
+          obvious thing to do — did nothing at all. The panel still grows from
+          the card's exact live rect, so opening an event stays continuous
+          with the card it came from.
+        */}
+        <TransitionLink
+          href={`/events/${event.slug}`}
+          label={event.title}
+          getFromRect={fromRect}
+          className="rail-link"
+          aria-label={`View ${event.title}`}
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 3,
+            display: "block",
+            textIndent: "-9999px",
+            overflow: "hidden",
+          }}
+        >
+          {event.title}
+        </TransitionLink>
       </div>
     );
   },

@@ -1,21 +1,16 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
-import { TransitionLink } from "@/components/motion/TransitionLink";
 import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
+import { TransitionLink } from "@/components/motion/TransitionLink";
 import { getSite } from "@/lib/events";
 import { Arrow } from "./Arrow";
 import { LocalClock } from "./LocalClock";
 import { Logo } from "./Logo";
 
-/*
-  These ids name the letters that CARRY the arrow flourishes — the C of
-  "Code", and the C, R and S of "Coders" — not separate arrow paths. They are
-  full letterforms and must always end up filled; they are only singled out so
-  they can be drawn last, which is what makes the mark feel like it fires shut.
-*/
+/** The letters carrying the arrow flourishes — full letterforms, drawn last. */
 const ARROW_LETTER_IDS = [
   "#footer-top-c-arrow",
   "#footer-bottom-c-arrow",
@@ -23,15 +18,28 @@ const ARROW_LETTER_IDS = [
   "#footer-bottom-s-arrow",
 ];
 
-/*
-  The logo finale belongs to the home page only.
+const LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Events", href: "/events" },
+  { label: "About", href: "/about" },
+];
 
-  Rendered on every route it became a full-screen violet takeover that ended
-  each event and about page — visitors landing on it read the site as broken,
-  because a page of content was followed by a screen of logo. Elsewhere the
-  footer is a compact ink strip.
+const mono: React.CSSProperties = {
+  fontFamily: "var(--font-mono)",
+  fontSize: "clamp(0.62rem, 0.85vw, 0.74rem)",
+  letterSpacing: "0.14em",
+  textTransform: "uppercase",
+};
+
+/*
+  One footer, on every route.
+
+  There used to be two — a full logo finale on home and a compact strip
+  elsewhere — and the strip read as a stray block of links rather than as the
+  end of the page. This is a single closing gesture: the mark draws itself,
+  its letters separate outward, and it settles back as the page ends.
 */
-export function Footer({ finale = false }: { finale?: boolean }) {
+export function Footer() {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const site = getSite();
@@ -45,7 +53,7 @@ export function Footer({ finale = false }: { finale?: boolean }) {
       if (letters.length === 0) return;
 
       if (reduced) {
-        gsap.set(letters, { autoAlpha: 1, drawSVG: "100%" });
+        gsap.set(letters, { autoAlpha: 1, drawSVG: "100%", fillOpacity: 1 });
         return;
       }
 
@@ -54,46 +62,56 @@ export function Footer({ finale = false }: { finale?: boolean }) {
       ).filter((p): p is SVGPathElement => p !== null);
       const plainLetters = letters.filter((l) => !arrowLetters.includes(l));
 
-      // Draw the outline first, then flood the fill, then fire the arrows —
-      // the same three-phase construction the loader uses, so the mark is
-      // built the same way wherever it appears.
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: el, start: "top 85%", once: true },
+        scrollTrigger: { trigger: el, start: "top 88%", once: true },
       });
 
-      tl.set(letters, { fillOpacity: 0, stroke: "var(--blush)", strokeWidth: 2 })
+      tl.set(letters, { fillOpacity: 0, stroke: "var(--color-paper)", strokeWidth: 1.5 })
         .fromTo(
           plainLetters,
           { drawSVG: "0%" },
-          { drawSVG: "100%", duration: 0.9, stagger: { from: "center", amount: 0.5 } },
+          { drawSVG: "100%", duration: 1, stagger: { from: "center", amount: 0.55 } },
         )
-        .to(plainLetters, { fillOpacity: 1, duration: 0.5, stagger: 0.03 }, "-=0.25")
+        .to(plainLetters, { fillOpacity: 1, duration: 0.5, stagger: { each: 0.04, from: "random" } }, "-=0.3")
         .fromTo(
           arrowLetters,
           { drawSVG: "0%" },
-          { drawSVG: "100%", duration: 0.5, ease: "power2.out", stagger: 0.07 },
+          { drawSVG: "100%", duration: 0.55, stagger: 0.07, ease: "power2.out" },
           "-=0.35",
         )
         .to(arrowLetters, { fillOpacity: 1, duration: 0.35, stagger: 0.05 }, "-=0.2")
-        // Every letter ends filled and unstroked — the end state is the plain
-        // wordmark, so nothing depends on the animation having run.
         .to(letters, { strokeWidth: 0, duration: 0.3 }, "-=0.2");
+
+      /*
+        Once the mark is complete the letters push apart and drift back on a
+        slow scrub — the wordmark breathing rather than sitting still. Each
+        letter moves by its own distance from the centre of the mark, so the
+        outer letters travel furthest.
+      */
+      const spread = gsap.timeline({
+        scrollTrigger: { trigger: el, start: "top 70%", end: "bottom bottom", scrub: 1 },
+      });
+
+      letters.forEach((letter, i) => {
+        const centre = (letters.length - 1) / 2;
+        const offset = (i - centre) / centre;
+        spread.to(
+          letter,
+          { xPercent: offset * 9, yPercent: Math.abs(offset) * -4, ease: "none" },
+          0,
+        );
+      });
 
       return () => {
         tl.scrollTrigger?.kill();
         tl.kill();
+        spread.scrollTrigger?.kill();
+        spread.kill();
         ScrollTrigger.refresh();
       };
     },
     { scope: root, dependencies: [reduced] },
   );
-
-  const monoRow = {
-    fontFamily: "var(--font-mono)",
-    fontSize: "0.78rem",
-    letterSpacing: "0.06em",
-    textTransform: "uppercase" as const,
-  };
 
   return (
     <footer
@@ -105,88 +123,80 @@ export function Footer({ finale = false }: { finale?: boolean }) {
         zIndex: 2,
         background: "var(--color-ink)",
         color: "var(--color-paper)",
-        padding: finale
-          ? "clamp(4rem, 10vw, 8rem) clamp(1.25rem, 4vw, 3rem) 0"
-          : "clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 3rem) 0",
+        padding: "clamp(3.5rem, 9vw, 7rem) clamp(1.25rem, 4vw, 3rem) 0",
         overflow: "hidden",
       }}
     >
       <div
         style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "clamp(2rem, 6vw, 6rem)",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1.4fr) minmax(0, 1fr)",
+          gap: "clamp(2rem, 6vw, 5rem)",
+          alignItems: "start",
         }}
+        className="footer-top"
       >
         <p
           style={{
             margin: 0,
             fontFamily: "var(--font-editorial)",
-            fontSize: finale
-              ? "clamp(2rem, 5.5vw, 4.4rem)"
-              : "clamp(1.4rem, 2.8vw, 2.2rem)",
-            lineHeight: 1.02,
+            fontSize: "clamp(1.8rem, 4.4vw, 3.6rem)",
+            lineHeight: 1.04,
             letterSpacing: "-0.02em",
-            maxWidth: "16ch",
+            maxWidth: "18ch",
           }}
         >
           Events end. The work, feedback and people you meet{" "}
           <span style={{ fontStyle: "italic", color: "var(--blush)" }}>should not.</span>
         </p>
 
-        <nav
-          aria-label="Footer"
-          style={{ display: "flex", gap: "clamp(2rem, 5vw, 4rem)", paddingTop: "0.4rem" }}
-        >
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, ...monoRow }}>
-            {[
-              { label: "Events", href: "/events" },
-              { label: "About", href: "/about" },
-            ].map((l) => (
-              <li key={l.href} style={{ marginBottom: "0.7em" }}>
+        <nav aria-label="Footer">
+          <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+            {LINKS.map((l, i) => (
+              <li key={l.href} style={{ borderTop: "1px solid rgba(243,239,229,0.22)" }}>
                 <TransitionLink
                   href={l.href}
                   label={l.label}
+                  className="footer-link"
                   style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "1em",
+                    padding: "0.85em 0",
                     color: "inherit",
                     textDecoration: "none",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.5em",
+                    fontFamily: "var(--font-display)",
+                    fontWeight: 700,
+                    fontSize: "clamp(1.2rem, 2.2vw, 1.9rem)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.01em",
                   }}
                 >
-                  <Arrow style={{ width: 14, height: 14 }} />
-                  {l.label}
+                  <span style={{ display: "inline-flex", alignItems: "baseline", gap: "0.7em" }}>
+                    <span style={{ ...mono, opacity: 0.5, fontSize: "0.55em" }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    {l.label}
+                  </span>
+                  <Arrow direction="up-right" style={{ width: 18, height: 18 }} />
                 </TransitionLink>
               </li>
             ))}
           </ul>
 
-          {/*
-            Rendered only when there are real, reachable URLs to link to. An
-            empty socials array is the correct state today, and this site
-            ships no dead links.
-          */}
           {site.socials.length > 0 && (
-            <ul style={{ listStyle: "none", margin: 0, padding: 0, ...monoRow }}>
-              {site.socials.map((s) => (
-                <li key={s.href} style={{ marginBottom: "0.7em" }}>
+            <ul style={{ listStyle: "none", margin: "1.6rem 0 0", padding: 0, ...mono }}>
+              {site.socials.map((soc) => (
+                <li key={soc.href} style={{ marginBottom: "0.6em" }}>
                   <a
-                    href={s.href}
+                    href={soc.href}
                     target="_blank"
                     rel="noreferrer noopener"
-                    style={{
-                      color: "inherit",
-                      textDecoration: "none",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "0.5em",
-                    }}
+                    style={{ color: "inherit", textDecoration: "none", display: "inline-flex", gap: "0.5em" }}
                   >
-                    <Arrow direction="up-right" style={{ width: 14, height: 14 }} />
-                    {s.label}
+                    <Arrow direction="up-right" style={{ width: 13, height: 13 }} />
+                    {soc.label}
                   </a>
                 </li>
               ))}
@@ -201,11 +211,11 @@ export function Footer({ finale = false }: { finale?: boolean }) {
           justifyContent: "space-between",
           flexWrap: "wrap",
           gap: "1rem",
-          marginTop: "clamp(3rem, 8vw, 6rem)",
-          paddingTop: "1.2rem",
-          borderTop: "1px solid color-mix(in srgb, var(--blush) 35%, transparent)",
-          opacity: 0.85,
-          ...monoRow,
+          marginTop: "clamp(2.5rem, 7vw, 5rem)",
+          paddingTop: "1.1rem",
+          borderTop: "1px solid rgba(243,239,229,0.22)",
+          opacity: 0.75,
+          ...mono,
         }}
       >
         <LocalClock timezone={site.timezone} city={site.city} />
@@ -214,18 +224,12 @@ export function Footer({ finale = false }: { finale?: boolean }) {
         </span>
       </div>
 
-      {/*
-        Bounded even on the home page: at full width the wordmark's height is
-        ~0.67 of the viewport width and swallows the whole screen, leaving the
-        fixed nav illegible over it.
-      */}
       <div
         style={{
-          marginTop: finale ? "clamp(2.5rem, 6vw, 5rem)" : "clamp(1.5rem, 3vw, 2.5rem)",
+          marginTop: "clamp(2rem, 5vw, 3.5rem)",
           paddingBottom: "clamp(1rem, 2.5vw, 2rem)",
-          height: finale ? "min(34vh, 24vw)" : "min(9vh, 7vw)",
           display: "flex",
-          justifyContent: finale ? "center" : "flex-start",
+          justifyContent: "center",
         }}
       >
         <Logo
@@ -233,7 +237,7 @@ export function Footer({ finale = false }: { finale?: boolean }) {
           idPrefix="footer"
           tone="paper"
           decorative
-          style={{ height: "100%", width: "auto" }}
+          style={{ width: "min(96vw, 150vh)", height: "auto" }}
         />
       </div>
     </footer>
