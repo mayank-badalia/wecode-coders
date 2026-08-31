@@ -239,3 +239,20 @@ html[data-wcc-seen="1"] .loader-root {
     scroll-behavior: auto !important;
   }
 }
+
+/* Each belief slides and reddens on hover — a restrained editorial rollover. */
+.about-belief {
+  transition: color 260ms ease;
+}
+
+.about-belief:hover {
+  color: var(--color-signal);
+}
+
+.about-belief > span:last-child {
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-belief:hover > span:last-child {
+  transform: translateX(0.6rem);
+}

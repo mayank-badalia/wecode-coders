@@ -8,15 +8,36 @@ import { useReducedMotion } from "@/components/motion/MotionProvider";
 import { getSite } from "@/lib/events";
 import { Arrow } from "./Arrow";
 
-/*
-  Marginalia. Deliberately not aligned to the main column's baseline grid —
-  print footnotes are not, and the slight misregistration is what makes the
-  page read as typeset rather than laid out in a grid system.
-*/
+const mono: React.CSSProperties = {
+  fontFamily: "var(--font-mono)",
+  fontSize: "clamp(0.62rem, 0.9vw, 0.74rem)",
+  letterSpacing: "0.14em",
+  textTransform: "uppercase",
+};
+
 const NOTES = [
-  { top: "6%", text: "No application. No screening. If you turn up, you are in." },
-  { top: "34%", text: "Every event ends with something that exists in public." },
-  { top: "63%", text: "We do not do prizes. Prizes turn builders into pitch-writers." },
+  "No application form. No screening call. If you turn up, you are in.",
+  "Every event ends with something that exists in public, with your name on it.",
+  "No prizes. Prizes turn builders into pitch-writers.",
+];
+
+/*
+  Three specific ideas, in order: what this is, what it runs, why it differs.
+  A public site should not carry filler in place of an explanation.
+*/
+const COLUMNS = [
+  {
+    label: "What it is",
+    body: "A community that runs events, not a course and not a cohort. Nobody teaches at you. You arrive with something unfinished, you work on it in a room full of people doing the same, and you leave having shown it.",
+  },
+  {
+    label: "What we run",
+    body: "Hackathons with a deadline and a deployed URL at the end. Workshops that start from an empty file. Build nights with no agenda at all. Demo days where the only rule is that it has to actually run.",
+  },
+  {
+    label: "Why it is different",
+    body: "Most events optimise for the people who are already confident. These deliberately do not. Half the places at a beginner event are held for first-timers, and the experienced half know that going in.",
+  },
 ];
 
 export function Manifesto() {
@@ -27,91 +48,115 @@ export function Manifesto() {
   useGSAP(
     () => {
       const el = root.current;
-      if (!el) return;
-      if (reduced) return;
+      if (!el || reduced) return;
 
       const quote = el.querySelector<HTMLElement>(".manifesto-quote");
-      const notes = gsap.utils.toArray<HTMLElement>(".manifesto-note");
       const cleanups: Array<() => void> = [];
 
       if (quote) {
         document.fonts.ready.then(() => {
-          const split = new SplitText(quote, {
-            type: "words,lines",
-            mask: "lines",
-          });
-          const words = split.words;
-          if (!words) return;
+          const split = new SplitText(quote, { type: "words,lines", mask: "lines" });
+          if (!split.words) return;
 
-          const tween = gsap.from(words, {
-            yPercent: 110,
+          const tween = gsap.from(split.words, {
+            yPercent: 112,
             duration: 0.9,
             ease: "wccOut",
-            stagger: 0.03,
-            scrollTrigger: { trigger: quote, start: "top 82%", once: true },
+            stagger: 0.028,
+            scrollTrigger: { trigger: quote, start: "top 84%", once: true },
           });
 
           /*
-            Instrument Serif has no variable axes, so the arrival is carried by
-            colour instead: the quote lands in ink and a signal-red wipe passes
-            through it once, left to right.
+            Each word lands in signal red and settles to ink behind the rest.
+
+            A background-clip: text gradient was tried first and rendered
+            nothing: SplitText re-wraps the text into child spans, which
+            inherit color: transparent but not the parent's background, so the
+            headline disappeared entirely. Animating colour per word survives
+            the split and reads better anyway.
           */
-          const soft = gsap.fromTo(
-            quote,
-            { "--wipe": "0%" },
+          const wipe = gsap.fromTo(
+            split.words,
+            { color: "var(--color-signal)" },
             {
-              "--wipe": "100%",
-              duration: 1.6,
-              ease: "wcc",
-              scrollTrigger: { trigger: quote, start: "top 82%", once: true },
+              color: "var(--color-ink)",
+              duration: 0.9,
+              ease: "power2.out",
+              stagger: 0.045,
+              delay: 0.25,
+              scrollTrigger: { trigger: quote, start: "top 84%", once: true },
             },
           );
 
           cleanups.push(() => {
             tween.scrollTrigger?.kill();
             tween.kill();
-            soft.scrollTrigger?.kill();
-            soft.kill();
+            wipe.scrollTrigger?.kill();
+            wipe.kill();
             split.revert();
           });
         });
       }
 
-      // Each note gets its own trigger at a different start, so they arrive
-      // out of step rather than as one block.
-      notes.forEach((note, i) => {
-        const tween = gsap.from(note, {
-          autoAlpha: 0,
-          y: 18,
-          duration: 0.8,
-          ease: "wccOut",
-          scrollTrigger: { trigger: note, start: `top ${92 - i * 6}%`, once: true },
+      // The column rules draw downward as the section arrives.
+      gsap.utils.toArray<HTMLElement>(".manifesto-rule").forEach((rule, i) => {
+        const t = gsap.from(rule, {
+          scaleY: 0,
+          transformOrigin: "top center",
+          duration: 0.9,
+          ease: "wcc",
+          delay: i * 0.09,
+          scrollTrigger: { trigger: rule, start: "top 88%", once: true },
         });
         cleanups.push(() => {
-          tween.scrollTrigger?.kill();
-          tween.kill();
+          t.scrollTrigger?.kill();
+          t.kill();
         });
       });
 
-      // The grid asserts itself briefly as the section arrives, then recedes.
-      const gridFlare = ScrollTrigger.create({
+      gsap.utils.toArray<HTMLElement>(".manifesto-col").forEach((col, i) => {
+        const t = gsap.from(col, {
+          y: 26,
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: "wccOut",
+          delay: i * 0.08,
+          scrollTrigger: { trigger: col, start: "top 88%", once: true },
+        });
+        cleanups.push(() => {
+          t.scrollTrigger?.kill();
+          t.kill();
+        });
+      });
+
+      gsap.utils.toArray<HTMLElement>(".manifesto-note").forEach((note, i) => {
+        const t = gsap.from(note, {
+          autoAlpha: 0,
+          x: 14,
+          duration: 0.75,
+          ease: "wccOut",
+          scrollTrigger: { trigger: note, start: `top ${92 - i * 5}%`, once: true },
+        });
+        cleanups.push(() => {
+          t.scrollTrigger?.kill();
+          t.kill();
+        });
+      });
+
+      const flare = ScrollTrigger.create({
         trigger: el,
         start: "top 70%",
         once: true,
         onEnter: () => {
           gsap.to(document.documentElement, {
-            "--grid-opacity": 0.45,
+            "--grid-opacity": 0.42,
             duration: 0.4,
             onComplete: () =>
-              gsap.to(document.documentElement, {
-                "--grid-opacity": 0.15,
-                duration: 0.6,
-                delay: 0.2,
-              }),
+              gsap.to(document.documentElement, { "--grid-opacity": 0.14, duration: 0.7, delay: 0.2 }),
           });
         },
       });
-      cleanups.push(() => gridFlare.kill());
+      cleanups.push(() => flare.kill());
 
       return () => cleanups.forEach((fn) => fn());
     },
@@ -129,89 +174,140 @@ export function Manifesto() {
         margin: "0 auto",
       }}
     >
-      <p
+      <div
         style={{
-          margin: "0 0 clamp(2.5rem, 6vh, 4rem)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          gap: "1rem",
           paddingBottom: "1.1rem",
-          borderBottom: "1px solid var(--color-paper-2)",
-          fontFamily: "var(--font-mono)",
-          fontSize: "clamp(0.65rem, 1vw, 0.78rem)",
-          letterSpacing: "0.14em",
-          textTransform: "uppercase",
+          borderBottom: "1px solid var(--color-ink)",
+          ...mono,
           color: "var(--color-ink-60)",
         }}
       >
-        [ 01 ] // What this is
+        <span>[ 01 ] // What this is</span>
+      </div>
+
+      {/*
+        A short, hard-broken headline. The previous version ran a long sentence
+        at display size and split it mid-clause — "a funnel. We" — which is the
+        one thing an editorial layout must not do.
+      */}
+      <p style={{ ...mono, margin: "1.2rem 0 0", color: "var(--color-ink-40)" }}>
+        {site.city}, {site.country} — since {site.foundedYear}
+      </p>
+
+      <blockquote
+        className="manifesto-quote"
+        style={{
+          margin: "clamp(2rem, 6vh, 4rem) 0 0",
+          maxWidth: "18ch",
+          fontFamily: "var(--font-editorial)",
+          fontSize: "clamp(2.6rem, 7.5vw, 6.2rem)",
+          lineHeight: 0.98,
+          letterSpacing: "-0.028em",
+          color: "var(--color-ink)",
+        }}
+      >
+        Not another place to watch people build.
+      </blockquote>
+
+      <p
+        style={{
+          margin: "0.6em 0 0",
+          maxWidth: "20ch",
+          fontFamily: "var(--font-editorial)",
+          fontStyle: "italic",
+          fontSize: "clamp(2rem, 5.4vw, 4.4rem)",
+          lineHeight: 1.02,
+          letterSpacing: "-0.02em",
+          color: "var(--color-ink-40)",
+        }}
+      >
+        A place to build beside them.
       </p>
 
       <div
+        className="manifesto-grid"
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(0, 7fr) minmax(0, 4fr)",
-          gap: "clamp(2rem, 6vw, 6rem)",
-          alignItems: "start",
+          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+          gap: "clamp(1.5rem, 4vw, 3.5rem)",
+          marginTop: "clamp(3.5rem, 10vh, 6rem)",
         }}
-        className="manifesto-grid"
       >
-        <blockquote
-          className="manifesto-quote"
-          style={{
-            margin: 0,
-            fontFamily: "var(--font-editorial)",
-            fontSize: "clamp(1.6rem, 3.6vw, 3.4rem)",
-            fontWeight: 400,
-            lineHeight: 1.12,
-            letterSpacing: "-0.015em",
-            backgroundImage:
-              "linear-gradient(90deg, var(--color-signal) var(--wipe, 0%), var(--color-ink) var(--wipe, 0%))",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            color: "transparent",
-          }}
-        >
-          {site.manifesto[0]}
-        </blockquote>
-
-        <div style={{ position: "relative", minHeight: "100%" }}>
-          {NOTES.map((n) => (
-            <p
-              key={n.text}
-              className="manifesto-note"
+        {COLUMNS.map((col, i) => (
+          <div key={col.label} className="manifesto-col" style={{ position: "relative", paddingLeft: "1.4rem" }}>
+            <span
+              className="manifesto-rule"
+              aria-hidden="true"
               style={{
-                position: "relative",
-                top: n.top,
-                margin: "0 0 2.2em",
-                paddingLeft: "1.6em",
-                fontFamily: "var(--font-mono)",
-                fontSize: "clamp(0.68rem, 0.95vw, 0.8rem)",
-                lineHeight: 1.65,
-                color: "var(--color-ink-60)",
+                position: "absolute",
+                left: 0,
+                top: "0.35em",
+                bottom: "0.2em",
+                width: 1,
+                background: "var(--color-ink-40)",
+              }}
+            />
+            <p style={{ ...mono, margin: 0, color: "var(--color-signal)" }}>
+              {String(i + 1).padStart(2, "0")} — {col.label}
+            </p>
+            <p
+              style={{
+                margin: "0.9em 0 0",
+                fontFamily: "var(--font-body)",
+                fontSize: "clamp(0.92rem, 1.05vw, 1.05rem)",
+                lineHeight: 1.6,
+                color: "var(--color-ink)",
               }}
             >
-              <Arrow
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: "0.35em",
-                  width: 13,
-                  height: 13,
-                  color: "var(--color-signal)",
-                }}
-              />
-              {n.text}
+              {col.body}
             </p>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
+
+      <ul
+        style={{
+          listStyle: "none",
+          margin: "clamp(3rem, 8vh, 5rem) 0 0",
+          padding: "1.4rem 0 0",
+          borderTop: "1px solid var(--color-paper-2)",
+          display: "grid",
+          gap: "0.9em",
+        }}
+      >
+        {NOTES.map((n) => (
+          <li
+            key={n}
+            className="manifesto-note"
+            style={{
+              ...mono,
+              display: "flex",
+              alignItems: "baseline",
+              gap: "0.8em",
+              color: "var(--color-ink-60)",
+              letterSpacing: "0.08em",
+              textTransform: "none",
+              fontSize: "clamp(0.72rem, 0.95vw, 0.85rem)",
+            }}
+          >
+            <Arrow style={{ width: 13, height: 13, color: "var(--color-signal)", flexShrink: 0 }} />
+            {n}
+          </li>
+        ))}
+      </ul>
 
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
           gap: "clamp(1rem, 4vw, 3rem)",
-          marginTop: "clamp(4rem, 12vh, 8rem)",
+          marginTop: "clamp(3.5rem, 10vh, 6rem)",
           paddingTop: "1.4rem",
-          borderTop: "1px solid var(--color-paper-2)",
+          borderTop: "1px solid var(--color-ink)",
         }}
       >
         {site.stats.map((s) => (
@@ -220,25 +316,15 @@ export function Manifesto() {
               style={{
                 margin: 0,
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(2.4rem, 7vw, 5.5rem)",
                 fontWeight: 700,
+                fontSize: "clamp(2.4rem, 7vw, 5.2rem)",
                 lineHeight: 1,
+                letterSpacing: "-0.02em",
               }}
             >
               <Counter to={Number(s.value)} />
             </p>
-            <p
-              style={{
-                margin: "0.6em 0 0",
-                fontFamily: "var(--font-mono)",
-                fontSize: "clamp(0.65rem, 0.9vw, 0.76rem)",
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--color-ink-60)",
-              }}
-            >
-              {s.label}
-            </p>
+            <p style={{ ...mono, margin: "0.6em 0 0", color: "var(--color-ink-60)" }}>{s.label}</p>
           </div>
         ))}
       </div>

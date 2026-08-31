@@ -18,6 +18,22 @@ const mono: React.CSSProperties = {
   color: "var(--color-ink-60)",
 };
 
+const BELIEFS = [
+  "Make before you feel ready.",
+  "Show the process, not the polish.",
+  "Give feedback you would want to receive.",
+  "Leave with something real.",
+];
+
+const DESIGN = [
+  { step: "Brief", detail: "A constraint tight enough to start on the same day you hear it." },
+  { step: "People", detail: "Teams form in the room, mixed by experience on purpose." },
+  { step: "Deadline", detail: "Short enough to force decisions, long enough to finish something." },
+  { step: "Work", detail: "The middle of every event is just people building, together." },
+  { step: "Demonstration", detail: "It runs in front of the room, or it does not go up." },
+  { step: "Proof", detail: "A URL, a repository, a recording. Something that outlives the day." },
+];
+
 /*
   Community timeline. Written as intentions and plans rather than as verified
   achievements — every fact on this site is placeholder until replaced, and
@@ -143,7 +159,147 @@ export default function AboutPage() {
           </aside>
         </section>
 
+        {/* Why it exists */}
+        <section
+          style={{
+            maxWidth: "min(1680px, 92vw)",
+            margin: "clamp(3.5rem, 10vh, 6rem) auto 0",
+            padding: "0 clamp(1.25rem, 2vw, 2rem)",
+          }}
+        >
+          <p style={{ ...mono, margin: "0 0 1.4rem", paddingBottom: "1rem", borderBottom: "1px solid var(--color-ink)" }}>
+            [ 01 ] // Why it exists
+          </p>
+          <div
+            className="about-grid"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
+              gap: "clamp(2rem, 6vw, 5rem)",
+            }}
+          >
+            <p
+              data-reveal
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-editorial)",
+                fontSize: "clamp(1.6rem, 3.4vw, 2.8rem)",
+                lineHeight: 1.12,
+                letterSpacing: "-0.02em",
+                maxWidth: "20ch",
+              }}
+            >
+              Most events are things you{" "}
+              <span style={{ fontStyle: "italic", color: "var(--color-signal)" }}>attend</span>.
+              Very few are things you{" "}
+              <span style={{ fontStyle: "italic", color: "var(--color-signal)" }}>do</span>.
+            </p>
+            <div>
+              <p data-reveal style={{ margin: 0, fontSize: "clamp(0.95rem, 1.1vw, 1.08rem)", lineHeight: 1.65 }}>
+                A workshop where somebody talks for three hours leaves you with notes. A
+                generic online hackathon leaves you with a submission form and a leaderboard
+                you never look at again. Both are easy to run and neither reliably produces
+                anything you would put your name on.
+              </p>
+              <p data-reveal style={{ margin: "1.1em 0 0", fontSize: "clamp(0.95rem, 1.1vw, 1.08rem)", lineHeight: 1.65 }}>
+                We run the other kind. Smaller, in person where possible, with a deadline and
+                a room. The measure of whether an event worked is not how many people came —
+                it is how many left with something that exists.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Beliefs */}
+        <section
+          style={{
+            maxWidth: "min(1680px, 92vw)",
+            margin: "clamp(3.5rem, 10vh, 6rem) auto 0",
+            padding: "0 clamp(1.25rem, 2vw, 2rem)",
+          }}
+        >
+          <p style={{ ...mono, margin: "0 0 1.4rem", paddingBottom: "1rem", borderBottom: "1px solid var(--color-ink)" }}>
+            [ 02 ] // What we believe
+          </p>
+          <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+            {BELIEFS.map((b, i) => (
+              <li
+                key={b}
+                data-reveal
+                className="about-belief"
+                style={{
+                  display: "flex",
+                  alignItems: "baseline",
+                  gap: "clamp(1rem, 3vw, 2.5rem)",
+                  padding: "0.45em 0",
+                  borderBottom: "1px solid var(--color-paper-2)",
+                }}
+              >
+                <span style={{ ...mono, color: "var(--color-signal)" }}>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontWeight: 700,
+                    fontSize: "clamp(1.5rem, 5vw, 3.8rem)",
+                    textTransform: "uppercase",
+                    letterSpacing: "-0.01em",
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {b}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <BurstBreak line={site.tagline} />
+
+        {/* How events are designed */}
+        <section
+          style={{
+            maxWidth: "min(1680px, 92vw)",
+            margin: "0 auto",
+            padding: "0 clamp(1.25rem, 2vw, 2rem)",
+          }}
+        >
+          <p style={{ ...mono, margin: "0 0 2rem", paddingBottom: "1rem", borderBottom: "1px solid var(--color-ink)" }}>
+            [ 03 ] // How an event is designed
+          </p>
+          <ol
+            style={{
+              listStyle: "none",
+              margin: 0,
+              padding: 0,
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
+              gap: "clamp(1.2rem, 3vw, 2.4rem)",
+            }}
+          >
+            {DESIGN.map((d, i) => (
+              <li key={d.step} data-reveal style={{ borderTop: "1px solid var(--color-ink-40)", paddingTop: "0.9rem" }}>
+                <p style={{ ...mono, margin: 0, color: "var(--color-ink-40)" }}>
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <p
+                  style={{
+                    margin: "0.4em 0 0",
+                    fontFamily: "var(--font-editorial)",
+                    fontSize: "clamp(1.3rem, 2.2vw, 1.9rem)",
+                    color: "var(--color-signal)",
+                  }}
+                >
+                  {d.step}
+                </p>
+                <p style={{ margin: "0.4em 0 0", fontSize: "0.92rem", lineHeight: 1.55, color: "var(--color-ink-60)" }}>
+                  {d.detail}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </section>
 
         {/* Story */}
         <section
@@ -153,8 +309,8 @@ export default function AboutPage() {
             padding: "0 clamp(1.25rem, 2vw, 2rem)",
           }}
         >
-          <p style={{ ...mono, margin: "0 0 2rem", paddingBottom: "1rem", borderBottom: "1px solid var(--color-paper-2)" }}>
-            [ 01 ] // How it went
+          <p style={{ ...mono, margin: "0 0 2rem", paddingBottom: "1rem", borderBottom: "1px solid var(--color-ink)" }}>
+            [ 04 ] // How it went
           </p>
 
           <ol style={{ listStyle: "none", margin: 0, padding: 0 }}>
@@ -194,10 +350,10 @@ export default function AboutPage() {
           style={{
             maxWidth: "min(1680px, 92vw)",
             margin: "0 auto",
-            padding: "clamp(4rem, 12vh, 8rem) clamp(1.25rem, 2vw, 2rem) clamp(5rem, 14vh, 9rem)",
+            padding: "clamp(3.5rem, 10vh, 6rem) clamp(1.25rem, 2vw, 2rem) clamp(5rem, 14vh, 9rem)",
           }}
         >
-          <p style={{ ...mono, margin: "0 0 2rem" }}>[ 02 ] // What it looks like</p>
+          <p style={{ ...mono, margin: "0 0 2rem" }}>[ 05 ] // What it looks like</p>
           <div
             className="about-tiles"
             style={{

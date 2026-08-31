@@ -312,10 +312,19 @@ export function EventsExperience({ events }: { events: Event[] }) {
             position: "absolute",
             left: 0,
             bottom: 0,
-            zIndex: 5,
-            maxWidth: "min(46ch, 90vw)",
+            top: 0,
+            zIndex: 6,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+            width: "min(46ch, 46vw)",
             padding: "clamp(1.5rem, 4vw, 3rem)",
             pointerEvents: "none",
+            // A scrim from the left, so the copy reads over whichever poster
+            // happens to be rotating behind it. Without it the title was
+            // clipped mid-word by the neighbouring plane.
+            background:
+              "linear-gradient(90deg, var(--color-ink) 0%, color-mix(in srgb, var(--color-ink) 82%, transparent) 55%, transparent 100%)",
           }}
         >
           <div style={{ overflow: "hidden" }}>

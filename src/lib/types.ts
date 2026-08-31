@@ -23,6 +23,22 @@ export type Event = {
   description: string[];
   forWho: string;
   tags: string[];
+
+  /** Practical facts a visitor needs before deciding. */
+  teamSize: string;
+  eligibility: string;
+  /** The central challenge, in the event's own words. */
+  brief: string;
+  /** What a participant is expected to have at the end. */
+  deliverables: string[];
+  /** Running order. Only rendered when present. */
+  schedule?: { when: string; what: string }[];
+  /** Only the criteria this event actually uses. */
+  judging?: { name: string; detail: string }[];
+  /** What people get out of it beyond the work itself. */
+  rewards?: string[];
+  faq?: { q: string; a: string }[];
+
   stats?: { label: string; value: string }[];
   /** Drives the generative poster. Must be unique per event. */
   posterSeed: number;

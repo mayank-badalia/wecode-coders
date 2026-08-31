@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import {
   createContext,
   useCallback,
@@ -41,8 +42,11 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
   const panel = useRef<HTMLDivElement>(null);
   const linesWrap = useRef<HTMLDivElement>(null);
   const busy = useRef(false);
+  /** Resolves when the exit half has finished covering the screen. */
+  const exiting = useRef<Promise<void> | null>(null);
   const lenis = useLenis();
   const reduced = useReducedMotion();
+  const pathname = usePathname();
 
   const setLabel = useCallback((label: string) => {
     const nodes = linesWrap.current?.querySelectorAll<HTMLElement>(".transition-line");
@@ -63,13 +67,15 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
       const lines = el.querySelectorAll<HTMLElement>(".transition-line");
 
       if (reduced) {
-        return new Promise<void>((resolve) => {
+        const p = new Promise<void>((resolve) => {
           gsap.set(el, { visibility: "visible", clipPath: "none" });
           gsap.fromTo(el, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.15, onComplete: resolve });
         });
+        exiting.current = p;
+        return p;
       }
 
-      return new Promise<void>((resolve) => {
+      const running = new Promise<void>((resolve) => {
         const tl = gsap.timeline({ onComplete: resolve });
 
         gsap.set(el, { visibility: "visible", autoAlpha: 1 });
@@ -119,13 +125,30 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
           0.25,
         );
       });
+
+      exiting.current = running;
+      return running;
     },
     [lenis, reduced, setLabel],
   );
 
-  const playEnter = useCallback(() => {
+  const playEnter = useCallback(async () => {
     const el = panel.current;
     if (!el) return;
+
+    /*
+      Wait for the exit to finish covering the screen before revealing.
+
+      The reveal used to run on template.tsx mounting, and on a route whose
+      page mounts quickly it fired BEFORE the exit had started — it saw the
+      panel still hidden, bailed, and the exit then left the panel covering
+      the page forever. Leaving /events reproduced it every time: the visitor
+      saw the transition play and the destination never appear.
+    */
+    if (exiting.current) {
+      await exiting.current;
+      exiting.current = null;
+    }
 
     // Nothing to reveal if no exit ran — a first load, for instance.
     if (getComputedStyle(el).visibility === "hidden") {
@@ -168,6 +191,18 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     feeling deliberate instead of snapping, without pretending a click
     happened.
   */
+  /*
+    The reveal is driven by the pathname changing, not by a child component
+    mounting. Mount timing varies with how heavy the destination page is;
+    the pathname does not.
+  */
+  const firstPath = useRef(pathname);
+  useEffect(() => {
+    if (firstPath.current === pathname) return;
+    firstPath.current = pathname;
+    void playEnter();
+  }, [pathname, playEnter]);
+
   useEffect(() => {
     const onPop = () => {
       const el = panel.current;

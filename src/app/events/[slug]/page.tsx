@@ -197,70 +197,244 @@ export default async function EventPage({ params }: Params) {
                   borderTop: "1px solid var(--color-paper-2)",
                 }}
               >
-                {event.stats.map((s) => (
-                  <div key={s.label}>
+                {event.stats.map((st) => (
+                  <div key={st.label}>
                     <p
                       style={{
                         margin: 0,
                         fontFamily: "var(--font-display)",
-                        fontSize: "clamp(2rem, 5vw, 3.4rem)",
                         fontWeight: 700,
+                        fontSize: "clamp(2rem, 5vw, 3.4rem)",
                         lineHeight: 1,
                       }}
                     >
-                      {s.value}
+                      {st.value}
                     </p>
-                    <p style={{ ...monoLabel, margin: "0.5em 0 0" }}>{s.label}</p>
+                    <p style={{ ...monoLabel, margin: "0.5em 0 0" }}>{st.label}</p>
                   </div>
                 ))}
               </div>
             )}
+          </div>
+        </div>
 
-            {event.links && event.links.length > 0 && (
-              <ul style={{ listStyle: "none", padding: 0, margin: "2rem 0 0" }}>
-                {event.links.map((l) => (
-                  <li key={l.href} style={{ marginBottom: "0.6em" }}>
-                    <a
-                      href={l.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      style={{ ...monoLabel, color: "var(--color-signal)" }}
-                    >
-                      {l.label}
-                    </a>
+        {/* The brief: the single most important thing on the page. */}
+        <section
+          data-nav-theme="dark"
+          style={{
+            background: "var(--color-ink)",
+            color: "var(--color-paper)",
+            padding: "clamp(3.5rem, 10vh, 7rem) clamp(1.25rem, 4vw, 3rem)",
+          }}
+        >
+          <div style={{ maxWidth: "min(1680px, 92vw)", margin: "0 auto" }}>
+            <p style={{ ...monoLabel, margin: 0, color: "var(--color-paper)", opacity: 0.6 }}>
+              [ Brief ] // What you are being asked to do
+            </p>
+            <p
+              data-reveal
+              style={{
+                margin: "0.6em 0 0",
+                fontFamily: "var(--font-editorial)",
+                fontSize: "clamp(1.7rem, 4.2vw, 3.6rem)",
+                lineHeight: 1.08,
+                letterSpacing: "-0.02em",
+                maxWidth: "22ch",
+              }}
+            >
+              {event.brief}
+            </p>
+
+            <div
+              className="detail-brief-grid"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: "clamp(1.5rem, 4vw, 3rem)",
+                marginTop: "clamp(2.5rem, 7vh, 4rem)",
+                paddingTop: "1.4rem",
+                borderTop: "1px solid rgba(243,239,229,0.25)",
+              }}
+            >
+              <div data-reveal>
+                <p style={{ ...monoLabel, margin: 0, color: "var(--color-paper)", opacity: 0.6 }}>
+                  What you leave with
+                </p>
+                <ul style={{ margin: "0.8em 0 0", paddingLeft: "1.1em", lineHeight: 1.6 }}>
+                  {event.deliverables.map((d) => (
+                    <li key={d} style={{ marginBottom: "0.4em" }}>
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div data-reveal>
+                <p style={{ ...monoLabel, margin: 0, color: "var(--color-paper)", opacity: 0.6 }}>
+                  Team size
+                </p>
+                <p style={{ margin: "0.8em 0 0", lineHeight: 1.6 }}>{event.teamSize}</p>
+              </div>
+              <div data-reveal>
+                <p style={{ ...monoLabel, margin: 0, color: "var(--color-paper)", opacity: 0.6 }}>
+                  Who can come
+                </p>
+                <p style={{ margin: "0.8em 0 0", lineHeight: 1.6 }}>{event.eligibility}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div
+          style={{
+            maxWidth: "min(1680px, 92vw)",
+            margin: "0 auto",
+            padding: "clamp(3.5rem, 10vh, 7rem) clamp(1.25rem, 2vw, 2rem) 0",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "clamp(2.5rem, 6vw, 5rem)",
+            alignItems: "start",
+          }}
+        >
+          {event.schedule && event.schedule.length > 0 && (
+            <section>
+              <p style={{ ...monoLabel, margin: "0 0 1.4rem" }}>[ Schedule ] // How the day runs</p>
+              <ol style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                {event.schedule.map((row) => (
+                  <li
+                    key={row.when + row.what}
+                    data-reveal
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "minmax(0, 0.6fr) minmax(0, 1.4fr)",
+                      gap: "1rem",
+                      padding: "0.9em 0",
+                      borderBottom: "1px solid var(--color-paper-2)",
+                    }}
+                  >
+                    <span style={monoLabel}>{row.when}</span>
+                    <span style={{ lineHeight: 1.55 }}>{row.what}</span>
                   </li>
                 ))}
-              </ul>
+              </ol>
+            </section>
+          )}
+
+          <div>
+            {event.judging && event.judging.length > 0 && (
+              <section style={{ marginBottom: "clamp(2.5rem, 6vh, 4rem)" }}>
+                <p style={{ ...monoLabel, margin: "0 0 1.4rem" }}>[ Judging ]</p>
+                {event.judging.map((j) => (
+                  <div key={j.name} data-reveal style={{ marginBottom: "1.2em" }}>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontFamily: "var(--font-editorial)",
+                        fontSize: "clamp(1.2rem, 2vw, 1.7rem)",
+                        color: "var(--color-signal)",
+                      }}
+                    >
+                      {j.name}
+                    </p>
+                    <p style={{ margin: "0.3em 0 0", lineHeight: 1.6, maxWidth: "52ch" }}>{j.detail}</p>
+                  </div>
+                ))}
+              </section>
             )}
 
-            {/*
-              No signup, no registration — those are not built in this version.
-              Only rendered at all when there is a real social account to point
-              at, because a link to nowhere is a broken link.
-            */}
-            {site.socials.length > 0 && site.socials[0] && (
-              <p data-reveal style={{ marginTop: "clamp(2rem, 6vh, 3.5rem)" }}>
-                <a
-                  href={site.socials[0].href}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  style={{
-                    ...monoLabel,
-                    color: "var(--color-ink)",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.6em",
-                    borderBottom: "1px solid currentColor",
-                    paddingBottom: "0.3em",
-                  }}
-                >
-                  Notify me when the next one drops
-                  <Arrow direction="up-right" style={{ width: 15, height: 15 }} />
-                </a>
-              </p>
+            {event.rewards && event.rewards.length > 0 && (
+              <section>
+                <p style={{ ...monoLabel, margin: "0 0 1.4rem" }}>[ What you get ]</p>
+                <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                  {event.rewards.map((r) => (
+                    <li
+                      key={r}
+                      data-reveal
+                      style={{
+                        display: "flex",
+                        gap: "0.7em",
+                        alignItems: "baseline",
+                        padding: "0.6em 0",
+                        lineHeight: 1.55,
+                      }}
+                    >
+                      <Arrow style={{ width: 13, height: 13, color: "var(--color-signal)", flexShrink: 0 }} />
+                      {r}
+                    </li>
+                  ))}
+                </ul>
+              </section>
             )}
           </div>
         </div>
+
+        {event.faq && event.faq.length > 0 && (
+          <section
+            style={{
+              maxWidth: "min(1680px, 92vw)",
+              margin: "0 auto",
+              padding: "clamp(3.5rem, 10vh, 6rem) clamp(1.25rem, 2vw, 2rem) 0",
+            }}
+          >
+            <p style={{ ...monoLabel, margin: "0 0 1.4rem" }}>[ Questions ]</p>
+            {event.faq.map((row) => (
+              <div
+                key={row.q}
+                data-reveal
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                  gap: "clamp(1rem, 3vw, 2.5rem)",
+                  padding: "1.3em 0",
+                  borderTop: "1px solid var(--color-paper-2)",
+                }}
+              >
+                <p
+                  style={{
+                    margin: 0,
+                    fontFamily: "var(--font-editorial)",
+                    fontSize: "clamp(1.15rem, 1.9vw, 1.6rem)",
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {row.q}
+                </p>
+                <p style={{ margin: 0, lineHeight: 1.6, color: "var(--color-ink-60)" }}>{row.a}</p>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {/*
+          No registration in this version. Rendered only when there is a real
+          social account to point at, because a link to nowhere is a dead link.
+        */}
+        {site.socials.length > 0 && site.socials[0] && (
+          <p
+            style={{
+              maxWidth: "min(1680px, 92vw)",
+              margin: "0 auto",
+              padding: "clamp(2.5rem, 6vh, 4rem) clamp(1.25rem, 2vw, 2rem) 0",
+            }}
+          >
+            <a
+              href={site.socials[0].href}
+              target="_blank"
+              rel="noreferrer noopener"
+              style={{
+                ...monoLabel,
+                color: "var(--color-ink)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.6em",
+                borderBottom: "1px solid currentColor",
+                paddingBottom: "0.3em",
+              }}
+            >
+              Notify me when the next one drops
+              <Arrow direction="up-right" style={{ width: 15, height: 15 }} />
+            </a>
+          </p>
+        )}
 
         {next && (
           <nav
