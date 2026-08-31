@@ -190,6 +190,8 @@ export function Nav() {
 
   return (
     <>
+      {/* Keeps the fixed bar legible where body copy scrolls beneath it. */}
+      <div className="nav-scrim" aria-hidden="true" />
       <header
         ref={root}
         className={onDark ? "burst" : undefined}

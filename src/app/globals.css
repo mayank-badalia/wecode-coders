@@ -119,3 +119,23 @@ html[data-wcc-seen="1"] .loader-root {
     display: none;
   }
 }
+
+/*
+  The nav is fixed, so at some scroll positions it lands on top of body copy.
+  A short gradient scrim keeps it legible without introducing a visible bar.
+  It inherits the page ground, so it is invisible over plain paper and only
+  does work where content runs underneath.
+*/
+.nav-scrim {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 7rem;
+  z-index: 49;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-paper) 82%, transparent),
+    transparent
+  );
+  transition: opacity 300ms ease;
+}
