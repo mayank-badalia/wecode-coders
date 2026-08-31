@@ -2,38 +2,27 @@
 
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
-import { gsap } from "@/components/motion/gsap";
+import { gsap, SplitText } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
 import { Arrow } from "./Arrow";
 
 const STEPS = [
-  {
-    index: "01",
-    now: "You have been meaning to start something for months.",
-    next: "Show up",
-  },
-  {
-    index: "02",
-    now: "You are building alone and it is slower than it should be.",
-    next: "Find your people",
-  },
-  {
-    index: "03",
-    now: "You have ideas, screenshots, and half a repo.",
-    next: "Build something real",
-  },
-  {
-    index: "04",
-    now: "It works on your machine and nowhere else.",
-    next: "Ship it publicly",
-  },
-  {
-    index: "05",
-    now: "Nobody can see what you can actually do.",
-    next: "Leave with proof",
-  },
+  { now: "You have been meaning to start something for months.", next: "Discover a brief" },
+  { now: "The brief is open and the date is on a page like this one.", next: "Choose your event" },
+  { now: "You are building alone and it is slower than it should be.", next: "Find your people" },
+  { now: "You have ideas, screenshots, and half a repo.", next: "Build under a deadline" },
+  { now: "It works on your machine and nowhere else.", next: "Submit the work" },
+  { now: "Nobody has told you what is actually wrong with it.", next: "Present and hear back" },
+  { now: "Nobody can see what you can do.", next: "Leave with proof" },
 ];
 
+/*
+  Inverted from the rest of the home page on purpose.
+
+  The journey is the one section that should feel like a different place — the
+  page turns to ink, the type goes up in scale, and the steps arrive as a
+  numbered ladder rather than as a thin rule with small labels beside it.
+*/
 export function Timeline() {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
@@ -43,44 +32,73 @@ export function Timeline() {
       const el = root.current;
       if (!el || reduced) return;
 
-      const path = el.querySelector<SVGPathElement>(".timeline-spine");
       const cleanups: Array<() => void> = [];
+      const head = el.querySelector<HTMLElement>(".timeline-head");
 
-      if (path) {
-        const draw = gsap.fromTo(
-          path,
-          { drawSVG: "0%" },
-          {
-            drawSVG: "100%",
-            ease: "none",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 65%",
-              end: "bottom 85%",
-              scrub: 0.6,
-            },
-          },
-        );
-        cleanups.push(() => {
-          draw.scrollTrigger?.kill();
-          draw.kill();
+      if (head) {
+        document.fonts.ready.then(() => {
+          const split = new SplitText(head, { type: "words,lines", mask: "lines" });
+          if (!split.words) return;
+          const t = gsap.from(split.words, {
+            yPercent: 115,
+            duration: 0.95,
+            ease: "wccOut",
+            stagger: 0.05,
+            scrollTrigger: { trigger: head, start: "top 82%", once: true },
+          });
+          cleanups.push(() => {
+            t.scrollTrigger?.kill();
+            t.kill();
+            split.revert();
+          });
         });
       }
 
-      // Each node fires on its own geometry rather than at an offset inside a
-      // shared timeline, so a node pops exactly when the drawn line reaches it
-      // at any viewport height.
-      gsap.utils.toArray<HTMLElement>(".timeline-node").forEach((node) => {
-        const cap = node.querySelector(".timeline-cap");
-        const text = node.querySelectorAll(".timeline-reveal");
-
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: node, start: "top 70%", once: true },
+      // The rail fills downward as the visitor descends it.
+      const rail = el.querySelector<HTMLElement>(".timeline-fill");
+      if (rail) {
+        const t = gsap.fromTo(
+          rail,
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            transformOrigin: "top center",
+            ease: "none",
+            scrollTrigger: { trigger: el, start: "top 60%", end: "bottom 75%", scrub: 0.7 },
+          },
+        );
+        cleanups.push(() => {
+          t.scrollTrigger?.kill();
+          t.kill();
         });
-        if (cap) {
-          tl.from(cap, { scale: 0, autoAlpha: 0, duration: 0.5, ease: "back.out(2)" });
-        }
-        tl.from(text, { yPercent: 60, autoAlpha: 0, duration: 0.7, stagger: 0.08 }, "-=0.25");
+      }
+
+      gsap.utils.toArray<HTMLElement>(".timeline-step").forEach((step) => {
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: step, start: "top 78%", once: true },
+        });
+
+        tl.from(step.querySelector(".timeline-num"), {
+          xPercent: -40,
+          autoAlpha: 0,
+          duration: 0.6,
+          ease: "wccOut",
+        })
+          .from(
+            step.querySelector(".timeline-next"),
+            { yPercent: 60, autoAlpha: 0, duration: 0.8, ease: "wccOut" },
+            "-=0.4",
+          )
+          .from(
+            step.querySelector(".timeline-now"),
+            { autoAlpha: 0, y: 12, duration: 0.6 },
+            "-=0.5",
+          )
+          .from(
+            step.querySelector(".timeline-dot"),
+            { scale: 0, duration: 0.5, ease: "back.out(2.4)" },
+            "-=0.6",
+          );
 
         cleanups.push(() => {
           tl.scrollTrigger?.kill();
@@ -96,152 +114,170 @@ export function Timeline() {
   return (
     <section
       ref={root}
+      className="burst"
+      data-nav-theme="dark"
       style={{
         position: "relative",
         zIndex: 2,
-        padding: "clamp(5rem, 14vh, 10rem) clamp(1.25rem, 4vw, 3rem) 0",
-        maxWidth: "min(1680px, 92vw)",
-        margin: "0 auto",
+        background: "var(--color-ink)",
+        color: "var(--color-paper)",
+        padding: "clamp(5rem, 14vh, 9rem) clamp(1.25rem, 4vw, 3rem) clamp(4rem, 10vh, 7rem)",
+        overflow: "hidden",
       }}
     >
-      <p
+      {/* Halftone, so the ink ground is not a flat slab. */}
+      <div
+        aria-hidden="true"
         style={{
-          margin: "0 0 clamp(3rem, 8vh, 5rem)",
-          paddingBottom: "1.1rem",
-          borderBottom: "1px solid var(--color-paper-2)",
-          fontFamily: "var(--font-mono)",
-          fontSize: "clamp(0.65rem, 1vw, 0.78rem)",
-          letterSpacing: "0.14em",
-          textTransform: "uppercase",
-          color: "var(--color-ink-60)",
+          position: "absolute",
+          inset: 0,
+          opacity: 0.14,
+          backgroundImage: "radial-gradient(circle, var(--blush) 1px, transparent 1px)",
+          backgroundSize: "16px 16px",
         }}
-      >
-        [ 03 ] // Where you are, and where you go
-      </p>
+      />
 
-      <div style={{ position: "relative" }}>
-        {/*
-          The spine. A gentle S rather than a straight rule, and its stroke is
-          a gradient because a plain stroke tween cannot express a colour that
-          changes along the path.
-        */}
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 100 1000"
-          preserveAspectRatio="none"
+      <div style={{ position: "relative", maxWidth: "min(1680px, 92vw)", margin: "0 auto" }}>
+        <p
           style={{
-            position: "absolute",
-            left: "50%",
-            top: 0,
-            width: 120,
-            height: "100%",
-            transform: "translateX(-50%)",
-            overflow: "visible",
-            pointerEvents: "none",
+            margin: 0,
+            paddingBottom: "1.1rem",
+            borderBottom: "1px solid rgba(243,239,229,0.25)",
+            fontFamily: "var(--font-mono)",
+            fontSize: "clamp(0.62rem, 0.9vw, 0.74rem)",
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            opacity: 0.6,
           }}
         >
-          <defs>
-            <linearGradient id="timeline-gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#131C33" />
-              <stop offset="0.5" stopColor="#D2543F" />
-              <stop offset="1" stopColor="#4B3BF0" />
-            </linearGradient>
-          </defs>
-          <path
-            className="timeline-spine"
-            d="M50 0 C 78 140, 22 260, 50 400 C 78 540, 22 660, 50 800 C 68 900, 44 950, 50 1000"
-            fill="none"
-            stroke="url(#timeline-gradient)"
-            strokeWidth="2"
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
+          [ 03 ] // The journey
+        </p>
 
-        {STEPS.map((step, i) => (
-          <div
-            key={step.index}
-            className="timeline-node"
+        <h2
+          className="timeline-head"
+          style={{
+            margin: "clamp(2rem, 6vh, 3.5rem) 0 clamp(3rem, 9vh, 5rem)",
+            fontFamily: "var(--font-editorial)",
+            fontSize: "clamp(2.6rem, 8vw, 6.4rem)",
+            lineHeight: 0.98,
+            letterSpacing: "-0.028em",
+            maxWidth: "14ch",
+          }}
+        >
+          You are here.{" "}
+          <span style={{ fontStyle: "italic", color: "var(--blush)" }}>
+            Where will you leave?
+          </span>
+        </h2>
+
+        <ol style={{ listStyle: "none", margin: 0, padding: 0, position: "relative" }}>
+          {/* The rail, and the accent that fills it as you descend. */}
+          <span
+            aria-hidden="true"
             style={{
-              position: "relative",
-              display: "grid",
-              gridTemplateColumns: "1fr auto 1fr",
-              alignItems: "center",
-              gap: "clamp(1rem, 4vw, 3.5rem)",
-              minHeight: "clamp(9rem, 20vh, 15rem)",
+              position: "absolute",
+              left: "calc(clamp(2.6rem, 5vw, 4.2rem) - 1px)",
+              top: 0,
+              bottom: 0,
+              width: 2,
+              background: "rgba(243,239,229,0.16)",
             }}
-          >
-            {/*
-              Sides stay fixed: where you are is always the quiet mono column
-              on the left, where you go is always the loud editorial column on
-              the right. Alternating which side held which lost exactly the
-              contrast the section exists to make. Only the cap's arrow
-              direction alternates, for rhythm.
-            */}
-            <p
-              className="timeline-reveal timeline-now"
-              style={{
-                gridColumn: 1,
-                margin: 0,
-                textAlign: "right",
-                fontFamily: "var(--font-mono)",
-                fontSize: "clamp(0.68rem, 0.95vw, 0.8rem)",
-                lineHeight: 1.6,
-                color: "var(--color-ink-60)",
-              }}
-            >
-              {step.now}
-            </p>
+          />
+          <span
+            className="timeline-fill"
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              left: "calc(clamp(2.6rem, 5vw, 4.2rem) - 1px)",
+              top: 0,
+              bottom: 0,
+              width: 2,
+              background: "linear-gradient(to bottom, var(--signal), var(--blush), var(--acid))",
+            }}
+          />
 
-            <span
-              className="timeline-cap"
+          {STEPS.map((step, i) => (
+            <li
+              key={step.next}
+              className="timeline-step"
               style={{
-                gridColumn: 2,
+                position: "relative",
                 display: "grid",
-                placeItems: "center",
-                width: 44,
-                height: 44,
-                borderRadius: "50%",
-                background: "var(--color-paper)",
-                border: "1px solid var(--color-paper-2)",
-                color: "var(--color-signal)",
+                gridTemplateColumns: "clamp(2.6rem, 5vw, 4.2rem) minmax(0, 1fr)",
+                gap: "clamp(1rem, 3vw, 2.5rem)",
+                padding: "clamp(1.4rem, 4vh, 2.6rem) 0",
               }}
             >
-              <Arrow
-                direction={i % 2 === 0 ? "right" : "down-right"}
-                style={{ width: 18, height: 18 }}
-              />
-            </span>
-
-            <div style={{ gridColumn: 3, textAlign: "left" }}>
-              <p
-                className="timeline-reveal"
+              <span
+                className="timeline-num"
                 style={{
-                  margin: 0,
                   fontFamily: "var(--font-mono)",
-                  fontSize: "clamp(0.6rem, 0.85vw, 0.72rem)",
-                  letterSpacing: "0.16em",
-                  color: "var(--color-ink-60)",
+                  fontSize: "clamp(0.62rem, 0.9vw, 0.74rem)",
+                  letterSpacing: "0.14em",
+                  opacity: 0.55,
+                  paddingTop: "0.6em",
                 }}
               >
-                {step.index}
-              </p>
-              <p
-                className="timeline-reveal"
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              <span
+                className="timeline-dot"
+                aria-hidden="true"
                 style={{
-                  margin: "0.15em 0 0",
-                  fontFamily: "var(--font-editorial)",
-                  fontSize: "clamp(1.8rem, 4.2vw, 3.6rem)",
-                  fontWeight: 800,
-                  lineHeight: 1.02,
-                  letterSpacing: "-0.02em",
-                  color: "var(--color-signal)",
+                  position: "absolute",
+                  left: "calc(clamp(2.6rem, 5vw, 4.2rem) - 7px)",
+                  top: "calc(clamp(1.4rem, 4vh, 2.6rem) + 0.75em)",
+                  width: 14,
+                  height: 14,
+                  borderRadius: "50%",
+                  background:
+                    i === STEPS.length - 1 ? "var(--acid)" : "var(--signal)",
                 }}
-              >
-                {step.next}
-              </p>
-            </div>
-          </div>
-        ))}
+              />
+
+              <div className="timeline-body" style={{ paddingLeft: "clamp(1rem, 2vw, 1.6rem)" }}>
+                <p
+                  className="timeline-next"
+                  style={{
+                    margin: 0,
+                    fontFamily: "var(--font-display)",
+                    fontWeight: 700,
+                    // The last step is the destination, so it is the largest.
+                    fontSize:
+                      i === STEPS.length - 1
+                        ? "clamp(2.4rem, 8vw, 6rem)"
+                        : "clamp(1.4rem, 3.4vw, 2.6rem)",
+                    lineHeight: 1.02,
+                    textTransform: "uppercase",
+                    letterSpacing: "-0.01em",
+                    color:
+                      i === STEPS.length - 1 ? "var(--acid)" : "var(--color-paper)",
+                  }}
+                >
+                  {step.next}
+                </p>
+                <p
+                  className="timeline-now"
+                  style={{
+                    margin: "0.5em 0 0",
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: "0.6em",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "clamp(0.68rem, 0.92vw, 0.8rem)",
+                    lineHeight: 1.55,
+                    opacity: 0.6,
+                    maxWidth: "58ch",
+                  }}
+                >
+                  <Arrow style={{ width: 12, height: 12, flexShrink: 0 }} />
+                  {step.now}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );
