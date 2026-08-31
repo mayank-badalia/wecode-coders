@@ -15,11 +15,6 @@ type MarqueeProps = {
   style?: React.CSSProperties;
   /** Pause and lift this bar above the stack while hovered. */
   liftOnHover?: boolean;
-  /**
-   * Vertical travel per horizontal unit. The tapes read as running uphill
-   * from bottom-left to top-right rather than flatly sideways.
-   */
-  rise?: number;
 };
 
 export function Marquee({
@@ -29,7 +24,6 @@ export function Marquee({
   className,
   style,
   liftOnHover = true,
-  rise = 0,
 }: MarqueeProps) {
   const root = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
@@ -80,7 +74,7 @@ export function Marquee({
           damping: 0.6,
         });
 
-        gsap.set(trackEl, { x: state.x, y: state.x * rise });
+        gsap.set(trackEl, { x: state.x });
       };
 
       gsap.ticker.add(tick);
@@ -89,7 +83,7 @@ export function Marquee({
         observer.disconnect();
       };
     },
-    { scope: root, dependencies: [speed, direction, reduced, rise] },
+    { scope: root, dependencies: [speed, direction, reduced] },
   );
 
   return (

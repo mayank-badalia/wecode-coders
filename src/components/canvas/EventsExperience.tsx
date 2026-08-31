@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { useGSAP } from "@gsap/react";
 import { useRouter } from "next/navigation";
 import { TransitionLink } from "@/components/motion/TransitionLink";
@@ -13,20 +13,6 @@ import { formatEventDate } from "@/lib/format";
 import type { Event } from "@/lib/types";
 import { CAMERA_Z, EventRing } from "./EventRing";
 import { RingFallback } from "./RingFallback";
-
-/*
-  The canvas runs frameloop="demand" so an idle ring costs nothing. That means
-  input arriving from outside React Three Fiber — a pointer drag, a scroll —
-  has to explicitly ask for a frame, or the loop never runs and the input is
-  never consumed. This hands the request function back out to the page.
-*/
-function InvalidateBridge({ onReady }: { onReady: (fn: () => void) => void }) {
-  const invalidate = useThree((s) => s.invalidate);
-  useEffect(() => {
-    onReady(invalidate);
-  }, [invalidate, onReady]);
-  return null;
-}
 
 const mono: React.CSSProperties = {
   fontFamily: "var(--font-mono)",
@@ -46,39 +32,51 @@ function useCanRunWebGL(reduced: boolean) {
   const [ok, setOk] = useState<boolean | null>(null);
 
   useEffect(() => {
-    let raf = 0;
-    let frames = 0;
-    let started = 0;
+    /*
+      WebGL runs unless there is a real reason it cannot.
 
-    // Every decision is made inside the animation-frame callback rather than
-    // in the effect body. Deciding synchronously here would set state during
-    // the effect and cascade a second render before paint.
+      There used to be a startup frame-rate probe here that demanded 50fps over
+      a 500ms sample. It sampled during page entry — while the loader, Lenis
+      and the route transition were all still running — so on a retina display
+      it routinely measured below the threshold and silently dropped the whole
+      ring to the CSS fallback. Headless browsers always hit 60fps, so it
+      looked fine in automation and was broken on real machines.
+
+      The remaining checks are the ones that are actually knowable up front:
+      the visitor asked for less motion, the device is a small touch screen, or
+      the browser cannot give us a context at all. Frame rate is handled by
+      degrading resolution while running, not by refusing to start.
+    */
     const decide = () => {
       if (reduced) return setOk(false);
 
-      if (window.matchMedia("(max-width: 900px), (pointer: coarse)").matches) {
+      if (window.matchMedia("(max-width: 900px) and (pointer: coarse)").matches) {
         return setOk(false);
       }
 
-      const gl = document.createElement("canvas").getContext("webgl2");
+      const probe = document.createElement("canvas");
+      const gl =
+        probe.getContext("webgl2") ??
+        probe.getContext("webgl") ??
+        probe.getContext("experimental-webgl");
+
       if (!gl) return setOk(false);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      (gl as WebGLRenderingContext).getExtension("WEBGL_lose_context")?.loseContext();
 
-      started = performance.now();
-      raf = requestAnimationFrame(sample);
+      setOk(true);
     };
 
-    // A short frame-time sample: a device that cannot hold 50fps idling will
-    // not hold it with seven textured planes spinning.
-    const sample = () => {
-      frames += 1;
-      const elapsed = performance.now() - started;
-      if (elapsed < 500) raf = requestAnimationFrame(sample);
-      else setOk(frames / (elapsed / 1000) >= 50);
-    };
+    /*
+      Deferred by a timeout, not by requestAnimationFrame.
 
-    raf = requestAnimationFrame(decide);
-    return () => cancelAnimationFrame(raf);
+      rAF does not fire in a background tab, so opening the page in a tab that
+      was not focused left the decision permanently pending and rendered
+      neither the canvas nor the fallback — a blank page whose cause was
+      invisible in any foreground test. A timeout still defers the state
+      update out of the effect body, which is all that was needed.
+    */
+    const id = window.setTimeout(decide, 0);
+    return () => window.clearTimeout(id);
   }, [reduced]);
 
   return ok;
@@ -89,8 +87,19 @@ export function EventsExperience({ events }: { events: Event[] }) {
   const { playExit, isBusy } = useTransition();
   const [focused, setFocused] = useState(0);
   const [inside, setInside] = useState(0);
+  const [active, setActive] = useState(true);
+
+  // A hidden tab should not be rendering a 3D scene.
+  useEffect(() => {
+    const onVisibility = () => setActive(!document.hidden);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
   const reduced = useReducedMotion();
   const webgl = useCanRunWebGL(reduced);
+  useEffect(() => {
+    webglRef.current = webgl;
+  }, [webgl]);
   const stage = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
 
@@ -98,17 +107,14 @@ export function EventsExperience({ events }: { events: Event[] }) {
   const lastPointerX = useRef(0);
   const pointerStart = useRef({ x: 0, y: 0 });
   const lenis = useLenis();
+  // Read inside the listeners, which are bound once.
+  const webglRef = useRef<boolean | null>(null);
   // Mirrors `focused` for the pointer handlers, which are bound once and must
   // not be torn down and rebound on every rotation of the ring.
   const focusedRef = useRef(0);
   useEffect(() => {
     focusedRef.current = focused;
   }, [focused]);
-  const requestFrame = useRef<() => void>(null);
-
-  const onBridgeReady = useCallback((fn: () => void) => {
-    requestFrame.current = fn;
-  }, []);
 
   // Hands the ring everything accumulated since its last frame, and clears it.
   const consumeInput = useCallback(() => {
@@ -127,6 +133,17 @@ export function EventsExperience({ events }: { events: Event[] }) {
     why it felt stuck rather than driven. Lenis is stopped, the body is fixed
     at its current offset, and wheel and touch events are consumed here.
   */
+  const step = useCallback(
+    (dir: number) => {
+      // In WebGL mode the ring owns the focused index, so a key press has to
+      // move the ring; setting state alone would be overwritten on the next
+      // frame. The fallback has no ring, so it uses the state directly.
+      input.current.nudge += dir;
+      setFocused((f) => (f + dir + events.length) % events.length);
+    },
+    [events.length],
+  );
+
   useEffect(() => {
     lenis?.stop();
 
@@ -136,13 +153,25 @@ export function EventsExperience({ events }: { events: Event[] }) {
     html.style.overflow = "hidden";
     window.scrollTo(0, 0);
 
+    let fallbackAccum = 0;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
+
+      // Without a ring to spin, the fallback steps a whole event once enough
+      // wheel travel has accumulated.
+      if (webglRef.current === false) {
+        fallbackAccum += e.deltaY;
+        if (Math.abs(fallbackAccum) > 240) {
+          step(fallbackAccum > 0 ? 1 : -1);
+          fallbackAccum = 0;
+        }
+        return;
+      }
+
       // Scrolling down carries the posters to the right, scrolling up to the
       // left — the direction the content travels, not the direction the
       // wheel turns.
-      input.current.scroll -= e.deltaY * 0.0024;
-      requestFrame.current?.();
+      input.current.scroll -= e.deltaY * 0.0042;
     };
 
     let lastTouchY = 0;
@@ -151,9 +180,8 @@ export function EventsExperience({ events }: { events: Event[] }) {
     };
     const onTouchMove = (e: TouchEvent) => {
       const y = e.touches[0]?.clientY ?? 0;
-      input.current.scroll -= (lastTouchY - y) * 0.006;
+      input.current.scroll -= (lastTouchY - y) * 0.009;
       lastTouchY = y;
-      requestFrame.current?.();
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -168,19 +196,8 @@ export function EventsExperience({ events }: { events: Event[] }) {
       html.style.overflow = prev.htmlOverflow;
       lenis?.start();
     };
-  }, [lenis]);
+  }, [lenis, step]);
 
-  const step = useCallback(
-    (dir: number) => {
-      // In WebGL mode the ring owns the focused index, so a key press has to
-      // move the ring; setting state alone would be overwritten on the next
-      // frame. The fallback has no ring, so it uses the state directly.
-      input.current.nudge += dir;
-      requestFrame.current?.();
-      setFocused((f) => (f + dir + events.length) % events.length);
-    },
-    [events.length],
-  );
 
   // Pointer drag, used by both the WebGL ring and the fallback.
   useEffect(() => {
@@ -198,12 +215,10 @@ export function EventsExperience({ events }: { events: Event[] }) {
       const dx = e.clientX - lastPointerX.current;
       lastPointerX.current = e.clientX;
       input.current.drag += dx * 0.005;
-      requestFrame.current?.();
       if (!webgl && Math.abs(dx) > 24) step(dx > 0 ? -1 : 1);
     };
     const up = (e: PointerEvent) => {
       input.current.dragging = false;
-      requestFrame.current?.();
       if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
 
       /*
@@ -285,13 +300,25 @@ export function EventsExperience({ events }: { events: Event[] }) {
     >
       {webgl === true && (
         <Canvas
-          frameloop="demand"
+          /*
+            A continuous loop, not "demand".
+
+            On demand, every input has to explicitly wake the renderer, and a
+            single wheel tick accumulated into the input buffer without ever
+            producing a frame — the ring sat frozen while the page insisted it
+            had received the scroll. The ring is the whole page here, there is
+            nothing else competing for frames, and continuous motion is the
+            point. The loop is paused when the tab is hidden.
+          */
+          frameloop={active ? "always" : "never"}
           camera={{ position: [0, 0.15, CAMERA_Z], fov: 46 }}
-          dpr={[1, 2]}
+          // Capped at 1.5 rather than 2: a retina panel at full DPR is four
+          // times the pixels for no visible gain at this scale, and that
+          // headroom is what keeps the ring smooth on ordinary laptops.
+          dpr={[1, 1.5]}
           gl={{ antialias: true }}
           style={{ position: "absolute", inset: 0 }}
         >
-          <InvalidateBridge onReady={onBridgeReady} />
           <EventRing
             events={events}
             focused={focused}
@@ -322,7 +349,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-end",
-            width: "min(46ch, 46vw)",
+            width: "min(42ch, 40vw)",
             padding: "clamp(1.5rem, 4vw, 3rem)",
             pointerEvents: "none",
             // A scrim from the left, so the copy reads over whichever poster
@@ -345,10 +372,13 @@ export function EventsExperience({ events }: { events: Event[] }) {
               style={{
                 margin: "0.2em 0 0",
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(2rem, 5.5vw, 4.6rem)",
+                fontSize: "clamp(1.7rem, 3.6vw, 3.2rem)",
                 fontWeight: 700,
-                lineHeight: 0.94,
+                lineHeight: 0.96,
                 textTransform: "uppercase",
+                // Long titles wrap inside the panel instead of running out
+                // across whichever poster is behind it.
+                overflowWrap: "break-word",
               }}
             >
               {event.title}

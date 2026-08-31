@@ -57,6 +57,11 @@ function Run({ children }: { children: React.ReactNode }) {
   above the headline, clear of the fixed nav; three seal below it. Only the
   outlined line is crossed, which is the partial obscuring the design wants.
 
+  Every tape climbs from the bottom left to the top right. The first attempt
+  at that translated the marquee track vertically, which pushed the text
+  straight out of the bar's own clip and left five empty coloured strips —
+  the diagonal belongs to the tape's rotation, not to the track inside it.
+
   They peel away in different directions as the visitor scrolls — the moment
   the package opens.
 */
@@ -66,8 +71,8 @@ const TAPES: Tape[] = [
     fg: "var(--blush)",
     speed: 62,
     direction: 1,
-    top: 12,
-    rotate: -4.5,
+    top: 26,
+    rotate: -4,
     exitX: -14,
     exitY: -34,
     copy: <Run>We Code Coders — Independent builder culture</Run>,
@@ -77,8 +82,8 @@ const TAPES: Tape[] = [
     fg: "var(--color-ink)",
     speed: 44,
     direction: -1,
-    top: 19.5,
-    rotate: 3.5,
+    top: 34,
+    rotate: -4.5,
     exitX: 16,
     exitY: -22,
     copy: <Run>Online events — Pune events — Open briefs</Run>,
@@ -89,7 +94,7 @@ const TAPES: Tape[] = [
     speed: 88,
     direction: 1,
     top: 70,
-    rotate: -2.5,
+    rotate: -5,
     exitX: -20,
     exitY: 26,
     copy: <Run>Build — Break — Learn — Ship — Repeat</Run>,
@@ -99,8 +104,8 @@ const TAPES: Tape[] = [
     fg: "var(--color-paper)",
     speed: 56,
     direction: -1,
-    top: 79,
-    rotate: 4.5,
+    top: 80,
+    rotate: -5.5,
     exitX: 22,
     exitY: 34,
     copy: <Run>Mini challenges — Mentors — Tools — Feedback</Run>,
@@ -110,8 +115,8 @@ const TAPES: Tape[] = [
     fg: "var(--color-ink)",
     speed: 72,
     direction: 1,
-    top: 88,
-    rotate: -3,
+    top: 90,
+    rotate: -6,
     exitX: -10,
     exitY: 44,
     copy: <Run>New events entering the system</Run>,
@@ -196,8 +201,8 @@ export function TapeStack() {
           style={{
             position: "absolute",
             top: `${tape.top}%`,
-            left: "-14%",
-            width: "128%",
+            left: "-20%",
+            width: "140%",
             transform: `rotate(${tape.rotate}deg)`,
             boxShadow: "0 2px 14px rgba(20,33,57,0.12)",
             pointerEvents: "auto",
@@ -206,10 +211,6 @@ export function TapeStack() {
           <Marquee
             speed={tape.speed}
             direction={tape.direction}
-            // Negative rise sends the content up-and-right as x decreases,
-            // so each tape reads as travelling diagonally from the bottom
-            // left toward the top right rather than sliding flat.
-            rise={tape.direction === 1 ? -0.12 : 0.12}
             style={{
               background: tape.bg,
               color: tape.fg,

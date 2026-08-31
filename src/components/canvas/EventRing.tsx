@@ -1,6 +1,6 @@
 "use client";
 
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { groundFor } from "@/components/poster/layouts";
@@ -14,7 +14,6 @@ const RADIUS = 3.4;
 const INSIDE_RADIUS_GAIN = 1.5;
 const PLANE_W = 2.15;
 const PLANE_H = 2.85;
-const SNAP_SPEED = 0.04;
 const TAU = Math.PI * 2;
 
 /** Where the camera sits before it travels inside. */
@@ -46,11 +45,14 @@ export function EventRing({
   const group = useRef<THREE.Group>(null);
   const world = useRef<THREE.Mesh>(null);
   const rotation = useRef(0);
+  /** Where the ring is heading; scroll and drag move this, not the angle. */
+  const target = useRef(0);
   const velocity = useRef(0);
+  /** Seconds since the last input, used to decide when to settle. */
+  const idle = useRef(0);
   const settled = useRef(false);
   const inside = useRef(0);
   const reportedInside = useRef(-1);
-  const invalidate = useThree((state) => state.invalidate);
 
   const textures = useMemo(
     () =>
@@ -118,32 +120,46 @@ export function EventRing({
   useFrame((state, rawDelta) => {
     const dt = Math.min(rawDelta, 0.05);
     const input = consumeInput();
+    const previous = rotation.current;
 
+    /*
+      Scroll drives a target angle and the ring eases toward it.
+
+      The first version added each scroll tick to an angular velocity that then
+      decayed. That reads as sluggish and unpredictable — forty wheel ticks
+      moved the ring less than a single turn, because each tick's contribution
+      was already decaying before the next arrived. Aiming at a target and
+      easing toward it accumulates properly, stays smooth at any frame rate,
+      and makes the snap a small adjustment of the target rather than a fight
+      against momentum.
+    */
     if (input.dragging) {
-      velocity.current = input.drag / Math.max(dt, 0.0001);
-      rotation.current += input.drag;
-      settled.current = false;
+      target.current += input.drag;
+      idle.current = 0;
     } else {
-      velocity.current += input.scroll;
-
-      if (input.nudge !== 0) {
-        velocity.current -= input.nudge * 2.4;
-        settled.current = false;
+      if (input.scroll !== 0) {
+        target.current += input.scroll;
+        idle.current = 0;
       }
+      if (input.nudge !== 0) {
+        target.current -= input.nudge * (TAU / events.length);
+        idle.current = 0;
+      }
+      idle.current += dt;
 
-      rotation.current += velocity.current * dt;
-      velocity.current *= Math.exp(-dt / 0.4);
-
-      if (Math.abs(velocity.current) < SNAP_SPEED) {
-        const slot = nearestSlot(-rotation.current, events.length);
-        const target = -slotAngle(slot, events.length);
-        const turns = Math.round((rotation.current - target) / TAU);
-        const goal = target + turns * TAU;
-        rotation.current += (goal - rotation.current) * Math.min(1, dt * 5);
-        velocity.current *= 0.9;
-        settled.current = true;
+      // Once the visitor stops, settle onto the nearest event.
+      if (idle.current > 0.28) {
+        const slot = nearestSlot(-target.current, events.length);
+        const nearest = -slotAngle(slot, events.length);
+        const turns = Math.round((target.current - nearest) / TAU);
+        target.current += (nearest + turns * TAU - target.current) * Math.min(1, dt * 3.4);
       }
     }
+
+    // Frame-rate independent easing toward the target.
+    rotation.current += (target.current - rotation.current) * (1 - Math.exp(-dt / 0.16));
+    velocity.current = (rotation.current - previous) / Math.max(dt, 0.0001);
+    settled.current = Math.abs(target.current - rotation.current) < 0.0005;
 
     if (group.current) {
       group.current.rotation.y = rotation.current;
@@ -226,13 +242,6 @@ export function EventRing({
       mat.uniforms.uVelocity!.value = velocity.current;
     });
 
-    if (
-      Math.abs(velocity.current) > 0.001 ||
-      !settled.current ||
-      Math.abs(targetInside - inside.current) > 0.001
-    ) {
-      invalidate();
-    }
   });
 
   return (
