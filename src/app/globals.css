@@ -1,28 +1,43 @@
 @import "tailwindcss";
 
-@theme {
-  --color-paper: #f4f1ea;
-  --color-paper-2: #eae5da;
-  --color-ink: #131c33;
-  --color-ink-60: rgba(19, 28, 51, 0.6);
-  --color-terracotta: #d2543f;
+/*
+  Design tokens live in :root, not in @theme.
 
-  --font-display: var(--font-archivo), "Arial Narrow", Helvetica, sans-serif;
-  --font-editorial: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+  Tailwind v4 tree-shakes @theme variables that no generated utility
+  references. This site styles almost entirely through inline styles reading
+  var(--token), so Tailwind saw the font tokens as unused and emitted nothing —
+  headlines silently fell back to the body face with no error anywhere.
+  :root always emits.
+*/
+:root {
+  --color-paper: #f3efe5;
+  --color-paper-2: #e8e1d5;
+  --color-ink: #142139;
+  --color-ink-60: rgba(20, 33, 57, 0.62);
+  --color-ink-40: rgba(20, 33, 57, 0.4);
+  --color-signal: #f04436;
+
+  --font-editorial: var(--font-serif), Georgia, "Times New Roman", serif;
+  --font-display: var(--font-condensed), "Arial Narrow", Helvetica, sans-serif;
+  --font-body: var(--font-sans), system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, SFMono-Regular, monospace;
+
+  --grid-opacity: 0.14;
 }
 
 /*
-  The burst palette is deliberately scoped. Outside a .burst ancestor these
-  custom properties are undefined, so reaching for violet in an editorial
-  section renders an invalid colour and fails visibly in review. This is the
-  70/30 ratio made mechanical rather than left to taste — see spec 4.1, and
-  scripts/check-burst.mjs which enforces the file-level half of the rule.
+  The loud accent pair is deliberately scoped. Outside a .burst ancestor these
+  are undefined, so reaching for blush or acid in an editorial section renders
+  an invalid colour and fails visibly. scripts/check-burst.mjs enforces the
+  file-level half of the same rule.
+
+  Deep ink is NOT scoped: it is a legitimate ground anywhere, and it replaced
+  the violet that used to fill the loader, transitions, footer and events page.
 */
 .burst {
-  --violet: #4b3bf0;
-  --pink: #f5c9d0;
-  --lime: #c9f73d;
+  --blush: #f3a5b7;
+  --acid: #d8ef72;
+  --signal: #f04436;
 }
 
 html {
@@ -35,19 +50,19 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: var(--font-editorial);
+  font-family: var(--font-body);
   overflow-x: clip;
 }
 
 ::selection {
-  background: var(--color-terracotta);
+  background: var(--color-signal);
   color: var(--color-paper);
 }
 
 /*
   Hidden before first paint on a repeat visit or under reduced motion, by the
-  script in the document head. Doing this in CSS rather than in React is what
-  keeps the markup identical on server and client.
+  script in the document head. Doing this in CSS rather than in React keeps the
+  markup identical on server and client.
 */
 html[data-wcc-seen="1"] .loader-root {
   display: none !important;
@@ -55,9 +70,7 @@ html[data-wcc-seen="1"] .loader-root {
 
 /*
   Desktop rail gutter. Set here rather than inline so the touch media query
-  below can override it — an inline padding cannot be overridden by a rule,
-  and the leftover 27vw pushed every stacked card off the right edge on
-  mobile.
+  below can override it — an inline padding cannot be overridden by a rule.
 */
 .rail-track {
   padding: 0 27vw;
@@ -70,16 +83,9 @@ html[data-wcc-seen="1"] .loader-root {
 }
 
 /*
-  Event rail — touch and narrow viewports.
-
-  The desktop rail is a pinned horizontal track. On touch there is no pin and
-  no horizontal translation, so the track has to become a vertical stack;
-  leaving it as a row left five of seven cards off-screen and unreachable.
-  The growth behaviour is unchanged — EventRail feeds vertical distance from
-  the viewport centre through the same railMetrics function.
-
-  Done in CSS rather than JS so the layout is correct on first paint, before
-  any matchMedia callback has run.
+  Event rail — touch and narrow viewports. No pin and no horizontal
+  translation, so the track becomes a vertical stack; left as a row, five of
+  seven cards were off-screen and unreachable. Growth behaviour is unchanged.
 */
 @media (max-width: 900px), (pointer: coarse) {
   .rail-section {
@@ -100,16 +106,6 @@ html[data-wcc-seen="1"] .loader-root {
     gap: 8vh;
   }
 
-  /*
-    Below this width the two nav labels and the menu button cannot sit on one
-    line; they wrapped and the roll-up hover layers collided into unreadable
-    overlaps. The overlay menu carries both links, so the bar keeps only the
-    mark and the trigger.
-  */
-  .nav-links {
-    display: none;
-  }
-
   .rail-chrome-top {
     position: relative;
     padding-top: 5rem;
@@ -118,13 +114,17 @@ html[data-wcc-seen="1"] .loader-root {
   .rail-progress-bar {
     display: none;
   }
+
+  /* Below this width the labels and the menu button cannot share a line. */
+  .nav-links {
+    display: none;
+  }
 }
 
 /*
-  The nav is fixed, so at some scroll positions it lands on top of body copy.
-  A short gradient scrim keeps it legible without introducing a visible bar.
-  It inherits the page ground, so it is invisible over plain paper and only
-  does work where content runs underneath.
+  The nav is fixed, so at some scroll positions it lands on body copy. A short
+  scrim keeps it legible without introducing a visible bar; it is hidden over
+  dark grounds, where a paper gradient reads as a haze.
 */
 .nav-scrim {
   position: fixed;
@@ -140,29 +140,54 @@ html[data-wcc-seen="1"] .loader-root {
   transition: opacity 300ms ease;
 }
 
-/* Drop cap on the first paragraph of the About lead. */
 .about-lead::first-letter {
   float: left;
   font-family: var(--font-editorial);
-  font-weight: 900;
-  font-size: 4.6em;
-  line-height: 0.78;
-  padding: 0.06em 0.1em 0 0;
-  color: var(--color-terracotta);
+  font-size: 4.4em;
+  line-height: 0.76;
+  padding: 0.08em 0.12em 0 0;
+  color: var(--color-signal);
+}
+
+/* Hero CTA fills with signal red on hover rather than swapping colour. */
+.hero-cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-signal);
+  transform: translateY(101%);
+  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-cta:hover::before,
+.hero-cta:focus-visible::before {
+  transform: translateY(0);
 }
 
 @media (max-width: 900px) {
   .about-grid,
   .detail-grid,
-  .manifesto-grid {
+  .manifesto-grid,
+  .hero-rail {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-rail {
+    align-items: start;
+    gap: 1.5rem;
   }
 }
 
 /*
   Present for assistive tech and crawlers, invisible to sighted users. Not
   display:none, which would remove it from the accessibility tree entirely.
-  Becomes visible when focused, so keyboard users can see where they are.
 */
 .visually-hidden {
   position: absolute;
@@ -191,11 +216,7 @@ html[data-wcc-seen="1"] .loader-root {
 
 /*
   A visible focus ring on everything focusable, without exception.
-
-  Several controls sit on violet and several on paper, so the ring is drawn
-  with currentColor plus a contrasting offset ring — it stays visible on any
-  ground. :focus-visible rather than :focus, so a mouse click does not leave a
-  ring behind.
+  :focus-visible rather than :focus, so a mouse click leaves no ring behind.
 */
 :focus-visible {
   outline: 2px solid currentColor;
@@ -204,13 +225,10 @@ html[data-wcc-seen="1"] .loader-root {
 }
 
 .burst :focus-visible {
-  outline-color: var(--lime);
+  outline-color: var(--acid);
 }
 
-/*
-  Respect the system setting even for anything not routed through
-  gsap.matchMedia — a belt-and-braces stop for CSS transitions.
-*/
+/* Belt and braces for anything not routed through gsap.matchMedia. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -14,7 +14,7 @@ const LINKS = [
   { index: "02", label: "About", href: "/about" },
 ] as const;
 
-/** A label that rolls up on hover: ink line out, terracotta line in. */
+/** A label that rolls up on hover: one line out, its echo in. */
 function RollLink({
   index,
   label,
@@ -210,7 +210,7 @@ export function Nav() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "clamp(1rem, 2.2vw, 1.8rem) clamp(1rem, 4vw, 3rem)",
-          color: onDark ? "var(--pink)" : "var(--color-ink)",
+          color: onDark ? "var(--blush)" : "var(--color-ink)",
           transition: "color 350ms ease",
           pointerEvents: "none",
           mixBlendMode: "normal",
@@ -246,10 +246,10 @@ export function Nav() {
             whiteSpace: "nowrap",
             display: "flex",
             alignItems: "baseline",
-            gap: "clamp(1.2rem, 3vw, 2.6rem)",
+            gap: "clamp(1.4rem, 3.4vw, 3rem)",
             fontFamily: "var(--font-display)",
             fontSize: "clamp(0.85rem, 1.15vw, 1.05rem)",
-            fontVariationSettings: "'wdth' 92, 'wght' 700",
+            fontWeight: 600,
             textTransform: "uppercase",
             letterSpacing: "0.02em",
             pointerEvents: "auto",

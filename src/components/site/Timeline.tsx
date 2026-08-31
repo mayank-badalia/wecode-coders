@@ -203,7 +203,7 @@ export function Timeline() {
                 borderRadius: "50%",
                 background: "var(--color-paper)",
                 border: "1px solid var(--color-paper-2)",
-                color: "var(--color-terracotta)",
+                color: "var(--color-signal)",
               }}
             >
               <Arrow
@@ -234,7 +234,7 @@ export function Timeline() {
                   fontWeight: 800,
                   lineHeight: 1.02,
                   letterSpacing: "-0.02em",
-                  color: "var(--color-terracotta)",
+                  color: "var(--color-signal)",
                 }}
               >
                 {step.next}

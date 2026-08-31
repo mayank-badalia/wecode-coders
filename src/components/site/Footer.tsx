@@ -23,7 +23,15 @@ const ARROW_LETTER_IDS = [
   "#footer-bottom-s-arrow",
 ];
 
-export function Footer() {
+/*
+  The logo finale belongs to the home page only.
+
+  Rendered on every route it became a full-screen violet takeover that ended
+  each event and about page — visitors landing on it read the site as broken,
+  because a page of content was followed by a screen of logo. Elsewhere the
+  footer is a compact ink strip.
+*/
+export function Footer({ finale = false }: { finale?: boolean }) {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const site = getSite();
@@ -53,7 +61,7 @@ export function Footer() {
         scrollTrigger: { trigger: el, start: "top 85%", once: true },
       });
 
-      tl.set(letters, { fillOpacity: 0, stroke: "var(--pink)", strokeWidth: 2 })
+      tl.set(letters, { fillOpacity: 0, stroke: "var(--blush)", strokeWidth: 2 })
         .fromTo(
           plainLetters,
           { drawSVG: "0%" },
@@ -95,9 +103,11 @@ export function Footer() {
       style={{
         position: "relative",
         zIndex: 2,
-        background: "var(--violet)",
-        color: "var(--pink)",
-        padding: "clamp(4rem, 10vw, 9rem) clamp(1.25rem, 4vw, 3rem) 0",
+        background: "var(--color-ink)",
+        color: "var(--color-paper)",
+        padding: finale
+          ? "clamp(4rem, 10vw, 8rem) clamp(1.25rem, 4vw, 3rem) 0"
+          : "clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 3rem) 0",
         overflow: "hidden",
       }}
     >
@@ -113,18 +123,23 @@ export function Footer() {
         <p
           style={{
             margin: 0,
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(2.2rem, 7vw, 5.5rem)",
-            fontVariationSettings: "'wdth' 108, 'wght' 800",
-            lineHeight: 0.94,
-            textTransform: "uppercase",
-            maxWidth: "12ch",
+            fontFamily: "var(--font-editorial)",
+            fontSize: finale
+              ? "clamp(2rem, 5.5vw, 4.4rem)"
+              : "clamp(1.4rem, 2.8vw, 2.2rem)",
+            lineHeight: 1.02,
+            letterSpacing: "-0.02em",
+            maxWidth: "16ch",
           }}
         >
-          {site.tagline}
+          Events end. The work, feedback and people you meet{" "}
+          <span style={{ fontStyle: "italic", color: "var(--blush)" }}>should not.</span>
         </p>
 
-        <nav aria-label="Footer" style={{ display: "flex", gap: "clamp(2rem, 5vw, 4rem)" }}>
+        <nav
+          aria-label="Footer"
+          style={{ display: "flex", gap: "clamp(2rem, 5vw, 4rem)", paddingTop: "0.4rem" }}
+        >
           <ul style={{ listStyle: "none", margin: 0, padding: 0, ...monoRow }}>
             {[
               { label: "Events", href: "/events" },
@@ -188,7 +203,7 @@ export function Footer() {
           gap: "1rem",
           marginTop: "clamp(3rem, 8vw, 6rem)",
           paddingTop: "1.2rem",
-          borderTop: "1px solid color-mix(in srgb, var(--pink) 35%, transparent)",
+          borderTop: "1px solid color-mix(in srgb, var(--blush) 35%, transparent)",
           opacity: 0.85,
           ...monoRow,
         }}
@@ -200,24 +215,23 @@ export function Footer() {
       </div>
 
       {/*
-        The finale, but bounded. At full width the wordmark is ~0.67 of the
-        viewport wide in height and swallows the whole screen, leaving the
-        fixed nav sitting pink-on-pink and illegible. Capping it keeps a
-        violet margin for the nav and still lands as the closing gesture.
+        Bounded even on the home page: at full width the wordmark's height is
+        ~0.67 of the viewport width and swallows the whole screen, leaving the
+        fixed nav illegible over it.
       */}
       <div
         style={{
-          marginTop: "clamp(3rem, 7vw, 6rem)",
-          paddingBottom: "clamp(1.5rem, 3vw, 3rem)",
-          height: "min(42vh, 30vw)",
+          marginTop: finale ? "clamp(2.5rem, 6vw, 5rem)" : "clamp(1.5rem, 3vw, 2.5rem)",
+          paddingBottom: "clamp(1rem, 2.5vw, 2rem)",
+          height: finale ? "min(34vh, 24vw)" : "min(9vh, 7vw)",
           display: "flex",
-          justifyContent: "center",
+          justifyContent: finale ? "center" : "flex-start",
         }}
       >
         <Logo
           className="footer-logo"
           idPrefix="footer"
-          tone="brand"
+          tone="paper"
           decorative
           style={{ height: "100%", width: "auto" }}
         />

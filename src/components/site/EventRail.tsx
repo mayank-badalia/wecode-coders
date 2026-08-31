@@ -290,7 +290,7 @@ export function EventRail() {
           className="rail-progress"
           style={{
             height: "100%",
-            background: "var(--color-terracotta)",
+            background: "var(--color-signal)",
             transformOrigin: "left center",
             transform: "scaleX(0)",
           }}

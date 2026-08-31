@@ -75,6 +75,8 @@ export function Poster({
 
   const halftoneSize = Math.round(range(rng, 8, 18));
   const titleWeight = Math.round(range(rng, 800, 900));
+  // IBM Plex Sans Condensed ships static weights and no width axis, so the
+  // seeded variation moves to weight and treatment rather than wdth.
 
   const words = event.title.toUpperCase().split(" ");
   const longestWord = Math.max(...words.map((w) => w.length));
@@ -82,9 +84,6 @@ export function Poster({
   // A long word set wide will always run into the margin. Condensing it is
   // what a typesetter would do, so the width axis is capped by word length
   // rather than left purely to the seed.
-  const maxWidth = longestWord > 8 ? 82 : longestWord > 6 ? 100 : 118;
-  const titleWidth = Math.round(range(rng, 62, maxWidth));
-
   // And the size is bounded by how many glyphs have to fit across the measure.
   const titleCqw = Math.min(9.5, 74 / longestWord);
 
@@ -173,7 +172,7 @@ export function Poster({
           lineHeight: 0.86,
           letterSpacing: "-0.01em",
           textTransform: "uppercase",
-          fontVariationSettings: `'wdth' ${titleWidth}, 'wght' ${titleWeight}`,
+          fontWeight: titleWeight >= 850 ? 700 : 600,
         }}
       >
         {words.map((word, i) => {

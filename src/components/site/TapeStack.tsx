@@ -1,19 +1,24 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
 import { Marquee } from "@/components/motion/Marquee";
-import { getSite } from "@/lib/events";
+import { gsap } from "@/components/motion/gsap";
+import { useReducedMotion } from "@/components/motion/MotionProvider";
 import { Arrow } from "./Arrow";
-import { Logo } from "./Logo";
 
-type Bar = {
+type Tape = {
   bg: string;
   fg: string;
   speed: number;
   direction: 1 | -1;
+  /** Vertical position across the hero, in % of the section height. */
+  top: number;
   rotate: number;
-  /** Vertical padding, so a bar carrying the wordmark can be taller. */
-  pad: string;
-  content: React.ReactNode;
+  /** Where it exits to as the visitor scrolls past. */
+  exitX: number;
+  exitY: number;
+  copy: React.ReactNode;
 };
 
 const cell: React.CSSProperties = {
@@ -23,17 +28,18 @@ const cell: React.CSSProperties = {
   padding: "0 1.1em",
   whiteSpace: "nowrap",
   fontFamily: "var(--font-mono)",
-  fontSize: "clamp(0.65rem, 1.05vw, 0.9rem)",
-  letterSpacing: "0.14em",
+  fontSize: "clamp(0.52rem, 0.72vw, 0.66rem)",
+  letterSpacing: "0.18em",
   textTransform: "uppercase",
 };
 
-function Repeat({ times, children }: { times: number; children: React.ReactNode }) {
+function Run({ children }: { children: React.ReactNode }) {
   return (
     <>
-      {Array.from({ length: times }, (_, i) => (
+      {Array.from({ length: 5 }, (_, i) => (
         <span key={i} style={cell}>
           {children}
+          <Arrow style={{ width: 13, height: 13, flexShrink: 0 }} />
         </span>
       ))}
     </>
@@ -41,128 +47,177 @@ function Repeat({ times, children }: { times: number; children: React.ReactNode 
 }
 
 /*
-  Five overlapping bars, tilted at opposing angles, sitting across the seam
-  between the hero and the manifesto so the page reads as taped shut.
+  Five tapes laid ACROSS the hero at different heights and angles, so the
+  screen reads as something sealed shut rather than a stack of bars parked at
+  the bottom.
 
-  They are aria-hidden: the content is decorative repetition of facts stated
-  properly elsewhere, and a screen reader announcing it five times over would
-  be noise. Marquee sets aria-hidden itself.
+  They are deliberately thin, and positioned around the type rather than
+  evenly: at even spacing with heavier bars they buried "Build in public."
+  completely, which is obscuring the page rather than sealing it. Two seal
+  above the headline, clear of the fixed nav; three seal below it. Only the
+  outlined line is crossed, which is the partial obscuring the design wants.
+
+  They peel away in different directions as the visitor scrolls — the moment
+  the package opens.
 */
-export function TapeStack() {
-  const site = getSite();
+const TAPES: Tape[] = [
+  {
+    bg: "var(--color-ink)",
+    fg: "var(--blush)",
+    speed: 62,
+    direction: 1,
+    top: 12,
+    rotate: -4.5,
+    exitX: -14,
+    exitY: -34,
+    copy: <Run>We Code Coders — Independent builder culture</Run>,
+  },
+  {
+    bg: "var(--blush)",
+    fg: "var(--color-ink)",
+    speed: 44,
+    direction: -1,
+    top: 19.5,
+    rotate: 3.5,
+    exitX: 16,
+    exitY: -22,
+    copy: <Run>Online events — Pune events — Open briefs</Run>,
+  },
+  {
+    bg: "var(--acid)",
+    fg: "var(--color-ink)",
+    speed: 88,
+    direction: 1,
+    top: 70,
+    rotate: -2.5,
+    exitX: -20,
+    exitY: 26,
+    copy: <Run>Build — Break — Learn — Ship — Repeat</Run>,
+  },
+  {
+    bg: "var(--signal)",
+    fg: "var(--color-paper)",
+    speed: 56,
+    direction: -1,
+    top: 79,
+    rotate: 4.5,
+    exitX: 22,
+    exitY: 34,
+    copy: <Run>Mini challenges — Mentors — Tools — Feedback</Run>,
+  },
+  {
+    bg: "var(--color-paper-2)",
+    fg: "var(--color-ink)",
+    speed: 72,
+    direction: 1,
+    top: 88,
+    rotate: -3,
+    exitX: -10,
+    exitY: 44,
+    copy: <Run>New events entering the system</Run>,
+  },
+];
 
-  const bars: Bar[] = [
-    {
-      bg: "var(--violet)",
-      fg: "var(--pink)",
-      speed: 70,
-      direction: 1,
-      rotate: -1.8,
-      pad: "0.8em 0",
-      content: (
-        <Repeat times={4}>
-          Hackathons <Arrow style={{ width: 13, height: 13 }} /> Workshops{" "}
-          <Arrow style={{ width: 13, height: 13 }} /> Build nights{" "}
-          <Arrow style={{ width: 13, height: 13 }} /> Demo days
-        </Repeat>
-      ),
+export function TapeStack() {
+  const root = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+
+  useGSAP(
+    () => {
+      const el = root.current;
+      if (!el || reduced) return;
+
+      const tapes = gsap.utils.toArray<HTMLElement>(".tape");
+
+      // Peel: each tape leaves in its own direction, so the seal breaks apart
+      // rather than fading out as one block.
+      const peel = gsap.timeline({
+        scrollTrigger: {
+          trigger: el.parentElement ?? el,
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.8,
+        },
+      });
+
+      tapes.forEach((tape, i) => {
+        peel.to(
+          tape,
+          {
+            xPercent: Number(tape.dataset.exitX),
+            yPercent: Number(tape.dataset.exitY),
+            rotate: Number(tape.dataset.rotate) * 2.4,
+            autoAlpha: 0,
+            ease: "none",
+          },
+          i * 0.04,
+        );
+      });
+
+      // A restrained pointer parallax, so the tapes sit in front of the type
+      // rather than on it.
+      const depth = tapes.map((t, i) => (i % 2 === 0 ? 1 : -1) * (6 + i * 2));
+      const setters = tapes.map((t) => gsap.quickTo(t, "x", { duration: 0.8, ease: "power3.out" }));
+
+      const onMove = (e: PointerEvent) => {
+        const nx = e.clientX / window.innerWidth - 0.5;
+        setters.forEach((set, i) => set(nx * (depth[i] ?? 8)));
+      };
+      window.addEventListener("pointermove", onMove);
+
+      return () => {
+        window.removeEventListener("pointermove", onMove);
+        peel.scrollTrigger?.kill();
+        peel.kill();
+      };
     },
-    {
-      bg: "var(--color-paper)",
-      fg: "var(--color-ink)",
-      speed: 45,
-      direction: -1,
-      rotate: 1.1,
-      pad: "0.8em 0",
-      content: (
-        <Repeat times={4}>
-          Est. {site.foundedYear} — {site.city}, {site.country} — Open to all — No
-          gatekeeping
-        </Repeat>
-      ),
-    },
-    {
-      bg: "var(--lime)",
-      fg: "var(--color-ink)",
-      speed: 95,
-      direction: 1,
-      rotate: -0.7,
-      pad: "0.8em 0",
-      content: (
-        <Repeat times={4}>
-          {site.stats.map((s) => `${s.value} ${s.label}`).join("  /  ")}
-        </Repeat>
-      ),
-    },
-    {
-      bg: "var(--color-ink)",
-      fg: "var(--pink)",
-      speed: 60,
-      direction: -1,
-      rotate: 1.6,
-      pad: "0.55em 0",
-      content: (
-        <Repeat times={8}>
-          <Logo
-            idPrefix="tape"
-            tone="current"
-            decorative
-            style={{ height: "2.7em", width: "auto" }}
-          />
-          <Arrow style={{ width: 15, height: 15 }} />
-        </Repeat>
-      ),
-    },
-    {
-      bg: "var(--pink)",
-      fg: "var(--violet)",
-      speed: 80,
-      direction: 1,
-      rotate: -1.1,
-      pad: "0.8em 0",
-      content: (
-        <Repeat times={5}>
-          <Arrow direction="up-right" style={{ width: 14, height: 14 }} /> Build in
-          public <Arrow direction="up-right" style={{ width: 14, height: 14 }} /> Leave
-          with proof
-        </Repeat>
-      ),
-    },
-  ];
+    { scope: root, dependencies: [reduced] },
+  );
 
   return (
     <div
-      className="burst"
+      ref={root}
+      className="burst tape-layer"
       style={{
-        position: "relative",
+        position: "absolute",
+        inset: 0,
         zIndex: 3,
-        // The bars are rotated, so they overhang horizontally. Clipping on x
-        // only keeps that from producing a horizontal scrollbar, without
-        // clipping the vertical overlap that makes them read as a stack.
-        overflowX: "clip",
-        padding: "clamp(3rem, 9vh, 7rem) 0",
+        pointerEvents: "none",
+        overflow: "clip",
       }}
     >
-      {bars.map((bar, i) => (
-        <Marquee
+      {TAPES.map((tape, i) => (
+        <div
           key={i}
-          speed={bar.speed}
-          direction={bar.direction}
+          className="tape"
+          data-exit-x={tape.exitX}
+          data-exit-y={tape.exitY}
+          data-rotate={tape.rotate}
           style={{
-            background: bar.bg,
-            color: bar.fg,
-            padding: bar.pad,
-            // scale covers the corners the rotation would otherwise expose.
-            transform: `rotate(${bar.rotate}deg) scale(1.05)`,
-            // Bars kiss rather than swallow: enough overlap to read as a
-            // stack, not so much that one bar's text sits under another's.
-            marginTop: i === 0 ? 0 : "-0.35em",
-            position: "relative",
-            boxShadow: "0 1px 0 rgba(0,0,0,0.10), 0 -1px 0 rgba(0,0,0,0.06)",
+            position: "absolute",
+            top: `${tape.top}%`,
+            left: "-14%",
+            width: "128%",
+            transform: `rotate(${tape.rotate}deg)`,
+            boxShadow: "0 2px 14px rgba(20,33,57,0.12)",
+            pointerEvents: "auto",
           }}
         >
-          {bar.content}
-        </Marquee>
+          <Marquee
+            speed={tape.speed}
+            direction={tape.direction}
+            style={{
+              background: tape.bg,
+              color: tape.fg,
+              padding: "0.55em 0",
+              // A faint fabric tooth, so they read as tape rather than as bars.
+              backgroundImage:
+                "repeating-linear-gradient(90deg, rgba(0,0,0,0.045) 0 1px, transparent 1px 3px)",
+            }}
+          >
+            {tape.copy}
+          </Marquee>
+        </div>
       ))}
     </div>
   );

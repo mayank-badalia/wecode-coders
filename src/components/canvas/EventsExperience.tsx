@@ -96,6 +96,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
   const input = useRef({ drag: 0, scroll: 0, nudge: 0, dragging: false });
   const lastPointerX = useRef(0);
   const pointerStart = useRef({ x: 0, y: 0 });
+  const lenis = useLenis();
   // Mirrors `focused` for the pointer handlers, which are bound once and must
   // not be torn down and rebound on every rotation of the ring.
   const focusedRef = useRef(0);
@@ -117,13 +118,53 @@ export function EventsExperience({ events }: { events: Event[] }) {
     return snapshot;
   }, []);
 
-  // Scroll drives rotation. The page itself does not scroll here — the ring
-  // consumes it — so Lenis velocity is read rather than page position.
-  useLenis((lenis) => {
-    if (lenis.velocity === 0) return;
-    input.current.scroll += lenis.velocity * 0.012;
-    requestFrame.current?.();
-  });
+  /*
+    The page does not scroll on this route: every scroll is a rotation.
+
+    Previously the document was taller than the viewport, so scrolling carried
+    the visitor past the ring to the footer while also spinning it — which is
+    why it felt stuck rather than driven. Lenis is stopped, the body is fixed
+    at its current offset, and wheel and touch events are consumed here.
+  */
+  useEffect(() => {
+    lenis?.stop();
+
+    const { body, documentElement: html } = document;
+    const prev = { bodyOverflow: body.style.overflow, htmlOverflow: html.style.overflow };
+    body.style.overflow = "hidden";
+    html.style.overflow = "hidden";
+    window.scrollTo(0, 0);
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      input.current.scroll += e.deltaY * 0.00055;
+      requestFrame.current?.();
+    };
+
+    let lastTouchY = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      lastTouchY = e.touches[0]?.clientY ?? 0;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      const y = e.touches[0]?.clientY ?? 0;
+      input.current.scroll += (lastTouchY - y) * 0.0016;
+      lastTouchY = y;
+      requestFrame.current?.();
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      body.style.overflow = prev.bodyOverflow;
+      html.style.overflow = prev.htmlOverflow;
+      lenis?.start();
+    };
+  }, [lenis]);
 
   const step = useCallback(
     (dir: number) => {
@@ -227,6 +268,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
       ref={stage}
       className="burst"
       data-nav-theme="dark"
+      data-cursor="Drag"
       style={{
         position: "relative",
         height: "100svh",
@@ -290,7 +332,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
                 margin: "0.2em 0 0",
                 fontFamily: "var(--font-display)",
                 fontSize: "clamp(2rem, 5.5vw, 4.6rem)",
-                fontVariationSettings: "'wdth' 78, 'wght' 850",
+                fontWeight: 700,
                 lineHeight: 0.94,
                 textTransform: "uppercase",
               }}

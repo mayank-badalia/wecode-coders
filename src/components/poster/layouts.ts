@@ -6,10 +6,11 @@
 */
 
 export const GROUNDS = [
-  { name: "violet", bg: "#4B3BF0", fg: "#F5C9D0", accent: "#C9F73D" },
-  { name: "pink", bg: "#F5C9D0", fg: "#4B3BF0", accent: "#131C33" },
-  { name: "lime", bg: "#C9F73D", fg: "#131C33", accent: "#4B3BF0" },
-  { name: "ink", bg: "#131C33", fg: "#F5C9D0", accent: "#C9F73D" },
+  { name: "ink", bg: "#142139", fg: "#F3EFE5", accent: "#F04436" },
+  { name: "signal", bg: "#F04436", fg: "#F3EFE5", accent: "#142139" },
+  { name: "blush", bg: "#F3A5B7", fg: "#142139", accent: "#F04436" },
+  { name: "acid", bg: "#D8EF72", fg: "#142139", accent: "#F04436" },
+  { name: "paper", bg: "#E8E1D5", fg: "#142139", accent: "#F04436" },
 ] as const;
 
 export const TITLE_TREATMENTS = ["solid", "outline", "mixed"] as const;

@@ -4,12 +4,13 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
-import { getSite } from "@/lib/events";
+import { TransitionLink } from "@/components/motion/TransitionLink";
+import { getSite, getUpcomingEvents } from "@/lib/events";
+import { formatEventDate } from "@/lib/format";
 import { Arrow } from "./Arrow";
 import { hasLoaderFinished, LOADER_DONE_EVENT } from "./Loader";
-import { Logo } from "./Logo";
+import { TapeStack } from "./TapeStack";
 
-/** One masked line. The mask is the parent; the child is what moves. */
 function Line({
   children,
   style,
@@ -18,7 +19,7 @@ function Line({
   style?: React.CSSProperties;
 }) {
   return (
-    <span style={{ display: "block", overflow: "hidden", paddingBottom: "0.08em" }}>
+    <span style={{ display: "block", overflow: "hidden", paddingBottom: "0.06em" }}>
       <span className="hero-line" style={{ display: "block", ...style }}>
         {children}
       </span>
@@ -26,10 +27,18 @@ function Line({
   );
 }
 
+const mono: React.CSSProperties = {
+  fontFamily: "var(--font-mono)",
+  fontSize: "clamp(0.62rem, 0.85vw, 0.74rem)",
+  letterSpacing: "0.14em",
+  textTransform: "uppercase",
+};
+
 export function Hero() {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const site = getSite();
+  const next = getUpcomingEvents()[0];
 
   useGSAP(
     () => {
@@ -38,62 +47,47 @@ export function Hero() {
 
       const lines = gsap.utils.toArray<HTMLElement>(".hero-line");
       const outlined = el.querySelector<HTMLElement>(".hero-outlined");
-      const build = el.querySelector<HTMLElement>(".hero-build");
-      const ghost = el.querySelector<HTMLElement>(".hero-ghost");
       const cue = el.querySelector<HTMLElement>(".hero-cue");
-      const kicker = el.querySelector<HTMLElement>(".hero-kicker");
+      const meta = gsap.utils.toArray<HTMLElement>(".hero-meta");
 
-      // The scroll-linked width morph runs regardless of the entrance, and is
-      // the one piece that must survive reduced motion being toggled.
-      const widthTrigger =
+      /*
+        Instrument Serif and Plex Condensed carry no variable axes, so the
+        scroll-linked stretch is done with a transform instead: the outlined
+        line widens horizontally as the hero leaves, which reads as the same
+        gesture and costs nothing to composite.
+      */
+      const stretch =
         outlined && !reduced
           ? gsap.to(outlined, {
-              "--wdth": 110,
+              scaleX: 1.06,
+              letterSpacing: "0.02em",
               ease: "none",
               scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: 0.6 },
             })
           : null;
 
-      const parallax =
-        ghost && !reduced
-          ? gsap.to(ghost, {
-              yPercent: 15,
-              ease: "none",
-              scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: true },
-            })
-          : null;
-
-      if (reduced) {
-        return () => {
-          widthTrigger?.scrollTrigger?.kill();
-          parallax?.scrollTrigger?.kill();
-        };
-      }
+      if (reduced) return () => stretch?.scrollTrigger?.kill();
 
       const tl = gsap.timeline({ paused: true });
 
-      tl.from(lines, { yPercent: 110, duration: 1, ease: "wccOut", stagger: 0.09 })
-        // "Build" settles its WONK axis: the italic arrives warped and relaxes.
-        .fromTo(build, { "--wonk": 1 }, { "--wonk": 0, duration: 0.7 }, 0.2)
-        // The outlined line is live text, not an SVG path, so DrawSVG does not
-        // apply — it is revealed with a clip-path sweep instead.
+      tl.from(lines, { yPercent: 112, duration: 1, ease: "wccOut", stagger: 0.08 })
         .fromTo(
           outlined,
           { clipPath: "inset(0 100% 0 0)" },
-          { clipPath: "inset(0 0% 0 0)", duration: 1.1, ease: "wcc" },
-          0.35,
+          { clipPath: "inset(0 0% 0 0)", duration: 1.05, ease: "wcc" },
+          0.32,
         )
-        .from(kicker, { autoAlpha: 0, y: -12, duration: 0.6 }, 0.5)
-        .from(cue, { autoAlpha: 0, y: -14, duration: 0.6 }, 0.9);
+        .from(meta, { autoAlpha: 0, y: 18, duration: 0.7, stagger: 0.08 }, 0.55)
+        .from(cue, { autoAlpha: 0, y: -12, duration: 0.6 }, 0.95);
 
       if (cue) {
         gsap.to(cue, {
-          y: 10,
-          duration: 1,
+          y: 9,
+          duration: 1.1,
           ease: "sine.inOut",
           repeat: -1,
           yoyo: true,
-          delay: 1.6,
+          delay: 1.7,
         });
       }
 
@@ -104,8 +98,7 @@ export function Hero() {
       return () => {
         window.removeEventListener(LOADER_DONE_EVENT, start);
         tl.kill();
-        widthTrigger?.scrollTrigger?.kill();
-        parallax?.scrollTrigger?.kill();
+        stretch?.scrollTrigger?.kill();
         ScrollTrigger.refresh();
       };
     },
@@ -118,101 +111,62 @@ export function Hero() {
       style={{
         position: "relative",
         minHeight: "100svh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: "clamp(6rem, 14vh, 10rem) clamp(1.25rem, 4vw, 3rem) clamp(3rem, 8vh, 6rem)",
-        overflow: "hidden",
+        display: "grid",
+        gridTemplateRows: "auto 1fr auto",
+        padding:
+          "clamp(6rem, 13vh, 9rem) clamp(1.25rem, 4vw, 3rem) clamp(2rem, 5vh, 3.5rem)",
+        maxWidth: "min(1680px, 94vw)",
+        margin: "0 auto",
         zIndex: 2,
       }}
     >
-      {/* Oversized ghost mark, parallaxing behind the type. */}
-      <div
-        className="hero-ghost"
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: "-10%",
-          left: "-20%",
-          width: "140vw",
-          opacity: 0.05,
-          pointerEvents: "none",
-        }}
-      >
-        <Logo idPrefix="ghost" tone="ink" decorative style={{ width: "100%", height: "auto" }} />
-      </div>
-
-      <p
-        className="hero-kicker"
-        style={{
-          position: "relative",
-          margin: "0 0 auto",
-          fontFamily: "var(--font-mono)",
-          fontSize: "clamp(0.65rem, 1vw, 0.8rem)",
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: "var(--color-ink-60)",
-        }}
-      >
-        [ {site.name} ] // Community of builders — {site.city}, {site.country}
+      <p className="hero-meta" style={{ ...mono, margin: 0, color: "var(--color-ink-60)" }}>
+        [ {site.name} ] // Independent builder culture — {site.city}, {site.country}
       </p>
 
       <h1
         style={{
           position: "relative",
-          margin: "0",
-          lineHeight: 0.92,
-          letterSpacing: "-0.02em",
+          zIndex: 4,
+          margin: "clamp(1.5rem, 5vh, 3rem) 0 0",
+          alignSelf: "center",
+          lineHeight: 0.9,
+          letterSpacing: "-0.025em",
         }}
       >
         <Line
           style={{
             fontFamily: "var(--font-editorial)",
-            fontSize: "clamp(3.2rem, 13vw, 11rem)",
-            fontWeight: 900,
+            fontSize: "clamp(3.4rem, 13.5vw, 11.5rem)",
           }}
         >
-          <span
-            className="hero-build"
-            style={{
-              fontStyle: "italic",
-              fontWeight: 300,
-              color: "var(--color-terracotta)",
-              fontVariationSettings: "'WONK' var(--wonk, 0), 'SOFT' 0",
-              // The italic's exit stroke reaches well past its advance width,
-              // so a word space alone leaves "Build" touching "in".
-              marginRight: "0.14em",
-            }}
-          >
-            Build
-          </span>{" "}
-          in
+          <span style={{ fontStyle: "italic", color: "var(--color-signal)" }}>Build</span>{" "}
+          <span>in</span>
         </Line>
 
         <Line
           style={{
             fontFamily: "var(--font-editorial)",
-            fontSize: "clamp(3.2rem, 13vw, 11rem)",
-            fontWeight: 900,
-            paddingLeft: "14%",
+            fontSize: "clamp(3.4rem, 13.5vw, 11.5rem)",
+            paddingLeft: "16%",
           }}
         >
           public.
         </Line>
 
-        <Line style={{ marginTop: "0.1em" }}>
+        <Line style={{ marginTop: "0.08em" }}>
           <span
             className="hero-outlined"
             style={{
               display: "block",
+              transformOrigin: "left center",
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(2.1rem, 9.2vw, 7.6rem)",
-              fontWeight: 900,
+              fontSize: "clamp(2.2rem, 9.4vw, 7.8rem)",
+              fontWeight: 700,
               textTransform: "uppercase",
-              letterSpacing: "-0.01em",
+              letterSpacing: "-0.005em",
               color: "transparent",
-              WebkitTextStroke: "1.5px var(--color-ink)",
-              fontVariationSettings: "'wdth' var(--wdth, 75)",
+              WebkitTextStroke: "1.4px var(--color-ink)",
             }}
           >
             Leave with proof.
@@ -220,23 +174,103 @@ export function Hero() {
         </Line>
       </h1>
 
+      {/*
+        The fold used to end on the headline with a large empty band beneath
+        it. This rail carries the things a first-time visitor actually needs —
+        what this is, what is next, and a way in — without breaking the
+        editorial calm of the type above.
+      */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1.35fr) minmax(0, 1fr) auto",
+          gap: "clamp(1.5rem, 5vw, 4rem)",
+          alignItems: "end",
+          position: "relative",
+          zIndex: 4,
+          marginTop: "clamp(2.5rem, 8vh, 5rem)",
+          // Its own paper ground: the tapes pass beneath it rather than
+          // through the copy, so this stays legible at every tape position.
+          background: "var(--color-paper)",
+          padding: "1.4rem clamp(0.75rem, 1.5vw, 1.25rem) 0.6rem",
+          borderTop: "1px solid var(--color-ink)",
+        }}
+        className="hero-rail"
+      >
+        <p
+          className="hero-meta"
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-body)",
+            fontSize: "clamp(0.95rem, 1.15vw, 1.1rem)",
+            lineHeight: 1.55,
+            maxWidth: "46ch",
+            color: "var(--color-ink)",
+          }}
+        >
+          We Code Coders runs focused events where curious people meet a deadline,
+          form a team, and turn unfinished ideas into visible work.
+        </p>
+
+        {next && (
+          <div className="hero-meta">
+            <p style={{ ...mono, margin: 0, color: "var(--color-ink-40)" }}>Next event</p>
+            <p
+              style={{
+                margin: "0.35em 0 0",
+                fontFamily: "var(--font-display)",
+                fontWeight: 700,
+                fontSize: "clamp(1.1rem, 1.7vw, 1.5rem)",
+                textTransform: "uppercase",
+                letterSpacing: "0.01em",
+              }}
+            >
+              {next.title}
+            </p>
+            <p style={{ ...mono, margin: "0.3em 0 0", color: "var(--color-ink-60)" }}>
+              {formatEventDate(next.startsAt, next.endsAt)} — {next.venue.city}
+            </p>
+          </div>
+        )}
+
+        <TransitionLink
+          href="/events"
+          label="Events"
+          className="hero-meta hero-cta"
+          style={{
+            ...mono,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.7em",
+            padding: "0.9em 1.3em",
+            background: "var(--color-ink)",
+            color: "var(--color-paper)",
+            textDecoration: "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Explore events
+          <Arrow style={{ width: 15, height: 15 }} />
+        </TransitionLink>
+      </div>
+
+      <TapeStack />
+
       <div
         className="hero-cue"
         style={{
-          position: "relative",
-          marginTop: "auto",
-          paddingTop: "clamp(2rem, 6vh, 4rem)",
+          ...mono,
+          position: "absolute",
+          left: "clamp(1.25rem, 4vw, 3rem)",
+          bottom: "clamp(0.8rem, 2vh, 1.4rem)",
+          zIndex: 4,
           display: "flex",
           alignItems: "center",
-          gap: "0.7em",
-          fontFamily: "var(--font-mono)",
-          fontSize: "clamp(0.65rem, 1vw, 0.8rem)",
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: "var(--color-ink-60)",
+          gap: "0.6em",
+          color: "var(--color-ink-40)",
         }}
       >
-        <Arrow direction="down" style={{ width: 18, height: 18 }} />
+        <Arrow direction="down" style={{ width: 16, height: 16 }} />
         Scroll
       </div>
     </section>

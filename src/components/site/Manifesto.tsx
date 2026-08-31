@@ -51,13 +51,18 @@ export function Manifesto() {
             scrollTrigger: { trigger: quote, start: "top 82%", once: true },
           });
 
-          // SOFT rises as the quote arrives, so the terminals soften into place.
+          /*
+            Instrument Serif has no variable axes, so the arrival is carried by
+            colour instead: the quote lands in ink and a signal-red wipe passes
+            through it once, left to right.
+          */
           const soft = gsap.fromTo(
             quote,
-            { "--soft": 0 },
+            { "--wipe": "0%" },
             {
-              "--soft": 60,
-              duration: 1.4,
+              "--wipe": "100%",
+              duration: 1.6,
+              ease: "wcc",
               scrollTrigger: { trigger: quote, start: "top 82%", once: true },
             },
           );
@@ -157,7 +162,11 @@ export function Manifesto() {
             fontWeight: 400,
             lineHeight: 1.12,
             letterSpacing: "-0.015em",
-            fontVariationSettings: "'SOFT' var(--soft, 0), 'opsz' 120",
+            backgroundImage:
+              "linear-gradient(90deg, var(--color-signal) var(--wipe, 0%), var(--color-ink) var(--wipe, 0%))",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            color: "transparent",
           }}
         >
           {site.manifesto[0]}
@@ -186,7 +195,7 @@ export function Manifesto() {
                   top: "0.35em",
                   width: 13,
                   height: 13,
-                  color: "var(--color-terracotta)",
+                  color: "var(--color-signal)",
                 }}
               />
               {n.text}
@@ -212,7 +221,7 @@ export function Manifesto() {
                 margin: 0,
                 fontFamily: "var(--font-display)",
                 fontSize: "clamp(2.4rem, 7vw, 5.5rem)",
-                fontVariationSettings: "'wdth' 78, 'wght' 800",
+                fontWeight: 700,
                 lineHeight: 1,
               }}
             >

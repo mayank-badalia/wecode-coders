@@ -37,8 +37,8 @@ export function BurstBreak({ line }: { line: string }) {
       style={{
         position: "relative",
         zIndex: 2,
-        background: "var(--violet)",
-        color: "var(--pink)",
+        background: "var(--color-ink)",
+        color: "var(--blush)",
         padding: "clamp(5rem, 16vh, 11rem) clamp(1.25rem, 4vw, 3rem)",
         margin: "clamp(4rem, 12vh, 8rem) 0",
         overflowX: "clip",
@@ -53,7 +53,7 @@ export function BurstBreak({ line }: { line: string }) {
           inset: 0,
           opacity: 0.22,
           backgroundImage:
-            "radial-gradient(circle, var(--lime) 1px, transparent 1px)",
+            "radial-gradient(circle, var(--acid) 1px, transparent 1px)",
           backgroundSize: "14px 14px",
         }}
       />
@@ -64,12 +64,12 @@ export function BurstBreak({ line }: { line: string }) {
           margin: 0,
           fontFamily: "var(--font-display)",
           fontSize: "clamp(2.2rem, 9vw, 8rem)",
-          fontVariationSettings: "'wdth' 104, 'wght' 900",
+          fontWeight: 700,
           lineHeight: 0.92,
           textTransform: "uppercase",
           letterSpacing: "-0.02em",
           color: "transparent",
-          WebkitTextStroke: "1.5px var(--pink)",
+          WebkitTextStroke: "1.5px var(--blush)",
           maxWidth: "16ch",
         }}
       >
@@ -97,7 +97,7 @@ export function BurstBreak({ line }: { line: string }) {
           direction={1}
           liftOnHover={false}
           style={{
-            background: "var(--lime)",
+            background: "var(--acid)",
             color: "var(--color-ink)",
             padding: "0.6em 0",
             transform: "rotate(-4deg) scale(1.08)",
@@ -112,8 +112,8 @@ export function BurstBreak({ line }: { line: string }) {
           direction={-1}
           liftOnHover={false}
           style={{
-            background: "var(--pink)",
-            color: "var(--violet)",
+            background: "var(--blush)",
+            color: "var(--color-ink)",
             padding: "0.6em 0",
             transform: "rotate(3deg) scale(1.08)",
           }}

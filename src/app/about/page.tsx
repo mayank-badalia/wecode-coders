@@ -74,7 +74,7 @@ export default function AboutPage() {
               style={{
                 fontStyle: "italic",
                 fontWeight: 300,
-                color: "var(--color-terracotta)",
+                color: "var(--color-signal)",
                 // The italic's exit stroke overruns its advance width.
                 marginRight: "0.12em",
               }}

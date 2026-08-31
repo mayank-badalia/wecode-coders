@@ -80,7 +80,7 @@ export function posterToCanvas(event: Event): HTMLCanvasElement {
   // Title
   const display = resolveFamily("--font-display");
   const size = Math.min(150, (W * 1.5) / longest);
-  ctx.font = `900 ${size}px ${display}`;
+  ctx.font = `700 ${size}px ${display}`;
   ctx.textBaseline = "top";
 
   const pad = W * 0.07;

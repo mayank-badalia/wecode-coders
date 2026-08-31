@@ -41,7 +41,7 @@ export default function NotFound() {
         }}
       >
         This one did not{" "}
-        <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--color-terracotta)" }}>
+        <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--color-signal)" }}>
           ship
         </span>
         .

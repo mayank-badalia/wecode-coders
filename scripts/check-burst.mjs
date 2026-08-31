@@ -14,7 +14,12 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 
 const ROOT = "src";
-const TOKENS = /--violet|--pink|--lime|#4B3BF0|#F5C9D0|#C9F73D/i;
+/*
+  Deep ink is deliberately absent from this list: it replaced violet as the
+  dark ground and is legitimate anywhere. What stays rationed is the loud
+  accent pair — blush and acid — which is what the 30% actually buys.
+*/
+const TOKENS = /--blush|--acid|#F3A5B7|#D8EF72/i;
 
 const ALLOWED = [
   "src/components/site/Loader",
@@ -47,9 +52,9 @@ const violations = walk(ROOT)
   .filter((p) => TOKENS.test(readFileSync(p, "utf8")));
 
 if (violations.length > 0) {
-  console.error("check-burst: burst colours used outside an allowed zone (spec 4.1):");
+  console.error("check-burst: accent colours used outside an allowed zone:");
   for (const v of violations) console.error("  " + v);
-  console.error("\nUse paper / ink / terracotta here, or move the surface into a burst zone.");
+  console.error("\nUse paper / ink / signal here, or move the surface into a burst zone.");
   process.exit(1);
 }
 

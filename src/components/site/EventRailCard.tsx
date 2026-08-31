@@ -28,6 +28,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
         }}
         className="rail-card"
         data-slug={event.slug}
+        data-cursor="Open"
         style={{
           position: "relative",
           flexShrink: 0,
@@ -95,7 +96,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
               margin: "0.4em 0 0",
               fontFamily: "var(--font-display)",
               fontSize: "clamp(1.5rem, 3.4vw, 3.4rem)",
-              fontVariationSettings: "'wdth' 76, 'wght' 800",
+              fontWeight: 700,
               lineHeight: 0.95,
               textTransform: "uppercase",
             }}

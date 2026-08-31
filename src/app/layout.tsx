@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Footer } from "@/components/site/Footer";
+import { SiteFooter } from "@/components/site/SiteFooter";
 import { Loader, LOADER_PREPAINT_SCRIPT } from "@/components/site/Loader";
+import { Cursor } from "@/components/motion/Cursor";
 import { Grain } from "@/components/site/Grain";
 import { Grid } from "@/components/site/Grid";
 import { Nav } from "@/components/site/Nav";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { TransitionProvider } from "@/components/motion/TransitionProvider";
-import { archivo, fraunces, jetbrainsMono } from "@/lib/fonts";
+import { instrumentSerif, plexCondensed, plexMono, plexSans } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${archivo.variable} ${jetbrainsMono.variable}`}
+      className={`${instrumentSerif.variable} ${plexSans.variable} ${plexCondensed.variable} ${plexMono.variable}`}
       /*
         The loader's pre-paint script stamps data-wcc-seen on this element
         before React hydrates, so the server's markup and the client's differ
@@ -37,10 +38,11 @@ export default function RootLayout({
           <TransitionProvider>
             <Loader />
             <Grain />
+            <Cursor />
             <Grid />
             <Nav />
             {children}
-            <Footer />
+            <SiteFooter />
           </TransitionProvider>
         </MotionProvider>
       </body>

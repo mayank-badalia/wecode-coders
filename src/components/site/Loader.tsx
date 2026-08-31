@@ -92,7 +92,7 @@ export function Loader() {
       // Phase 1 — DRAW. Outlines stroke on from the centre of the wordmark out.
       tl.set(letters, {
         fillOpacity: 0,
-        stroke: "var(--pink)",
+        stroke: "var(--blush)",
         strokeWidth: 2,
         drawSVG: "0%",
       })
@@ -189,7 +189,7 @@ export function Loader() {
           <div
             key={i}
             className="loader-column"
-            style={{ flex: 1, background: "var(--violet)" }}
+            style={{ flex: 1, background: "var(--color-ink)" }}
           />
         ))}
       </div>
@@ -220,7 +220,7 @@ export function Loader() {
           bottom: "clamp(1rem, 4vw, 3rem)",
           fontFamily: "var(--font-mono)",
           fontSize: "clamp(2rem, 6vw, 4rem)",
-          color: "var(--pink)",
+          color: "var(--blush)",
           fontVariantNumeric: "tabular-nums",
         }}
       >

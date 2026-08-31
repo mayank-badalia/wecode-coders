@@ -94,7 +94,7 @@ export default async function EventPage({ params }: Params) {
                 margin: "0.3em 0 0",
                 fontFamily: "var(--font-display)",
                 fontSize: "clamp(2.6rem, 9vw, 8rem)",
-                fontVariationSettings: "'wdth' 78, 'wght' 850",
+                fontWeight: 700,
                 lineHeight: 0.92,
                 letterSpacing: "-0.02em",
                 textTransform: "uppercase",
@@ -204,7 +204,7 @@ export default async function EventPage({ params }: Params) {
                         margin: 0,
                         fontFamily: "var(--font-display)",
                         fontSize: "clamp(2rem, 5vw, 3.4rem)",
-                        fontVariationSettings: "'wdth' 80, 'wght' 800",
+                        fontWeight: 700,
                         lineHeight: 1,
                       }}
                     >
@@ -224,7 +224,7 @@ export default async function EventPage({ params }: Params) {
                       href={l.href}
                       target="_blank"
                       rel="noreferrer noopener"
-                      style={{ ...monoLabel, color: "var(--color-terracotta)" }}
+                      style={{ ...monoLabel, color: "var(--color-signal)" }}
                     >
                       {l.label}
                     </a>
@@ -293,7 +293,7 @@ export default async function EventPage({ params }: Params) {
                   fontSize: "clamp(1.8rem, 5vw, 4rem)",
                   fontWeight: 800,
                   lineHeight: 1.05,
-                  color: "var(--color-terracotta)",
+                  color: "var(--color-signal)",
                 }}
               >
                 {next.title}
