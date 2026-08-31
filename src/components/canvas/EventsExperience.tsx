@@ -1,0 +1,364 @@
+"use client";
+
+import { Canvas, useThree } from "@react-three/fiber";
+import { useGSAP } from "@gsap/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { gsap } from "@/components/motion/gsap";
+import { useLenis, useReducedMotion } from "@/components/motion/MotionProvider";
+import { Arrow } from "@/components/site/Arrow";
+import { formatEventDate } from "@/lib/format";
+import type { Event } from "@/lib/types";
+import { CAMERA_Z, EventRing } from "./EventRing";
+import { RingFallback } from "./RingFallback";
+
+/*
+  The canvas runs frameloop="demand" so an idle ring costs nothing. That means
+  input arriving from outside React Three Fiber — a pointer drag, a scroll —
+  has to explicitly ask for a frame, or the loop never runs and the input is
+  never consumed. This hands the request function back out to the page.
+*/
+function InvalidateBridge({ onReady }: { onReady: (fn: () => void) => void }) {
+  const invalidate = useThree((s) => s.invalidate);
+  useEffect(() => {
+    onReady(invalidate);
+  }, [invalidate, onReady]);
+  return null;
+}
+
+const mono: React.CSSProperties = {
+  fontFamily: "var(--font-mono)",
+  fontSize: "clamp(0.62rem, 0.9vw, 0.76rem)",
+  letterSpacing: "0.14em",
+  textTransform: "uppercase",
+};
+
+/**
+ * Decides whether this device should run the WebGL ring at all.
+ *
+ * Three ways to fail: the visitor asked for reduced motion, the device is a
+ * small touch screen, or a short frame-time sample shows it cannot hold a
+ * usable rate. Any of them mounts the CSS fallback instead.
+ */
+function useCanRunWebGL(reduced: boolean) {
+  const [ok, setOk] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let raf = 0;
+    let frames = 0;
+    let started = 0;
+
+    // Every decision is made inside the animation-frame callback rather than
+    // in the effect body. Deciding synchronously here would set state during
+    // the effect and cascade a second render before paint.
+    const decide = () => {
+      if (reduced) return setOk(false);
+
+      if (window.matchMedia("(max-width: 900px), (pointer: coarse)").matches) {
+        return setOk(false);
+      }
+
+      const gl = document.createElement("canvas").getContext("webgl2");
+      if (!gl) return setOk(false);
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
+
+      started = performance.now();
+      raf = requestAnimationFrame(sample);
+    };
+
+    // A short frame-time sample: a device that cannot hold 50fps idling will
+    // not hold it with seven textured planes spinning.
+    const sample = () => {
+      frames += 1;
+      const elapsed = performance.now() - started;
+      if (elapsed < 500) raf = requestAnimationFrame(sample);
+      else setOk(frames / (elapsed / 1000) >= 50);
+    };
+
+    raf = requestAnimationFrame(decide);
+    return () => cancelAnimationFrame(raf);
+  }, [reduced]);
+
+  return ok;
+}
+
+export function EventsExperience({ events }: { events: Event[] }) {
+  const router = useRouter();
+  const [focused, setFocused] = useState(0);
+  const reduced = useReducedMotion();
+  const webgl = useCanRunWebGL(reduced);
+  const stage = useRef<HTMLDivElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+
+  const input = useRef({ drag: 0, scroll: 0, nudge: 0, dragging: false });
+  const lastPointerX = useRef(0);
+  const pointerStart = useRef({ x: 0, y: 0 });
+  // Mirrors `focused` for the pointer handlers, which are bound once and must
+  // not be torn down and rebound on every rotation of the ring.
+  const focusedRef = useRef(0);
+  useEffect(() => {
+    focusedRef.current = focused;
+  }, [focused]);
+  const requestFrame = useRef<() => void>(null);
+
+  const onBridgeReady = useCallback((fn: () => void) => {
+    requestFrame.current = fn;
+  }, []);
+
+  // Hands the ring everything accumulated since its last frame, and clears it.
+  const consumeInput = useCallback(() => {
+    const snapshot = { ...input.current };
+    input.current.drag = 0;
+    input.current.scroll = 0;
+    input.current.nudge = 0;
+    return snapshot;
+  }, []);
+
+  // Scroll drives rotation. The page itself does not scroll here — the ring
+  // consumes it — so Lenis velocity is read rather than page position.
+  useLenis((lenis) => {
+    if (lenis.velocity === 0) return;
+    input.current.scroll += lenis.velocity * 0.012;
+    requestFrame.current?.();
+  });
+
+  const step = useCallback(
+    (dir: number) => {
+      // In WebGL mode the ring owns the focused index, so a key press has to
+      // move the ring; setting state alone would be overwritten on the next
+      // frame. The fallback has no ring, so it uses the state directly.
+      input.current.nudge += dir;
+      requestFrame.current?.();
+      setFocused((f) => (f + dir + events.length) % events.length);
+    },
+    [events.length],
+  );
+
+  // Pointer drag, used by both the WebGL ring and the fallback.
+  useEffect(() => {
+    const el = stage.current;
+    if (!el) return;
+
+    const down = (e: PointerEvent) => {
+      input.current.dragging = true;
+      lastPointerX.current = e.clientX;
+      pointerStart.current = { x: e.clientX, y: e.clientY };
+      el.setPointerCapture(e.pointerId);
+    };
+    const move = (e: PointerEvent) => {
+      if (!input.current.dragging) return;
+      const dx = e.clientX - lastPointerX.current;
+      lastPointerX.current = e.clientX;
+      input.current.drag += dx * 0.005;
+      requestFrame.current?.();
+      if (!webgl && Math.abs(dx) > 24) step(dx > 0 ? -1 : 1);
+    };
+    const up = (e: PointerEvent) => {
+      input.current.dragging = false;
+      requestFrame.current?.();
+      if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
+
+      /*
+        A press that did not travel is a click on the focused poster.
+
+        This is handled here rather than with a mesh click handler because the
+        stage captures the pointer in order to drag, so React Three Fiber never
+        receives a clean click of its own. Doing it at this level also means
+        the CSS fallback behaves identically without a second code path.
+      */
+      const travelled = Math.hypot(
+        e.clientX - pointerStart.current.x,
+        e.clientY - pointerStart.current.y,
+      );
+      if (travelled > 6) return;
+      if ((e.target as HTMLElement | null)?.closest("a")) return;
+
+      const target = events[focusedRef.current];
+      if (target) router.push(`/events/${target.slug}`);
+    };
+
+    el.addEventListener("pointerdown", down);
+    el.addEventListener("pointermove", move);
+    el.addEventListener("pointerup", up);
+    el.addEventListener("pointercancel", up);
+    return () => {
+      el.removeEventListener("pointerdown", down);
+      el.removeEventListener("pointermove", move);
+      el.removeEventListener("pointerup", up);
+      el.removeEventListener("pointercancel", up);
+    };
+  }, [webgl, step, events, router]);
+
+  // Keyboard: arrow keys rotate the ring, so it is operable without a pointer.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") step(1);
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") step(-1);
+      else return;
+      e.preventDefault();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [step]);
+
+  // Panel copy swaps through a mask on each snap.
+  useGSAP(
+    () => {
+      if (reduced) return;
+      const lines = gsap.utils.toArray<HTMLElement>(".panel-line", panel.current);
+      if (lines.length === 0) return;
+      gsap.fromTo(
+        lines,
+        { yPercent: 110, autoAlpha: 0 },
+        { yPercent: 0, autoAlpha: 1, duration: 0.6, stagger: 0.05, ease: "wccOut" },
+      );
+    },
+    { dependencies: [focused, reduced], scope: panel },
+  );
+
+  const event = events[focused];
+
+  return (
+    <div
+      ref={stage}
+      className="burst"
+      data-nav-theme="dark"
+      style={{
+        position: "relative",
+        height: "100svh",
+        background: "var(--color-ink)",
+        color: "var(--color-paper)",
+        overflow: "hidden",
+        touchAction: "pan-y",
+        cursor: "grab",
+      }}
+    >
+      {webgl === true && (
+        <Canvas
+          frameloop="demand"
+          camera={{ position: [0, 0.15, CAMERA_Z], fov: 46 }}
+          dpr={[1, 2]}
+          gl={{ antialias: true }}
+          style={{ position: "absolute", inset: 0 }}
+        >
+          <InvalidateBridge onReady={onBridgeReady} />
+          <EventRing
+            events={events}
+            focused={focused}
+            onFocusChange={setFocused}
+            consumeInput={consumeInput}
+          />
+        </Canvas>
+      )}
+
+      {webgl === false && <RingFallback events={events} focused={focused} />}
+
+      {/*
+        The focused event's copy is DOM, not canvas text. That keeps it
+        selectable, translatable, present in the accessibility tree and
+        visible to crawlers — none of which canvas glyphs would be.
+      */}
+      {event && (
+        <div
+          ref={panel}
+          aria-live="polite"
+          style={{
+            position: "absolute",
+            left: 0,
+            bottom: 0,
+            zIndex: 5,
+            maxWidth: "min(46ch, 90vw)",
+            padding: "clamp(1.5rem, 4vw, 3rem)",
+            pointerEvents: "none",
+          }}
+        >
+          <div style={{ overflow: "hidden" }}>
+            <p className="panel-line" style={{ ...mono, margin: 0, opacity: 0.8 }}>
+              {String(focused + 1).padStart(2, "0")} /{" "}
+              {String(events.length).padStart(2, "0")} — {event.kicker}
+            </p>
+          </div>
+
+          <div style={{ overflow: "hidden" }}>
+            <h2
+              className="panel-line"
+              style={{
+                margin: "0.2em 0 0",
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(2rem, 5.5vw, 4.6rem)",
+                fontVariationSettings: "'wdth' 78, 'wght' 850",
+                lineHeight: 0.94,
+                textTransform: "uppercase",
+              }}
+            >
+              {event.title}
+            </h2>
+          </div>
+
+          <div style={{ overflow: "hidden" }}>
+            <p className="panel-line" style={{ ...mono, margin: "0.6em 0 0", opacity: 0.75 }}>
+              {formatEventDate(event.startsAt, event.endsAt)} — {event.venue.city}
+            </p>
+          </div>
+
+          <div style={{ overflow: "hidden" }}>
+            <p
+              className="panel-line"
+              style={{
+                margin: "1em 0 0",
+                fontFamily: "var(--font-editorial)",
+                fontSize: "clamp(1rem, 1.4vw, 1.25rem)",
+                lineHeight: 1.45,
+                opacity: 0.92,
+              }}
+            >
+              {event.summary}
+            </p>
+          </div>
+
+          {/*
+            A real link, not just a clickable mesh. Clicking the poster works,
+            but a canvas click target is invisible to keyboards and screen
+            readers, so the same destination is offered as an anchor.
+          */}
+          <div style={{ overflow: "hidden", marginTop: "1.2em" }}>
+            <Link
+              href={`/events/${event.slug}`}
+              className="panel-line"
+              style={{
+                ...mono,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.6em",
+                color: "var(--color-paper)",
+                textDecoration: "none",
+                borderBottom: "1px solid currentColor",
+                paddingBottom: "0.3em",
+                pointerEvents: "auto",
+              }}
+            >
+              View event
+              <Arrow style={{ width: 15, height: 15 }} />
+            </Link>
+          </div>
+        </div>
+      )}
+
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          zIndex: 5,
+          padding: "calc(clamp(1rem, 2.2vw, 1.8rem) + 3.4rem) clamp(1.25rem, 4vw, 3rem) 0",
+          ...mono,
+          opacity: 0.7,
+          pointerEvents: "none",
+        }}
+      >
+        Drag or scroll <Arrow style={{ width: 14, height: 14, display: "inline-block", verticalAlign: "middle" }} />
+      </div>
+    </div>
+  );
+}

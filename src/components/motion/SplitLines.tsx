@@ -102,9 +102,14 @@ export function SplitLines({
     { scope: root, dependencies: [reduced, type, stagger, start, delay] },
   );
 
+  // Narrowed to a concrete intrinsic for JSX's benefit. A polymorphic `as`
+  // cannot be typed against every element's ref signature at once, and
+  // leaving it open makes JSX infer children as never.
+  const Element = Tag as "p";
+
   return (
-    <Tag ref={root} className={className}>
+    <Element ref={root as React.RefObject<HTMLParagraphElement>} className={className}>
       {children}
-    </Tag>
+    </Element>
   );
 }
