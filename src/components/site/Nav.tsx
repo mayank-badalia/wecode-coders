@@ -190,8 +190,12 @@ export function Nav() {
 
   return (
     <>
-      {/* Keeps the fixed bar legible where body copy scrolls beneath it. */}
-      <div className="nav-scrim" aria-hidden="true" />
+      {/*
+        Keeps the fixed bar legible where body copy scrolls beneath it. Hidden
+        over dark grounds, where a paper-coloured gradient reads as a haze
+        across the top of the image rather than as nothing at all.
+      */}
+      <div className="nav-scrim" aria-hidden="true" style={{ opacity: onDark ? 0 : 1 }} />
       <header
         ref={root}
         className={onDark ? "burst" : undefined}
