@@ -1,4 +1,5 @@
 import { Hero } from "@/components/site/Hero";
+import { Manifesto } from "@/components/site/Manifesto";
 import { TapeStack } from "@/components/site/TapeStack";
 
 export default function Home() {
@@ -6,8 +7,8 @@ export default function Home() {
     <main style={{ position: "relative", zIndex: 2 }}>
       <Hero />
       <TapeStack />
-      {/* Manifesto, event rail and timeline land next. */}
-      <section style={{ height: "60vh" }} />
+      <Manifesto />
+      {/* Event rail and timeline land next. */}
     </main>
   );
 }
