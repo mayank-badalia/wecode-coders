@@ -1,11 +1,11 @@
+import { Logo } from "@/components/site/Logo";
+
+// Placeholder home page. The real composition — hero, tape stack, manifesto,
+// event rail, timeline — arrives across checkpoints 2 and 3.
 export default function Home() {
   return (
-    <main style={{ padding: "4rem" }}>
-      {Array.from({ length: 40 }, (_, i) => (
-        <p key={i} style={{ fontSize: 40, margin: "2rem 0" }}>
-          Scroll probe line {i + 1}
-        </p>
-      ))}
+    <main style={{ padding: "6rem 4rem", position: "relative", zIndex: 2 }}>
+      <Logo className="w-full" tone="ink" />
     </main>
   );
 }

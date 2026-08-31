@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Grain } from "@/components/site/Grain";
+import { Grid } from "@/components/site/Grid";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { archivo, fraunces, jetbrainsMono } from "@/lib/fonts";
 import "./globals.css";
@@ -17,7 +19,11 @@ export default function RootLayout({
       className={`${fraunces.variable} ${archivo.variable} ${jetbrainsMono.variable}`}
     >
       <body>
-        <MotionProvider>{children}</MotionProvider>
+        <MotionProvider>
+          <Grain />
+          <Grid />
+          {children}
+        </MotionProvider>
       </body>
     </html>
   );
