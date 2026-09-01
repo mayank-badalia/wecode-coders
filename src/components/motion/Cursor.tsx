@@ -6,6 +6,24 @@ import { useRef } from "react";
 import { gsap } from "./gsap";
 import { useReducedMotion } from "./MotionProvider";
 
+export type CursorTarget = { label: string; color: string; ink: string };
+
+const CURSOR_EVENT = "wcc:cursor";
+
+/**
+ * Point the cursor bubble at something directly.
+ *
+ * DOM elements declare `data-cursor` and are picked up by hit-testing, but a
+ * WebGL scene has no DOM to hit-test — the canvas is one element and the
+ * posters inside it are not. Routing canvas hover through attributes made the
+ * bubble appear a whole mouse-move late, because the attributes were written
+ * after the move that should have shown it. This is called straight from the
+ * raycast instead.
+ */
+export function setCursorTarget(target: CursorTarget | null) {
+  window.dispatchEvent(new CustomEvent(CURSOR_EVENT, { detail: target }));
+}
+
 /*
   A cursor bubble that appears over anything declaring data-cursor.
 
@@ -34,16 +52,35 @@ export function Cursor() {
 
       gsap.set(el, { scale: 0, autoAlpha: 0, xPercent: -50, yPercent: -50 });
 
-      let active: Element | null = null;
+      /*
+        Tracked by signature, not by element identity.
+
+        On the events page a single stage element carries the cursor
+        attributes and rewrites them as the pointer moves between posters. An
+        identity check saw the same element both times and short-circuited, so
+        the bubble kept whichever colour it happened to open with.
+      */
+      let active: string | null = null;
+      /** True while a scene is driving the bubble directly. */
+      let forced = false;
+
+      const signatureOf = (t: Element) =>
+        [
+          t.getAttribute("data-cursor"),
+          t.getAttribute("data-cursor-color"),
+          t.getAttribute("data-cursor-ink"),
+        ].join("|");
 
       const hide = () => {
-        if (!active) return;
+        if (active === null) return;
         active = null;
+        forced = false;
         gsap.to(el, { scale: 0, autoAlpha: 0, duration: 0.28, ease: "power2.in" });
       };
 
-      const show = (target: Element) => {
-        active = target;
+      const show = (target: Element, signature: string) => {
+        const first = active === null;
+        active = signature;
         if (label) label.textContent = target.getAttribute("data-cursor") ?? "";
         // Each event carries its own accent, so the bubble picks up the colour
         // of the thing being hovered rather than being one flat red everywhere.
@@ -51,10 +88,11 @@ export function Cursor() {
         gsap.to(el, {
           scale: 1,
           autoAlpha: 1,
-          backgroundColor: accent ?? "var(--color-signal)",
+          backgroundColor: accent ?? "#F04436",
           color: target.getAttribute("data-cursor-ink") ?? "#F3EFE5",
-          duration: 0.35,
-          ease: "back.out(1.7)",
+          // Opening pops; moving between two things just recolours.
+          duration: first ? 0.35 : 0.25,
+          ease: first ? "back.out(1.7)" : "power2.out",
         });
       };
 
@@ -74,9 +112,38 @@ export function Cursor() {
         // An element can opt out while it is not actually interactive.
         const live = hit && hit.getAttribute("data-cursor-active") !== "false" ? hit : null;
 
-        if (live === active) return;
-        if (live) show(live);
+        // A scene driving the bubble directly wins over hit-testing.
+        if (forced) return;
+
+        const signature = live ? signatureOf(live) : null;
+        if (signature === active) return;
+        if (live && signature) show(live, signature);
         else hide();
+      };
+
+      // Direct targeting, used by the WebGL scene.
+      const onTarget = (e: Event) => {
+        const target = (e as CustomEvent<CursorTarget | null>).detail;
+        if (!target) {
+          forced = false;
+          hide();
+          return;
+        }
+
+        forced = true;
+        const signature = ["forced", target.label, target.color].join("|");
+        if (signature === active) return;
+        const first = active === null;
+        active = signature;
+        if (label) label.textContent = target.label;
+        gsap.to(el, {
+          scale: 1,
+          autoAlpha: 1,
+          backgroundColor: target.color,
+          color: target.ink,
+          duration: first ? 0.35 : 0.25,
+          ease: first ? "back.out(1.7)" : "power2.out",
+        });
       };
 
       window.addEventListener("pointermove", onMove, { passive: true });
@@ -84,12 +151,14 @@ export function Cursor() {
       window.addEventListener("pointerdown", onMove, { passive: true });
       document.addEventListener("pointerleave", hide);
       window.addEventListener("blur", hide);
+      window.addEventListener(CURSOR_EVENT, onTarget);
 
       return () => {
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("pointerdown", onMove);
         document.removeEventListener("pointerleave", hide);
         window.removeEventListener("blur", hide);
+        window.removeEventListener(CURSOR_EVENT, onTarget);
       };
     },
     /*

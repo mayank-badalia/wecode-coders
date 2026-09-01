@@ -7,6 +7,7 @@ import { TransitionLink } from "@/components/motion/TransitionLink";
 import { useTransition } from "@/components/motion/TransitionProvider";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "@/components/motion/gsap";
+import { setCursorTarget } from "@/components/motion/Cursor";
 import { useLenis, useReducedMotion } from "@/components/motion/MotionProvider";
 import { Arrow } from "@/components/site/Arrow";
 import { formatEventDate } from "@/lib/format";
@@ -88,20 +89,34 @@ export function EventsExperience({ events }: { events: Event[] }) {
   const { playExit, isBusy } = useTransition();
   const [focused, setFocused] = useState(0);
   const [inside, setInside] = useState(0);
-  const [active, setActive] = useState(true);
   const [hovered, setHovered] = useState<number | null>(null);
 
-  // A hidden tab should not be rendering a 3D scene.
-  useEffect(() => {
-    const onVisibility = () => setActive(!document.hidden);
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => document.removeEventListener("visibilitychange", onVisibility);
-  }, []);
   const reduced = useReducedMotion();
   const webgl = useCanRunWebGL(reduced);
   useEffect(() => {
     webglRef.current = webgl;
   }, [webgl]);
+
+  /*
+    The cursor bubble belongs to a poster, not to the page.
+
+    The whole stage used to carry data-cursor, so the bubble sat on screen
+    permanently in one flat colour no matter what was under the pointer. It is
+    now driven straight from the ring's raycast, and takes that event's own
+    ground colour.
+  */
+  useEffect(() => {
+    const target = hovered === null ? null : events[hovered];
+    if (!target) {
+      setCursorTarget(null);
+      return;
+    }
+    const ground = groundFor(target);
+    setCursorTarget({ label: "Open", color: ground.bg, ink: ground.fg });
+  }, [hovered, events]);
+
+  // Leaving the route must not leave the bubble pointing at a poster.
+  useEffect(() => () => setCursorTarget(null), []);
   const stage = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
 
@@ -283,29 +298,13 @@ export function EventsExperience({ events }: { events: Event[] }) {
   );
 
   const event = events[focused];
-  const hoveredEvent = hovered === null ? null : events[hovered];
-  const hoveredGround = hoveredEvent ? groundFor(hoveredEvent) : null;
 
   return (
     <div
       ref={stage}
       className="burst"
       data-nav-theme="dark"
-      /*
-        The cursor bubble belongs to a poster, not to the page.
 
-        The whole stage used to carry data-cursor, so the bubble sat on screen
-        permanently in one flat colour no matter what was under the pointer.
-        These attributes are now driven by a real raycast against the ring, so
-        the bubble appears over a poster and takes that event's own ground.
-      */
-      {...(hoveredEvent
-        ? {
-            "data-cursor": "Open",
-            "data-cursor-color": hoveredGround?.bg,
-            "data-cursor-ink": hoveredGround?.fg,
-          }
-        : {})}
       style={{
         position: "relative",
         height: "100svh",
@@ -328,7 +327,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
             nothing else competing for frames, and continuous motion is the
             point. The loop is paused when the tab is hidden.
           */
-          frameloop={active ? "always" : "never"}
+          frameloop="always"
           camera={{ position: [0, 0.15, CAMERA_Z], fov: 46 }}
           // Capped at 1.5 rather than 2: a retina panel at full DPR is four
           // times the pixels for no visible gain at this scale, and that

@@ -32,7 +32,13 @@ export const ringFragment = /* glsl */ `
     */
     vec2 uv = gl_FrontFacing ? vUv : vec2(1.0 - vUv.x, vUv.y);
 
-    float amt = clamp(abs(uVelocity) * 0.016, 0.0, 0.04);
+    /*
+      A hint of channel separation, not a smear.
+
+      At the previous strength the split was wide enough to make a spinning
+      poster's title unreadable, which defeats the point of showing titles.
+    */
+    float amt = clamp(abs(uVelocity) * 0.005, 0.0, 0.012);
     float r = texture2D(uTex, uv + vec2(amt, 0.0)).r;
     float g = texture2D(uTex, uv).g;
     float b = texture2D(uTex, uv - vec2(amt, 0.0)).b;
@@ -46,6 +52,13 @@ export const ringFragment = /* glsl */ `
     // The focused poster is rimmed in its own accent rather than a fixed hue.
     float edge = pow(1.0 - abs(uv.x - 0.5) * 2.0, 4.0);
     col += uAccent * edge * uFocus * 0.45;
+
+    // And every plane keeps a hairline border, so a dark poster still reads
+    // as a card in space rather than dissolving into the background.
+    float bx = min(uv.x, 1.0 - uv.x);
+    float by = min(uv.y, 1.0 - uv.y);
+    float border = 1.0 - smoothstep(0.0, 0.006, min(bx, by));
+    col = mix(col, vec3(0.95, 0.94, 0.90), border * 0.5);
 
     col += (hash(uv * 900.0) - 0.5) * 0.04;
     gl_FragColor = vec4(col, 1.0);

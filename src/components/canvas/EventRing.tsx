@@ -82,8 +82,11 @@ export function EventRing({
           uniforms: {
             uTex: { value: tex },
             uVelocity: { value: 0 },
-            uDistance: { value: 1 },
-            uFocus: { value: 0 },
+            // Seeded as if the frame loop had already run once, so the first
+            // painted frame shows a focused ring rather than a fully
+            // desaturated one.
+            uDistance: { value: i === 0 ? 0 : 1 },
+            uFocus: { value: i === 0 ? 1 : 0 },
             uCurve: { value: 0.05 },
             uAccent: { value: new THREE.Color(ground.bg) },
           },
@@ -101,7 +104,14 @@ export function EventRing({
         uniforms: {
           uOffset: { value: 0 },
           uInside: { value: 0 },
-          uBase: { value: new THREE.Color("#142139") },
+          /*
+            Deliberately darker than the ink poster ground.
+
+            The world used to be exactly #142139 — the same value an
+            ink-ground poster is filled with — so those posters vanished
+            into the background and the ring looked empty at rest.
+          */
+          uBase: { value: new THREE.Color("#0A0F1C") },
           uLine: { value: new THREE.Color("#F3EFE5") },
         },
       }),
