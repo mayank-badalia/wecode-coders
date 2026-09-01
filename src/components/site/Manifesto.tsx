@@ -4,7 +4,9 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import { gsap, ScrollTrigger, SplitText } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
-import { getSite } from "@/lib/events";
+import { TransitionLink } from "@/components/motion/TransitionLink";
+import { getSite, getUpcomingEvents } from "@/lib/events";
+import { formatEventDate } from "@/lib/format";
 import { Arrow } from "./Arrow";
 
 const mono: React.CSSProperties = {
@@ -43,6 +45,7 @@ export function Manifesto() {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const site = getSite();
+  const next = getUpcomingEvents()[0];
 
   useGSAP(
     () => {
@@ -201,14 +204,86 @@ export function Manifesto() {
         at display size and split it mid-clause — "a funnel. We" — which is the
         one thing an editorial layout must not do.
       */}
-      <p style={{ ...mono, margin: "1.2rem 0 0", color: "var(--color-ink-40)" }}>
-{site.reach} — since {site.foundedYear}
+      {/*
+        The orientation rail: what this is, what is next, and a way in.
+
+        It used to sit at the foot of the hero, stranded under the headline
+        with a screen of dead space between it and the section it belonged to.
+        Here it reads in the order a visitor needs it — the section announces
+        itself, then answers the obvious questions.
+      */}
+      <div className="manifesto-rail" data-reveal>
+        <p
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-body)",
+            fontSize: "clamp(1rem, 1.25vw, 1.2rem)",
+            lineHeight: 1.55,
+            maxWidth: "44ch",
+          }}
+        >
+          We Code Coders runs focused events where curious people meet a deadline,
+          form a team, and turn unfinished ideas into visible work.
+        </p>
+
+        {next && (
+          <div>
+            <p style={{ ...mono, margin: 0, color: "var(--color-ink-40)" }}>Next event</p>
+            <p
+              style={{
+                margin: "0.35em 0 0",
+                fontFamily: "var(--font-display)",
+                fontWeight: 700,
+                fontSize: "clamp(1.15rem, 1.8vw, 1.6rem)",
+                textTransform: "uppercase",
+                letterSpacing: "0.01em",
+              }}
+            >
+              {next.title}
+            </p>
+            <p style={{ ...mono, margin: "0.3em 0 0", color: "var(--color-ink-60)" }}>
+              {formatEventDate(next.startsAt, next.endsAt)}
+              {next.venue.place ? ` — ${next.venue.place}` : ""}
+            </p>
+          </div>
+        )}
+
+        <TransitionLink
+          href="/events"
+          label="Events"
+          className="hero-cta"
+          style={{
+            ...mono,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.7em",
+            padding: "0.95em 1.4em",
+            background: "var(--color-ink)",
+            color: "var(--color-paper)",
+            textDecoration: "none",
+            whiteSpace: "nowrap",
+            alignSelf: "start",
+          }}
+        >
+          Explore events
+          <Arrow style={{ width: 15, height: 15 }} />
+        </TransitionLink>
+      </div>
+
+      <p
+        style={{
+          ...mono,
+          margin: "clamp(3rem, 8vh, 5rem) 0 0",
+          color: "var(--color-ink-40)",
+        }}
+      >
+        {site.reach} — since {site.foundedYear}
       </p>
 
       <blockquote
         className="manifesto-quote"
         style={{
-          margin: "clamp(2rem, 6vh, 4rem) 0 0",
+          margin: "clamp(1.4rem, 4vh, 2.6rem) 0 0",
           maxWidth: "18ch",
           fontFamily: "var(--font-editorial)",
           fontSize: "clamp(2.6rem, 7.5vw, 6.2rem)",

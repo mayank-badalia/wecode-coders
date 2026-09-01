@@ -102,11 +102,16 @@ const TAPES: Tape[] = [
     fg: "var(--color-ink)",
     speed: 72,
     direction: -1,
-    // The only strip crossing the other way. Placed high, so it cuts across
-    // the ink one near the top of the fold and the seal reads as an X rather
-    // than as five parallel bars.
-    top: 22,
-    rotate: 7,
+    /*
+      The only strip crossing the other way, so the seal reads as an X rather
+      than five parallel bars.
+
+      A clockwise rotation lifts its LEFT end, and at 22% that end rose into
+      the kicker line and tangled two lines of small mono type together. Set
+      low enough that the raised end still clears it.
+    */
+    top: 38,
+    rotate: 6,
     copy: <Run>New events entering the system — Wherever you are</Run>,
   },
 ];

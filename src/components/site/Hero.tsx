@@ -4,9 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
-import { TransitionLink } from "@/components/motion/TransitionLink";
-import { getSite, getUpcomingEvents } from "@/lib/events";
-import { formatEventDate } from "@/lib/format";
+import { getSite } from "@/lib/events";
 import { Arrow } from "./Arrow";
 import { hasLoaderFinished, LOADER_DONE_EVENT } from "./Loader";
 import { TapeStack } from "./TapeStack";
@@ -38,7 +36,6 @@ export function Hero() {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const site = getSite();
-  const next = getUpcomingEvents()[0];
 
   useGSAP(
     () => {
@@ -48,7 +45,7 @@ export function Hero() {
       const lines = gsap.utils.toArray<HTMLElement>(".hero-line");
       const outlined = el.querySelector<HTMLElement>(".hero-outlined");
       const cue = el.querySelector<HTMLElement>(".hero-cue");
-      const meta = gsap.utils.toArray<HTMLElement>(".hero-meta");
+      const kicker = el.querySelector<HTMLElement>(".hero-meta");
 
       /*
         Instrument Serif and Plex Condensed carry no variable axes, so the
@@ -77,7 +74,7 @@ export function Hero() {
           { clipPath: "inset(0 0% 0 0)", duration: 1.05, ease: "wcc" },
           0.32,
         )
-        .from(meta, { autoAlpha: 0, y: 18, duration: 0.7, stagger: 0.08 }, 0.55)
+        .from(kicker, { autoAlpha: 0, y: -14, duration: 0.7 }, 0.55)
         .from(cue, { autoAlpha: 0, y: -12, duration: 0.6 }, 0.95);
 
       if (cue) {
@@ -112,7 +109,7 @@ export function Hero() {
         position: "relative",
         minHeight: "100svh",
         display: "grid",
-        gridTemplateRows: "auto 1fr auto",
+        gridTemplateRows: "auto 1fr",
         padding:
           "clamp(6rem, 13vh, 9rem) clamp(1.25rem, 4vw, 3rem) clamp(2rem, 5vh, 3.5rem)",
         maxWidth: "min(1680px, 94vw)",
@@ -176,88 +173,6 @@ export function Hero() {
           </span>
         </Line>
       </h1>
-
-      {/*
-        The fold used to end on the headline with a large empty band beneath
-        it. This rail carries the things a first-time visitor actually needs —
-        what this is, what is next, and a way in — without breaking the
-        editorial calm of the type above.
-      */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1.35fr) minmax(0, 1fr) auto",
-          gap: "clamp(1.5rem, 5vw, 4rem)",
-          alignItems: "end",
-          position: "relative",
-          zIndex: 4,
-          // Well clear of the lowest tape at every viewport height.
-          marginTop: "clamp(6rem, 20vh, 12rem)",
-          // Its own paper ground: the tapes pass beneath it rather than
-          // through the copy, so this stays legible at every tape position.
-          background: "var(--color-paper)",
-          padding: "1.4rem clamp(0.75rem, 1.5vw, 1.25rem) 0.6rem",
-          borderTop: "1px solid var(--color-ink)",
-        }}
-        className="hero-rail"
-      >
-        <p
-          className="hero-meta"
-          style={{
-            margin: 0,
-            fontFamily: "var(--font-body)",
-            fontSize: "clamp(0.95rem, 1.15vw, 1.1rem)",
-            lineHeight: 1.55,
-            maxWidth: "46ch",
-            color: "var(--color-ink)",
-          }}
-        >
-          We Code Coders runs focused events where curious people meet a deadline,
-          form a team, and turn unfinished ideas into visible work.
-        </p>
-
-        {next && (
-          <div className="hero-meta">
-            <p style={{ ...mono, margin: 0, color: "var(--color-ink-40)" }}>Next event</p>
-            <p
-              style={{
-                margin: "0.35em 0 0",
-                fontFamily: "var(--font-display)",
-                fontWeight: 700,
-                fontSize: "clamp(1.1rem, 1.7vw, 1.5rem)",
-                textTransform: "uppercase",
-                letterSpacing: "0.01em",
-              }}
-            >
-              {next.title}
-            </p>
-            <p style={{ ...mono, margin: "0.3em 0 0", color: "var(--color-ink-60)" }}>
-              {formatEventDate(next.startsAt, next.endsAt)}
-              {next.venue.place ? ` — ${next.venue.place}` : ""}
-            </p>
-          </div>
-        )}
-
-        <TransitionLink
-          href="/events"
-          label="Events"
-          className="hero-meta hero-cta"
-          style={{
-            ...mono,
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.7em",
-            padding: "0.9em 1.3em",
-            background: "var(--color-ink)",
-            color: "var(--color-paper)",
-            textDecoration: "none",
-            whiteSpace: "nowrap",
-          }}
-        >
-          Explore events
-          <Arrow style={{ width: 15, height: 15 }} />
-        </TransitionLink>
-      </div>
 
       <TapeStack />
 

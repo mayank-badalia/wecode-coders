@@ -297,3 +297,24 @@ html[data-wcc-seen="1"] .loader-root {
 .rail-card:hover .rail-cta {
   gap: 1.2em;
 }
+
+/*
+  The orientation rail at the head of the second screen: what this is, what is
+  next, and a way in. Three columns on desktop, stacked on narrow viewports.
+*/
+.manifesto-rail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: start;
+  margin-top: clamp(1.6rem, 4vh, 2.6rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--color-paper-2);
+}
+
+@media (max-width: 900px) {
+  .manifesto-rail {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+}
