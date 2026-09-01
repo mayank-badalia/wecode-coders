@@ -11,6 +11,7 @@ import { useLenis, useReducedMotion } from "@/components/motion/MotionProvider";
 import { Arrow } from "@/components/site/Arrow";
 import { formatEventDate } from "@/lib/format";
 import type { Event } from "@/lib/types";
+import { groundFor } from "@/components/poster/layouts";
 import { CAMERA_Z, EventRing } from "./EventRing";
 import { RingFallback } from "./RingFallback";
 
@@ -88,6 +89,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
   const [focused, setFocused] = useState(0);
   const [inside, setInside] = useState(0);
   const [active, setActive] = useState(true);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   // A hidden tab should not be rendering a 3D scene.
   useEffect(() => {
@@ -281,13 +283,29 @@ export function EventsExperience({ events }: { events: Event[] }) {
   );
 
   const event = events[focused];
+  const hoveredEvent = hovered === null ? null : events[hovered];
+  const hoveredGround = hoveredEvent ? groundFor(hoveredEvent) : null;
 
   return (
     <div
       ref={stage}
       className="burst"
       data-nav-theme="dark"
-      data-cursor="Drag"
+      /*
+        The cursor bubble belongs to a poster, not to the page.
+
+        The whole stage used to carry data-cursor, so the bubble sat on screen
+        permanently in one flat colour no matter what was under the pointer.
+        These attributes are now driven by a real raycast against the ring, so
+        the bubble appears over a poster and takes that event's own ground.
+      */
+      {...(hoveredEvent
+        ? {
+            "data-cursor": "Open",
+            "data-cursor-color": hoveredGround?.bg,
+            "data-cursor-ink": hoveredGround?.fg,
+          }
+        : {})}
       style={{
         position: "relative",
         height: "100svh",
@@ -295,7 +313,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
         color: "var(--color-paper)",
         overflow: "hidden",
         touchAction: "pan-y",
-        cursor: "grab",
+        cursor: hovered === null ? "grab" : "pointer",
       }}
     >
       {webgl === true && (
@@ -324,6 +342,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
             focused={focused}
             onFocusChange={setFocused}
             onInsideChange={setInside}
+            onHoverChange={setHovered}
             consumeInput={consumeInput}
           />
         </Canvas>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
+import { usePathname } from "next/navigation";
 import { useRef } from "react";
 import { gsap } from "./gsap";
 import { useReducedMotion } from "./MotionProvider";
@@ -16,12 +17,16 @@ import { useReducedMotion } from "./MotionProvider";
 export function Cursor() {
   const root = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
+  const pathname = usePathname();
 
   useGSAP(
     () => {
       const el = root.current;
       if (!el || reduced) return;
       if (window.matchMedia("(pointer: coarse)").matches) return;
+
+      // Whatever the previous route left behind is not valid here.
+      gsap.set(el, { scale: 0, autoAlpha: 0 });
 
       const label = el.querySelector<HTMLElement>(".cursor-label");
       const toX = gsap.quickTo(el, "x", { duration: 0.35, ease: "power3.out" });
@@ -87,7 +92,15 @@ export function Cursor() {
         window.removeEventListener("blur", hide);
       };
     },
-    { scope: root, dependencies: [reduced] },
+    /*
+      Rebuilt on every route change.
+
+      The element the bubble was tracking is gone once the page changes, but
+      the bubble itself lives in the layout and survived — so it stayed on
+      screen, following the pointer with a label for something that no longer
+      existed. Re-running clears it and starts fresh.
+    */
+    { scope: root, dependencies: [reduced, pathname] },
   );
 
   return (

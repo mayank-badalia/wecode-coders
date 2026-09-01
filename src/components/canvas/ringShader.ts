@@ -76,17 +76,19 @@ export const worldFragment = /* glsl */ `
   varying vec2 vUv;
 
   void main() {
-    // Vertical rules, travelling with the rotation.
+    /*
+      Vertical rules only, travelling with the rotation.
+
+      There used to be a second set of horizontal bands crossing them, which
+      read as a stray straight line laid over the moving ones rather than as
+      part of the same world.
+    */
     float x = fract(vUv.x * 60.0 + uOffset * 60.0);
     float rule = smoothstep(0.0, 0.03, x) * smoothstep(0.06, 0.03, x);
 
-    // Horizon bands, so there is a floor and ceiling to move against.
-    float y = fract(vUv.y * 26.0 + uOffset * 3.0);
-    float band = smoothstep(0.0, 0.04, y) * smoothstep(0.08, 0.04, y) * 0.45;
-
     // Rules brighten once the visitor is inside and surrounded by them.
     float strength = mix(0.16, 0.42, uInside);
-    vec3 col = mix(uBase, uLine, clamp(rule + band, 0.0, 1.0) * strength);
+    vec3 col = mix(uBase, uLine, clamp(rule, 0.0, 1.0) * strength);
 
     // Fade toward the poles so the cylinder does not read as a hard tube.
     float fade = smoothstep(0.0, 0.28, vUv.y) * smoothstep(1.0, 0.72, vUv.y);

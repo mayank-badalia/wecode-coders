@@ -32,6 +32,8 @@ type EventRingProps = {
   onFocusChange: (index: number) => void;
   /** Reports 0 outside the ring, 1 once the camera is at its centre. */
   onInsideChange?: (inside: number) => void;
+  /** Index of the poster under the pointer, or null when over empty space. */
+  onHoverChange?: (index: number | null) => void;
   consumeInput: () => RingInput;
 };
 
@@ -40,6 +42,7 @@ export function EventRing({
   focused,
   onFocusChange,
   onInsideChange,
+  onHoverChange,
   consumeInput,
 }: EventRingProps) {
   const group = useRef<THREE.Group>(null);
@@ -259,6 +262,16 @@ export function EventRing({
               position={[Math.sin(angle) * RADIUS, 0, Math.cos(angle) * RADIUS]}
               rotation={[0, angle, 0]}
               material={materials[i]}
+              /*
+                Real raycast hover, so the cursor bubble appears over an actual
+                poster rather than across the whole page, and can take that
+                event's own colour.
+              */
+              onPointerOver={(e) => {
+                e.stopPropagation();
+                onHoverChange?.(i);
+              }}
+              onPointerOut={() => onHoverChange?.(null)}
             >
               <planeGeometry args={[PLANE_W, PLANE_H, 28, 1]} />
             </mesh>
