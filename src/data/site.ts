@@ -9,13 +9,15 @@ export const site: SiteData = {
   name: "We Code Coders",
   tagline: "Build in public. Leave with proof.",
   foundedYear: 2026,
-  city: "Pune",
-  country: "India",
+  // Online-first and open to anyone who can reach a browser. Naming a single
+  // city made it read as a local, in-person meetup group, which it is not.
+  reach: "Online, open to anyone",
   timezone: "Asia/Kolkata",
+  timezoneLabel: "IST",
 
   manifesto: [
-    "We are not a course, a cohort, or a funnel. We are a room where people build things and show their working.",
-    "Nobody here asks what you have shipped before. They ask what you are shipping now, and whether you want a hand with it.",
+    "We are not a course, a cohort, or a funnel. We are a room where people build things and show their working — and the room is online, so it has space for everyone.",
+    "Nobody here asks what you have shipped before, or where you are from. They ask what you are shipping now, and whether you want a hand with it.",
     "Everything we run ends the same way: with something that exists, in public, with your name on it.",
   ],
 

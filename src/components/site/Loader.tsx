@@ -251,7 +251,7 @@ export function Loader() {
             paddingBottom: "0.3em",
           }}
         >
-          Independent builder culture — Pune, India
+          Independent builder culture — online, open to all
         </span>
       </div>
     </div>

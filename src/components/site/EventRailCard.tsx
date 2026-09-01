@@ -146,7 +146,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
               opacity: 0.75,
             }}
           >
-            {formatEventDate(event.startsAt, event.endsAt)} — {event.venue.city}
+            {formatEventDate(event.startsAt, event.endsAt)} — {event.venue.place}
           </p>
 
           {/* Revealed only once the card is nearly full-bleed and readable. */}

@@ -16,7 +16,12 @@ export type Event = {
   /** ISO 8601 with offset. */
   startsAt: string;
   endsAt: string;
-  venue: { name: string; city: string; country: string };
+  /**
+   * Where it happens. Most events are online and open to anyone; `place` is
+   * the human label shown everywhere ("Online", or a city when there is one).
+   */
+  mode: "online" | "in-person" | "hybrid";
+  venue: { name: string; place: string };
   /** One or two sentences. Used on rail cards and the events ring panel. */
   summary: string;
   /** Paragraphs for the detail page. */
@@ -51,10 +56,11 @@ export type SiteData = {
   name: string;
   tagline: string;
   foundedYear: number;
-  city: string;
-  country: string;
-  /** IANA timezone — used by the footer clock. */
+  /** Where the community is reachable from, in words. */
+  reach: string;
+  /** IANA timezone — the clock the schedule is published in. */
   timezone: string;
+  timezoneLabel: string;
   manifesto: string[];
   stats: { label: string; value: string }[];
   socials: { label: string; href: string }[];

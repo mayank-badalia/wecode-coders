@@ -223,7 +223,7 @@ export function Poster({
       >
         <span>{formatEventDate(event.startsAt, event.endsAt)}</span>
         <span>
-          {event.venue.city} — {event.format.replace("-", " ")}
+          {event.venue.place} — {event.format.replace("-", " ")}
         </span>
       </div>
       ) : null}

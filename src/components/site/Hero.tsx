@@ -120,8 +120,11 @@ export function Hero() {
         zIndex: 2,
       }}
     >
-      <p className="hero-meta" style={{ ...mono, margin: 0, color: "var(--color-ink-60)" }}>
-        [ {site.name} ] // Independent builder culture — {site.city}, {site.country}
+      <p
+        className="hero-meta"
+        style={{ ...mono, margin: 0, color: "var(--color-ink-60)", position: "relative", zIndex: 4 }}
+      >
+        [ {site.name} ] // Independent builder culture — {site.reach}
       </p>
 
       <h1
@@ -188,7 +191,7 @@ export function Hero() {
           alignItems: "end",
           position: "relative",
           zIndex: 4,
-          marginTop: "clamp(2.5rem, 8vh, 5rem)",
+          marginTop: "clamp(4rem, 13vh, 8rem)",
           // Its own paper ground: the tapes pass beneath it rather than
           // through the copy, so this stays legible at every tape position.
           background: "var(--color-paper)",
@@ -228,7 +231,7 @@ export function Hero() {
               {next.title}
             </p>
             <p style={{ ...mono, margin: "0.3em 0 0", color: "var(--color-ink-60)" }}>
-              {formatEventDate(next.startsAt, next.endsAt)} — {next.venue.city}
+              {formatEventDate(next.startsAt, next.endsAt)} — {next.venue.place}
             </p>
           </div>
         )}

@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 
 /**
- * The community's local time, ticking.
+ * The clock the schedule is published in, ticking.
  *
  * Renders nothing on the server: the server's clock and the visitor's differ,
  * so rendering a time during SSR guarantees a hydration mismatch. The first
  * value is written after mount instead.
  */
-export function LocalClock({ timezone, city }: { timezone: string; city: string }) {
+export function LocalClock({ timezone, label }: { timezone: string; label: string }) {
   const [time, setTime] = useState<string | null>(null);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function LocalClock({ timezone, city }: { timezone: string; city: string 
 
   return (
     <span style={{ fontVariantNumeric: "tabular-nums" }}>
-      {city} — {time ?? "--:--:--"}
+      Schedules in {label} — {time ?? "--:--:--"}
     </span>
   );
 }

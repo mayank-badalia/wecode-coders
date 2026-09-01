@@ -7,7 +7,7 @@ import { getAllEvents, getSite } from "@/lib/events";
 export const metadata: Metadata = {
   title: "About — We Code Coders",
   description:
-    "A community of builders in Pune. No application, no screening, no prizes — just rooms where people build things in public.",
+    "An online community of builders. No application, no screening, no prizes — just rooms where people build things in public, wherever they are.",
 };
 
 const mono: React.CSSProperties = {
@@ -150,8 +150,8 @@ export default function AboutPage() {
 
           <aside style={{ ...mono, lineHeight: 1.7 }}>
             <p data-reveal style={{ margin: "0 0 1.6em" }}>
-              Based in {site.city}, {site.country}. Everything happens in person unless
-              it genuinely cannot.
+              {site.reach}. Events run online so where you live is not a filter, and
+              the schedule is published in {site.timezoneLabel}.
             </p>
             <p data-reveal style={{ margin: 0 }}>
               Founded {site.foundedYear}. Run by the people who turn up.

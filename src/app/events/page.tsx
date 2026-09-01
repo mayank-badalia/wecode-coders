@@ -30,7 +30,7 @@ export default function EventsPage() {
           {events.map((e) => (
             <li key={e.slug}>
               <TransitionLink href={`/events/${e.slug}`} label={e.title}>
-                {e.title} — {formatEventDate(e.startsAt, e.endsAt)}, {e.venue.city}.{" "}
+                {e.title} — {formatEventDate(e.startsAt, e.endsAt)}, {e.venue.place}.{" "}
                 {e.summary}
               </TransitionLink>
             </li>

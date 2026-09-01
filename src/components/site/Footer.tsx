@@ -218,9 +218,9 @@ export function Footer() {
           ...mono,
         }}
       >
-        <LocalClock timezone={site.timezone} city={site.city} />
+        <LocalClock timezone={site.timezone} label={site.timezoneLabel} />
         <span>
-          Est. {site.foundedYear} — {site.city}, {site.country}
+          Est. {site.foundedYear} — {site.reach}
         </span>
       </div>
 

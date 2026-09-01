@@ -24,8 +24,10 @@ export function BurstBreak({ line }: { line: string }) {
         textTransform: "uppercase",
       }}
     >
-      No gatekeeping <Arrow style={{ width: 13, height: 13 }} /> No prizes{" "}
-      <Arrow style={{ width: 13, height: 13 }} /> No pitch decks{" "}
+      Turn up with something unfinished{" "}
+      <Arrow style={{ width: 13, height: 13 }} /> Leave with something that runs{" "}
+      <Arrow style={{ width: 13, height: 13 }} /> Nobody asks for your CV{" "}
+      <Arrow style={{ width: 13, height: 13 }} /> Deadlines, not lectures{" "}
       <Arrow style={{ width: 13, height: 13 }} />
     </span>
   );

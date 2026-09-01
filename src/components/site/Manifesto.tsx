@@ -66,7 +66,7 @@ export function Manifesto() {
           });
 
           /*
-            Each word lands in signal red and settles to ink behind the rest.
+            Each word arrives in ink and turns signal red, and stays red.
 
             A background-clip: text gradient was tried first and rendered
             nothing: SplitText re-wraps the text into child spans, which
@@ -76,9 +76,9 @@ export function Manifesto() {
           */
           const wipe = gsap.fromTo(
             split.words,
-            { color: "var(--color-signal)" },
+            { color: "var(--color-ink)" },
             {
-              color: "var(--color-ink)",
+              color: "var(--color-signal)",
               duration: 0.9,
               ease: "power2.out",
               stagger: 0.045,
@@ -194,7 +194,7 @@ export function Manifesto() {
         one thing an editorial layout must not do.
       */}
       <p style={{ ...mono, margin: "1.2rem 0 0", color: "var(--color-ink-40)" }}>
-        {site.city}, {site.country} — since {site.foundedYear}
+{site.reach} — since {site.foundedYear}
       </p>
 
       <blockquote

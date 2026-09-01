@@ -10,6 +10,9 @@
 // poster image instead of the generated one, set `posterImage` to a path
 // under /public. Nothing else needs changing.
 //
+// Events are online by default so anyone can join wherever they are. Set
+// mode: "in-person" and a real venue only when there genuinely is one.
+//
 // The Event type requires the fields a visitor needs before deciding to come
 // — brief, deliverables, team size, eligibility. An event cannot be published
 // half-described, because a page that answers nothing is worse than no page.
@@ -25,7 +28,8 @@ export const events: Event[] = [
     status: "past",
     startsAt: "2026-02-14T18:30:00+05:30",
     endsAt: "2026-02-14T21:30:00+05:30",
-    venue: { name: "A borrowed classroom", city: "Pune", country: "India" },
+    mode: "online",
+    venue: { name: "Online — video call and a shared board", place: "Online" },
     summary:
       "The first one. Nineteen people, one projector that did not work, and a rule that everybody had to show something unfinished.",
     description: [
@@ -63,7 +67,8 @@ export const events: Event[] = [
     status: "past",
     startsAt: "2026-03-21T17:00:00+05:30",
     endsAt: "2026-03-21T21:00:00+05:30",
-    venue: { name: "A co-working floor", city: "Pune", country: "India" },
+    mode: "online",
+    venue: { name: "Online — an open call you can drop into", place: "Online" },
     summary:
       "No talks, no slides, no agenda. Four hours, one table, everyone working on their own thing in the same room.",
     description: [
@@ -101,7 +106,8 @@ export const events: Event[] = [
     status: "past",
     startsAt: "2026-05-09T14:00:00+05:30",
     endsAt: "2026-05-09T18:00:00+05:30",
-    venue: { name: "An auditorium with bad acoustics", city: "Pune", country: "India" },
+    mode: "online",
+    venue: { name: "Online — streamed, with the room in chat", place: "Online" },
     summary:
       "Everything built across the first three months, shown in public, in one afternoon. Working software only — no mockups, no roadmaps.",
     description: [
@@ -143,7 +149,8 @@ export const events: Event[] = [
     status: "upcoming",
     startsAt: "2026-09-19T07:00:00+05:30",
     endsAt: "2026-09-19T13:00:00+05:30",
-    venue: { name: "To be announced", city: "Pune", country: "India" },
+    mode: "online",
+    venue: { name: "Online", place: "Online" },
     summary:
       "Six hours of GLSL from an empty file. No engine, no framework, no library — a quad, a fragment shader, and enough maths to draw light.",
     description: [
@@ -187,7 +194,8 @@ export const events: Event[] = [
     status: "upcoming",
     startsAt: "2026-10-03T18:00:00+05:30",
     endsAt: "2026-10-03T21:30:00+05:30",
-    venue: { name: "To be announced", city: "Pune", country: "India" },
+    mode: "online",
+    venue: { name: "Online", place: "Online" },
     summary:
       "Why most web animation looks cheap, and what typographers knew about timing a century before anyone had a browser.",
     description: [
@@ -226,7 +234,8 @@ export const events: Event[] = [
     status: "upcoming",
     startsAt: "2026-11-14T09:00:00+05:30",
     endsAt: "2026-11-15T21:00:00+05:30",
-    venue: { name: "To be announced", city: "Pune", country: "India" },
+    mode: "online",
+    venue: { name: "Online", place: "Online" },
     summary:
       "Thirty-six hours. One deployed URL at the end or you are out of the room. No slide decks, no judges, no prize pool.",
     description: [
@@ -273,7 +282,8 @@ export const events: Event[] = [
     status: "upcoming",
     startsAt: "2026-12-12T09:00:00+05:30",
     endsAt: "2026-12-13T20:00:00+05:30",
-    venue: { name: "To be announced", city: "Pune", country: "India" },
+    mode: "online",
+    venue: { name: "Online", place: "Online" },
     summary:
       "A weekend build for people who have never done one. Half the room will be first-timers by design, and the other half are there to make sure they finish.",
     description: [

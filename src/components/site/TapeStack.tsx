@@ -71,8 +71,8 @@ const TAPES: Tape[] = [
     fg: "var(--blush)",
     speed: 62,
     direction: 1,
-    top: 26,
-    rotate: -4,
+    top: 16,
+    rotate: -5,
     exitX: -14,
     exitY: -34,
     copy: <Run>We Code Coders — Independent builder culture</Run>,
@@ -82,19 +82,19 @@ const TAPES: Tape[] = [
     fg: "var(--color-ink)",
     speed: 44,
     direction: -1,
-    top: 34,
-    rotate: -4.5,
+    top: 30,
+    rotate: -6,
     exitX: 16,
     exitY: -22,
-    copy: <Run>Online events — Pune events — Open briefs</Run>,
+    copy: <Run>Open briefs — Anyone can enter — Nothing to pay</Run>,
   },
   {
     bg: "var(--acid)",
     fg: "var(--color-ink)",
     speed: 88,
     direction: 1,
-    top: 70,
-    rotate: -5,
+    top: 52,
+    rotate: -4.5,
     exitX: -20,
     exitY: 26,
     copy: <Run>Build — Break — Learn — Ship — Repeat</Run>,
@@ -104,22 +104,22 @@ const TAPES: Tape[] = [
     fg: "var(--color-paper)",
     speed: 56,
     direction: -1,
-    top: 80,
-    rotate: -5.5,
+    top: 70,
+    rotate: -6.5,
     exitX: 22,
     exitY: 34,
-    copy: <Run>Mini challenges — Mentors — Tools — Feedback</Run>,
+    copy: <Run>Mini challenges — Mentors on call — Real feedback</Run>,
   },
   {
     bg: "var(--color-paper-2)",
     fg: "var(--color-ink)",
     speed: 72,
     direction: 1,
-    top: 90,
-    rotate: -6,
+    top: 84,
+    rotate: -5,
     exitX: -10,
     exitY: 44,
-    copy: <Run>New events entering the system</Run>,
+    copy: <Run>New events entering the system — Wherever you are</Run>,
   },
 ];
 
@@ -186,7 +186,18 @@ export function TapeStack() {
       style={{
         position: "absolute",
         inset: 0,
-        zIndex: 3,
+        /*
+          Behind the headline, not over it.
+
+          The tape positions are percentages of the hero's height, so the
+          relationship between a tape and the vertically centred headline
+          changes with viewport height — on a tall screen they landed directly
+          across "Build in public." and buried it. Sitting behind the type
+          keeps the headline readable at every height while the tapes still
+          cross the whole composition, and the outlined line shows them
+          through its counters, which is better than either alone.
+        */
+        zIndex: 1,
         pointerEvents: "none",
         overflow: "clip",
       }}

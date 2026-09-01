@@ -15,6 +15,16 @@ import { useLenis, useReducedMotion } from "./MotionProvider";
 
 const LINE_COUNT = 5;
 
+/**
+ * How long the exit is allowed to take before the route changes anyway.
+ *
+ * Navigation must never be hostage to an animation finishing. A timeline that
+ * stalls for any reason — a dropped frame budget, a killed tween, a stray
+ * refresh — would otherwise leave the panel covering the page forever and the
+ * visitor stuck on a route they asked to leave.
+ */
+export const EXIT_DEADLINE_MS = 1100;
+
 export type FromRect = { top: number; left: number; width: number; height: number };
 
 type TransitionApi = {
@@ -76,7 +86,11 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
       }
 
       const running = new Promise<void>((resolve) => {
-        const tl = gsap.timeline({ onComplete: resolve });
+        // Resolves on completion or on the deadline, whichever comes first.
+        const settle = () => resolve();
+        window.setTimeout(settle, EXIT_DEADLINE_MS);
+
+        const tl = gsap.timeline({ onComplete: settle });
 
         gsap.set(el, { visibility: "visible", autoAlpha: 1 });
 
@@ -146,7 +160,10 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
       saw the transition play and the destination never appear.
     */
     if (exiting.current) {
-      await exiting.current;
+      await Promise.race([
+        exiting.current,
+        new Promise((r) => window.setTimeout(r, EXIT_DEADLINE_MS)),
+      ]);
       exiting.current = null;
     }
 
