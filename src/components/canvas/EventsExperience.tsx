@@ -88,7 +88,6 @@ export function EventsExperience({ events }: { events: Event[] }) {
   const router = useRouter();
   const { playExit, isBusy } = useTransition();
   const [focused, setFocused] = useState(0);
-  const [inside, setInside] = useState(0);
   const [hovered, setHovered] = useState<number | null>(null);
 
   const reduced = useReducedMotion();
@@ -340,7 +339,6 @@ export function EventsExperience({ events }: { events: Event[] }) {
             events={events}
             focused={focused}
             onFocusChange={setFocused}
-            onInsideChange={setInside}
             onHoverChange={setHovered}
             consumeInput={consumeInput}
           />
@@ -466,7 +464,7 @@ export function EventsExperience({ events }: { events: Event[] }) {
           pointerEvents: "none",
         }}
       >
-        {inside > 0.65 ? "You are inside the ring" : "Drag or scroll"}{" "}
+        Drag or scroll{" "}
         <Arrow style={{ width: 14, height: 14, display: "inline-block", verticalAlign: "middle" }} />
       </div>
     </div>

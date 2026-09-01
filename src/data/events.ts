@@ -241,7 +241,7 @@ export const events: Event[] = [
       "Thirty-six hours. One deployed URL at the end or you are out of the room. No slide decks, no judges, no prize pool.",
     description: [
       "The deal is blunt. You have thirty-six hours and at the end there must be a URL that a stranger can open. Not a repository. Not a video. A URL.",
-      "There are no judges because judging turns builders into pitch-writers, and we would rather have thirty rough things that exist than three polished things that do not. There is no prize pool for the same reason.",
+      "There are no judges. Judging rewards the team that presents best, not the team that built most, and we would rather have thirty rough things that exist than three polished pitches for things that do not. There is no prize pool for the same reason.",
       "You can come alone. Teams form in the first hour and they form better when people arrive without one. Sleep is allowed and quietly encouraged.",
     ],
     forWho: "Anyone who can get something onto the internet in a weekend, or wants to find out if they can.",
@@ -262,7 +262,7 @@ export const events: Event[] = [
       { when: "Sun 19:00", what: "Everyone opens everyone else's link" },
     ],
     judging: [
-      { name: "No judging", detail: "There are no judges. Judging turns builders into pitch-writers, and we would rather have thirty rough things that exist than three polished things that do not." },
+      { name: "No judging", detail: "There are no judges. What you leave with is the thing you built and the people who saw you build it." },
     ],
     rewards: [
       "Something deployed with your name on it",

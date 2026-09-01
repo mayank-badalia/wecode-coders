@@ -147,7 +147,7 @@ export function Footer() {
           }}
         >
           Events end. The work, feedback and people you meet{" "}
-          <span style={{ fontStyle: "italic", color: "var(--blush)" }}>should not.</span>
+          <span style={{ fontStyle: "italic", color: "var(--signal)" }}>should not.</span>
         </p>
 
         <nav aria-label="Footer">

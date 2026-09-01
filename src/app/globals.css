@@ -15,7 +15,7 @@
   --color-ink: #142139;
   --color-ink-60: rgba(20, 33, 57, 0.62);
   --color-ink-40: rgba(20, 33, 57, 0.4);
-  --color-signal: #f04436;
+  --color-signal: #ed1c24;
 
   --font-editorial: var(--font-serif), Georgia, "Times New Roman", serif;
   --font-display: var(--font-condensed), "Arial Narrow", Helvetica, sans-serif;
@@ -34,10 +34,18 @@
   Deep ink is NOT scoped: it is a legitimate ground anywhere, and it replaced
   the violet that used to fill the loader, transitions, footer and events page.
 */
+/*
+  Blush is a GROUND, not a text colour.
+
+  It was being used for type on dark surfaces — the nav over ink, the
+  transition panel, the loader — which read as a soft pink brand the logo no
+  longer has. Type on dark now takes the signal red the wordmark is built
+  from; blush stays for surfaces that are themselves pink.
+*/
 .burst {
   --blush: #f3a5b7;
   --acid: #d8ef72;
-  --signal: #f04436;
+  --signal: #ed1c24;
 }
 
 html {

@@ -92,7 +92,7 @@ export function Loader() {
       // Phase 1 — DRAW. Outlines stroke on from the centre of the wordmark out.
       tl.set(letters, {
         fillOpacity: 0,
-        stroke: "var(--blush)",
+        stroke: "var(--signal)",
         strokeWidth: 2,
         drawSVG: "0%",
       })
@@ -228,7 +228,7 @@ export function Loader() {
           justifyContent: "space-between",
           alignItems: "flex-end",
           gap: "1rem",
-          color: "var(--blush)",
+          color: "var(--signal)",
           fontFamily: "var(--font-mono)",
         }}
       >

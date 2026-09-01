@@ -63,7 +63,7 @@ function Run({ children }: { children: React.ReactNode }) {
 const TAPES: Tape[] = [
   {
     bg: "var(--color-ink)",
-    fg: "var(--blush)",
+    fg: "var(--signal)",
     speed: 62,
     direction: 1,
     top: 16,

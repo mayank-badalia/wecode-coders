@@ -124,7 +124,7 @@ export function NavOverlay({ open, onClose, links }: NavOverlayProps) {
         inset: 0,
         zIndex: 70,
         background: "var(--color-ink)",
-        color: "var(--blush)",
+        color: "var(--signal)",
         visibility: "hidden",
         opacity: 0,
         display: "flex",

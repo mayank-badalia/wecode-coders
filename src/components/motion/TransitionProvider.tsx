@@ -263,7 +263,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
           height: "100svh",
           zIndex: 90,
           background: "var(--color-ink)",
-          color: "var(--blush)",
+          color: "var(--signal)",
           visibility: "hidden",
           opacity: 0,
           pointerEvents: "none",

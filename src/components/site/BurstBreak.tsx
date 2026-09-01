@@ -40,7 +40,7 @@ export function BurstBreak({ line }: { line: string }) {
         position: "relative",
         zIndex: 2,
         background: "var(--color-ink)",
-        color: "var(--blush)",
+        color: "var(--signal)",
         padding: "clamp(5rem, 16vh, 11rem) clamp(1.25rem, 4vw, 3rem)",
         margin: "clamp(4rem, 12vh, 8rem) 0",
         overflowX: "clip",
@@ -71,7 +71,7 @@ export function BurstBreak({ line }: { line: string }) {
           textTransform: "uppercase",
           letterSpacing: "-0.02em",
           color: "transparent",
-          WebkitTextStroke: "1.5px var(--blush)",
+          WebkitTextStroke: "1.5px var(--signal)",
           maxWidth: "16ch",
         }}
       >

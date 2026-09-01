@@ -30,6 +30,34 @@ for (const p of paths) {
   }
 }
 
+/*
+  The gradient is read from the source too, not hardcoded here.
+
+  It was hardcoded, so swapping in a new logo file regenerated all twelve
+  paths correctly and silently kept the previous wordmark's colours — the mark
+  changed shape-perfectly and stayed the wrong colour.
+*/
+const gradient = svg.match(/<linearGradient\b([^>]*)>([\s\S]*?)<\/linearGradient>/);
+if (!gradient) throw new Error("no <linearGradient> found in the source SVG");
+
+const gradientAttrs = Object.fromEntries(
+  [...gradient[1].matchAll(/([\w-]+)="([^"]*)"/g)].map(([, k, v]) => [k, v]),
+);
+const stops = [...gradient[2].matchAll(/<stop\b([^>]*)\/>/g)].map(([, attrs]) => {
+  const get = (n) => (attrs.match(new RegExp(`${n}="([^"]*)"`)) || [])[1];
+  return { offset: get("offset"), color: get("stop-color") };
+});
+if (stops.length === 0) throw new Error("gradient has no stops");
+
+const gradientCoords = ["gradientUnits", "x1", "y1", "x2", "y2"]
+  .filter((k) => gradientAttrs[k] !== undefined)
+  .map((k) => `${k}="${gradientAttrs[k]}"`)
+  .join(" ");
+
+const stopMarkup = stops
+  .map((st) => `          <stop offset="${st.offset}" stopColor="${st.color}" />`)
+  .join("\n");
+
 const groupOf = (id) => (id.startsWith("top-") ? "we-code" : "coders");
 
 const render = (group) =>
@@ -97,10 +125,8 @@ export function Logo({
         : { role: "img" as const, "aria-label": title })}
     >
       <defs>
-        <linearGradient id={\`\${idPrefix}-gradient\`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#FFD0DC" />
-          <stop offset="0.52" stopColor="#F9C1D0" />
-          <stop offset="1" stopColor="#F2B1C4" />
+        <linearGradient id={\`\${idPrefix}-gradient\`} ${gradientCoords}>
+${stopMarkup}
         </linearGradient>
       </defs>
       <g id={\`\${idPrefix}-we-code\`}>
@@ -115,4 +141,7 @@ ${render("coders")}
 `;
 
 writeFileSync("src/components/site/Logo.tsx", out);
-console.log(`gen-logo: wrote ${paths.length} letter paths`);
+console.log(
+  `gen-logo: wrote ${paths.length} letter paths and ${stops.length} gradient stops ` +
+    `(${stops.map((st) => st.color).join(" -> ")})`,
+);

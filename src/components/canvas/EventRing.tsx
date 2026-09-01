@@ -30,8 +30,6 @@ type EventRingProps = {
   events: Event[];
   focused: number;
   onFocusChange: (index: number) => void;
-  /** Reports 0 outside the ring, 1 once the camera is at its centre. */
-  onInsideChange?: (inside: number) => void;
   /** Index of the poster under the pointer, or null when over empty space. */
   onHoverChange?: (index: number | null) => void;
   consumeInput: () => RingInput;
@@ -41,7 +39,6 @@ export function EventRing({
   events,
   focused,
   onFocusChange,
-  onInsideChange,
   onHoverChange,
   consumeInput,
 }: EventRingProps) {
@@ -55,7 +52,6 @@ export function EventRing({
   const idle = useRef(0);
   const settled = useRef(false);
   const inside = useRef(0);
-  const reportedInside = useRef(-1);
 
   const textures = useMemo(
     () =>
@@ -233,12 +229,6 @@ export function EventRing({
         inside: inside.current,
         velocity: velocity.current,
       };
-    }
-
-    const rounded = Math.round(inside.current * 20) / 20;
-    if (rounded !== reportedInside.current) {
-      reportedInside.current = rounded;
-      onInsideChange?.(rounded);
     }
 
     const slot = nearestSlot(-rotation.current, events.length);

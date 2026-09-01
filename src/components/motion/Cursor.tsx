@@ -88,7 +88,7 @@ export function Cursor() {
         gsap.to(el, {
           scale: 1,
           autoAlpha: 1,
-          backgroundColor: accent ?? "#F04436",
+          backgroundColor: accent ?? "#ED1C24",
           color: target.getAttribute("data-cursor-ink") ?? "#F3EFE5",
           // Opening pops; moving between two things just recolours.
           duration: first ? 0.35 : 0.25,

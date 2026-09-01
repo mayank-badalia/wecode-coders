@@ -132,7 +132,7 @@ export function Timeline() {
           position: "absolute",
           inset: 0,
           opacity: 0.14,
-          backgroundImage: "radial-gradient(circle, var(--blush) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, var(--signal) 1px, transparent 1px)",
           backgroundSize: "16px 16px",
         }}
       />
@@ -165,7 +165,7 @@ export function Timeline() {
           }}
         >
           You are here.{" "}
-          <span style={{ fontStyle: "italic", color: "var(--blush)" }}>
+          <span style={{ fontStyle: "italic", color: "var(--signal)" }}>
             Where will you leave?
           </span>
         </h2>
@@ -192,7 +192,7 @@ export function Timeline() {
               top: 0,
               bottom: 0,
               width: 2,
-              background: "linear-gradient(to bottom, var(--signal), var(--blush), var(--acid))",
+              background: "linear-gradient(to bottom, var(--signal), var(--acid))",
             }}
           />
 

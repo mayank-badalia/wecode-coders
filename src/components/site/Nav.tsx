@@ -210,7 +210,7 @@ export function Nav() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "clamp(1rem, 2.2vw, 1.8rem) clamp(1rem, 4vw, 3rem)",
-          color: onDark ? "var(--blush)" : "var(--color-ink)",
+          color: onDark ? "var(--signal)" : "var(--color-ink)",
           transition: "color 350ms ease",
           pointerEvents: "none",
           mixBlendMode: "normal",

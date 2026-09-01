@@ -46,10 +46,10 @@ export function Logo({
         : { role: "img" as const, "aria-label": title })}
     >
       <defs>
-        <linearGradient id={`${idPrefix}-gradient`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#FFD0DC" />
-          <stop offset="0.52" stopColor="#F9C1D0" />
-          <stop offset="1" stopColor="#F2B1C4" />
+        <linearGradient id={`${idPrefix}-gradient`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1328" y2="0">
+          <stop offset="0" stopColor="#F52A34" />
+          <stop offset="0.52" stopColor="#ED1C24" />
+          <stop offset="1" stopColor="#D9162C" />
         </linearGradient>
       </defs>
       <g id={`${idPrefix}-we-code`}>

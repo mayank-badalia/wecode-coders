@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1328 884" width="1328" height="884" role="img" aria-labelledby="logo-title logo-description">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1328 884" width="1328" height="884" role="img" aria-labelledby="logo-title logo-description" shape-rendering="geometricPrecision">
   <title id="logo-title">We Code Coders</title>
-  <desc id="logo-description">The We Code Coders wordmark in pink, with arrow details in the outlined C, R, and S characters.</desc>
+  <desc id="logo-description">Subtle signal-red gradient We Code Coders wordmark with the original arrow details in the C, R, and S characters.</desc>
   <defs>
-    <linearGradient id="logo-gradient" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#FFD0DC"/>
-      <stop offset="0.52" stop-color="#F9C1D0"/>
-      <stop offset="1" stop-color="#F2B1C4"/>
+    <linearGradient id="logo-gradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1328" y2="0" color-interpolation="sRGB">
+      <stop offset="0" stop-color="#F52A34"/>
+      <stop offset="0.52" stop-color="#ED1C24"/>
+      <stop offset="1" stop-color="#D9162C"/>
     </linearGradient>
+    <style>
+      .logo-letter { shape-rendering: geometricPrecision; }
+    </style>
   </defs>
   <g id="we-code" aria-label="We Code">
     <path id="top-w" class="logo-letter" data-letter="W" fill="url(#logo-gradient)" fill-rule="evenodd" clip-rule="evenodd" d="M 42.0 452.1 C 42.0 452.1 26.0 256.5 21.5 195.0 C 17.0 133.5 9.9 14.0 9.9 14.0 C 9.9 14.0 84.0 13.5 84.0 13.5 C 84.0 13.5 86.5 15.0 86.5 15.0 C 86.5 15.0 101.0 317.1 101.0 317.1 C 101.0 317.1 103.2 310.5 103.5 307.0 C 103.7 303.5 122.7 15.0 122.7 15.0 C 122.7 15.0 126.0 13.5 126.0 13.5 C 126.0 13.5 203.0 14.3 203.0 14.3 C 203.0 14.3 216.6 253.0 217.5 269.0 C 218.5 285.0 220.6 316.0 220.6 316.0 C 220.6 316.0 222.0 317.1 222.0 317.1 C 222.0 317.1 237.7 15.0 237.7 15.0 C 237.7 15.0 241.0 13.5 241.0 13.5 C 241.0 13.5 313.0 13.9 313.0 13.9 C 313.0 13.9 308.6 93.9 305.5 135.0 C 302.4 176.1 280.1 452.0 280.1 452.0 C 280.1 452.0 178.9 452.0 178.9 452.0 C 178.9 452.0 172.3 374.8 169.5 335.0 C 166.8 295.2 162.4 215.0 162.4 215.0 C 162.4 215.0 161.0 213.9 161.0 213.9 C 161.0 213.9 145.3 451.0 145.3 451.0 C 145.3 451.0 142.0 452.5 142.0 452.5 C 142.0 452.5 42.0 452.1 42.0 452.1 Z"/>

@@ -19,7 +19,6 @@ const mono: React.CSSProperties = {
 const NOTES = [
   "No application form. No screening call. If you turn up, you are in.",
   "Every event ends with something that exists in public, with your name on it.",
-  "No prizes. Prizes turn builders into pitch-writers.",
 ];
 
 /*
@@ -89,7 +88,7 @@ export function Manifesto() {
             split.words,
             { color: "#142139" },
             {
-              color: "#F04436",
+              color: "#ED1C24",
               duration: 0.9,
               ease: "power2.out",
               stagger: 0.045,
@@ -179,7 +178,7 @@ export function Manifesto() {
       style={{
         position: "relative",
         zIndex: 2,
-        padding: "clamp(5rem, 16vh, 11rem) clamp(1.25rem, 4vw, 3rem)",
+        padding: "clamp(1rem, 2.5vh, 2rem) clamp(1.25rem, 4vw, 3rem) clamp(5rem, 14vh, 9rem)",
         maxWidth: "min(1680px, 92vw)",
         margin: "0 auto",
       }}

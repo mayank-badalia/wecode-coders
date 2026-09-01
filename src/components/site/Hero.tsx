@@ -5,7 +5,6 @@ import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
 import { getSite } from "@/lib/events";
-import { Arrow } from "./Arrow";
 import { hasLoaderFinished, LOADER_DONE_EVENT } from "./Loader";
 import { TapeStack } from "./TapeStack";
 
@@ -44,7 +43,6 @@ export function Hero() {
 
       const lines = gsap.utils.toArray<HTMLElement>(".hero-line");
       const outlined = el.querySelector<HTMLElement>(".hero-outlined");
-      const cue = el.querySelector<HTMLElement>(".hero-cue");
       const kicker = el.querySelector<HTMLElement>(".hero-meta");
 
       /*
@@ -74,19 +72,7 @@ export function Hero() {
           { clipPath: "inset(0 0% 0 0)", duration: 1.05, ease: "wcc" },
           0.32,
         )
-        .from(kicker, { autoAlpha: 0, y: -14, duration: 0.7 }, 0.55)
-        .from(cue, { autoAlpha: 0, y: -12, duration: 0.6 }, 0.95);
-
-      if (cue) {
-        gsap.to(cue, {
-          y: 9,
-          duration: 1.1,
-          ease: "sine.inOut",
-          repeat: -1,
-          yoyo: true,
-          delay: 1.7,
-        });
-      }
+        .from(kicker, { autoAlpha: 0, y: -14, duration: 0.7 }, 0.55);
 
       const start = () => tl.play();
       if (hasLoaderFinished()) start();
@@ -111,7 +97,7 @@ export function Hero() {
         display: "grid",
         gridTemplateRows: "auto 1fr",
         padding:
-          "clamp(6rem, 13vh, 9rem) clamp(1.25rem, 4vw, 3rem) clamp(2rem, 5vh, 3.5rem)",
+          "clamp(6rem, 13vh, 9rem) clamp(1.25rem, 4vw, 3rem) clamp(0.5rem, 1.5vh, 1rem)",
         maxWidth: "min(1680px, 94vw)",
         margin: "0 auto",
         zIndex: 2,
@@ -176,23 +162,6 @@ export function Hero() {
 
       <TapeStack />
 
-      <div
-        className="hero-cue"
-        style={{
-          ...mono,
-          position: "absolute",
-          left: "clamp(1.25rem, 4vw, 3rem)",
-          bottom: "clamp(0.8rem, 2vh, 1.4rem)",
-          zIndex: 4,
-          display: "flex",
-          alignItems: "center",
-          gap: "0.6em",
-          color: "var(--color-ink-40)",
-        }}
-      >
-        <Arrow direction="down" style={{ width: 16, height: 16 }} />
-        Scroll
-      </div>
     </section>
   );
 }
