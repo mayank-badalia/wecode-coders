@@ -15,9 +15,6 @@ type Tape = {
   /** Vertical position across the hero, in % of the section height. */
   top: number;
   rotate: number;
-  /** Where it exits to as the visitor scrolls past. */
-  exitX: number;
-  exitY: number;
   copy: React.ReactNode;
 };
 
@@ -57,13 +54,11 @@ function Run({ children }: { children: React.ReactNode }) {
   above the headline, clear of the fixed nav; three seal below it. Only the
   outlined line is crossed, which is the partial obscuring the design wants.
 
-  Every tape climbs from the bottom left to the top right. The first attempt
-  at that translated the marquee track vertically, which pushed the text
-  straight out of the bar's own clip and left five empty coloured strips —
-  the diagonal belongs to the tape's rotation, not to the track inside it.
-
-  They peel away in different directions as the visitor scrolls — the moment
-  the package opens.
+  Four climb from the bottom left to the top right; the pale one crosses them,
+  climbing from the bottom right to the top left. The first attempt at the
+  diagonal translated the marquee track vertically, which pushed the text
+  straight out of the bar's own clip and left five empty coloured strips — the
+  diagonal belongs to the tape's rotation, not to the track inside it.
 */
 const TAPES: Tape[] = [
   {
@@ -73,8 +68,6 @@ const TAPES: Tape[] = [
     direction: 1,
     top: 16,
     rotate: -5,
-    exitX: -14,
-    exitY: -34,
     copy: <Run>We Code Coders — Independent builder culture</Run>,
   },
   {
@@ -84,8 +77,6 @@ const TAPES: Tape[] = [
     direction: -1,
     top: 30,
     rotate: -6,
-    exitX: 16,
-    exitY: -22,
     copy: <Run>Open briefs — Anyone can enter — Nothing to pay</Run>,
   },
   {
@@ -95,8 +86,6 @@ const TAPES: Tape[] = [
     direction: 1,
     top: 52,
     rotate: -4.5,
-    exitX: -20,
-    exitY: 26,
     copy: <Run>Build — Break — Learn — Ship — Repeat</Run>,
   },
   {
@@ -106,19 +95,17 @@ const TAPES: Tape[] = [
     direction: -1,
     top: 70,
     rotate: -6.5,
-    exitX: 22,
-    exitY: 34,
     copy: <Run>Mini challenges — Mentors on call — Real feedback</Run>,
   },
   {
     bg: "var(--color-paper-2)",
     fg: "var(--color-ink)",
     speed: 72,
-    direction: 1,
+    direction: -1,
+    // The only strip crossing the other way: it climbs from the bottom right
+    // up to the top left, so the seal reads as crossed rather than combed.
     top: 84,
-    rotate: -5,
-    exitX: -10,
-    exitY: 44,
+    rotate: 6,
     copy: <Run>New events entering the system — Wherever you are</Run>,
   },
 ];
@@ -134,30 +121,14 @@ export function TapeStack() {
 
       const tapes = gsap.utils.toArray<HTMLElement>(".tape");
 
-      // Peel: each tape leaves in its own direction, so the seal breaks apart
-      // rather than fading out as one block.
-      const peel = gsap.timeline({
-        scrollTrigger: {
-          trigger: el.parentElement ?? el,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.8,
-        },
-      });
+      /*
+        The tapes hold their positions.
 
-      tapes.forEach((tape, i) => {
-        peel.to(
-          tape,
-          {
-            xPercent: Number(tape.dataset.exitX),
-            yPercent: Number(tape.dataset.exitY),
-            rotate: Number(tape.dataset.rotate) * 2.4,
-            autoAlpha: 0,
-            ease: "none",
-          },
-          i * 0.04,
-        );
-      });
+        They used to travel away on a scrub as the visitor scrolled, which
+        read as the whole seal sliding down the page and dragging across the
+        type. Sealing tape does not move once it is stuck; only the ticker
+        inside each strip runs.
+      */
 
       // A restrained pointer parallax, so the tapes sit in front of the type
       // rather than on it.
@@ -170,11 +141,7 @@ export function TapeStack() {
       };
       window.addEventListener("pointermove", onMove);
 
-      return () => {
-        window.removeEventListener("pointermove", onMove);
-        peel.scrollTrigger?.kill();
-        peel.kill();
-      };
+      return () => window.removeEventListener("pointermove", onMove);
     },
     { scope: root, dependencies: [reduced] },
   );
@@ -206,9 +173,6 @@ export function TapeStack() {
         <div
           key={i}
           className="tape"
-          data-exit-x={tape.exitX}
-          data-exit-y={tape.exitY}
-          data-rotate={tape.rotate}
           style={{
             position: "absolute",
             top: `${tape.top}%`,

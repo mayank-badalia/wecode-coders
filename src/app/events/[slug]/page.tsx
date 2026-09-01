@@ -50,10 +50,8 @@ export default async function EventPage({ params }: Params) {
     { label: "Date", value: formatEventDate(event.startsAt, event.endsAt) },
     { label: "Starts", value: formatEventTime(event.startsAt) },
     { label: "Runs for", value: hours >= 24 ? `${hours} hours` : `${hours} hours` },
-    { label: "Format", value: event.mode === "online" ? "Online" : "In person" },
     { label: "Joining", value: event.venue.name },
-    { label: "Where", value: event.venue.place },
-    { label: "Format", value: event.format.replace("-", " ") },
+    { label: "Kind", value: event.format.replace("-", " ") },
     { label: "Who it is for", value: event.forWho },
   ];
 

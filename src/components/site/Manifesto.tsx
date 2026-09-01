@@ -74,11 +74,19 @@ export function Manifesto() {
             headline disappeared entirely. Animating colour per word survives
             the split and reads better anyway.
           */
+          /*
+            Literal colours, not var(--token).
+
+            GSAP parses colour values itself and cannot interpolate a CSS
+            custom property — handed var(--color-ink) it had nothing to tween
+            between, so the words simply never changed. These two values are
+            the same ink and signal red defined in globals.css.
+          */
           const wipe = gsap.fromTo(
             split.words,
-            { color: "var(--color-ink)" },
+            { color: "#142139" },
             {
-              color: "var(--color-signal)",
+              color: "#F04436",
               duration: 0.9,
               ease: "power2.out",
               stagger: 0.045,

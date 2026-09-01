@@ -17,8 +17,12 @@ export type Event = {
   startsAt: string;
   endsAt: string;
   /**
-   * Where it happens. Most events are online and open to anyone; `place` is
-   * the human label shown everywhere ("Online", or a city when there is one).
+   * How to join, and optionally where.
+   *
+   * The site does not advertise whether events run remotely or in a room —
+   * that framing narrows who thinks it is for them. `place` is blank unless
+   * there is a specific location worth naming, and nothing renders it when
+   * it is empty.
    */
   mode: "online" | "in-person" | "hybrid";
   venue: { name: string; place: string };

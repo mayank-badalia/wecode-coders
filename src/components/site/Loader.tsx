@@ -251,7 +251,7 @@ export function Loader() {
             paddingBottom: "0.3em",
           }}
         >
-          Independent builder culture — online, open to all
+          Independent builder culture — open to anyone
         </span>
       </div>
     </div>

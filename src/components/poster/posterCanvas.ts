@@ -104,11 +104,7 @@ export function posterToCanvas(event: Event): HTMLCanvasElement {
   ctx.fillStyle = ground.fg;
   ctx.globalAlpha = 0.85;
   ctx.fillText(formatEventDate(event.startsAt, event.endsAt).toUpperCase(), pad, H - pad - 60);
-  ctx.fillText(
-    `${event.venue.place.toUpperCase()} — ${event.format.replace("-", " ").toUpperCase()}`,
-    pad,
-    H - pad - 24,
-  );
+  ctx.fillText(event.format.replace("-", " ").toUpperCase(), pad, H - pad - 24);
   ctx.globalAlpha = 1;
 
   return canvas;

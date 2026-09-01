@@ -222,9 +222,7 @@ export function Poster({
         }}
       >
         <span>{formatEventDate(event.startsAt, event.endsAt)}</span>
-        <span>
-          {event.venue.place} — {event.format.replace("-", " ")}
-        </span>
+        <span>{event.format.replace("-", " ")}</span>
       </div>
       ) : null}
 

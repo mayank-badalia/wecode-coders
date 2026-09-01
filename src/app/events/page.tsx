@@ -7,7 +7,7 @@ import { formatEventDate } from "@/lib/format";
 export const metadata: Metadata = {
   title: "Events — We Code Coders",
   description:
-    "Hackathons, workshops, build nights and demo days. Everything we run, and what each one is for.",
+    "Hackathons, workshops, build nights and demo days. Everything we run, and what each one is for."
 };
 
 export default function EventsPage() {
@@ -30,7 +30,7 @@ export default function EventsPage() {
           {events.map((e) => (
             <li key={e.slug}>
               <TransitionLink href={`/events/${e.slug}`} label={e.title}>
-                {e.title} — {formatEventDate(e.startsAt, e.endsAt)}, {e.venue.place}.{" "}
+                {e.title} — {formatEventDate(e.startsAt, e.endsAt)}.{" "}
                 {e.summary}
               </TransitionLink>
             </li>

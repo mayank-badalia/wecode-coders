@@ -191,7 +191,8 @@ export function Hero() {
           alignItems: "end",
           position: "relative",
           zIndex: 4,
-          marginTop: "clamp(4rem, 13vh, 8rem)",
+          // Well clear of the lowest tape at every viewport height.
+          marginTop: "clamp(6rem, 20vh, 12rem)",
           // Its own paper ground: the tapes pass beneath it rather than
           // through the copy, so this stays legible at every tape position.
           background: "var(--color-paper)",
@@ -231,7 +232,8 @@ export function Hero() {
               {next.title}
             </p>
             <p style={{ ...mono, margin: "0.3em 0 0", color: "var(--color-ink-60)" }}>
-              {formatEventDate(next.startsAt, next.endsAt)} — {next.venue.place}
+              {formatEventDate(next.startsAt, next.endsAt)}
+              {next.venue.place ? ` — ${next.venue.place}` : ""}
             </p>
           </div>
         )}

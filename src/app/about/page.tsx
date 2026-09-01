@@ -7,7 +7,7 @@ import { getAllEvents, getSite } from "@/lib/events";
 export const metadata: Metadata = {
   title: "About — We Code Coders",
   description:
-    "An online community of builders. No application, no screening, no prizes — just rooms where people build things in public, wherever they are.",
+    "A community of builders. No application, no screening, no prizes — just rooms where people build things in public."
 };
 
 const mono: React.CSSProperties = {
@@ -150,8 +150,8 @@ export default function AboutPage() {
 
           <aside style={{ ...mono, lineHeight: 1.7 }}>
             <p data-reveal style={{ margin: "0 0 1.6em" }}>
-              {site.reach}. Events run online so where you live is not a filter, and
-              the schedule is published in {site.timezoneLabel}.
+              {site.reach}. Where you are is not a filter and never has been; the
+              schedule is published in {site.timezoneLabel}.
             </p>
             <p data-reveal style={{ margin: 0 }}>
               Founded {site.foundedYear}. Run by the people who turn up.
@@ -197,13 +197,12 @@ export default function AboutPage() {
             <div>
               <p data-reveal style={{ margin: 0, fontSize: "clamp(0.95rem, 1.1vw, 1.08rem)", lineHeight: 1.65 }}>
                 A workshop where somebody talks for three hours leaves you with notes. A
-                generic online hackathon leaves you with a submission form and a leaderboard
+                mass hackathon leaves you with a submission form and a leaderboard
                 you never look at again. Both are easy to run and neither reliably produces
                 anything you would put your name on.
               </p>
               <p data-reveal style={{ margin: "1.1em 0 0", fontSize: "clamp(0.95rem, 1.1vw, 1.08rem)", lineHeight: 1.65 }}>
-                We run the other kind. Smaller, in person where possible, with a deadline and
-                a room. The measure of whether an event worked is not how many people came —
+                We run the other kind. Smaller, with a deadline and a room. The measure of whether an event worked is not how many people came —
                 it is how many left with something that exists.
               </p>
             </div>

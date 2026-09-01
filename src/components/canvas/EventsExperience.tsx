@@ -387,7 +387,8 @@ export function EventsExperience({ events }: { events: Event[] }) {
 
           <div style={{ overflow: "hidden" }}>
             <p className="panel-line" style={{ ...mono, margin: "0.6em 0 0", opacity: 0.75 }}>
-              {formatEventDate(event.startsAt, event.endsAt)} — {event.venue.place}
+              {formatEventDate(event.startsAt, event.endsAt)}
+              {event.venue.place ? ` — ${event.venue.place}` : ""}
             </p>
           </div>
 
