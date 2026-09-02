@@ -83,6 +83,7 @@ export function Loader() {
       ).filter((p): p is SVGPathElement => p !== null);
       const plainLetters = letters.filter((l) => !arrowLetters.includes(l));
       const columns = gsap.utils.toArray<HTMLElement>(".loader-column");
+      const overlay = el.querySelector<HTMLElement>(".loader-overlay");
       const counter = el.querySelector<HTMLElement>(".loader-counter");
 
       const tl = gsap.timeline({
@@ -141,14 +142,23 @@ export function Loader() {
         );
       }
 
-      // Phase 4 — EXIT. Six columns clear upward. The hero is already running
-      // underneath by the time the first one lifts.
+      /*
+        Phase 4 — EXIT. The ground and the wordmark leave together.
+
+        Only the columns used to animate, so the mark sat in place while the
+        colour lifted out from behind it and then vanished on its own — two
+        separate departures where there should be one. Everything on the panel
+        now travels up on the same tween, with a small column stagger for
+        texture rather than as a separate act.
+      */
+      const exiting = [...columns, ...(overlay ? [overlay] : [])];
+
       tl.add(() => signalLoaderDone(), ">-0.1").to(
-        columns,
+        exiting,
         {
           yPercent: -100,
-          duration: 0.7,
-          stagger: 0.06,
+          duration: 0.75,
+          stagger: { each: 0.045, from: "start" },
           ease: "expo.inOut",
         },
         ">-0.1",
@@ -195,6 +205,7 @@ export function Loader() {
       </div>
 
       <div
+        className="loader-overlay"
         style={{
           position: "absolute",
           inset: 0,

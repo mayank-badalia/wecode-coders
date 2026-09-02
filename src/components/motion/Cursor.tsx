@@ -6,7 +6,13 @@ import { useRef } from "react";
 import { gsap } from "./gsap";
 import { useReducedMotion } from "./MotionProvider";
 
-export type CursorTarget = { label: string; color: string; ink: string };
+export type CursorTarget = {
+  label: string;
+  color: string;
+  ink: string;
+  /** Border colour, so the bubble reads against a surface of its own hue. */
+  ring?: string;
+};
 
 const CURSOR_EVENT = "wcc:cursor";
 
@@ -136,6 +142,7 @@ export function Cursor() {
         const first = active === null;
         active = signature;
         if (label) label.textContent = target.label;
+        el.style.borderColor = target.ring ?? "transparent";
         gsap.to(el, {
           scale: 1,
           autoAlpha: 1,
@@ -189,6 +196,8 @@ export function Cursor() {
         borderRadius: "50%",
         background: "var(--color-signal)",
         color: "var(--color-paper)",
+        border: "2px solid transparent",
+        boxSizing: "border-box",
         visibility: "hidden",
         opacity: 0,
         mixBlendMode: "normal",

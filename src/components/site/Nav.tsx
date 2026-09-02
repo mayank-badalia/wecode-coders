@@ -142,7 +142,15 @@ export function Nav() {
     let current = false;
 
     const sample = () => {
-      const probe = document.elementFromPoint(24, 40);
+      /*
+        Sampled at the middle of the bar, where nothing of the nav's own sits.
+
+        The old probe point was the top-left corner — which is inside the logo
+        link. elementFromPoint returned the link, closest() found no dark
+        section above it, and the nav stayed ink on dark pages where it was
+        invisible.
+      */
+      const probe = document.elementFromPoint(window.innerWidth * 0.5, 40);
       const dark = probe?.closest("[data-nav-theme='dark']") != null;
       if (dark !== current) {
         current = dark;
@@ -210,7 +218,14 @@ export function Nav() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "clamp(1rem, 2.2vw, 1.8rem) clamp(1rem, 4vw, 3rem)",
-          color: onDark ? "var(--signal)" : "var(--color-ink)",
+          /*
+            Neutral on both grounds, not red.
+
+            Black is the right answer on paper; on a dark section it would be
+            invisible, so the dark half uses paper. Red is reserved for the
+            wordmark and for accents, not for navigation.
+          */
+          color: onDark ? "var(--color-paper)" : "var(--color-ink)",
           transition: "color 350ms ease",
           pointerEvents: "none",
           mixBlendMode: "normal",
@@ -223,7 +238,8 @@ export function Nav() {
           style={{ position: "relative", display: "block", pointerEvents: "auto", width: 132, height: 44 }}
         >
           <span className="nav-wordmark" style={{ position: "absolute", inset: 0, display: "block" }}>
-            <Logo tone="current" idPrefix="nav" decorative className="h-full w-auto" />
+            {/* The mark keeps its own colour; only the links go neutral. */}
+            <Logo tone="brand" idPrefix="nav" decorative className="h-full w-auto" />
           </span>
           <span
             className="nav-glyph"

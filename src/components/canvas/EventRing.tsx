@@ -24,6 +24,8 @@ export type RingInput = {
   scroll: number;
   nudge: number;
   dragging: boolean;
+  /** False until the pointer has actually entered the canvas. */
+  pointerOver: boolean;
 };
 
 type EventRingProps = {
@@ -43,6 +45,8 @@ export function EventRing({
   consumeInput,
 }: EventRingProps) {
   const group = useRef<THREE.Group>(null);
+  const planes = useRef<(THREE.Mesh | null)[]>([]);
+  const reportedHover = useRef<number | null>(null);
   const world = useRef<THREE.Mesh>(null);
   const rotation = useRef(0);
   /** Where the ring is heading; scroll and drag move this, not the angle. */
@@ -231,6 +235,41 @@ export function EventRing({
       };
     }
 
+    /*
+      Hover is resolved by raycasting every frame, not by pointer enter and
+      leave events.
+
+      Those events are missed whenever the thing under the pointer changes for
+      a reason other than the pointer moving — the ring rotating out from under
+      it, a poster passing behind another, a fast flick between two planes —
+      and a missed "out" left the cursor bubble stranded over empty space.
+      Asking the scene what is actually under the pointer each frame cannot get
+      stuck in the same way.
+    */
+    const meshes = planes.current.filter((m): m is THREE.Mesh => m !== null);
+
+    /*
+      The raycaster is aimed explicitly, and only while the pointer is over
+      the canvas: an untouched pointer reads (0, 0), which is dead centre, and
+      would report a hover on the focused poster before the visitor had moved
+      the mouse at all.
+    */
+    if (input.pointerOver && meshes.length > 0) {
+      state.raycaster.setFromCamera(state.pointer, state.camera);
+    }
+    const hits =
+      input.pointerOver && meshes.length > 0
+        ? state.raycaster.intersectObjects(meshes, false)
+        : [];
+    const hitMesh = hits[0]?.object;
+    const hovered = hitMesh ? planes.current.findIndex((m) => m === hitMesh) : -1;
+    const hoveredIndex = hovered === -1 ? null : hovered;
+
+    if (hoveredIndex !== reportedHover.current) {
+      reportedHover.current = hoveredIndex;
+      onHoverChange?.(hoveredIndex);
+    }
+
     const slot = nearestSlot(-rotation.current, events.length);
     if (slot !== focused) onFocusChange(slot);
 
@@ -262,16 +301,9 @@ export function EventRing({
               position={[Math.sin(angle) * RADIUS, 0, Math.cos(angle) * RADIUS]}
               rotation={[0, angle, 0]}
               material={materials[i]}
-              /*
-                Real raycast hover, so the cursor bubble appears over an actual
-                poster rather than across the whole page, and can take that
-                event's own colour.
-              */
-              onPointerOver={(e) => {
-                e.stopPropagation();
-                onHoverChange?.(i);
+              ref={(node) => {
+                planes.current[i] = node;
               }}
-              onPointerOut={() => onHoverChange?.(null)}
             >
               <planeGeometry args={[PLANE_W, PLANE_H, 28, 1]} />
             </mesh>

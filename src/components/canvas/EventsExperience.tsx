@@ -110,16 +110,35 @@ export function EventsExperience({ events }: { events: Event[] }) {
       setCursorTarget(null);
       return;
     }
+    /*
+      The bubble takes the poster's own ground, and a contrasting ring keeps it
+      readable on top of it.
+
+      Inverting it instead collapsed the whole set to two colours — every
+      ground's foreground is either paper or ink — so the bubble stopped
+      changing between events, which was the point of colouring it at all.
+    */
     const ground = groundFor(target);
-    setCursorTarget({ label: "Open", color: ground.bg, ink: ground.fg });
+    setCursorTarget({ label: "Open", color: ground.bg, ink: ground.fg, ring: ground.fg });
   }, [hovered, events]);
 
-  // Leaving the route must not leave the bubble pointing at a poster.
-  useEffect(() => () => setCursorTarget(null), []);
+  // Leaving the route, the window, or the tab must all release the bubble.
+  useEffect(() => {
+    const release = () => {
+      input.current.pointerOver = false;
+    };
+    window.addEventListener("blur", release);
+    document.addEventListener("pointerleave", release);
+    return () => {
+      window.removeEventListener("blur", release);
+      document.removeEventListener("pointerleave", release);
+      setCursorTarget(null);
+    };
+  }, []);
   const stage = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
 
-  const input = useRef({ drag: 0, scroll: 0, nudge: 0, dragging: false });
+  const input = useRef({ drag: 0, scroll: 0, nudge: 0, dragging: false, pointerOver: false });
   const lastPointerX = useRef(0);
   const pointerStart = useRef({ x: 0, y: 0 });
   const lenis = useLenis();
@@ -220,6 +239,13 @@ export function EventsExperience({ events }: { events: Event[] }) {
     const el = stage.current;
     if (!el) return;
 
+    const enter = () => {
+      input.current.pointerOver = true;
+    };
+    const leave = () => {
+      input.current.pointerOver = false;
+    };
+
     const down = (e: PointerEvent) => {
       input.current.dragging = true;
       lastPointerX.current = e.clientX;
@@ -227,6 +253,16 @@ export function EventsExperience({ events }: { events: Event[] }) {
       el.setPointerCapture(e.pointerId);
     };
     const move = (e: PointerEvent) => {
+      /*
+        Presence is re-asserted by movement, not only by pointerenter.
+
+        Relying on enter and leave alone meant a single missed or stray leave
+        killed hover until the pointer physically exited the stage and came
+        back — the bubble simply stopped appearing. Any movement over the
+        stage proves the pointer is here.
+      */
+      input.current.pointerOver = true;
+
       if (!input.current.dragging) return;
       const dx = e.clientX - lastPointerX.current;
       lastPointerX.current = e.clientX;
@@ -257,11 +293,15 @@ export function EventsExperience({ events }: { events: Event[] }) {
       void playExit(target.title).then(() => router.push(`/events/${target.slug}`));
     };
 
+    el.addEventListener("pointerenter", enter);
+    el.addEventListener("pointerleave", leave);
     el.addEventListener("pointerdown", down);
     el.addEventListener("pointermove", move);
     el.addEventListener("pointerup", up);
     el.addEventListener("pointercancel", up);
     return () => {
+      el.removeEventListener("pointerenter", enter);
+      el.removeEventListener("pointerleave", leave);
       el.removeEventListener("pointerdown", down);
       el.removeEventListener("pointermove", move);
       el.removeEventListener("pointerup", up);

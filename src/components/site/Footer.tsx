@@ -62,12 +62,32 @@ export function Footer() {
       ).filter((p): p is SVGPathElement => p !== null);
       const plainLetters = letters.filter((l) => !arrowLetters.includes(l));
 
+      /*
+        Triggered on the wordmark itself, not on the footer.
+
+        The footer's top enters the viewport a long way before the mark does,
+        so the whole construction played out below the fold and was over by the
+        time anyone could see it.
+      */
+      // The wrapper, not the <svg>: ScrollTrigger measures an SVG element
+      // unreliably and the trigger simply never fired.
+      const mark = el.querySelector<HTMLElement>(".footer-mark");
+
+      /*
+        Hidden immediately, not as the timeline's first step.
+
+        The set used to live inside the timeline, which only runs once the
+        trigger fires — so the wordmark sat fully drawn until the visitor
+        reached it, then blanked and redrew itself in front of them. It has to
+        start hidden the moment the page renders.
+      */
+      gsap.set(letters, { fillOpacity: 0, stroke: "var(--signal)", strokeWidth: 1.5 });
+
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: el, start: "top 88%", once: true },
+        scrollTrigger: { trigger: mark ?? el, start: "top 92%", once: true },
       });
 
-      tl.set(letters, { fillOpacity: 0, stroke: "var(--color-paper)", strokeWidth: 1.5 })
-        .fromTo(
+      tl.fromTo(
           plainLetters,
           { drawSVG: "0%" },
           { drawSVG: "100%", duration: 1, stagger: { from: "center", amount: 0.55 } },
@@ -225,6 +245,7 @@ export function Footer() {
       </div>
 
       <div
+        className="footer-mark"
         style={{
           marginTop: "clamp(2rem, 5vw, 3.5rem)",
           paddingBottom: "clamp(1rem, 2.5vw, 2rem)",
@@ -235,7 +256,7 @@ export function Footer() {
         <Logo
           className="footer-logo"
           idPrefix="footer"
-          tone="paper"
+          tone="brand"
           decorative
           style={{ width: "min(96vw, 150vh)", height: "auto" }}
         />
