@@ -69,7 +69,7 @@ export function Poster({
           color: LOCKED_GROUND.fg,
           display: "grid",
           placeItems: "center",
-          border: "1px solid rgba(108,119,140,0.35)",
+          border: "1px solid rgba(138,148,168,0.5)",
         }}
       >
         <div
@@ -77,9 +77,9 @@ export function Poster({
           style={{
             position: "absolute",
             inset: 0,
-            opacity: 0.18,
+            opacity: 0.28,
             backgroundImage:
-              "repeating-linear-gradient(135deg, transparent 0 10px, rgba(108,119,140,0.5) 10px 11px)",
+              "repeating-linear-gradient(135deg, transparent 0 10px, rgba(138,148,168,0.5) 10px 11px)",
           }}
         />
         <div style={{ position: "relative", textAlign: "center", padding: "12%" }}>

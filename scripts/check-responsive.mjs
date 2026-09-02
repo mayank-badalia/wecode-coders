@@ -19,12 +19,35 @@ const SIZES = [
   { name: "Ultrawide", w: 2560, h: 1080, touch: false },
 ];
 
-const ROUTES = ["/", "/events", "/about", "/events/ship-or-sink", "/events/locked-7"];
+/*
+  Detail routes are read off /events rather than written out here.
+
+  A hardcoded slug is a route that quietly stops existing the moment an event
+  is locked — the whole set is locked right now — and the check then reports a
+  broken 404 page as a broken layout. The events page carries a real link per
+  event, locked or not, so it always names routes that exist.
+*/
+async function detailRoutes(page, base) {
+  await page.goto(`${base}/events`, { waitUntil: "domcontentloaded" });
+  const hrefs = await page.$$eval('a[href^="/events/"]', (as) =>
+    [...new Set(as.map((a) => a.getAttribute("href")).filter(Boolean))],
+  );
+  const locked = hrefs.find((h) => /\/locked-\d+$/.test(h));
+  const published = hrefs.find((h) => !/\/locked-\d+$/.test(h));
+  // One of each kind when both exist; whatever exists otherwise.
+  return [published, locked].filter(Boolean);
+}
+
+const ROUTES = ["/", "/events", "/about"];
 const MIN_FONT = 11;
 const MIN_TAP = 40;
 
 const browser = await chromium.launch();
 const problems = [];
+
+const probe = await browser.newPage();
+const routes = [...ROUTES, ...(await detailRoutes(probe, "http://localhost:3000"))];
+await probe.close();
 
 for (const size of SIZES) {
   const context = await browser.newContext({
@@ -34,7 +57,7 @@ for (const size of SIZES) {
     deviceScaleFactor: size.touch ? 2 : 1,
   });
 
-  for (const route of ROUTES) {
+  for (const route of routes) {
     const page = await context.newPage();
     const errors = [];
     page.on("pageerror", (e) => errors.push(String(e).slice(0, 90)));
@@ -113,4 +136,4 @@ if (problems.length > 0) {
   for (const p of problems) console.error("  " + p);
   process.exit(1);
 }
-console.log(`check-responsive: ok — ${SIZES.length} sizes x ${ROUTES.length} routes`);
+console.log(`check-responsive: ok — ${SIZES.length} sizes x ${routes.length} routes`);

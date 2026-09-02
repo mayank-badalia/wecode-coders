@@ -1,17 +1,43 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { getAllEvents } from "@/lib/events";
+import type { PublicEvent } from "@/lib/types";
 import { Poster } from "./Poster";
 
-// Published events only: a locked one has no title to assert against, which
-// is the entire point of it.
-const events = getAllEvents().filter((e) => !e.locked);
+/*
+  Fixtures, not the live event set.
+
+  These assert what the generated composition does with a title and a seed,
+  and a locked event deliberately carries neither. Every event in src/data is
+  locked at the moment, so reading from there left this suite with nothing to
+  render — the generator is worth testing whether or not anything is currently
+  published, so it gets its own inputs.
+*/
+const published = (slug: string, title: string, posterSeed: number): PublicEvent =>
+  ({
+    locked: false,
+    slug,
+    title,
+    posterSeed,
+    kicker: "WORKSHOP — ONE EVENING",
+    format: "workshop",
+    status: "upcoming",
+    startsAt: "2026-09-19T10:00:00+05:30",
+    endsAt: "2026-09-19T16:00:00+05:30",
+    mode: "in-person",
+  }) as PublicEvent;
+
+const events: PublicEvent[] = [
+  published("fixture-one", "Fixture One", 3),
+  published("fixture-two", "Fixture Two", 11),
+  published("fixture-three", "Fixture Three", 27),
+  published("fixture-four", "Fixture Four", 41),
+];
 
 describe("Poster", () => {
   it("renders the event title as real text", () => {
     const e = events[0]!;
     const { container } = render(<Poster event={e} />);
-    expect(container.textContent).toContain(e.title.toUpperCase());
+    expect(container.textContent).toContain("FIXTURE ONE");
   });
 
   it("is deterministic — the same event renders identically twice", () => {
@@ -27,7 +53,7 @@ describe("Poster", () => {
     expect(a).not.toBe(b);
   });
 
-  it("produces more than one ground colour across the real event set", () => {
+  it("produces more than one ground colour across a spread of seeds", () => {
     const grounds = new Set(
       events.map((e) => {
         const { container } = render(<Poster event={e} />);

@@ -26,6 +26,7 @@ import type { Event } from "@/lib/types";
 
 export const events: Event[] = [
   {
+    locked: true,
     slug: "cold-start",
     title: "Cold Start",
     kicker: "MEETUP — ONE EVENING",
@@ -65,6 +66,7 @@ export const events: Event[] = [
     posterSeed: 1001,
   },
   {
+    locked: true,
     slug: "build-night-01",
     title: "Build Night 01",
     kicker: "BUILD NIGHT — FOUR HOURS",
@@ -104,6 +106,7 @@ export const events: Event[] = [
     posterSeed: 2000,
   },
   {
+    locked: true,
     slug: "first-light",
     title: "First Light",
     kicker: "DEMO DAY — ONE AFTERNOON",
@@ -147,6 +150,7 @@ export const events: Event[] = [
     posterSeed: 3000,
   },
   {
+    locked: true,
     slug: "shaders-at-dawn",
     title: "Shaders at Dawn",
     kicker: "WORKSHOP — SIX HOURS",
@@ -192,6 +196,7 @@ export const events: Event[] = [
     posterSeed: 4000,
   },
   {
+    locked: true,
     slug: "type-and-motion",
     title: "Type & Motion",
     kicker: "WORKSHOP — ONE EVENING",
@@ -232,6 +237,7 @@ export const events: Event[] = [
     posterSeed: 5004,
   },
   {
+    locked: true,
     slug: "ship-or-sink",
     title: "Ship or Sink",
     kicker: "HACKATHON — 36 HOURS",

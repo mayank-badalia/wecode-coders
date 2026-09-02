@@ -41,10 +41,20 @@ import type { PublicEvent } from "@/lib/types";
  * states, cursor bubbles and canvas tints all match the poster the visitor is
  * actually looking at instead of one shared accent.
  */
+/*
+  The sealed plate's colours.
+
+  Kept well clear of the events ring's world (#0A0F1C). At #0F1626 the plate
+  was all but the same value as the world behind it, which read fine while one
+  locked plate sat among six colourful ones — the contrast came from its
+  neighbours. With every event locked those neighbours are gone, and the ring
+  became a single black void, so the plate has to carry its own separation and
+  be legible as the only thing on the page.
+*/
 export const LOCKED_GROUND: Ground = {
   name: "ink",
-  bg: "#0F1626",
-  fg: "#6C778C",
+  bg: "#242F45",
+  fg: "#B4BECF",
   accent: "#ED1C24",
 };
 
