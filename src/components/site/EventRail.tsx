@@ -26,9 +26,10 @@ export function EventRail({ events }: { events: PublicEvent[] }) {
       /*
         Applies the metrics for every card.
 
-        All reads happen before all writes. Interleaving getBoundingClientRect
-        with style writes forces a synchronous layout per card, which on a
-        seven-card rail is seven forced reflows every scroll frame.
+        All reads happen before all writes, bar one noted below. Interleaving
+        getBoundingClientRect with style writes forces a synchronous layout per
+        card, which on a seven-card rail is seven forced reflows every scroll
+        frame.
       */
       const applyMetrics = () => {
         const cards = gsap.utils.toArray<HTMLElement>(".rail-card", section);
@@ -40,14 +41,23 @@ export function EventRail({ events }: { events: PublicEvent[] }) {
 
         const measured = cards.map((card) => {
           const r = card.getBoundingClientRect();
-          return { card, dx: r.left + r.width / 2 - centre };
+          return { card, left: r.left, dx: r.left + r.width / 2 - centre };
         });
+
+        const metrics = measured.map(({ dx }) => railMetrics(dx, { width: vw, height: vh }));
 
         let nearest = 0;
         let nearestDist = Infinity;
+        measured.forEach(({ dx }, i) => {
+          if (Math.abs(dx) < nearestDist) {
+            nearestDist = Math.abs(dx);
+            nearest = i;
+          }
+        });
 
-        measured.forEach(({ card, dx }, i) => {
-          const m = railMetrics(dx, { width: vw, height: vh });
+        measured.forEach(({ card, left }, i) => {
+          const m = metrics[i];
+          if (!m) return;
 
           gsap.set(card, {
             width: m.width,
@@ -70,6 +80,36 @@ export function EventRail({ events }: { events: PublicEvent[] }) {
           const detail = card.querySelector<HTMLElement>(".rail-detail");
           if (detail) gsap.set(detail, { opacity: m.detail });
 
+          /*
+            Keep the full-bleed card's copy inside the viewport, not merely
+            inside the card.
+
+            A card wide enough to fill the screen sits with its left edge past
+            the viewport's, because it keeps growing after the track has
+            stopped translating. Its copy then renders off the left of the
+            screen and the visitor reads the tail of a sentence.
+
+            This is the one read that cannot be batched: the overhang depends
+            on the width written a line above and on the track offset the
+            scrub writes in this same frame, so an edge measured earlier is
+            wrong by however far the rail moved. It is confined to the card at
+            the centre, and only once the stale edge says it has crossed the
+            viewport — one forced layout per frame at the end of the pin
+            rather than one per card throughout. A card leaving to the left
+            overhangs too, but its copy is meant to slide out of frame with
+            it, so it is left alone.
+          */
+          const copy = card.querySelector<HTMLElement>(".rail-copy");
+          if (copy) {
+            // `left`, not padding: the box is positioned by left/right, and
+            // padding is set with the shorthand this would clobber.
+            const overhang =
+              i === nearest && left < 0
+                ? Math.max(0, -card.getBoundingClientRect().left)
+                : 0;
+            gsap.set(copy, { left: overhang });
+          }
+
           const link = card.querySelector<HTMLElement>(".rail-link");
           // An unreadable card must not be clickable, and the cursor bubble
           // must not offer to open it either.
@@ -81,11 +121,6 @@ export function EventRail({ events }: { events: PublicEvent[] }) {
           card.classList.toggle("burst", m.interactive);
           if (m.interactive) card.setAttribute("data-nav-theme", "dark");
           else card.removeAttribute("data-nav-theme");
-
-          if (Math.abs(dx) < nearestDist) {
-            nearestDist = Math.abs(dx);
-            nearest = i;
-          }
         });
 
         if (counter) {
@@ -119,6 +154,16 @@ export function EventRail({ events }: { events: PublicEvent[] }) {
         const tween = gsap.to(trackEl, {
           x: () => -distance(),
           ease: "none",
+          /*
+            On the tween, not the trigger. `scrub` keeps easing the track for
+            about half a second after the trigger's progress has stopped
+            changing, so metrics driven off the trigger are computed against
+            an x the scrub is still about to move, and the last card settles
+            with its copy offset by however far that tail carried it. A tween
+            onUpdate runs after each tick has written x, and it keeps running
+            through the tail.
+          */
+          onUpdate: applyMetrics,
           scrollTrigger: {
             trigger: section,
             start: "top top",
@@ -128,7 +173,6 @@ export function EventRail({ events }: { events: PublicEvent[] }) {
             invalidateOnRefresh: true,
             anticipatePin: 1,
             onUpdate: (self) => {
-              applyMetrics();
               if (progressBar) gsap.set(progressBar, { scaleX: self.progress });
             },
             onRefresh: applyMetrics,

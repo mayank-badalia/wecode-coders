@@ -99,6 +99,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: PublicEvent; in
           their text no matter how far from centre they were.
         */}
         <div
+          className="rail-copy"
           style={{
             position: "absolute",
             left: 0,
