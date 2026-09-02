@@ -1,3 +1,7 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
 /*
   The editorial grid.
 
@@ -6,6 +10,17 @@
   the structure assert itself and then recede.
 */
 export function Grid() {
+  const pathname = usePathname();
+
+  /*
+    Not over the events scene.
+
+    The grid is a print device for the paper pages. Laid over the WebGL world
+    it became a second, static set of vertical rules sitting on top of the
+    ring's own moving ones — two grids at once, one of which never moved.
+  */
+  if (pathname === "/events") return null;
+
   return (
     <div
       aria-hidden="true"

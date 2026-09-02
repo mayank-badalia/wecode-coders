@@ -1,6 +1,7 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
+import { usePathname } from "next/navigation";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { useRef, useState } from "react";
 import { gsap, ScrollTrigger, SplitText } from "@/components/motion/gsap";
@@ -121,6 +122,7 @@ export function Nav() {
   const root = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const [onDark, setOnDark] = useState(false);
+  const pathname = usePathname();
   const menuButton = useRef<HTMLButtonElement>(null);
   const reduced = useReducedMotion();
 
@@ -200,11 +202,16 @@ export function Nav() {
   return (
     <>
       {/*
-        Keeps the fixed bar legible where body copy scrolls beneath it. Hidden
-        over dark grounds, where a paper-coloured gradient reads as a haze
-        across the top of the image rather than as nothing at all.
+        Keeps the fixed bar legible where body copy scrolls beneath it.
+
+        Hidden over dark grounds, and not rendered at all on the events route:
+        a paper-coloured gradient over a dark 3D scene reads as a haze band
+        across the top of the image rather than as nothing at all, and there
+        is no body copy there for it to protect the bar from.
       */}
-      <div className="nav-scrim" aria-hidden="true" style={{ opacity: onDark ? 0 : 1 }} />
+      {pathname !== "/events" && (
+        <div className="nav-scrim" aria-hidden="true" style={{ opacity: onDark ? 0 : 1 }} />
+      )}
       <header
         ref={root}
         className={onDark ? "burst" : undefined}
@@ -238,8 +245,8 @@ export function Nav() {
           style={{ position: "relative", display: "block", pointerEvents: "auto", width: 132, height: 44 }}
         >
           <span className="nav-wordmark" style={{ position: "absolute", inset: 0, display: "block" }}>
-            {/* The mark keeps its own colour; only the links go neutral. */}
-            <Logo tone="brand" idPrefix="nav" decorative className="h-full w-auto" />
+            {/* The mark matches the links rather than staying branded red. */}
+            <Logo tone="current" idPrefix="nav" decorative className="h-full w-auto" />
           </span>
           <span
             className="nav-glyph"
