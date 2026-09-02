@@ -10,6 +10,10 @@
 // poster image instead of the generated one, set `posterImage` to a path
 // under /public. Nothing else needs changing.
 //
+// Set `locked: true` to hold an event back before it is announced. The record
+// can be written out in full — the read seam in src/lib/events.ts strips it to
+// an opaque placeholder, so none of it reaches the browser.
+//
 // `place` is intentionally blank: the site does not advertise whether an
 // event is online or in person. Fill it in only when there is a specific
 // location worth naming, and it will appear wherever it is relevant.
@@ -276,6 +280,9 @@ export const events: Event[] = [
     posterSeed: 6011,
   },
   {
+    // Locked: prepared here in full, published nowhere. Flip this to false
+    // (or delete the line) to announce it.
+    locked: true,
     slug: "no-gatekeepers",
     title: "No Gatekeepers",
     kicker: "HACKATHON — ONE WEEKEND",

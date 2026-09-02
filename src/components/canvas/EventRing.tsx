@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { groundFor } from "@/components/poster/layouts";
 import { posterToCanvas } from "@/components/poster/posterCanvas";
 import { angularDistance, nearestSlot, slotAngle } from "@/lib/ring";
-import type { Event } from "@/lib/types";
+import type { PublicEvent } from "@/lib/types";
 import { ringFragment, ringVertex, worldFragment, worldVertex } from "./ringShader";
 
 const RADIUS = 3.4;
@@ -29,7 +29,7 @@ export type RingInput = {
 };
 
 type EventRingProps = {
-  events: Event[];
+  events: PublicEvent[];
   focused: number;
   onFocusChange: (index: number) => void;
   /** Index of the poster under the pointer, or null when over empty space. */

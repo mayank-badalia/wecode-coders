@@ -3,6 +3,7 @@ import { TransitionLink } from "@/components/motion/TransitionLink";
 import { notFound } from "next/navigation";
 import { Poster } from "@/components/poster/Poster";
 import { Arrow } from "@/components/site/Arrow";
+import { LockGlyph } from "@/components/site/LockGlyph";
 import { EventDetailMotion } from "@/components/site/EventDetailMotion";
 import { getAdjacentEvent, getAllEvents, getEventBySlug, getSite } from "@/lib/events";
 import { eventDurationHours, formatEventDate, formatEventTime } from "@/lib/format";
@@ -17,6 +18,16 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const event = getEventBySlug(slug);
   if (!event) return {};
+
+  // A locked event must not leak through metadata either — that is the one
+  // place a title would otherwise reach search results and link previews.
+  if (event.locked) {
+    return {
+      title: "Locked event — We Code Coders",
+      description: "This event has not been announced yet.",
+      robots: { index: false, follow: false },
+    };
+  }
 
   return {
     title: `${event.title} — We Code Coders`,
@@ -42,7 +53,80 @@ export default async function EventPage({ params }: Params) {
   const event = getEventBySlug(slug);
   if (!event) notFound();
 
+  /*
+    Locked events get a page that says only that they are locked. Everything
+    else about them is absent from this component's data, not merely unrendered.
+  */
+  if (event.locked) {
+    return (
+      <main
+        data-nav-theme="dark"
+        style={{
+          position: "relative",
+          zIndex: 2,
+          minHeight: "100svh",
+          display: "grid",
+          placeItems: "center",
+          background: "var(--color-ink)",
+          color: "var(--color-paper)",
+          padding: "clamp(6rem, 16vh, 10rem) clamp(1.25rem, 5vw, 3rem)",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ maxWidth: "44ch" }}>
+          <LockGlyph style={{ width: "clamp(2.2rem, 6vw, 3.4rem)", margin: "0 auto" }} />
+          <p style={{ ...monoLabel, margin: "1.6rem 0 0", color: "var(--color-paper)", opacity: 0.55 }}>
+            Locked
+          </p>
+          <h1
+            style={{
+              margin: "0.4em 0 0",
+              fontFamily: "var(--font-editorial)",
+              fontSize: "clamp(2rem, 6vw, 4rem)",
+              lineHeight: 1.02,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Not announced yet.
+          </h1>
+          <p
+            style={{
+              margin: "1.2em 0 0",
+              fontSize: "clamp(0.95rem, 1.2vw, 1.1rem)",
+              lineHeight: 1.6,
+              opacity: 0.75,
+            }}
+          >
+            Registration opens when this one is announced. Nothing about it is
+            published until then — not the brief, not the date, not the format.
+          </p>
+          <p style={{ marginTop: "2.2rem" }}>
+            <TransitionLink
+              href="/events"
+              label="Events"
+              style={{
+                ...monoLabel,
+                color: "var(--color-paper)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.6em",
+                borderBottom: "1px solid currentColor",
+                paddingBottom: "0.3em",
+              }}
+            >
+              Back to events
+              <Arrow style={{ width: 15, height: 15 }} />
+            </TransitionLink>
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+  // Only ever points at something announced; a "next event" that is locked
+  // would be a link to a wall.
   const next = getAdjacentEvent(slug);
+  const nextAnnounced = next && !next.locked ? next : undefined;
   const site = getSite();
   const hours = eventDurationHours(event.startsAt, event.endsAt);
 
@@ -435,7 +519,7 @@ export default async function EventPage({ params }: Params) {
           </p>
         )}
 
-        {next && (
+        {nextAnnounced && (
           <nav
             aria-label="Next event"
             style={{
@@ -445,8 +529,8 @@ export default async function EventPage({ params }: Params) {
             }}
           >
             <TransitionLink
-              href={`/events/${next.slug}`}
-              label={next.title}
+              href={`/events/${nextAnnounced.slug}`}
+              label={nextAnnounced.title}
               style={{
                 display: "block",
                 textDecoration: "none",
@@ -469,7 +553,7 @@ export default async function EventPage({ params }: Params) {
                   color: "var(--color-signal)",
                 }}
               >
-                {next.title}
+                {nextAnnounced.title}
                 <Arrow style={{ width: "0.5em", height: "0.5em" }} />
               </span>
             </TransitionLink>

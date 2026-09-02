@@ -4,16 +4,15 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
-import { getAllEvents } from "@/lib/events";
 import { railMetrics } from "@/lib/rail";
+import type { PublicEvent } from "@/lib/types";
 import { Arrow } from "./Arrow";
 import { EventRailCard } from "./EventRailCard";
 
-export function EventRail() {
+export function EventRail({ events }: { events: PublicEvent[] }) {
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
-  const events = getAllEvents();
 
   useGSAP(
     () => {

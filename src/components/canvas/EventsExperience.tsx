@@ -11,7 +11,7 @@ import { setCursorTarget } from "@/components/motion/Cursor";
 import { useLenis, useReducedMotion } from "@/components/motion/MotionProvider";
 import { Arrow } from "@/components/site/Arrow";
 import { formatEventDate } from "@/lib/format";
-import type { Event } from "@/lib/types";
+import type { PublicEvent } from "@/lib/types";
 import { groundFor } from "@/components/poster/layouts";
 import { CAMERA_Z, EventRing } from "./EventRing";
 import { RingFallback } from "./RingFallback";
@@ -84,7 +84,7 @@ function useCanRunWebGL(reduced: boolean) {
   return ok;
 }
 
-export function EventsExperience({ events }: { events: Event[] }) {
+export function EventsExperience({ events }: { events: PublicEvent[] }) {
   const router = useRouter();
   const { playExit, isBusy } = useTransition();
   const [focused, setFocused] = useState(0);
@@ -119,7 +119,12 @@ export function EventsExperience({ events }: { events: Event[] }) {
       changing between events, which was the point of colouring it at all.
     */
     const ground = groundFor(target);
-    setCursorTarget({ label: "Open", color: ground.bg, ink: ground.fg, ring: ground.fg });
+    setCursorTarget({
+      label: target.locked ? "Locked" : "Open",
+      color: ground.bg,
+      ink: ground.fg,
+      ring: ground.fg,
+    });
   }, [hovered, events]);
 
   // Leaving the route, the window, or the tab must all release the bubble.
@@ -290,7 +295,9 @@ export function EventsExperience({ events }: { events: Event[] }) {
 
       const target = events[focusedRef.current];
       if (!target || isBusy()) return;
-      void playExit(target.title).then(() => router.push(`/events/${target.slug}`));
+      // A locked event still opens — to its locked page, which says only that.
+      const label = target.locked ? "Locked" : target.title;
+      void playExit(label).then(() => router.push(`/events/${target.slug}`));
     };
 
     el.addEventListener("pointerenter", enter);
@@ -415,6 +422,45 @@ export function EventsExperience({ events }: { events: Event[] }) {
               "linear-gradient(90deg, var(--color-ink) 0%, color-mix(in srgb, var(--color-ink) 82%, transparent) 55%, transparent 100%)",
           }}
         >
+          {event.locked ? (
+            <>
+              <div style={{ overflow: "hidden" }}>
+                <p className="panel-line" style={{ ...mono, margin: 0, opacity: 0.6 }}>
+                  {String(focused + 1).padStart(2, "0")} /{" "}
+                  {String(events.length).padStart(2, "0")} — Locked
+                </p>
+              </div>
+              <div style={{ overflow: "hidden" }}>
+                <h2
+                  className="panel-line"
+                  style={{
+                    margin: "0.3em 0 0",
+                    fontFamily: "var(--font-editorial)",
+                    fontSize: "clamp(1.6rem, 3.4vw, 3rem)",
+                    lineHeight: 1.02,
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  Not announced yet.
+                </h2>
+              </div>
+              <div style={{ overflow: "hidden" }}>
+                <p
+                  className="panel-line"
+                  style={{
+                    margin: "0.9em 0 0",
+                    fontFamily: "var(--font-body)",
+                    fontSize: "clamp(0.9rem, 1.2vw, 1.05rem)",
+                    lineHeight: 1.5,
+                    opacity: 0.7,
+                  }}
+                >
+                  Registration opens when this one is announced.
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
           <div style={{ overflow: "hidden" }}>
             <p className="panel-line" style={{ ...mono, margin: 0, opacity: 0.8 }}>
               {String(focused + 1).padStart(2, "0")} /{" "}
@@ -489,6 +535,8 @@ export function EventsExperience({ events }: { events: Event[] }) {
               <Arrow style={{ width: 15, height: 15 }} />
             </TransitionLink>
           </div>
+            </>
+          )}
         </div>
       )}
 

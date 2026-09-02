@@ -6,6 +6,7 @@ import { Grain } from "@/components/site/Grain";
 import { Grid } from "@/components/site/Grid";
 import { Nav } from "@/components/site/Nav";
 import { MotionProvider } from "@/components/motion/MotionProvider";
+import { getSite } from "@/lib/events";
 import { TransitionProvider } from "@/components/motion/TransitionProvider";
 import { instrumentSerif, plexCondensed, plexMono, plexSans } from "@/lib/fonts";
 import "./globals.css";
@@ -42,7 +43,7 @@ export default function RootLayout({
             <Grid />
             <Nav />
             {children}
-            <SiteFooter />
+            <SiteFooter site={getSite()} />
           </TransitionProvider>
         </MotionProvider>
       </body>

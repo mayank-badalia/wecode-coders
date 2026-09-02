@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
 import { TransitionLink } from "@/components/motion/TransitionLink";
-import { getSite } from "@/lib/events";
+import type { SiteData } from "@/lib/types";
 import { Arrow } from "./Arrow";
 import { LocalClock } from "./LocalClock";
 import { Logo } from "./Logo";
@@ -39,10 +39,9 @@ const mono: React.CSSProperties = {
   end of the page. This is a single closing gesture: the mark draws itself,
   its letters separate outward, and it settles back as the page ends.
 */
-export function Footer() {
+export function Footer({ site }: { site: SiteData }) {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
-  const site = getSite();
 
   useGSAP(
     () => {

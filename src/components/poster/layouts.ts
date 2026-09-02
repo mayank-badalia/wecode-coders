@@ -16,7 +16,7 @@ export const GROUNDS = [
 export const TITLE_TREATMENTS = ["solid", "outline", "mixed"] as const;
 export const TITLE_ALIGNMENTS = ["top", "centre", "bottom"] as const;
 
-export type Ground = (typeof GROUNDS)[number];
+export type Ground = { name: string; bg: string; fg: string; accent: string };
 export type TitleTreatment = (typeof TITLE_TREATMENTS)[number];
 export type TitleAlignment = (typeof TITLE_ALIGNMENTS)[number];
 
@@ -32,7 +32,7 @@ export const GRAIN_URL = `data:image/svg+xml;utf8,${encodeURIComponent(
 )}`;
 
 import { createRng, pick } from "@/lib/seededRandom";
-import type { Event } from "@/lib/types";
+import type { PublicEvent } from "@/lib/types";
 
 /**
  * The ground an event's generated poster lands on.
@@ -41,6 +41,16 @@ import type { Event } from "@/lib/types";
  * states, cursor bubbles and canvas tints all match the poster the visitor is
  * actually looking at instead of one shared accent.
  */
-export function groundFor(event: Event): Ground {
+export const LOCKED_GROUND: Ground = {
+  name: "ink",
+  bg: "#0F1626",
+  fg: "#6C778C",
+  accent: "#ED1C24",
+};
+
+export function groundFor(event: PublicEvent): Ground {
+  // A locked event has no seed to derive from, and must not look like any
+  // particular one of the published grounds.
+  if (event.locked) return LOCKED_GROUND;
   return pick(createRng(event.posterSeed), GROUNDS);
 }

@@ -56,6 +56,15 @@ const eslintConfig = defineConfig([
     files: ["src/lib/events.ts"],
     rules: { "no-restricted-imports": "off" },
   },
+  {
+    /*
+      Tests may read the raw data. The locked-event test exists precisely to
+      compare both sides of the seam — it has to know what a locked event
+      actually says in order to prove none of it is published.
+    */
+    files: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    rules: { "no-restricted-imports": "off" },
+  },
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", ".filmstrips/**"]),
 ]);
 

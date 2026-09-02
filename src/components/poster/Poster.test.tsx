@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import { getAllEvents } from "@/lib/events";
 import { Poster } from "./Poster";
 
-const events = getAllEvents();
+// Published events only: a locked one has no title to assert against, which
+// is the entire point of it.
+const events = getAllEvents().filter((e) => !e.locked);
 
 describe("Poster", () => {
   it("renders the event title as real text", () => {

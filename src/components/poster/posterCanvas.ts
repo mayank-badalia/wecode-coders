@@ -1,6 +1,6 @@
 import { formatEventDate } from "@/lib/format";
 import { createRng, pick, range } from "@/lib/seededRandom";
-import type { Event } from "@/lib/types";
+import type { PublicEvent } from "@/lib/types";
 import { GROUNDS, TITLE_TREATMENTS } from "./layouts";
 
 /*
@@ -30,12 +30,48 @@ function resolveFamily(cssVar: string): string {
   return family;
 }
 
-export function posterToCanvas(event: Event): HTMLCanvasElement {
+export function posterToCanvas(event: PublicEvent): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
   if (!ctx) return canvas;
+
+  /*
+    A locked event is drawn as a sealed plate: hatching and a padlock, nothing
+    derived from its real content. It has no seed to compose from and must not
+    resemble any particular published ground.
+  */
+  if (event.locked) {
+    ctx.fillStyle = "#0F1626";
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.strokeStyle = "rgba(108,119,140,0.35)";
+    ctx.lineWidth = 3;
+    for (let x = -H; x < W + H; x += 34) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x + H, H);
+      ctx.stroke();
+    }
+
+    ctx.strokeStyle = "rgba(108,119,140,0.55)";
+    ctx.lineWidth = 6;
+    const cx = W / 2;
+    const cy = H / 2;
+    ctx.strokeRect(cx - 70, cy - 40, 140, 100);
+    ctx.beginPath();
+    ctx.arc(cx, cy - 40, 42, Math.PI, 0);
+    ctx.stroke();
+
+    const monoLocked = resolveFamily("--font-mono");
+    ctx.font = `500 ${Math.round(W * 0.032)}px ${monoLocked}`;
+    ctx.fillStyle = "#6C778C";
+    ctx.textAlign = "center";
+    ctx.fillText("LOCKED", cx, cy + 130);
+    ctx.textAlign = "left";
+    return canvas;
+  }
 
   const rng = createRng(event.posterSeed);
   const ground = pick(rng, GROUNDS);

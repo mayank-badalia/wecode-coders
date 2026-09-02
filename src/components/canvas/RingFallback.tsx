@@ -1,7 +1,7 @@
 "use client";
 
 import { Poster } from "@/components/poster/Poster";
-import type { Event } from "@/lib/types";
+import type { PublicEvent } from "@/lib/types";
 
 /*
   Non-WebGL path: a CSS-3D coverflow with the same interaction contract as the
@@ -13,7 +13,7 @@ export function RingFallback({
   events,
   focused,
 }: {
-  events: Event[];
+  events: PublicEvent[];
   focused: number;
 }) {
   return (

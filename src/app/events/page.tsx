@@ -27,14 +27,22 @@ export default function EventsPage() {
       <nav aria-label="All events" className="visually-hidden">
         <h1>Events</h1>
         <ul>
-          {events.map((e) => (
-            <li key={e.slug}>
-              <TransitionLink href={`/events/${e.slug}`} label={e.title}>
-                {e.title} — {formatEventDate(e.startsAt, e.endsAt)}.{" "}
-                {e.summary}
-              </TransitionLink>
-            </li>
-          ))}
+          {events.map((e) =>
+            e.locked ? (
+              <li key={e.slug}>
+                <TransitionLink href={`/events/${e.slug}`} label="Locked">
+                  A locked event, not yet announced.
+                </TransitionLink>
+              </li>
+            ) : (
+              <li key={e.slug}>
+                <TransitionLink href={`/events/${e.slug}`} label={e.title}>
+                  {e.title} — {formatEventDate(e.startsAt, e.endsAt)}.{" "}
+                  {e.summary}
+                </TransitionLink>
+              </li>
+            ),
+          )}
         </ul>
       </nav>
     </>

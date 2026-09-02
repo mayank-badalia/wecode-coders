@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
-import { getSite } from "@/lib/events";
+import type { SiteData } from "@/lib/types";
 import { hasLoaderFinished, LOADER_DONE_EVENT } from "./Loader";
 import { TapeStack } from "./TapeStack";
 
@@ -31,10 +31,9 @@ const mono: React.CSSProperties = {
   textTransform: "uppercase",
 };
 
-export function Hero() {
+export function Hero({ site }: { site: SiteData }) {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
-  const site = getSite();
 
   useGSAP(
     () => {

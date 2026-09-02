@@ -5,8 +5,8 @@ import { useRef } from "react";
 import { gsap, ScrollTrigger, SplitText } from "@/components/motion/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
 import { TransitionLink } from "@/components/motion/TransitionLink";
-import { getSite, getUpcomingEvents } from "@/lib/events";
 import { formatEventDate } from "@/lib/format";
+import type { PublicEvent, SiteData } from "@/lib/types";
 import { Arrow } from "./Arrow";
 
 const mono: React.CSSProperties = {
@@ -40,11 +40,16 @@ const COLUMNS = [
   },
 ];
 
-export function Manifesto() {
+type ManifestoProps = {
+  site: SiteData;
+  /** Only ever an announced event; a locked one is never advertised here. */
+  next?: PublicEvent & { locked: false };
+  lockedCount: number;
+};
+
+export function Manifesto({ site, next, lockedCount }: ManifestoProps) {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
-  const site = getSite();
-  const next = getUpcomingEvents()[0];
 
   useGSAP(
     () => {
@@ -225,7 +230,7 @@ export function Manifesto() {
           form a team, and turn unfinished ideas into visible work.
         </p>
 
-        {next && (
+        {next ? (
           <div>
             <p style={{ ...mono, margin: 0, color: "var(--color-ink-40)" }}>Next event</p>
             <p
@@ -245,7 +250,22 @@ export function Manifesto() {
               {next.venue.place ? ` — ${next.venue.place}` : ""}
             </p>
           </div>
-        )}
+        ) : lockedCount > 0 ? (
+          <div>
+            <p style={{ ...mono, margin: 0, color: "var(--color-ink-40)" }}>Next event</p>
+            <p
+              style={{
+                margin: "0.35em 0 0",
+                fontFamily: "var(--font-display)",
+                fontWeight: 700,
+                fontSize: "clamp(1.15rem, 1.8vw, 1.6rem)",
+                textTransform: "uppercase",
+              }}
+            >
+              Not announced yet
+            </p>
+          </div>
+        ) : null}
 
         <TransitionLink
           href="/events"

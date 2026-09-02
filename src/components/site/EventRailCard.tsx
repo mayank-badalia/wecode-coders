@@ -5,7 +5,7 @@ import { TransitionLink } from "@/components/motion/TransitionLink";
 import { groundFor } from "@/components/poster/layouts";
 import { Poster } from "@/components/poster/Poster";
 import { formatEventDate } from "@/lib/format";
-import type { Event } from "@/lib/types";
+import type { PublicEvent } from "@/lib/types";
 import { Arrow } from "./Arrow";
 
 /*
@@ -16,7 +16,7 @@ import { Arrow } from "./Arrow";
   scroll frame for every card, and re-rendering React that often would be
   visibly slow.
 */
-export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: number; total: number }>(
+export const EventRailCard = forwardRef<HTMLDivElement, { event: PublicEvent; index: number; total: number }>(
   function EventRailCard({ event, index, total }, ref) {
     const card = useRef<HTMLDivElement>(null);
     const ground = groundFor(event);
@@ -37,7 +37,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
         }}
         className="rail-card"
         data-slug={event.slug}
-        data-cursor="Open"
+        data-cursor={event.locked ? "Locked" : "Open"}
         data-cursor-active="false"
         data-cursor-color={ground.bg}
         data-cursor-ink={ground.fg}
@@ -109,6 +109,48 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
             color: "var(--color-paper)",
           }}
         >
+          {event.locked ? (
+            <>
+              <p
+                style={{
+                  margin: 0,
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "clamp(0.58rem, 0.8vw, 0.72rem)",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  opacity: 0.7,
+                }}
+              >
+                {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")} — Locked
+              </p>
+              <h3
+                style={{
+                  margin: "0.4em 0 0",
+                  fontFamily: "var(--font-editorial)",
+                  fontSize: "clamp(1.4rem, 3vw, 2.8rem)",
+                  lineHeight: 1.02,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Not announced yet.
+              </h3>
+              <div className="rail-detail" style={{ opacity: 0, marginTop: "1.2em", maxWidth: "48ch" }}>
+                <p
+                  style={{
+                    margin: 0,
+                    fontFamily: "var(--font-body)",
+                    fontSize: "clamp(0.9rem, 1.2vw, 1.05rem)",
+                    lineHeight: 1.5,
+                    opacity: 0.8,
+                  }}
+                >
+                  Registration opens when this one is announced. Nothing about it is
+                  published until then.
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
           <p
             style={{
               margin: 0,
@@ -186,6 +228,8 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
               <Arrow style={{ width: 15, height: 15 }} />
             </span>
           </div>
+            </>
+          )}
         </div>
 
         {/*
@@ -198,10 +242,10 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
         */}
         <TransitionLink
           href={`/events/${event.slug}`}
-          label={event.title}
+          label={event.locked ? "Locked" : event.title}
           getFromRect={fromRect}
           className="rail-link"
-          aria-label={`View ${event.title}`}
+          aria-label={event.locked ? "A locked event" : `View ${event.title}`}
           style={{
             position: "absolute",
             inset: 0,
@@ -211,7 +255,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: Event; index: n
             overflow: "hidden",
           }}
         >
-          {event.title}
+          {event.locked ? "Locked event" : event.title}
         </TransitionLink>
       </div>
     );

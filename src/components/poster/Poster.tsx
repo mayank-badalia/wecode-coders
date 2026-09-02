@@ -3,16 +3,18 @@ import { Fragment } from "react";
 import { Arrow } from "@/components/site/Arrow";
 import { formatEventDate } from "@/lib/format";
 import { createRng, pick, range } from "@/lib/seededRandom";
-import type { Event } from "@/lib/types";
+import type { PublicEvent } from "@/lib/types";
+import { LockGlyph } from "@/components/site/LockGlyph";
 import {
   GRAIN_URL,
   GROUNDS,
+  LOCKED_GROUND,
   TITLE_ALIGNMENTS,
   TITLE_TREATMENTS,
 } from "./layouts";
 
 type PosterProps = {
-  event: Event;
+  event: PublicEvent;
   className?: string;
   priority?: boolean;
   /**
@@ -50,6 +52,53 @@ export function Poster({
   const frame = fill
     ? ({ position: "absolute", inset: 0 } as const)
     : ({ position: "relative", aspectRatio: "3 / 4" } as const);
+
+  /*
+    A locked event has nothing to compose from — no title, no date, no seed.
+    It gets a sealed placeholder instead, and deliberately not a generated
+    poster, so its very look does not hint at the format or the mood of it.
+  */
+  if (event.locked) {
+    return (
+      <div
+        className={`burst ${className ?? ""}`}
+        style={{
+          ...frame,
+          overflow: "hidden",
+          backgroundColor: LOCKED_GROUND.bg,
+          color: LOCKED_GROUND.fg,
+          display: "grid",
+          placeItems: "center",
+          border: "1px solid rgba(108,119,140,0.35)",
+        }}
+      >
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0.18,
+            backgroundImage:
+              "repeating-linear-gradient(135deg, transparent 0 10px, rgba(108,119,140,0.5) 10px 11px)",
+          }}
+        />
+        <div style={{ position: "relative", textAlign: "center", padding: "12%" }}>
+          <LockGlyph />
+          <p
+            style={{
+              margin: "0.9em 0 0",
+              fontFamily: "var(--font-mono)",
+              fontSize: "clamp(0.55rem, 2.6cqw, 0.72rem)",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+            }}
+          >
+            Locked
+          </p>
+        </div>
+      </div>
+    );
+  }
   if (event.posterImage) {
     return (
       <div
