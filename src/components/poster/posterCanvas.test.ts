@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { LOCKED_GROUND } from "./layouts";
+import { GROUNDS, groundFor, tint } from "./layouts";
 import { posterToCanvas } from "./posterCanvas";
 import type { PublicEvent } from "@/lib/types";
 
@@ -8,9 +8,13 @@ import type { PublicEvent } from "@/lib/types";
 
   Its header promises the two cannot drift, and for the seeded compositions
   that held — both read GROUNDS. The locked branch did not: it carried its own
-  written-out copy of the sealed plate's colours, so lightening the token moved
-  the DOM posters and the About tiles while the events ring went on drawing the
-  old near-black plate. These assert the branch reads the token.
+  written-out copy of the sealed plate's colours, so a change to the palette
+  moved the DOM posters and the About tiles while the events ring went on
+  drawing the old plate. These assert the branch reads the shared table.
+
+  They also pin what a locked plate is allowed to derive its colour from: the
+  order, which is already printed on the card, and never the poster seed,
+  which would turn the colour into a fingerprint of the withheld event.
 */
 
 /** Records every fill and stroke colour the drawing code sets. */
@@ -61,15 +65,15 @@ function recordingContext() {
   return { ctx, fills, strokes };
 }
 
-function drawLocked() {
+function drawLocked(order = 0) {
   const { ctx, fills, strokes } = recordingContext();
   const spy = vi
     .spyOn(HTMLCanvasElement.prototype, "getContext")
     .mockReturnValue(ctx as unknown as CanvasRenderingContext2D);
-  const locked: PublicEvent = { locked: true, slug: "locked-1", order: 0 };
+  const locked: PublicEvent = { locked: true, slug: `locked-${order + 1}`, order };
   posterToCanvas(locked);
   spy.mockRestore();
-  return { fills, strokes };
+  return { fills, strokes, ground: groundFor(locked) };
 }
 
 afterEach(() => {
@@ -77,32 +81,35 @@ afterEach(() => {
 });
 
 describe("posterToCanvas — locked", () => {
-  it("fills the plate with the shared locked ground, not a second copy of it", () => {
-    const { fills } = drawLocked();
-    expect(fills).toContain(LOCKED_GROUND.bg);
+  it("fills the plate with the shared ground, not a second copy of it", () => {
+    const { fills, ground } = drawLocked();
+    expect(fills).toContain(ground.bg);
   });
 
-  it("draws the LOCKED label in the shared locked foreground", () => {
-    const { fills } = drawLocked();
-    expect(fills).toContain(LOCKED_GROUND.fg);
+  it("draws the LOCKED label in that ground's foreground", () => {
+    const { fills, ground } = drawLocked();
+    expect(fills).toContain(ground.fg);
   });
 
-  it("derives the hatching and padlock from the shared foreground", () => {
-    const { strokes } = drawLocked();
-    const n = parseInt(LOCKED_GROUND.fg.slice(1), 16);
-    const channels = `${(n >> 16) & 255},${(n >> 8) & 255},${n & 255}`;
+  it("derives the hatching and padlock from that ground's foreground", () => {
+    const { strokes, ground } = drawLocked();
     expect(strokes.length).toBeGreaterThan(0);
-    for (const s of strokes) expect(s).toContain(channels);
+    // Alpha varies between the hatching and the padlock; the channels must not.
+    const channels = tint(ground.fg, 1).replace(",1)", "");
+    for (const s of strokes) expect(s.startsWith(channels)).toBe(true);
   });
 
-  it("never paints a published ground's colours onto a locked plate", () => {
-    const { fills, strokes } = drawLocked();
-    // A locked plate that happened to render as, say, the acid ground would
-    // leak the one thing the lock exists to hide: which event this is.
-    for (const colour of [...fills, ...strokes]) {
-      expect(colour).not.toBe("#D8EF72");
-      expect(colour).not.toBe("#F3A5B7");
-      expect(colour).not.toBe("#ED1C24");
+  it("gives consecutive locked plates different grounds", () => {
+    const grounds = [0, 1, 2, 3].map((o) => drawLocked(o).ground.bg);
+    expect(new Set(grounds).size).toBe(4);
+  });
+
+  it("takes the ground from the order, never from a seed", () => {
+    // The order is already printed on the card. A seed is not, and a colour
+    // derived from one would fingerprint the event being withheld.
+    for (const order of [0, 1, 2, 3, 4, 5, 6]) {
+      const { ground } = drawLocked(order);
+      expect(ground).toBe(GROUNDS[order % GROUNDS.length]);
     }
   });
 });

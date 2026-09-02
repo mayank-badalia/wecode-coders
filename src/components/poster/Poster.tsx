@@ -8,9 +8,10 @@ import { LockGlyph } from "@/components/site/LockGlyph";
 import {
   GRAIN_URL,
   GROUNDS,
-  LOCKED_GROUND,
   TITLE_ALIGNMENTS,
   TITLE_TREATMENTS,
+  groundFor,
+  tint,
 } from "./layouts";
 
 type PosterProps = {
@@ -59,17 +60,18 @@ export function Poster({
     poster, so its very look does not hint at the format or the mood of it.
   */
   if (event.locked) {
+    const ground = groundFor(event);
     return (
       <div
         className={`burst ${className ?? ""}`}
         style={{
           ...frame,
           overflow: "hidden",
-          backgroundColor: LOCKED_GROUND.bg,
-          color: LOCKED_GROUND.fg,
+          backgroundColor: ground.bg,
+          color: ground.fg,
           display: "grid",
           placeItems: "center",
-          border: "1px solid rgba(138,148,168,0.5)",
+          border: `1px solid ${tint(ground.fg, 0.35)}`,
         }}
       >
         <div
@@ -77,9 +79,11 @@ export function Poster({
           style={{
             position: "absolute",
             inset: 0,
-            opacity: 0.28,
-            backgroundImage:
-              "repeating-linear-gradient(135deg, transparent 0 10px, rgba(138,148,168,0.5) 10px 11px)",
+            opacity: 0.18,
+            backgroundImage: `repeating-linear-gradient(135deg, transparent 0 10px, ${tint(
+              ground.fg,
+              0.5,
+            )} 10px 11px)`,
           }}
         />
         <div style={{ position: "relative", textAlign: "center", padding: "12%" }}>

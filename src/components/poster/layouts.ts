@@ -41,26 +41,23 @@ import type { PublicEvent } from "@/lib/types";
  * states, cursor bubbles and canvas tints all match the poster the visitor is
  * actually looking at instead of one shared accent.
  */
-/*
-  The sealed plate's colours.
-
-  Kept well clear of the events ring's world (#0A0F1C). At #0F1626 the plate
-  was all but the same value as the world behind it, which read fine while one
-  locked plate sat among six colourful ones — the contrast came from its
-  neighbours. With every event locked those neighbours are gone, and the ring
-  became a single black void, so the plate has to carry its own separation and
-  be legible as the only thing on the page.
-*/
-export const LOCKED_GROUND: Ground = {
-  name: "ink",
-  bg: "#242F45",
-  fg: "#B4BECF",
-  accent: "#ED1C24",
-};
+/** A ground colour at partial opacity, for hatching and hairlines. */
+export function tint(hex: string, alpha: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
+}
 
 export function groundFor(event: PublicEvent): Ground {
-  // A locked event has no seed to derive from, and must not look like any
-  // particular one of the published grounds.
-  if (event.locked) return LOCKED_GROUND;
+  /*
+    A locked event's ground comes from its position in the run.
+
+    It has no seed to compose from, and it must not borrow the published
+    seed's ground — that would make the colour a fingerprint of the event
+    being withheld. Its order is already on the card in plain text ("03 / 07"),
+    so keying off it tells the visitor nothing they cannot already see, while
+    keeping the sealed cards as visually distinct from each other as the
+    published ones are.
+  */
+  if (event.locked) return GROUNDS[event.order % GROUNDS.length]!;
   return pick(createRng(event.posterSeed), GROUNDS);
 }

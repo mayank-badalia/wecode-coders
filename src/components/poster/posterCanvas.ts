@@ -1,7 +1,7 @@
 import { formatEventDate } from "@/lib/format";
 import { createRng, pick, range } from "@/lib/seededRandom";
 import type { PublicEvent } from "@/lib/types";
-import { GROUNDS, LOCKED_GROUND, TITLE_TREATMENTS } from "./layouts";
+import { GROUNDS, TITLE_TREATMENTS, groundFor, tint } from "./layouts";
 
 /*
   Canvas-2D twin of <Poster>.
@@ -30,12 +30,6 @@ function resolveFamily(cssVar: string): string {
   return family;
 }
 
-/** `#rrggbb` plus an alpha, as a canvas-ready colour string. */
-function rgba(hex: string, alpha: number): string {
-  const n = parseInt(hex.slice(1), 16);
-  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
-}
-
 export function posterToCanvas(event: PublicEvent): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
   canvas.width = W;
@@ -53,9 +47,10 @@ export function posterToCanvas(event: PublicEvent): HTMLCanvasElement {
     // used to be written out here as well as in Poster, and the two drifted
     // the moment one was tuned: the ring kept drawing the old near-black
     // plate while the DOM posters had already been lightened.
-    const seal = (alpha: number) => rgba(LOCKED_GROUND.fg, alpha);
+    const lockedGround = groundFor(event);
+    const seal = (alpha: number) => tint(lockedGround.fg, alpha);
 
-    ctx.fillStyle = LOCKED_GROUND.bg;
+    ctx.fillStyle = lockedGround.bg;
     ctx.fillRect(0, 0, W, H);
 
     ctx.strokeStyle = seal(0.35);
@@ -78,7 +73,7 @@ export function posterToCanvas(event: PublicEvent): HTMLCanvasElement {
 
     const monoLocked = resolveFamily("--font-mono");
     ctx.font = `500 ${Math.round(W * 0.032)}px ${monoLocked}`;
-    ctx.fillStyle = LOCKED_GROUND.fg;
+    ctx.fillStyle = lockedGround.fg;
     ctx.textAlign = "center";
     ctx.fillText("LOCKED", cx, cy + 130);
     ctx.textAlign = "left";
