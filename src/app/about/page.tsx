@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 const mono: React.CSSProperties = {
   fontFamily: "var(--font-mono)",
-  fontSize: "clamp(0.65rem, 0.95vw, 0.78rem)",
+  fontSize: "clamp(0.72rem, 0.95vw, 0.78rem)",
   letterSpacing: "0.14em",
   textTransform: "uppercase",
   color: "var(--color-ink-60)",

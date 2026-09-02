@@ -115,7 +115,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: PublicEvent; in
                 style={{
                   margin: 0,
                   fontFamily: "var(--font-mono)",
-                  fontSize: "clamp(0.58rem, 0.8vw, 0.72rem)",
+                  fontSize: "clamp(0.72rem, 0.8vw, 0.72rem)",
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
                   opacity: 0.7,
@@ -155,7 +155,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: PublicEvent; in
             style={{
               margin: 0,
               fontFamily: "var(--font-mono)",
-              fontSize: "clamp(0.58rem, 0.8vw, 0.72rem)",
+              fontSize: "clamp(0.72rem, 0.8vw, 0.72rem)",
               letterSpacing: "0.14em",
               textTransform: "uppercase",
               opacity: 0.8,
@@ -182,7 +182,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: PublicEvent; in
             style={{
               margin: "0.6em 0 0",
               fontFamily: "var(--font-mono)",
-              fontSize: "clamp(0.6rem, 0.85vw, 0.74rem)",
+              fontSize: "clamp(0.72rem, 0.85vw, 0.74rem)",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               opacity: 0.75,

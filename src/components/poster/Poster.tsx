@@ -88,7 +88,7 @@ export function Poster({
             style={{
               margin: "0.9em 0 0",
               fontFamily: "var(--font-mono)",
-              fontSize: "clamp(0.55rem, 2.6cqw, 0.72rem)",
+              fontSize: "clamp(0.72rem, 2.8cqw, 0.85rem)",
               letterSpacing: "0.18em",
               textTransform: "uppercase",
             }}
@@ -260,7 +260,7 @@ export function Poster({
           marginTop: "auto",
           paddingTop: "1.4em",
           fontFamily: "var(--font-mono)",
-          fontSize: "clamp(0.5rem, 2.6cqw, 0.75rem)",
+          fontSize: "clamp(0.72rem, 2.8cqw, 0.82rem)",
           letterSpacing: "0.08em",
           textTransform: "uppercase",
           color: ground.fg,

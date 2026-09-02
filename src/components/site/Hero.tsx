@@ -26,7 +26,7 @@ function Line({
 
 const mono: React.CSSProperties = {
   fontFamily: "var(--font-mono)",
-  fontSize: "clamp(0.62rem, 0.85vw, 0.74rem)",
+  fontSize: "clamp(0.72rem, 0.85vw, 0.74rem)",
   letterSpacing: "0.14em",
   textTransform: "uppercase",
 };

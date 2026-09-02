@@ -144,7 +144,7 @@ export function Timeline() {
             paddingBottom: "1.1rem",
             borderBottom: "1px solid rgba(243,239,229,0.25)",
             fontFamily: "var(--font-mono)",
-            fontSize: "clamp(0.62rem, 0.9vw, 0.74rem)",
+            fontSize: "clamp(0.72rem, 0.9vw, 0.74rem)",
             letterSpacing: "0.14em",
             textTransform: "uppercase",
             opacity: 0.6,
@@ -212,7 +212,7 @@ export function Timeline() {
                 className="timeline-num"
                 style={{
                   fontFamily: "var(--font-mono)",
-                  fontSize: "clamp(0.62rem, 0.9vw, 0.74rem)",
+                  fontSize: "clamp(0.72rem, 0.9vw, 0.74rem)",
                   letterSpacing: "0.14em",
                   opacity: 0.55,
                   paddingTop: "0.6em",
@@ -265,7 +265,7 @@ export function Timeline() {
                     alignItems: "baseline",
                     gap: "0.6em",
                     fontFamily: "var(--font-mono)",
-                    fontSize: "clamp(0.68rem, 0.92vw, 0.8rem)",
+                    fontSize: "clamp(0.72rem, 0.92vw, 0.8rem)",
                     lineHeight: 1.55,
                     opacity: 0.6,
                     maxWidth: "58ch",

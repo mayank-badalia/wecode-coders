@@ -26,7 +26,7 @@ const LINKS = [
 
 const mono: React.CSSProperties = {
   fontFamily: "var(--font-mono)",
-  fontSize: "clamp(0.62rem, 0.85vw, 0.74rem)",
+  fontSize: "clamp(0.72rem, 0.85vw, 0.74rem)",
   letterSpacing: "0.14em",
   textTransform: "uppercase",
 };
@@ -193,7 +193,7 @@ export function Footer({ site }: { site: SiteData }) {
                   }}
                 >
                   <span style={{ display: "inline-flex", alignItems: "baseline", gap: "0.7em" }}>
-                    <span style={{ ...mono, opacity: 0.5, fontSize: "0.55em" }}>
+                    <span style={{ ...mono, opacity: 0.5, fontSize: "max(0.72rem, 0.55em)" }}>
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     {l.label}

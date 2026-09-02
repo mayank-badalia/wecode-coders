@@ -230,7 +230,7 @@ export function EventRail({ events }: { events: PublicEvent[] }) {
           gap: "1rem",
           padding: "calc(clamp(1rem, 2.2vw, 1.8rem) + 3.2rem) clamp(1.25rem, 4vw, 3rem) 1rem",
           fontFamily: "var(--font-mono)",
-          fontSize: "clamp(0.65rem, 1vw, 0.78rem)",
+          fontSize: "clamp(0.72rem, 1vw, 0.78rem)",
           letterSpacing: "0.14em",
           textTransform: "uppercase",
           color: "var(--rail-chrome, rgba(19,28,51,0.6))",

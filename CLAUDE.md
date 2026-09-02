@@ -17,6 +17,13 @@ Read `README.md` first. The parts that matter most:
   ScrollTrigger and shows every reveal blank. Use `scripts/filmstrip.mjs`.
 - **No dead links.** `scripts/check-links.mjs` fails on stubs and 404s. Fix by
   removing the link, not by adding a page.
+- **Locked events must not leak.** `src/lib/events.ts` is `server-only`; never
+  import it from a client component — that bundles every locked record into the
+  browser. Client components take redacted `PublicEvent` props from a server
+  parent. `npm test` has a leak test that will catch it.
+- **Responsiveness is checked, not assumed.** `npm run check:responsive` covers
+  8 viewports x every route. Keep font-size floors at or above 0.72rem and tap
+  targets at 44px on coarse pointers.
 - Do not add anything from the "Not built" list in the README without being
   asked.
 

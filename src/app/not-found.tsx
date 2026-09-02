@@ -20,7 +20,7 @@ export default function NotFound() {
         style={{
           margin: 0,
           fontFamily: "var(--font-mono)",
-          fontSize: "clamp(0.65rem, 1vw, 0.78rem)",
+          fontSize: "clamp(0.72rem, 1vw, 0.78rem)",
           letterSpacing: "0.14em",
           textTransform: "uppercase",
           color: "var(--color-ink-60)",

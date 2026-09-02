@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 const monoLabel: React.CSSProperties = {
   fontFamily: "var(--font-mono)",
-  fontSize: "clamp(0.6rem, 0.85vw, 0.72rem)",
+  fontSize: "clamp(0.72rem, 0.85vw, 0.72rem)",
   letterSpacing: "0.14em",
   textTransform: "uppercase",
   color: "var(--color-ink-60)",
@@ -104,6 +104,7 @@ export default async function EventPage({ params }: Params) {
             <TransitionLink
               href="/events"
               label="Events"
+              className="back-link"
               style={{
                 ...monoLabel,
                 color: "var(--color-paper)",
@@ -219,7 +220,7 @@ export default async function EventPage({ params }: Params) {
                   style={{
                     margin: 0,
                     fontFamily: "var(--font-mono)",
-                    fontSize: "clamp(0.68rem, 0.95vw, 0.8rem)",
+                    fontSize: "clamp(0.72rem, 0.95vw, 0.8rem)",
                     lineHeight: 1.5,
                   }}
                 >
@@ -503,6 +504,7 @@ export default async function EventPage({ params }: Params) {
               href={site.socials[0].href}
               target="_blank"
               rel="noreferrer noopener"
+              className="detail-cta"
               style={{
                 ...monoLabel,
                 color: "var(--color-ink)",

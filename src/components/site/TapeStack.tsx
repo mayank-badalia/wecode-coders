@@ -25,7 +25,7 @@ const cell: React.CSSProperties = {
   padding: "0 1.1em",
   whiteSpace: "nowrap",
   fontFamily: "var(--font-mono)",
-  fontSize: "clamp(0.52rem, 0.72vw, 0.66rem)",
+  fontSize: "clamp(0.72rem, 0.72vw, 0.66rem)",
   letterSpacing: "0.18em",
   textTransform: "uppercase",
 };

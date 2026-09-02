@@ -326,3 +326,79 @@ html[data-wcc-seen="1"] .loader-root {
     gap: 1.5rem;
   }
 }
+
+/*
+  Touch targets.
+
+  An audit across eight viewports found controls as small as 46x20 — a Close
+  button, inline "View event" and "Back to events" links, the Menu trigger.
+  Anything a finger is meant to hit needs roughly a fingertip of area, so the
+  standalone controls get a real hit box on coarse pointers. Inline links
+  inside prose are deliberately excluded: padding them out would break the
+  line rhythm of the body copy they sit in.
+*/
+@media (pointer: coarse) {
+  header a,
+  header button,
+  [role="dialog"] a,
+  [role="dialog"] button,
+  .footer-link,
+  .hero-cta,
+  .rail-cta,
+  .panel-line[href],
+  .detail-cta,
+  .back-link {
+    min-height: 44px;
+  }
+
+  header button,
+  [role="dialog"] button,
+  .panel-line[href],
+  .detail-cta,
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    padding-block: 0.65rem;
+  }
+}
+
+/*
+  Tape stack on a phone.
+
+  Five thick strips across a short viewport swamp the headline and bury the
+  kicker — what reads as a sealed package on a wide screen reads as clutter on
+  a narrow one. Two of the five step aside, the rest thin down, and the pair
+  nearest the top move clear of the kicker line.
+*/
+@media (max-width: 700px) {
+  .tape-layer .tape:nth-child(3),
+  .tape-layer .tape:nth-child(4) {
+    display: none;
+  }
+
+  .tape-layer .tape {
+    left: -30%;
+    width: 160%;
+  }
+
+  .tape-layer .tape > div {
+    padding-block: 0.42em;
+  }
+
+  /*
+    Margin, not top: the strips set `top` inline, which a rule cannot
+    override. This pushes the first one clear of the kicker line.
+  */
+  .tape-layer .tape:nth-child(1) {
+    margin-top: 3.5rem;
+  }
+
+  .tape-layer .tape:nth-child(2) {
+    margin-top: 2rem;
+  }
+
+  .tape-layer .tape span {
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+  }
+}

@@ -100,6 +100,39 @@ node scripts/shot.mjs / hero.png                # one settled frame
 Both wait for the loader to clear rather than guessing a delay. `filmstrip.mjs`
 also fails on console errors.
 
+## Locked events
+
+Set `locked: true` on an event to hold it back before it is announced. The
+record can be written out in full — the read seam strips it to an opaque
+placeholder, so **none of it reaches the browser**. Not hidden with CSS:
+absent from the payload.
+
+The guarantee is structural. `PublicEvent` is a discriminated union, so a
+locked event has no `title`, no dates and no copy to read — rendering one is a
+type error. Its slug is derived from position (`locked-3`), so even the URL
+says nothing, and its metadata is replaced and noindexed.
+
+Two things make this hold, and both are easy to break by accident:
+
+- **`src/lib/events.ts` is `server-only`.** If a client component imports it,
+  the whole data module — locked records included — is pulled into the browser
+  bundle. Pass redacted data down as props from a server component instead.
+- **`npm test` includes a leak test** that serialises everything the seam
+  publishes and asserts no locked event's own words appear in it.
+
+To verify by hand after a build: `grep -r "<a locked title>" .next/static`
+should find nothing. Hits under `.next/server` are fine — that never ships.
+
+## Responsive
+
+`npm run check:responsive` drives 8 viewports (375px phone up to 2560px
+ultrawide) across every route and fails on the three things that actually
+break a layout: content wider than the viewport, text under 11px, and tap
+targets under 40px on touch devices. Run it against a running server.
+
+Decorative marquee text and the visually-hidden crawler list are exempt —
+neither is reading material or a touch target.
+
 ## Not built
 
 Deliberately absent, and not to be added speculatively: seasons, a projects

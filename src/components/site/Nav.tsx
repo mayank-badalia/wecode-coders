@@ -82,7 +82,9 @@ function RollLink({
       <span
         style={{
           fontFamily: "var(--font-mono)",
-          fontSize: "0.62em",
+          // Floored, not purely relative: at 0.62em of a shrinking parent this
+          // index dropped to 7.7px on a phone.
+          fontSize: "max(0.72rem, 0.62em)",
           opacity: 0.7,
         }}
       >

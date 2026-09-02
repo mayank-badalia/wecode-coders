@@ -18,7 +18,7 @@ import { RingFallback } from "./RingFallback";
 
 const mono: React.CSSProperties = {
   fontFamily: "var(--font-mono)",
-  fontSize: "clamp(0.62rem, 0.9vw, 0.76rem)",
+  fontSize: "clamp(0.72rem, 0.9vw, 0.76rem)",
   letterSpacing: "0.14em",
   textTransform: "uppercase",
 };

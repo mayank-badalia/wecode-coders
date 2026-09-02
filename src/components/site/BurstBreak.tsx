@@ -19,7 +19,7 @@ export function BurstBreak({ line }: { line: string }) {
         padding: "0 1.1em",
         whiteSpace: "nowrap",
         fontFamily: "var(--font-mono)",
-        fontSize: "clamp(0.6rem, 0.95vw, 0.82rem)",
+        fontSize: "clamp(0.72rem, 0.95vw, 0.82rem)",
         letterSpacing: "0.16em",
         textTransform: "uppercase",
       }}

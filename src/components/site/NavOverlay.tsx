@@ -178,7 +178,7 @@ export function NavOverlay({ open, onClose, links }: NavOverlayProps) {
               <span
                 style={{
                   fontFamily: "var(--font-mono)",
-                  fontSize: "0.16em",
+                  fontSize: "max(0.75rem, 0.16em)",
                   opacity: 0.65,
                   alignSelf: "flex-start",
                   paddingTop: "1.2em",

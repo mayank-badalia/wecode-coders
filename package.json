@@ -13,7 +13,8 @@
     "check:links": "node scripts/check-links.mjs",
     "check": "tsc --noEmit && eslint . && vitest run && node scripts/check-burst.mjs",
     "filmstrip": "node scripts/filmstrip.mjs",
-    "gen:logo": "node scripts/gen-logo.mjs"
+    "gen:logo": "node scripts/gen-logo.mjs",
+    "check:responsive": "node scripts/check-responsive.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

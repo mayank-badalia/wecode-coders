@@ -255,7 +255,7 @@ export function Loader() {
         </span>
         <span
           style={{
-            fontSize: "clamp(0.58rem, 0.85vw, 0.72rem)",
+            fontSize: "clamp(0.72rem, 0.85vw, 0.72rem)",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
             opacity: 0.75,
