@@ -19,9 +19,8 @@ export function RingFallback({
   return (
     <div
       aria-hidden="true"
+      className="ring-fallback"
       style={{
-        position: "absolute",
-        inset: 0,
         display: "grid",
         placeItems: "center",
         perspective: "1400px",
@@ -39,9 +38,9 @@ export function RingFallback({
           return (
             <div
               key={event.slug}
+              className="ring-fallback-plate"
               style={{
                 position: "absolute",
-                width: "min(38vw, 300px)",
                 aspectRatio: "3 / 4",
                 left: "50%",
                 top: "50%",
@@ -53,7 +52,8 @@ export function RingFallback({
                 pointerEvents: "none",
               }}
             >
-              <Poster event={event} />
+              {/* Contain, so real artwork keeps its own proportions here too. */}
+              <Poster event={event} fit="contain" />
             </div>
           );
         })}

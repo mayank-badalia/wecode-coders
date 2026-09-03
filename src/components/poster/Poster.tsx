@@ -123,6 +123,19 @@ export function Poster({
     );
   }
   if (event.posterImage) {
+    /*
+      Real artwork is shown whole by default.
+
+      A generated poster composes to whatever box it is given, so cropping it
+      is free. A real poster is a finished piece at a fixed portrait ratio, and
+      cropping it into a wide card lands on an arbitrary slice of somebody's
+      design — so `contain` letterboxes it instead.
+
+      The letterbox is left transparent on purpose: every surface that shows a
+      poster already sits on a ground chosen for it — paper behind the about
+      tiles, ink behind the rail card and the detail header — and painting a
+      mat of our own here would drop a slab of the wrong colour onto each.
+    */
     return (
       <div
         className={`burst ${className ?? ""}`}

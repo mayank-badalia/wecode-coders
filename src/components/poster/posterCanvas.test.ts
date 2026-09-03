@@ -179,17 +179,19 @@ describe("posterToCanvas — real poster image", () => {
     expect(repainted()).toBe(true);
   });
 
-  it("covers the plane rather than letterboxing it", async () => {
-    // A taller-than-wide poster on a 768x1024 plane must overflow vertically,
-    // never leave the ground showing as bars.
-    const { ctx } = drawWithImage(1200, 2400);
+  it("fits the whole poster on the plate rather than cropping it", async () => {
+    // A 2:3 poster on a 3:4 plate must sit inside the plate with a mount
+    // either side, never overflow it — cropping loses part of the artwork.
+    const { ctx } = drawWithImage(1200, 1800);
     await Promise.resolve();
     const call = (ctx.drawImage as unknown as { mock: { calls: number[][] } }).mock.calls[0]!;
     const [, dx, dy, dw, dh] = call;
-    expect(dw!).toBeGreaterThanOrEqual(768);
-    expect(dh!).toBeGreaterThanOrEqual(1024);
-    expect(dx!).toBeLessThanOrEqual(0);
-    expect(dy!).toBeLessThanOrEqual(0);
+    expect(dw!).toBeLessThanOrEqual(768);
+    expect(dh!).toBeLessThanOrEqual(1024);
+    expect(dx!).toBeGreaterThanOrEqual(0);
+    expect(dy!).toBeGreaterThanOrEqual(0);
+    // Aspect preserved: 1200/1800 in, the same ratio out.
+    expect(dw! / dh!).toBeCloseTo(1200 / 1800, 3);
   });
 
   it("does not fall through to the generated composition", async () => {

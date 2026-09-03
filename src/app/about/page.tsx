@@ -357,15 +357,20 @@ export default function AboutPage() {
             className="about-tiles"
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              /*
+                min() rather than a flat 180px: on a phone the container is
+                about 305px, so a 180px minimum fits exactly one column and
+                the strip became nine full-screen tiles to scroll past. The
+                percentage floor lets two sit side by side there and changes
+                nothing on a wide screen, where 180px is the smaller value.
+              */
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(45%, 180px), 1fr))",
               gap: "clamp(0.75rem, 1.6vw, 1.5rem)",
             }}
           >
             {events.map((e) => (
               <div key={e.slug} className="about-tile" style={{ containerType: "inline-size" }}>
-                {/* Top-anchored: a tall poster cropped into a 3:4 tile from the
-                    centre loses its masthead, which is what names it. */}
-                <Poster event={e} position="top" />
+                <Poster event={e} fit="contain" />
               </div>
             ))}
           </div>

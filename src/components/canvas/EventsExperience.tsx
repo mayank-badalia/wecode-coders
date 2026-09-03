@@ -380,7 +380,7 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
           // headroom is what keeps the ring smooth on ordinary laptops.
           dpr={[1, 1.5]}
           gl={{ antialias: true }}
-          style={{ position: "absolute", inset: 0 }}
+          className="ring-canvas"
         >
           <EventRing
             events={events}
@@ -403,23 +403,15 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
         <div
           ref={panel}
           aria-live="polite"
+          className="ring-panel"
           style={{
             position: "absolute",
-            left: 0,
-            bottom: 0,
-            top: 0,
             zIndex: 6,
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-end",
-            width: "min(42ch, 40vw)",
             padding: "clamp(1.5rem, 4vw, 3rem)",
             pointerEvents: "none",
-            // A scrim from the left, so the copy reads over whichever poster
-            // happens to be rotating behind it. Without it the title was
-            // clipped mid-word by the neighbouring plane.
-            background:
-              "linear-gradient(90deg, var(--color-ink) 0%, color-mix(in srgb, var(--color-ink) 82%, transparent) 55%, transparent 100%)",
           }}
         >
           {event.locked ? (

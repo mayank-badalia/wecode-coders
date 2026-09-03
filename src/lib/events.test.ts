@@ -52,9 +52,18 @@ describe("events seam", () => {
     expect(getAdjacentEvent("nope")).toBeUndefined();
   });
 
-  it("is sorted chronologically", () => {
+  it("is sorted chronologically within each group", () => {
     const dates = published.map((e) => e.startsAt);
     expect([...dates].sort()).toEqual(dates);
+  });
+
+  it("leads with the announced events and puts the locked run after them", () => {
+    // A visitor's first card, and the ring's first focus, must be something
+    // they can actually act on rather than a padlock.
+    const all = getAllEvents();
+    const firstLocked = all.findIndex((e) => e.locked);
+    if (firstLocked === -1) return;
+    expect(all.slice(firstLocked).every((e) => e.locked)).toBe(true);
   });
 
   it("every published event carries the fields the detail page renders", () => {

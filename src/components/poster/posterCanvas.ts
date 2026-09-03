@@ -107,9 +107,15 @@ export function posterToCanvas(
     const img = new Image();
     img.decoding = "async";
     img.onload = () => {
-      // Cover, not contain: the plane has a fixed aspect and letterboxing it
-      // would show the ground as bars down the sides of the poster.
-      const scale = Math.max(W / img.width, H / img.height);
+      /*
+        Contain, so the whole poster is on the plate.
+
+        Cover cropped a 2:3 poster into this 3:4 plane, which cut a band off
+        the artwork on the one page where the posters are the entire design.
+        The plate is painted in the event's ground first, so what shows either
+        side of the poster is a narrow mount rather than a hole.
+      */
+      const scale = Math.min(W / img.width, H / img.height);
       const w = img.width * scale;
       const h = img.height * scale;
       ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);

@@ -204,17 +204,38 @@ export function EventRail({ events }: { events: PublicEvent[] }) {
             return { card, dy: r.top + r.height / 2 - centre };
           });
 
+          /*
+            Constant card geometry, unlike the horizontal rail.
+
+            Sizing each card from its distance to the centre is what makes the
+            desktop rail work, but on a stack it fed back on itself: changing
+            card heights changed the section's height, which moved the very
+            ScrollTrigger range being used to measure them. Past the stale
+            range the updates simply stopped, leaving cards frozen at whatever
+            size they last had — one full-bleed card followed by a column of
+            173px strips.
+
+            A stack of equal cards is also the better phone design. Distance
+            still drives the wash and the nav theme, which cost nothing to
+            recompute and change no layout.
+          */
+          const cardW = Math.min(vw - 32, 560);
+          const cardH = Math.min(vh * 0.8, cardW * 1.6);
+
           measured.forEach(({ card, dy }) => {
             // Scale the vertical offset into the same domain the function
             // expects, so the thresholds mean the same thing on both axes.
             const m = railMetrics((dy / vh) * vw, { width: vw, height: vh });
-            gsap.set(card, {
-              width: Math.min(m.width, vw - 32),
-              height: m.height,
-              borderRadius: m.radius,
-            });
+            gsap.set(card, { width: cardW, height: cardH, borderRadius: 18 });
+            /*
+              Always shown here. On the desktop rail the summary fades in as a
+              card reaches the centre, but the copy block is anchored to the
+              card's bottom edge, so hiding it does not reclaim the space — it
+              leaves a hole under the title. Touch has no hover to reward
+              either, so every card in the stack simply reads in full.
+            */
             const detail = card.querySelector<HTMLElement>(".rail-detail");
-            if (detail) gsap.set(detail, { opacity: m.detail });
+            if (detail) gsap.set(detail, { opacity: 1 });
             const wash = card.querySelector<HTMLElement>(".rail-wash");
             if (wash) gsap.set(wash, { opacity: 0.3 + m.wash * 0.45 });
             const link = card.querySelector<HTMLElement>(".rail-link");
@@ -248,24 +269,11 @@ export function EventRail({ events }: { events: PublicEvent[] }) {
     <section
       ref={root}
       className="rail-section"
-      style={{
-        position: "relative",
-        zIndex: 2,
-        // Exactly one screen tall, so a card scaled to 100vh x 100vw genuinely
-        // fills the viewport. The chrome is overlaid rather than stacked,
-        // because stacking it made the section taller than the screen and
-        // pushed the bottom of a full-bleed card out of view.
-        height: "100svh",
-        overflow: "hidden",
-      }}
+      style={{ position: "relative", zIndex: 2 }}
     >
       <div
         className="rail-chrome-top"
         style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
           zIndex: 4,
           pointerEvents: "none",
           display: "flex",
@@ -290,13 +298,7 @@ export function EventRail({ events }: { events: PublicEvent[] }) {
 
       <div
         className="rail-viewport"
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          overflow: "hidden",
-        }}
+        style={{ display: "flex", alignItems: "center" }}
       >
         <div
           ref={track}

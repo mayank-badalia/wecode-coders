@@ -77,9 +77,38 @@ html[data-wcc-seen="1"] .loader-root {
 }
 
 /*
-  Desktop rail gutter. Set here rather than inline so the touch media query
-  below can override it — an inline padding cannot be overridden by a rule.
+  The pinned horizontal rail.
+
+  Every one of these was written inline on the elements themselves, which is
+  why the touch rules further down never took effect: an inline style beats
+  any rule in this file, so on a phone the section stayed one screen tall with
+  its overflow hidden and the track stayed a row. Seven of nine cards were
+  clipped and unreachable — exactly the failure those rules were added to
+  prevent. Geometry that a media query has to change belongs here.
+
+  The section is exactly one screen tall so a card scaled to 100vw x 100vh
+  genuinely fills the viewport, and the chrome is overlaid rather than stacked,
+  because stacking it made the section taller than the screen and pushed the
+  bottom of a full-bleed card out of view.
 */
+.rail-section {
+  height: 100svh;
+  overflow: hidden;
+}
+
+.rail-chrome-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.rail-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
 .rail-track {
   padding: 0 27vw;
 }
@@ -126,6 +155,144 @@ html[data-wcc-seen="1"] .loader-root {
   /* Below this width the labels and the menu button cannot share a line. */
   .nav-links {
     display: none;
+  }
+}
+
+/*
+  The events ring and the panel that names the focused event.
+
+  On a wide screen the panel is a column down the left, over a scrim that
+  fades to the right, and the ring fills the stage behind it.
+
+  On a phone that column is 40vw — about 144px — and the title broke mid-word
+  inside it ("LAUNC / HPAD") while the summary ran down over the posters and
+  the call to action fell off the bottom of the screen. So the panel becomes a
+  full-width band along the bottom and the ring gives up the space it needs,
+  which also stops the two overlapping at all.
+
+  Set here rather than inline because that is the only way a media query can
+  reach them.
+*/
+.ring-canvas,
+.ring-fallback {
+  position: absolute;
+  inset: 0;
+}
+
+.ring-fallback-plate {
+  width: min(38vw, 300px);
+}
+
+.ring-panel {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: min(42ch, 40vw);
+  background: linear-gradient(
+    90deg,
+    var(--color-ink) 0%,
+    color-mix(in srgb, var(--color-ink) 82%, transparent) 55%,
+    transparent 100%
+  );
+}
+
+@media (max-width: 900px), (pointer: coarse) {
+  /*
+    Small touch screens never get the WebGL ring — see the capability check in
+    EventsExperience — so the CSS fallback is the one that actually has to
+    make room here. Both are listed because the media query also catches a
+    narrow desktop window, where the canvas is the one on screen.
+  */
+  .ring-canvas,
+  .ring-fallback {
+    bottom: 42%;
+  }
+
+  /* With the panel below rather than beside them, the plates can be larger. */
+  .ring-fallback-plate {
+    width: min(54vw, 260px);
+  }
+
+  .ring-panel {
+    top: auto;
+    width: 100%;
+    background: linear-gradient(
+      0deg,
+      var(--color-ink) 0%,
+      var(--color-ink) 62%,
+      color-mix(in srgb, var(--color-ink) 70%, transparent) 88%,
+      transparent 100%
+    );
+  }
+}
+
+/*
+  The poster layer fills its card. Set here, not inline, so the artwork rules
+  below can move it — an inline inset wins against every rule in this file.
+*/
+.rail-poster {
+  position: absolute;
+  inset: 0;
+}
+
+/*
+  Rail cards carrying real poster artwork.
+
+  A generated poster is composed for this card and can run under its type. A
+  real poster is a finished piece at a fixed portrait ratio: cropped to the
+  card it lost half the design, and shown whole it ran straight through the
+  copy — the summary crossed the prize-pool panel and neither could be read.
+
+  So the card splits. The artwork takes the right column at its own ratio, the
+  type takes the left, and neither is over the other at any width the card
+  animates through. Written here rather than inline because the touch rules
+  below have to restack it, and an inline style cannot be overridden.
+*/
+.rail-card--art .rail-poster {
+  inset: clamp(0.9rem, 1.8vw, 1.8rem);
+  left: auto;
+  width: 42%;
+  /*
+    The nav is fixed and its links are paper-coloured over this dark section.
+    A card at full bleed reaches the top of the viewport, so artwork printed on
+    cream would sit directly under them and swallow them. Percentages rather
+    than a fixed clearance: the card animates through every height between
+    resting and full bleed, and only the tallest of those reaches the nav.
+  */
+  top: 9%;
+  bottom: 5%;
+}
+
+.rail-card--art .rail-copy {
+  right: 46%;
+}
+
+/*
+  No wash on these. It exists to carry paper-coloured type over a poster; here
+  the type has its own column of ink and the wash only dims the artwork.
+*/
+.rail-card--art .rail-wash {
+  display: none;
+}
+
+/*
+  Stacked cards are portrait, so the split becomes two cramped columns. The
+  artwork goes back on top with the type beneath it.
+*/
+@media (max-width: 900px), (pointer: coarse) {
+  .rail-card--art .rail-poster {
+    inset: clamp(0.9rem, 3vw, 1.4rem);
+    /*
+      The copy below is anchored to the card's bottom edge and, on touch,
+      always shows its summary and call to action — so this has to clear the
+      tallest of those, not just the title.
+    */
+    bottom: 52%;
+    width: auto;
+  }
+
+  .rail-card--art .rail-copy {
+    right: 0;
   }
 }
 

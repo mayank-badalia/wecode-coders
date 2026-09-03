@@ -35,7 +35,7 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: PublicEvent; in
           if (typeof ref === "function") ref(node);
           else if (ref) ref.current = node;
         }}
-        className="rail-card"
+        className={`rail-card${!event.locked && event.posterImage ? " rail-card--art" : ""}`}
         data-slug={event.slug}
         data-cursor={event.locked ? "Locked" : "Open"}
         data-cursor-active="false"
@@ -54,38 +54,23 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: PublicEvent; in
           ["--card-ink" as string]: ground.fg,
         }}
       >
-        <div className="rail-poster" style={{ position: "absolute", inset: 0 }}>
+        {/*
+          A generated poster fills the card and is composed to leave its lower
+          third quiet, so the card's own type can sit on top of it. Real
+          artwork makes no such promise and is dense to its edges, so a card
+          carrying it splits instead — see .rail-card--art in globals.css,
+          where a media query can restack the split on a phone.
+        */}
+        <div className="rail-poster">
           <Poster
             event={event}
             className="rail-poster-inner"
             priority={index < 2}
             showTitle={false}
             fill
-            position="top"
+            fit={!event.locked && event.posterImage ? "contain" : "cover"}
           />
         </div>
-
-        {/*
-          Veil, for real poster artwork only.
-
-          A generated poster is composed to sit under this card's typography:
-          it leaves the lower band quiet, so the wash below is enough. Real
-          artwork makes no such promise — the two announced posters are printed
-          on cream, and the card's paper-coloured copy vanished into them. The
-          veil buys a guaranteed ground for the type whatever the poster does,
-          and it is absent from generated posters so their composition is not
-          needlessly muddied.
-        */}
-        {!event.locked && event.posterImage && (
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: "color-mix(in srgb, var(--color-ink) 58%, transparent)",
-            }}
-          />
-        )}
 
         {/* Violet wash, faded in only as the card approaches full bleed. */}
         <div
