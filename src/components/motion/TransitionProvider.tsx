@@ -60,9 +60,50 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
 
   const setLabel = useCallback((label: string) => {
     const nodes = linesWrap.current?.querySelectorAll<HTMLElement>(".transition-line");
-    nodes?.forEach((n) => {
+    if (!nodes || nodes.length === 0) return;
+
+    nodes.forEach((n) => {
+      // Clear any size left by the previous label before measuring this one.
+      n.style.fontSize = "";
       n.textContent = label;
     });
+
+    /*
+      Shrink the name until it fits on one line.
+
+      The lines are nowrap, and the size was set from viewport height alone —
+      so on a phone "WCC LAUNCHPAD 30" was laid out at 87px and ran off both
+      edges, leaving "WCC LAUN" mid-word on every line. A width cap in CSS
+      cannot fix this on its own, because how wide a label runs depends on the
+      label: capping tightly enough for the longest event title would shrink
+      "Events" to nothing.
+
+      So it is measured. Reading scrollWidth here forces one layout per
+      navigation, which is affordable — this runs once as the panel is about
+      to cover the screen, not on a scroll frame.
+    */
+    const first = nodes[0]!;
+    const available = (first.parentElement?.clientWidth ?? 0) * 0.9;
+
+    /*
+      A Range, not scrollWidth.
+
+      The line is centred and nowrap, so an oversized label overflows equally
+      to the left and the right. scrollWidth only counts overflow past the
+      right edge, so it reported the label as fitting while both ends were
+      being clipped. A range around the text measures what is actually drawn.
+    */
+    const range = document.createRange();
+    range.selectNodeContents(first);
+    const width = range.getBoundingClientRect().width;
+
+    if (available > 0 && width > available) {
+      const base = parseFloat(getComputedStyle(first).fontSize);
+      const fitted = Math.max(16, base * (available / width));
+      nodes.forEach((n) => {
+        n.style.fontSize = `${fitted}px`;
+      });
+    }
   }, []);
 
   const playExit = useCallback(
@@ -281,7 +322,6 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
                 className="transition-line"
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: "clamp(2.2rem, 13vh, 9rem)",
                   fontWeight: 700,
                   lineHeight: 1.02,
                   textTransform: "uppercase",

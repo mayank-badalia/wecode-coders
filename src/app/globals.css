@@ -159,6 +159,19 @@ html[data-wcc-seen="1"] .loader-root {
 }
 
 /*
+  Page-transition lines.
+
+  The size lives here rather than inline because the transition measures each
+  label and shrinks it to fit — an oversized event name was being clipped to
+  "WCC LAUN" on a phone. Clearing an inline font-size deletes it outright
+  instead of restoring the intended value, which left every label at the
+  inherited 16px; a rule is what that reset falls back to.
+*/
+.transition-line {
+  font-size: clamp(2.2rem, 13vh, 9rem);
+}
+
+/*
   Hero: the tape stack and the headline.
 
   On a wide screen the tapes are spread down the whole hero and the headline
@@ -571,27 +584,18 @@ html[data-wcc-seen="1"] .loader-root {
 /*
   Tape stack on a phone.
 
-  Five thick strips across a short viewport swamp the headline and bury the
-  kicker — what reads as a sealed package on a wide screen reads as clutter on
-  a narrow one. Two of the five step aside and the rest thin down.
+  The strips keep their wide-screen positions, so the band still runs across
+  the headline rather than sitting in a separate slab above it — the two are
+  one composition, and pulling them apart on a phone read as two unrelated
+  blocks with a hole between them. They are behind the type (see TapeStack)
+  and the outlined last line shows them through its counters, which is the
+  whole idea.
 
-  The three that stay are then placed into the top third outright, so the
-  headline below them is clear. That used to be done by nudging the top pair
-  with margin-top, because the strips set `top` inline and no rule could reach
-  it; they now carry it as --tape-top instead, and the whole band can be
-  positioned honestly. The margin nudge had been pushing the top pair *down*
-  into the headline, which is the collision this is here to prevent.
-
-  Widened to the site's 900px breakpoint: the strips are positioned as a
-  percentage of the hero, so the overlap starts as soon as the viewport is
-  short, not at some narrower width of its own.
+  What does change is the strips themselves: full-width type at the desktop
+  size buries a 375px screen, so they thin down and run wider, which keeps the
+  marquee legible and the diagonal shallow enough to read as tape.
 */
 @media (max-width: 900px) {
-  .tape-layer .tape:nth-child(3),
-  .tape-layer .tape:nth-child(4) {
-    display: none;
-  }
-
   .tape-layer .tape {
     left: -30%;
     width: 160%;
@@ -601,42 +605,26 @@ html[data-wcc-seen="1"] .loader-root {
     padding-block: 0.42em;
   }
 
-  /*
-    A percentage with a floor.
-
-    The kicker's distance from the top is a fixed clamp, not a percentage, so
-    on a 640px-tall phone a purely proportional band rode up into it — the
-    strips are rotated, and a raised end reaches about 20px above its own top.
-    The rem floors hold the band clear of the kicker on short screens and are
-    below the percentages on tall ones, where the percentages win.
-  */
-  .tape-layer .tape:nth-child(1) {
-    top: max(21%, 10rem);
-  }
-
-  .tape-layer .tape:nth-child(2) {
-    top: max(28%, 13rem);
-  }
-
-  /* The one crossing the other way sits last, closing the X. */
-  .tape-layer .tape:nth-child(5) {
-    top: max(35%, 16rem);
-  }
-
   .tape-layer .tape span {
     font-size: 0.66rem;
     letter-spacing: 0.12em;
   }
-}
 
-/*
-  A short phone has room for two, not three. Between the kicker and the top of
-  the headline there is about 180px on a 640px screen, which three rotated
-  strips cannot occupy without touching one or the other. The crossing strip
-  is the one that goes, since the pair still reads as tape.
-*/
-@media (max-width: 900px) and (max-height: 720px) {
-  .tape-layer .tape:nth-child(5) {
-    display: none;
+  /*
+    The whole band shifts down together, keeping its spacing.
+
+    The kicker is one line on a wide screen and wraps to two on a phone, so it
+    reaches lower than the percentage band expects and the top strip — whose
+    raised end sits about 28px above its own top — landed across it. Nudging
+    only that strip closed the gap to the one below and the two parallel bands
+    merged into a single slab, so instead the band starts lower and every
+    strip keeps its offset from the first.
+
+    The 0.94 keeps the last strip on screen once the whole set has moved down.
+    Only the pale strip still overlaps a neighbour, which is the point of it —
+    it is rotated the other way and is meant to cross.
+  */
+  .tape-layer .tape {
+    top: calc(27% + (var(--tape-top) - 16%) * 0.94);
   }
 }
