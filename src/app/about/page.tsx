@@ -7,7 +7,7 @@ import { getAllEvents, getSite } from "@/lib/events";
 export const metadata: Metadata = {
   title: "About — We Code Coders",
   description:
-    "A community of builders. No application, no screening, no prizes — just rooms where people build things in public."
+    "A community of builders. No application, no screening, no gatekeeping — just rooms where people build things in public."
 };
 
 const mono: React.CSSProperties = {
@@ -107,7 +107,7 @@ export default function AboutPage() {
             margin: "0 auto",
             padding: "0 clamp(1.25rem, 2vw, 2rem)",
             display: "grid",
-            gridTemplateColumns: "minmax(0, 7fr) minmax(0, 4fr)",
+            ["--cols" as string]: "minmax(0, 7fr) minmax(0, 4fr)",
             gap: "clamp(2rem, 6vw, 6rem)",
             alignItems: "start",
           }}
@@ -174,7 +174,7 @@ export default function AboutPage() {
             className="about-grid"
             style={{
               display: "grid",
-              gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
+              ["--cols" as string]: "minmax(0, 1fr) minmax(0, 1fr)",
               gap: "clamp(2rem, 6vw, 5rem)",
             }}
           >
@@ -363,7 +363,9 @@ export default function AboutPage() {
           >
             {events.map((e) => (
               <div key={e.slug} className="about-tile" style={{ containerType: "inline-size" }}>
-                <Poster event={e} />
+                {/* Top-anchored: a tall poster cropped into a 3:4 tile from the
+                    centre loses its masthead, which is what names it. */}
+                <Poster event={e} position="top" />
               </div>
             ))}
           </div>

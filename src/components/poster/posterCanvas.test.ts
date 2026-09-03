@@ -43,6 +43,7 @@ function recordingContext() {
     textAlign: "left",
     globalAlpha: 1,
     fillRect: vi.fn(),
+    drawImage: vi.fn(),
     strokeRect: vi.fn(),
     beginPath: vi.fn(),
     moveTo: vi.fn(),
@@ -111,5 +112,90 @@ describe("posterToCanvas — locked", () => {
       const { ground } = drawLocked(order);
       expect(ground).toBe(GROUNDS[order % GROUNDS.length]);
     }
+  });
+});
+
+describe("posterToCanvas — real poster image", () => {
+  /*
+    An announced event can supply its own artwork. Before this branch existed
+    the ring fell through to the generated composition, so the one surface
+    where the posters *are* the page showed different art from every other
+    surface on the site.
+  */
+
+  /** A stand-in for the browser's Image: jsdom never fetches anything. */
+  function stubImage(w: number, h: number) {
+    class FakeImage {
+      width = w;
+      height = h;
+      decoding = "";
+      onload: (() => void) | null = null;
+      set src(_v: string) {
+        queueMicrotask(() => this.onload?.());
+      }
+    }
+    vi.stubGlobal("Image", FakeImage);
+  }
+
+  function drawWithImage(w = 1200, h = 1800) {
+    const { ctx, fills } = recordingContext();
+    stubImage(w, h);
+    const spy = vi
+      .spyOn(HTMLCanvasElement.prototype, "getContext")
+      .mockReturnValue(ctx as unknown as CanvasRenderingContext2D);
+    const event = {
+      locked: false,
+      slug: "fixture-with-art",
+      title: "Fixture With Art",
+      // Chosen the way a real record chooses one: for the ground it lands on,
+      // since the seed no longer composes anything once posterImage is set.
+      posterSeed: 8002,
+      posterImage: "/posters/example.webp",
+      kicker: "HACKATHON — 30 HOURS",
+      format: "hackathon",
+      status: "upcoming",
+      startsAt: "2026-09-20T10:00:00+05:30",
+      endsAt: "2026-09-21T16:00:00+05:30",
+      mode: "online",
+    } as unknown as PublicEvent;
+    let repainted = false;
+    posterToCanvas(event, () => {
+      repainted = true;
+    });
+    spy.mockRestore();
+    return { ctx, fills, repainted: () => repainted, ground: groundFor(event) };
+  }
+
+  it("paints the ground straight away so the plane is never blank", () => {
+    // The texture is handed to WebGL before the image has decoded.
+    const { fills, ground } = drawWithImage();
+    expect(fills).toContain(ground.bg);
+  });
+
+  it("draws the image once it decodes and asks the caller to repaint", async () => {
+    const { ctx, repainted } = drawWithImage();
+    await Promise.resolve();
+    expect(ctx.drawImage).toHaveBeenCalled();
+    expect(repainted()).toBe(true);
+  });
+
+  it("covers the plane rather than letterboxing it", async () => {
+    // A taller-than-wide poster on a 768x1024 plane must overflow vertically,
+    // never leave the ground showing as bars.
+    const { ctx } = drawWithImage(1200, 2400);
+    await Promise.resolve();
+    const call = (ctx.drawImage as unknown as { mock: { calls: number[][] } }).mock.calls[0]!;
+    const [, dx, dy, dw, dh] = call;
+    expect(dw!).toBeGreaterThanOrEqual(768);
+    expect(dh!).toBeGreaterThanOrEqual(1024);
+    expect(dx!).toBeLessThanOrEqual(0);
+    expect(dy!).toBeLessThanOrEqual(0);
+  });
+
+  it("does not fall through to the generated composition", async () => {
+    // The generated poster writes the title; the image branch must not.
+    const { ctx } = drawWithImage();
+    await Promise.resolve();
+    expect(ctx.fillText).not.toHaveBeenCalled();
   });
 });

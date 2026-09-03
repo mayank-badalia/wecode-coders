@@ -5,6 +5,7 @@ import { Poster } from "@/components/poster/Poster";
 import { Arrow } from "@/components/site/Arrow";
 import { LockGlyph } from "@/components/site/LockGlyph";
 import { EventDetailMotion } from "@/components/site/EventDetailMotion";
+import { EventSections } from "@/components/site/EventSections";
 import { getAdjacentEvent, getAllEvents, getEventBySlug, getSite } from "@/lib/events";
 import { eventDurationHours, formatEventDate, formatEventTime } from "@/lib/format";
 
@@ -133,8 +134,10 @@ export default async function EventPage({ params }: Params) {
 
   const spec: { label: string; value: string }[] = [
     { label: "Date", value: formatEventDate(event.startsAt, event.endsAt) },
-    { label: "Starts", value: formatEventTime(event.startsAt) },
-    { label: "Runs for", value: hours >= 24 ? `${hours} hours` : `${hours} hours` },
+    { label: "Starts", value: event.startTimeNote ?? formatEventTime(event.startsAt) },
+    // A duration measured from a start time that has not been announced is
+    // fiction, so it is dropped alongside the time it is derived from.
+    ...(event.startTimeNote ? [] : [{ label: "Runs for", value: `${hours} hours` }]),
     { label: "Joining", value: event.venue.name },
     { label: "Kind", value: event.format.replace("-", " ") },
     { label: "Who it is for", value: event.forWho },
@@ -143,52 +146,130 @@ export default async function EventPage({ params }: Params) {
   return (
     <EventDetailMotion>
       <article style={{ position: "relative", zIndex: 2 }}>
-        {/* Header: full-bleed poster with the title over it. */}
-        <header
-          data-nav-theme="dark"
-          style={{
-            position: "relative",
-            minHeight: "min(78svh, 720px)",
-            display: "flex",
-            alignItems: "flex-end",
-            overflow: "hidden",
-            padding: "clamp(6rem, 14vh, 9rem) clamp(1.25rem, 4vw, 3rem) clamp(2rem, 6vh, 4rem)",
-          }}
-        >
-          <div className="detail-poster" style={{ position: "absolute", inset: "-10% 0 -10% 0" }}>
-            <Poster event={event} showTitle={false} fill priority />
-          </div>
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "linear-gradient(to top, rgba(19,28,51,0.82) 0%, rgba(19,28,51,0.25) 60%, transparent 100%)",
-            }}
-          />
+        {/*
+          Two headers, because there are two kinds of poster.
 
-          <div style={{ position: "relative", color: "var(--color-paper)" }}>
-            <p style={{ ...monoLabel, color: "rgba(244,241,234,0.8)", margin: 0 }}>
-              {event.kicker}
-            </p>
-            <h1
-              className="detail-title"
+          A generated poster composes to whatever box it is handed, so it can
+          run full bleed with the title laid over it. A real poster is someone's
+          finished artwork at a fixed portrait ratio: cropping it to a landscape
+          band cuts the design in half, and setting our own title over it
+          duplicates the one already printed on it. That one gets shown whole,
+          against the ink ground, with the copy beside it.
+        */}
+        {event.posterImage ? (
+          <header
+            data-nav-theme="dark"
+            style={{
+              background: "var(--color-ink)",
+              color: "var(--color-paper)",
+              padding:
+                "clamp(7rem, 16vh, 10rem) clamp(1.25rem, 4vw, 3rem) clamp(3rem, 8vh, 5rem)",
+            }}
+          >
+            <div
+              className="detail-hero"
               style={{
-                margin: "0.3em 0 0",
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(2.6rem, 9vw, 8rem)",
-                fontWeight: 700,
-                lineHeight: 0.92,
-                letterSpacing: "-0.02em",
-                textTransform: "uppercase",
-                maxWidth: "14ch",
+                maxWidth: "min(1680px, 92vw)",
+                margin: "0 auto",
+                display: "grid",
+                ["--cols" as string]: "minmax(0, 6fr) minmax(0, 5fr)",
+                gap: "clamp(2.5rem, 6vw, 5rem)",
+                alignItems: "center",
               }}
             >
-              {event.title}
-            </h1>
-          </div>
-        </header>
+              <div>
+                <p style={{ ...monoLabel, color: "rgba(244,241,234,0.8)", margin: 0 }}>
+                  {event.kicker}
+                </p>
+                <h1
+                  className="detail-title"
+                  style={{
+                    margin: "0.3em 0 0",
+                    fontFamily: "var(--font-display)",
+                    fontSize: "clamp(2.4rem, 6.5vw, 6rem)",
+                    fontWeight: 700,
+                    lineHeight: 0.92,
+                    letterSpacing: "-0.02em",
+                    textTransform: "uppercase",
+                    maxWidth: "13ch",
+                  }}
+                >
+                  {event.title}
+                </h1>
+                <p
+                  style={{
+                    margin: "1.2em 0 0",
+                    maxWidth: "46ch",
+                    fontFamily: "var(--font-editorial)",
+                    fontSize: "clamp(1.05rem, 1.5vw, 1.4rem)",
+                    lineHeight: 1.55,
+                    opacity: 0.82,
+                  }}
+                >
+                  {event.summary}
+                </p>
+              </div>
+
+              <div
+                style={{
+                  position: "relative",
+                  // Bounded here rather than left to the image, so the box is
+                  // the right size before the file has loaded and the page
+                  // does not jump when it arrives.
+                  height: "min(68svh, 720px)",
+                }}
+              >
+                <Poster event={event} showTitle={false} fill fit="contain" priority />
+              </div>
+            </div>
+          </header>
+        ) : (
+          <header
+            data-nav-theme="dark"
+            style={{
+              position: "relative",
+              minHeight: "min(78svh, 720px)",
+              display: "flex",
+              alignItems: "flex-end",
+              overflow: "hidden",
+              padding: "clamp(6rem, 14vh, 9rem) clamp(1.25rem, 4vw, 3rem) clamp(2rem, 6vh, 4rem)",
+            }}
+          >
+            <div className="detail-poster" style={{ position: "absolute", inset: "-10% 0 -10% 0" }}>
+              <Poster event={event} showTitle={false} fill priority />
+            </div>
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(to top, rgba(19,28,51,0.82) 0%, rgba(19,28,51,0.25) 60%, transparent 100%)",
+              }}
+            />
+
+            <div style={{ position: "relative", color: "var(--color-paper)" }}>
+              <p style={{ ...monoLabel, color: "rgba(244,241,234,0.8)", margin: 0 }}>
+                {event.kicker}
+              </p>
+              <h1
+                className="detail-title"
+                style={{
+                  margin: "0.3em 0 0",
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(2.6rem, 9vw, 8rem)",
+                  fontWeight: 700,
+                  lineHeight: 0.92,
+                  letterSpacing: "-0.02em",
+                  textTransform: "uppercase",
+                  maxWidth: "14ch",
+                }}
+              >
+                {event.title}
+              </h1>
+            </div>
+          </header>
+        )}
 
         <div
           style={{
@@ -196,7 +277,7 @@ export default async function EventPage({ params }: Params) {
             margin: "0 auto",
             padding: "clamp(3rem, 10vh, 7rem) clamp(1.25rem, 2vw, 2rem)",
             display: "grid",
-            gridTemplateColumns: "minmax(0, 4fr) minmax(0, 7fr)",
+            ["--cols" as string]: "minmax(0, 4fr) minmax(0, 7fr)",
             gap: "clamp(2rem, 6vw, 6rem)",
             alignItems: "start",
           }}
@@ -412,12 +493,17 @@ export default async function EventPage({ params }: Params) {
                     <p
                       style={{
                         margin: 0,
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignItems: "baseline",
+                        gap: "0.6em",
                         fontFamily: "var(--font-editorial)",
                         fontSize: "clamp(1.2rem, 2vw, 1.7rem)",
                         color: "var(--color-signal)",
                       }}
                     >
                       {j.name}
+                      {j.weight && <span style={monoLabel}>{j.weight}</span>}
                     </p>
                     <p style={{ margin: "0.3em 0 0", lineHeight: 1.6, maxWidth: "52ch" }}>{j.detail}</p>
                   </div>
@@ -450,6 +536,10 @@ export default async function EventPage({ params }: Params) {
             )}
           </div>
         </div>
+
+        {event.sections && event.sections.length > 0 && (
+          <EventSections sections={event.sections} />
+        )}
 
         {event.faq && event.faq.length > 0 && (
           <section
@@ -485,6 +575,84 @@ export default async function EventPage({ params }: Params) {
                 <p style={{ margin: 0, lineHeight: 1.6, color: "var(--color-ink-60)" }}>{row.a}</p>
               </div>
             ))}
+          </section>
+        )}
+
+        {/*
+          Registration.
+
+          `href` absent is the honest pre-launch state: the page says the form
+          is not open rather than rendering a button that goes nowhere, which
+          is both a dead link and a worse lie than saying nothing.
+        */}
+        {event.registration && (
+          <section
+            data-nav-theme="dark"
+            style={{
+              marginTop: "clamp(3.5rem, 10vh, 6rem)",
+              background: "var(--color-signal)",
+              color: "var(--color-paper)",
+              padding: "clamp(3rem, 8vh, 5rem) clamp(1.25rem, 4vw, 3rem)",
+            }}
+          >
+            <div style={{ maxWidth: "min(1680px, 92vw)", margin: "0 auto" }}>
+              <p style={{ ...monoLabel, margin: 0, color: "var(--color-paper)", opacity: 0.75 }}>
+                [ Register ]
+              </p>
+              <p
+                data-reveal
+                style={{
+                  margin: "0.5em 0 0",
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  fontSize: "clamp(2rem, 6.5vw, 5rem)",
+                  lineHeight: 0.95,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                {event.registration.href
+                  ? (event.registration.label ?? "Register now")
+                  : "Registration opens soon"}
+              </p>
+              {event.registration.note && (
+                <p
+                  style={{
+                    margin: "1em 0 0",
+                    maxWidth: "52ch",
+                    fontSize: "clamp(0.95rem, 1.2vw, 1.1rem)",
+                    lineHeight: 1.6,
+                    opacity: 0.85,
+                  }}
+                >
+                  {event.registration.note}
+                </p>
+              )}
+              {event.registration.href && (
+                <p style={{ margin: "1.8rem 0 0" }}>
+                  <a
+                    href={event.registration.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="detail-cta"
+                    style={{
+                      ...monoLabel,
+                      color: "var(--color-signal)",
+                      background: "var(--color-paper)",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.7em",
+                      padding: "1em 1.6em",
+                      borderRadius: 999,
+                      textDecoration: "none",
+                    }}
+                  >
+                    {event.registration.label ?? "Register now"}
+                    <Arrow direction="up-right" style={{ width: 15, height: 15 }} />
+                  </a>
+                </p>
+              )}
+            </div>
           </section>
         )}
 

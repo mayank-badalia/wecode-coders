@@ -1,6 +1,8 @@
-// PLACEHOLDER — replace with real content.
+// MIXED. The first two records (wcc-launchpad-30, protocol-60) are real,
+// announced events with real posters. Everything after them is still
+// placeholder and still locked.
 //
-// Every record below is invented so the layout, the horizontal rail and the
+// Every placeholder record is invented so the layout, the horizontal rail and the
 // events ring have something true-shaped to hold. No real person, partner
 // organisation, sponsor, or verified outcome is named anywhere in this file.
 // The prose is written in the voice the site should have — edit it freely.
@@ -25,6 +27,484 @@
 import type { Event } from "@/lib/types";
 
 export const events: Event[] = [
+  {
+    // LIVE. The first two announced events — real content, real posters.
+    // Everything above and below this pair is still placeholder and locked.
+    locked: false,
+    slug: "wcc-launchpad-30",
+    title: "WCC Launchpad 30",
+    kicker: "HACKATHON — 30 HOURS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-09-20T10:00:00+05:30",
+    endsAt: "2026-09-21T16:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "Thirty hours to turn one problem worth solving into a working product. National, online, free to enter, ₹1,00,000 in prizes.",
+    description: [
+      "WCC Launchpad 30 is a national online hackathon for students, developers, designers and anyone else who wants to find out what an idea looks like once it has to run.",
+      "You get thirty hours to pick a problem that genuinely exists, build the one journey through it that matters, and show that it works. You do not need a startup, a rehearsed pitch, or years of experience behind you. You need a problem worth solving and the willingness to build.",
+      "The aim is not the biggest project in the room. It is the clearest possible proof that your idea can work. A small product with one reliable, well-made workflow beats a pile of half-finished features almost every time.",
+    ],
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: [
+      "agentic ai",
+      "open innovation",
+      "education",
+      "online",
+      "beginner-friendly",
+      "product building",
+    ],
+    teamSize: "1 to 4. Every participant belongs to one team only.",
+    eligibility:
+      "School and college students, developers, designers, no-code builders, first-timers and early-stage teams. Under-18s may be asked for a parent or guardian's permission.",
+    brief:
+      "Take one problem worth solving and turn it into something people can use, in thirty hours.",
+    deliverables: [
+      "A working product or prototype whose central workflow actually runs",
+      "A two-to-three-minute demo video and a short pitch deck",
+      "Source code judges can reach before the deadline",
+      "A showcase post on LinkedIn, Instagram and Reddit, links included",
+    ],
+    schedule: [
+      { when: "Sun 20 Sep, 10:00", what: "Kick-off, tracks explained, building starts" },
+      { when: "Sun 20 Sep, 14:00", what: "First checkpoint: who is your user, and how do you know" },
+      { when: "Sun 20 Sep, 20:00", what: "Mentor sessions and workshops" },
+      { when: "Mon 21 Sep, 09:00", what: "Second checkpoint: what are you cutting" },
+      { when: "Mon 21 Sep, 14:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Mon 21 Sep, 16:00", what: "Wrap. Shortlisted teams are invited to demo live." },
+    ],
+    judging: [
+      {
+        name: "User insight and problem evidence",
+        weight: "15 points",
+        detail:
+          "How well do you understand the person you are building for? Research, observation, interviews or survey data that shows the problem is real.",
+      },
+      {
+        name: "Strength of the core solution",
+        weight: "20 points",
+        detail:
+          "Does the product solve the problem you named, directly? Is the main workflow focused, useful, and does it produce a clear outcome?",
+      },
+      {
+        name: "Technical depth and reliability",
+        weight: "20 points",
+        detail:
+          "How well have you used what you chose? Does it work consistently? Are the integrations, data flows and AI components put together with thought?",
+      },
+      {
+        name: "Originality and differentiation",
+        weight: "15 points",
+        detail:
+          "What makes this different from the tools that exist and the ideas that show up at every hackathon? A distinctive insight, interaction or approach.",
+      },
+      {
+        name: "Real-world usability",
+        weight: "10 points",
+        detail:
+          "Could the intended user work it out without a walkthrough? Is it accessible and practical in the setting it is meant for?",
+      },
+      {
+        name: "Responsible design and trust",
+        weight: "10 points",
+        detail:
+          "Privacy, security, bias, transparency, accessibility and human oversight, where they are relevant. Do users keep control of the decisions that matter?",
+      },
+      {
+        name: "Public product storytelling",
+        weight: "5 points",
+        detail:
+          "How well do your LinkedIn, Instagram and Reddit posts explain the product and why it matters? Judged on clarity and honesty, never on likes.",
+      },
+      {
+        name: "Demonstration quality and learning velocity",
+        weight: "5 points",
+        detail:
+          "Does the demo show real progress made during the thirty hours? Can you say what changed, what broke, what you learned and what you would fix next?",
+      },
+    ],
+    rewards: [
+      "A share of the ₹1,00,000 prize pool",
+      "A functional product you can put on a résumé or in a portfolio",
+      "A verifiable digital participation certificate",
+      "Feedback from judges, mentors and reviewers",
+      "AI tool credits, n8n and Lovable benefits, and a .XYZ domain",
+      "Workshops, mentor sessions and community access",
+    ],
+    sections: [
+      {
+        kind: "columns",
+        label: "Tracks",
+        intro:
+          "Pick one primary track. Interdisciplinary projects are welcome, but the entry has to say which track it belongs to.",
+        items: [
+          {
+            code: "01",
+            name: "Agentic AI",
+            blurb:
+              "Systems where AI agents reason, plan, use tools and finish useful work with proper human oversight. Judged on how useful the agent is, how well it is orchestrated, how reliably it runs, and how clearly a human stays in control.",
+            points: [
+              "Research and knowledge agents",
+              "Customer-support agents",
+              "Personal productivity assistants",
+              "Multi-agent collaboration",
+              "Business-process automation",
+              "Developer and coding agents",
+              "Responsible autonomous workflows",
+              "Industry-specific copilots",
+            ],
+          },
+          {
+            code: "02",
+            name: "Open Innovation",
+            blurb:
+              "A real problem, solved with whatever technology fits. The problem should be specific, the user should be clear, and the solution should measurably beat what people do today.",
+            points: [
+              "Accessibility",
+              "Climate and sustainability",
+              "Healthcare operations",
+              "Finance and commerce",
+              "Civic technology",
+              "Community platforms",
+              "Logistics and mobility",
+              "Creator tools",
+              "Safety and trust",
+            ],
+          },
+          {
+            code: "03",
+            name: "Education",
+            blurb:
+              "Products that change how people learn, teach, assess, collaborate or reach opportunities. Show educational value — a chatbot dropped into a learning interface is not it.",
+            points: [
+              "Personalised learning systems",
+              "AI tutors and study assistants",
+              "Teacher productivity tools",
+              "Skill assessment",
+              "Accessibility in education",
+              "Career and internship discovery",
+              "Collaborative learning",
+              "Regional-language learning products",
+            ],
+          },
+        ],
+      },
+      {
+        kind: "list",
+        label: "What you must submit",
+        numbered: true,
+        intro:
+          "The product does not need to be commercially launched, but its central workflow has to run and be demonstrable. Repositories may be private as long as judges get access before the deadline.",
+        items: [
+          "Project name",
+          "Selected track",
+          "Problem statement",
+          "Short solution summary",
+          "List of team members",
+          "Technology stack",
+          "Source-code repository",
+          "Working product or demo link",
+          "Two-to-three-minute demonstration video",
+          "Short pitch deck",
+          "Future development plan",
+          "Disclosure of AI tools, templates and pre-existing assets used",
+          "A LinkedIn post showcasing the product",
+          "An Instagram post or reel showcasing the product",
+          "A Reddit post showcasing the product",
+        ],
+      },
+      {
+        kind: "list",
+        label: "Rules",
+        numbered: true,
+        items: [
+          "The core product must be built during the official hackathon period.",
+          "You may research and discuss ideas before the event.",
+          "Existing libraries, APIs, frameworks and open-source components are allowed.",
+          "Templates or code you wrote earlier must be clearly disclosed.",
+          "Only work done during the event counts towards judging.",
+          "AI, no-code and low-code tools are allowed.",
+          "Every participant belongs to one team only.",
+          "The project must be the team's own work.",
+          "Plagiarised, copied or misleading submissions are disqualified.",
+          "Respect software licences, intellectual property and user privacy.",
+          "Projects must not promote illegal, harmful or discriminatory activity.",
+          "Everything on the submission list has to arrive before the deadline.",
+          "The three showcase posts must be written by team members and describe the product accurately.",
+          "No bots, paid engagement, misleading claims or spam to promote those posts.",
+          "Judges may ask for repository access or other proof of development.",
+          "Organisers may remove anyone who disrupts the event or breaks community guidelines.",
+          "The judges' decision is final.",
+        ],
+      },
+    ],
+    faq: [
+      { q: "Is it free?", a: "Yes. Registration costs nothing." },
+      { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
+      { q: "Can beginners enter?", a: "Yes. The event is built for first-timers and experienced builders in the same room." },
+      { q: "Do I need an idea before I register?", a: "No. Register first and choose your problem before the building period starts." },
+      { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
+      { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones in your submission." },
+      { q: "Can I change track?", a: "Yes, any time before final submission. Only one primary track can be selected." },
+      { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable demo and a video." },
+      { q: "Do the social posts really matter?", a: "Yes — all three are required. They are worth 5 points, judged on clarity and honesty. Likes and views count for nothing." },
+      { q: "Will everyone get a certificate?", a: "Certificates go to registered participants who check in, submit a valid project on time, post the three showcases and follow the rules. Registering alone does not qualify." },
+      { q: "Are the tool credits guaranteed?", a: "No. Credits, domains and subscriptions have their own eligibility rules and depend on partner confirmation and availability." },
+    ],
+    stats: [
+      { label: "Hours to build", value: "30" },
+      { label: "Prize pool", value: "₹1,00,000" },
+      { label: "Tracks", value: "3" },
+      { label: "Per team", value: "1–4" },
+    ],
+    registration: {
+      note: "Free to enter. Joining details go out by email and the official event channel.",
+    },
+    // The seed no longer composes anything — posterImage wins — but its ground
+    // still tints hover states and the ring's glow, so it is chosen to land on
+    // "paper", which is what the artwork is printed on.
+    posterSeed: 8002,
+    posterImage: "/posters/wcc-launchpad-30.webp",
+  },
+  {
+    locked: false,
+    slug: "protocol-60",
+    title: "Protocol//60",
+    kicker: "QUIZ — ONE SITTING",
+    format: "quiz",
+    status: "upcoming",
+    startsAt: "2026-09-20T10:00:00+05:30",
+    endsAt: "2026-09-20T22:00:00+05:30",
+    startTimeNote: "Announced to registered participants before the event",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A national online quiz on MCP, ACP and how AI agents actually talk to tools and to each other. Top 60 each take home all three rewards.",
+    description: [
+      "Modern AI has moved past the standalone chatbot. Agents connect to tools, pull in context, take actions and hand work to other systems. Protocol//60 asks how well you understand the protocols underneath that shift.",
+      "The questions are conceptual, technical and situational. You will be asked to spot the right protocol concept, read a proposed agent workflow and find what is wrong with it, and choose between approaches to interoperability. Memorising definitions will not get you far.",
+      "The top 60 on the leaderboard each receive the complete reward bundle — not one prize split three ways, but all three to every winner. Everyone who completes the quiz properly gets a verifiable certificate.",
+    ],
+    forWho: "Students, developers, AI enthusiasts and anyone curious about how agents work.",
+    tags: [
+      "mcp",
+      "acp",
+      "ai agents",
+      "automation",
+      "interoperability",
+      "online",
+      "beginner-friendly",
+    ],
+    teamSize: "Individual. Everyone registers and attempts on their own.",
+    eligibility:
+      "School and college students, developers, AI and automation builders, no-code creators and anyone exploring agents. No professional MCP or ACP experience needed.",
+    brief: "Understand the protocols. Crack the challenge. Finish in the top 60.",
+    deliverables: [
+      "One timed attempt, submitted before the clock runs out",
+      "Optional mini-challenges, for extra rewards and recognition",
+    ],
+    schedule: [
+      {
+        when: "Before",
+        what: "Register, join the official channel, read the participant guide and review the recommended MCP and ACP resources",
+      },
+      { when: "20 Sep", what: "Join through the official link, check in, read the final instructions" },
+      { when: "The quiz", what: "One attempt. The timer runs until you submit or it expires." },
+      { when: "Alongside", what: "Optional mini-challenges, running separately from the main leaderboard" },
+      { when: "After", what: "Responses validated, leaderboard reviewed, top 60 announced, certificates issued" },
+    ],
+    judging: [
+      { name: "Total score", detail: "The primary ranking. Everything below is used to separate people who tie." },
+      { name: "Correct answers", detail: "How many you got right across the paper." },
+      { name: "Accuracy", detail: "Right answers against attempted ones, across the whole quiz." },
+      {
+        name: "Completion time",
+        detail: "Used as a tie-breaker, alongside designated tie-breaker questions where needed.",
+      },
+    ],
+    rewards: [
+      "Top 60 each receive n8n access or benefits",
+      "Top 60 each receive Lovable access or benefits",
+      "Top 60 each receive one .XYZ domain",
+      "A verifiable digital participation certificate for everyone who completes the quiz",
+      "Additional rewards and recognition through the optional mini-challenges",
+    ],
+    sections: [
+      {
+        kind: "columns",
+        label: "What the quiz covers",
+        intro:
+          "The participant guide names the recommended reading and the exact protocol versions in scope.",
+        items: [
+          {
+            code: "01",
+            name: "MCP foundations",
+            points: [
+              "Purpose and core concepts",
+              "Clients, servers and connected applications",
+              "Tools, resources and prompts",
+              "Context exchange between systems",
+              "Capability discovery",
+              "Request-and-response flows",
+              "Permission and access boundaries",
+              "Connecting models to external services",
+            ],
+          },
+          {
+            code: "02",
+            name: "ACP foundations",
+            points: [
+              "Purpose and core concepts",
+              "Communication between agents and services",
+              "Tasks, messages and responses",
+              "Agent discovery and collaboration",
+              "Structured information exchange",
+              "Long-running operations",
+              "Multi-agent coordination",
+            ],
+          },
+          {
+            code: "03",
+            name: "Agent interoperability",
+            points: [
+              "How independent systems work together",
+              "Passing context between tools and agents",
+              "Designing workflows that hold up",
+              "Human approval and oversight",
+              "Handling failures and partial responses",
+              "Avoiding duplicated or conflicting actions",
+              "Choosing the right protocol for the job",
+            ],
+          },
+          {
+            code: "04",
+            name: "Security and responsible design",
+            points: [
+              "Authentication and authorisation",
+              "User consent",
+              "Data privacy and access control",
+              "Prompt injection and unsafe tool use",
+              "Logging and traceability",
+              "Limiting agent permissions",
+              "Human control over decisions that matter",
+            ],
+          },
+          {
+            code: "05",
+            name: "Practical scenarios",
+            points: [
+              "Connecting an assistant to external tools",
+              "Building research and productivity agents",
+              "Coordinating specialised agents",
+              "Automating repetitive workflows",
+              "Choosing a communication structure",
+              "Spotting unsafe or unreliable implementations",
+              "Improving a workflow that already exists",
+            ],
+          },
+        ],
+      },
+      {
+        kind: "list",
+        label: "Format",
+        intro:
+          "A timed online quiz, one official attempt. The final question count, duration and marking scheme come with the participant instructions.",
+        items: [
+          "Multiple-choice and multiple-select questions",
+          "Technical concept questions",
+          "Scenario-based questions",
+          "Workflow analysis questions",
+          "Short visual and code-based questions",
+          "Once it starts, the timer runs until you submit or time expires",
+          "Answers submitted after the deadline are not accepted",
+        ],
+      },
+      {
+        kind: "list",
+        label: "Rules and fair play",
+        numbered: true,
+        items: [
+          "One registration and one attempt per person.",
+          "Use accurate personal and contact details.",
+          "The quiz is attempted individually.",
+          "Do not share questions or answers during the event.",
+          "Working with another person during the live quiz is prohibited.",
+          "No search engines, AI assistants, group chats or outside help during the quiz unless explicitly allowed.",
+          "Do not copy, record, publish or redistribute the questions.",
+          "No automated answering tools, scripts, bots or browser manipulation.",
+          "Do not impersonate anyone else.",
+          "Duplicate, manipulated or suspicious entries may be disqualified.",
+          "Finish within the official event window.",
+          "Report technical problems immediately through the official support channel.",
+          "Organisers may review activity and response patterns to keep the event fair.",
+          "Breaking the rules can cost you your leaderboard position, rewards and certificate.",
+          "The organisers' decision on eligibility, ranking and disqualification is final.",
+        ],
+      },
+      {
+        kind: "list",
+        label: "What you need",
+        intro:
+          "Open the quiz link before the scheduled start and make sure your device is charged. A second attempt cannot be guaranteed for connectivity trouble, device failure or an accidental close.",
+        items: [
+          "A laptop, desktop, tablet or supported smartphone",
+          "A modern, updated browser",
+          "A reliable internet connection",
+          "Access to the email address you registered with",
+          "The official event communication channel",
+          "A quiet place to sit the timed quiz",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Is this a quiz or a hackathon?",
+        a: "A quiz, on MCP, ACP and AI-agent concepts. It is a separate event from WCC Launchpad 30.",
+      },
+      { q: "Is it free?", a: "Yes. Registration costs nothing." },
+      { q: "Can I take part as a team?", a: "No. This one is individual." },
+      { q: "Can beginners take part?", a: "Yes. Recommended learning resources go out before the event." },
+      {
+        q: "What do the top 60 get?",
+        a: "Each of them gets the full bundle: n8n benefits, Lovable benefits and one .XYZ domain. The rewards are not split into separate categories.",
+      },
+      {
+        q: "Will everyone get a certificate?",
+        a: "Everyone who registers, joins through the official link, completes and submits the quiz, follows the rules and passes the integrity checks. Registering alone does not qualify.",
+      },
+      {
+        q: "Are the mini-challenges compulsory?",
+        a: "No. They are optional, and they run separately from the main top-60 leaderboard unless announced otherwise beforehand.",
+      },
+      {
+        q: "How are winners chosen?",
+        a: "By score first. Accuracy, completion time and designated tie-breaker questions separate people who tie.",
+      },
+      {
+        q: "When do I get the joining link?",
+        a: "Before the event, by email and through the official event channel.",
+      },
+      {
+        q: "When are results and rewards announced?",
+        a: "After the responses are validated and the leaderboard is reviewed. Timelines are shared through the same two channels.",
+      },
+    ],
+    stats: [
+      { label: "Winners", value: "60" },
+      { label: "Rewards each", value: "3" },
+      { label: "Entry fee", value: "₹0" },
+      { label: "Official attempts", value: "1" },
+    ],
+    registration: {
+      note: "Free to enter. The quiz time and joining link go out by email and the official event channel.",
+    },
+    // As above: the seed only chooses the accent now, and "paper" matches the
+    // poster it is tinting.
+    posterSeed: 8016,
+    posterImage: "/posters/protocol-60.webp",
+  },
   {
     locked: true,
     slug: "cold-start",

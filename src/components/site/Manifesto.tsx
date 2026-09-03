@@ -333,7 +333,7 @@ export function Manifesto({ site, next, lockedCount }: ManifestoProps) {
         className="manifesto-grid"
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+          ["--cols" as string]: "repeat(3, minmax(0, 1fr))",
           gap: "clamp(1.5rem, 4vw, 3.5rem)",
           marginTop: "clamp(3.5rem, 10vh, 6rem)",
         }}

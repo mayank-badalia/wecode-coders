@@ -30,6 +30,23 @@ type PosterProps = {
    * a fixed ratio leaves a band of bare card showing.
    */
   fill?: boolean;
+  /**
+   * How a real poster image sits in its frame. Only meaningful alongside
+   * `fill`, and only for events with a `posterImage` — a generated poster
+   * composes to whatever box it is given.
+   *
+   * `cover` is right wherever the poster is furniture in a larger layout: a
+   * rail card, an about tile. `contain` is right where the artwork is the
+   * subject and cropping it would cut into someone's design.
+   */
+  fit?: "cover" | "contain";
+  /**
+   * CSS object-position for a real poster image. Cropping a tall poster into
+   * a wide card from the centre lands on an arbitrary middle slice; anchoring
+   * to the top keeps the masthead and title, which is the part that says
+   * which poster it is.
+   */
+  position?: string;
 };
 
 /*
@@ -49,6 +66,8 @@ export function Poster({
   priority = false,
   showTitle = true,
   fill = false,
+  fit = "cover",
+  position = "center",
 }: PosterProps) {
   const frame = fill
     ? ({ position: "absolute", inset: 0 } as const)
@@ -114,7 +133,7 @@ export function Poster({
           alt={`Poster for ${event.title}`}
           fill
           priority={priority}
-          style={{ objectFit: "cover" }}
+          style={{ objectFit: fit, objectPosition: position }}
           sizes="(max-width: 900px) 90vw, 46vw"
         />
       </div>

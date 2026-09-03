@@ -30,7 +30,16 @@ function resolveFamily(cssVar: string): string {
   return family;
 }
 
-export function posterToCanvas(event: PublicEvent): HTMLCanvasElement {
+/**
+ * @param onRepaint Called once a real poster image has finished decoding and
+ *   been drawn. Only fires for events with a `posterImage`; the caller uses it
+ *   to mark its texture dirty, since the canvas is painted after it is handed
+ *   over.
+ */
+export function posterToCanvas(
+  event: PublicEvent,
+  onRepaint?: () => void,
+): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
@@ -77,6 +86,36 @@ export function posterToCanvas(event: PublicEvent): HTMLCanvasElement {
     ctx.textAlign = "center";
     ctx.fillText("LOCKED", cx, cy + 130);
     ctx.textAlign = "left";
+    return canvas;
+  }
+
+  /*
+    A real poster wins over the generated one here exactly as it does in the
+    DOM poster. Without this branch an announced event showed its artwork
+    everywhere on the site except the ring, which is the one surface where the
+    posters are the whole page.
+
+    Decoding is asynchronous and CanvasTexture wants a canvas now, so the
+    ground is painted immediately — the seed's ground is chosen to match the
+    artwork — and the image is drawn over it when it arrives.
+  */
+  if (event.posterImage) {
+    const ground = groundFor(event);
+    ctx.fillStyle = ground.bg;
+    ctx.fillRect(0, 0, W, H);
+
+    const img = new Image();
+    img.decoding = "async";
+    img.onload = () => {
+      // Cover, not contain: the plane has a fixed aspect and letterboxing it
+      // would show the ground as bars down the sides of the poster.
+      const scale = Math.max(W / img.width, H / img.height);
+      const w = img.width * scale;
+      const h = img.height * scale;
+      ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+      onRepaint?.();
+    };
+    img.src = event.posterImage;
     return canvas;
   }
 

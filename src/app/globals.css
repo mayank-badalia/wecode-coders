@@ -179,9 +179,26 @@ html[data-wcc-seen="1"] .loader-root {
   transform: translateY(0);
 }
 
+/*
+  Multi-column grids take their track list from --cols, set inline.
+
+  Writing grid-template-columns inline instead put the desktop layout in a
+  style attribute, which no stylesheet rule can override — so the collapse
+  below was dead and every one of these stayed multi-column on a phone, with
+  the about body squeezed into 99px. An inline custom property loses to a rule
+  that reads it, which is the whole point of routing it through a variable.
+*/
+.about-grid,
+.detail-grid,
+.detail-hero,
+.manifesto-grid {
+  grid-template-columns: var(--cols);
+}
+
 @media (max-width: 900px) {
   .about-grid,
   .detail-grid,
+  .detail-hero,
   .manifesto-grid,
   .hero-rail {
     grid-template-columns: minmax(0, 1fr);

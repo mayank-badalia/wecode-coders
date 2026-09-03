@@ -60,7 +60,14 @@ export function EventRing({
   const textures = useMemo(
     () =>
       events.map((e) => {
-        const tex = new THREE.CanvasTexture(posterToCanvas(e));
+        // The canvas for an event with a real poster is painted once the
+        // image decodes, after this texture already exists — hence the
+        // callback rather than a second useMemo pass.
+        const tex: THREE.CanvasTexture = new THREE.CanvasTexture(
+          posterToCanvas(e, () => {
+            tex.needsUpdate = true;
+          }),
+        );
         tex.colorSpace = THREE.SRGBColorSpace;
         tex.anisotropy = 4;
         tex.needsUpdate = true;

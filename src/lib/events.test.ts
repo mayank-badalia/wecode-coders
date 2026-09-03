@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { events as rawEvents } from "@/data/events";
 import {
@@ -130,6 +132,37 @@ describe("events seam", () => {
 
   it("counts locked events without exposing them", () => {
     expect(getLockedCount()).toBe(rawEvents.filter((e) => e.locked).length);
+  });
+
+  it("points every poster image at a file that exists", () => {
+    /*
+      A typo here is silent: next/image renders nothing, the rail card and the
+      ring both go blank, and no build step complains. The published events are
+      the ones with real artwork, so the path is worth checking against disk.
+    */
+    for (const e of published) {
+      if (!e.posterImage) continue;
+      expect(e.posterImage.startsWith("/")).toBe(true);
+      expect(existsSync(join(process.cwd(), "public", e.posterImage))).toBe(true);
+    }
+  });
+
+  it("never publishes a registration link that goes nowhere", () => {
+    // An absent href is the deliberate "not open yet" state and renders as
+    // text; a present one has to be somewhere a browser can actually go.
+    for (const e of published) {
+      const href = e.registration?.href;
+      if (href !== undefined) expect(href).toMatch(/^https?:\/\//);
+    }
+  });
+
+  it("does not print an unannounced start time as though it were fixed", () => {
+    for (const e of published) {
+      if (!e.startTimeNote) continue;
+      expect(e.startTimeNote.trim().length).toBeGreaterThan(0);
+      // The timestamp still has to be real so the event sorts into place.
+      expect(new Date(e.startsAt).toString()).not.toBe("Invalid Date");
+    }
   });
 
   it("only links out to real, absolute URLs", () => {

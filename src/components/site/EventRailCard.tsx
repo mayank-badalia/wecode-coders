@@ -61,8 +61,31 @@ export const EventRailCard = forwardRef<HTMLDivElement, { event: PublicEvent; in
             priority={index < 2}
             showTitle={false}
             fill
+            position="top"
           />
         </div>
+
+        {/*
+          Veil, for real poster artwork only.
+
+          A generated poster is composed to sit under this card's typography:
+          it leaves the lower band quiet, so the wash below is enough. Real
+          artwork makes no such promise — the two announced posters are printed
+          on cream, and the card's paper-coloured copy vanished into them. The
+          veil buys a guaranteed ground for the type whatever the poster does,
+          and it is absent from generated posters so their composition is not
+          needlessly muddied.
+        */}
+        {!event.locked && event.posterImage && (
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "color-mix(in srgb, var(--color-ink) 58%, transparent)",
+            }}
+          />
+        )}
 
         {/* Violet wash, faded in only as the card approaches full bleed. */}
         <div
