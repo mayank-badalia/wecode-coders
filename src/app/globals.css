@@ -159,6 +159,28 @@ html[data-wcc-seen="1"] .loader-root {
 }
 
 /*
+  Hero: the tape stack and the headline.
+
+  On a wide screen the tapes are spread down the whole hero and the headline
+  sits over them — they are behind it, and the outlined last line deliberately
+  shows them through its counters.
+
+  A phone has nowhere near that height. The tapes are positioned as
+  percentages of the hero, so on a short viewport the same spread put four of
+  them straight across "Build in public. Leave with proof.", and against an
+  outlined line that reads as tape printed on top of the words. There they are
+  compressed into the upper band instead and the headline is aligned to the
+  bottom of its row, so the two occupy different parts of the screen.
+*/
+.tape {
+  top: var(--tape-top);
+}
+
+.hero-title {
+  align-self: center;
+}
+
+/*
   The events ring and the panel that names the focused event.
 
   On a wide screen the panel is a column down the left, over a scrim that
@@ -551,10 +573,20 @@ html[data-wcc-seen="1"] .loader-root {
 
   Five thick strips across a short viewport swamp the headline and bury the
   kicker — what reads as a sealed package on a wide screen reads as clutter on
-  a narrow one. Two of the five step aside, the rest thin down, and the pair
-  nearest the top move clear of the kicker line.
+  a narrow one. Two of the five step aside and the rest thin down.
+
+  The three that stay are then placed into the top third outright, so the
+  headline below them is clear. That used to be done by nudging the top pair
+  with margin-top, because the strips set `top` inline and no rule could reach
+  it; they now carry it as --tape-top instead, and the whole band can be
+  positioned honestly. The margin nudge had been pushing the top pair *down*
+  into the headline, which is the collision this is here to prevent.
+
+  Widened to the site's 900px breakpoint: the strips are positioned as a
+  percentage of the hero, so the overlap starts as soon as the viewport is
+  short, not at some narrower width of its own.
 */
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .tape-layer .tape:nth-child(3),
   .tape-layer .tape:nth-child(4) {
     display: none;
@@ -570,19 +602,41 @@ html[data-wcc-seen="1"] .loader-root {
   }
 
   /*
-    Margin, not top: the strips set `top` inline, which a rule cannot
-    override. This pushes the first one clear of the kicker line.
+    A percentage with a floor.
+
+    The kicker's distance from the top is a fixed clamp, not a percentage, so
+    on a 640px-tall phone a purely proportional band rode up into it — the
+    strips are rotated, and a raised end reaches about 20px above its own top.
+    The rem floors hold the band clear of the kicker on short screens and are
+    below the percentages on tall ones, where the percentages win.
   */
   .tape-layer .tape:nth-child(1) {
-    margin-top: 3.5rem;
+    top: max(21%, 10rem);
   }
 
   .tape-layer .tape:nth-child(2) {
-    margin-top: 2rem;
+    top: max(28%, 13rem);
+  }
+
+  /* The one crossing the other way sits last, closing the X. */
+  .tape-layer .tape:nth-child(5) {
+    top: max(35%, 16rem);
   }
 
   .tape-layer .tape span {
     font-size: 0.66rem;
     letter-spacing: 0.12em;
+  }
+}
+
+/*
+  A short phone has room for two, not three. Between the kicker and the top of
+  the headline there is about 180px on a 640px screen, which three rotated
+  strips cannot occupy without touching one or the other. The crossing strip
+  is the one that goes, since the pair still reads as tape.
+*/
+@media (max-width: 900px) and (max-height: 720px) {
+  .tape-layer .tape:nth-child(5) {
+    display: none;
   }
 }

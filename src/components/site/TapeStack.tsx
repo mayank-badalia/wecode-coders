@@ -181,7 +181,10 @@ export function TapeStack() {
           className="tape"
           style={{
             position: "absolute",
-            top: `${tape.top}%`,
+            // Through a custom property so the phone rules in globals.css can
+            // compress the whole stack into the hero's upper band; a top set
+            // directly here would be beyond their reach.
+            ["--tape-top" as string]: `${tape.top}%`,
             left: "-20%",
             width: "140%",
             transform: `rotate(${tape.rotate}deg)`,

@@ -110,11 +110,11 @@ export function Hero({ site }: { site: SiteData }) {
       </p>
 
       <h1
+        className="hero-title"
         style={{
           position: "relative",
           zIndex: 4,
           margin: "clamp(1.5rem, 5vh, 3rem) 0 0",
-          alignSelf: "center",
           lineHeight: 0.9,
           letterSpacing: "-0.025em",
         }}
