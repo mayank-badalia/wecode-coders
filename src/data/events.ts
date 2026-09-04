@@ -36,8 +36,8 @@ export const events: Event[] = [
     kicker: "HACKATHON — 30 HOURS",
     format: "hackathon",
     status: "upcoming",
-    startsAt: "2026-09-20T10:00:00+05:30",
-    endsAt: "2026-09-21T16:00:00+05:30",
+    startsAt: "2026-10-04T10:00:00+05:30",
+    endsAt: "2026-10-05T16:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -68,12 +68,12 @@ export const events: Event[] = [
       "A showcase post on LinkedIn, Instagram and Reddit, links included",
     ],
     schedule: [
-      { when: "Sun 20 Sep, 10:00", what: "Kick-off, tracks explained, building starts" },
-      { when: "Sun 20 Sep, 14:00", what: "First checkpoint: who is your user, and how do you know" },
-      { when: "Sun 20 Sep, 20:00", what: "Mentor sessions and workshops" },
-      { when: "Mon 21 Sep, 09:00", what: "Second checkpoint: what are you cutting" },
-      { when: "Mon 21 Sep, 14:00", what: "Submissions close. Everything on the list is in, or it is not." },
-      { when: "Mon 21 Sep, 16:00", what: "Wrap. Shortlisted teams are invited to demo live." },
+      { when: "Sun 4 Oct, 10:00", what: "Kick-off, tracks explained, building starts" },
+      { when: "Sun 4 Oct, 14:00", what: "First checkpoint: who is your user, and how do you know" },
+      { when: "Sun 4 Oct, 20:00", what: "Mentor sessions and workshops" },
+      { when: "Mon 5 Oct, 09:00", what: "Second checkpoint: what are you cutting" },
+      { when: "Mon 5 Oct, 14:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Mon 5 Oct, 16:00", what: "Wrap. Shortlisted teams are invited to demo live." },
     ],
     judging: [
       {
@@ -266,7 +266,7 @@ export const events: Event[] = [
     // still tints hover states and the ring's glow, so it is chosen to land on
     // "paper", which is what the artwork is printed on.
     posterSeed: 8002,
-    posterImage: "/posters/wcc-launchpad-30.webp",
+    posterImage: "/posters/wcc-launchpad-30-oct.webp",
   },
   {
     locked: false,
