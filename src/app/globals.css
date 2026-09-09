@@ -547,6 +547,72 @@ html[data-wcc-seen="1"] .loader-root {
 }
 
 /*
+  The register button in the event hero.
+
+  Signal red carrying paper type, sitting on the ink ground of the poster
+  header. This is the single action on the page, so it is the one element in
+  the hero allowed to spend the signal colour, and it is sized well past the
+  44px tap floor instead of relying on the coarse-pointer rule below to
+  rescue it.
+
+  All of it lives here rather than in a style prop because that block sets
+  padding on .detail-cta: an inline padding would beat it, and beat every
+  media query with it — the trap that has already cost this build the tape
+  positions, the rail cards and the transition label. The element selector
+  keeps this rule ahead of the touch-target one on the axis they share.
+*/
+a.detail-cta--signal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 1.05em 1.9em;
+  border-radius: 999px;
+  background: var(--color-signal);
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 0.95vw, 0.88rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(237, 28, 36, 0.28);
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+a.detail-cta--signal:hover,
+a.detail-cta--signal:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(237, 28, 36, 0.42);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a.detail-cta--signal {
+    transition: none;
+  }
+
+  a.detail-cta--signal:hover,
+  a.detail-cta--signal:focus-visible {
+    transform: none;
+  }
+}
+
+/*
+  Sponsor billing.
+
+  The title sponsor is set larger and alone on its row; the rest share a row
+  that wraps to two columns on a phone. auto-fit rather than a fixed count so
+  a sixth partner does not need a CSS change to sit correctly.
+*/
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+/*
   Touch targets.
 
   An audit across eight viewports found controls as small as 46x20 — a Close

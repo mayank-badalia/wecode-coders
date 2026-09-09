@@ -132,6 +132,10 @@ export default async function EventPage({ params }: Params) {
   const site = getSite();
   const hours = eventDurationHours(event.startsAt, event.endsAt);
 
+  // The title sponsor is billed on its own line, above and larger than the
+  // rest, so it is split off here rather than special-cased by index in JSX.
+  const [titleSponsor, ...otherSponsors] = event.sponsors ?? [];
+
   const spec: { label: string; value: string }[] = [
     { label: "Date", value: formatEventDate(event.startsAt, event.endsAt) },
     { label: "Starts", value: event.startTimeNote ?? formatEventTime(event.startsAt) },
@@ -208,6 +212,31 @@ export default async function EventPage({ params }: Params) {
                 >
                   {event.summary}
                 </p>
+
+                {/*
+                  Register, at the top of the page.
+
+                  The red band at the foot is the full call to action, but it
+                  sits behind the entire brief — tracks, submission list,
+                  rules, judging — and someone who arrives already intending to
+                  sign up should not have to read to the end to find the link.
+
+                  Rendered only when there is a real URL, so it can never
+                  appear as a button that goes nowhere.
+                */}
+                {event.registration?.href && (
+                  <p style={{ margin: "1.6em 0 0" }}>
+                    <a
+                      href={event.registration.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="detail-cta detail-cta--signal"
+                    >
+                      {event.registration.label ?? "Register now"}
+                      <Arrow direction="up-right" style={{ width: 15, height: 15 }} />
+                    </a>
+                  </p>
+                )}
               </div>
 
               <div
@@ -575,6 +604,100 @@ export default async function EventPage({ params }: Params) {
                 <p style={{ margin: 0, lineHeight: 1.6, color: "var(--color-ink-60)" }}>{row.a}</p>
               </div>
             ))}
+          </section>
+        )}
+
+        {/*
+          Partners.
+
+          Set as names, not as a logo wall. Supplied marks arrive at different
+          weights, trims and colour treatments, and a row of them fights the
+          typography holding up every other section here — a sponsor rendered
+          badly is served worse than a sponsor set properly.
+        */}
+        {event.sponsors && event.sponsors.length > 0 && (
+          <section
+            style={{
+              maxWidth: "min(1680px, 92vw)",
+              margin: "0 auto",
+              padding: "clamp(3.5rem, 10vh, 6rem) clamp(1.25rem, 2vw, 2rem) 0",
+            }}
+          >
+            <p style={{ ...monoLabel, margin: "0 0 1.4rem" }}>[ Partners ]</p>
+
+            {titleSponsor && (
+              <div
+                data-reveal
+                style={{
+                  borderTop: "1px solid var(--color-paper-2)",
+                  paddingTop: "clamp(1.4rem, 3.5vh, 2.1rem)",
+                }}
+              >
+                <p style={{ ...monoLabel, margin: 0, color: "var(--color-signal)" }}>
+                  {titleSponsor.role}
+                </p>
+                <p
+                  style={{
+                    margin: "0.2em 0 0",
+                    fontFamily: "var(--font-display)",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    fontSize: "clamp(2.2rem, 6.5vw, 4.5rem)",
+                    lineHeight: 1,
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  {titleSponsor.href ? (
+                    <a
+                      href={titleSponsor.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      {titleSponsor.name}
+                    </a>
+                  ) : (
+                    titleSponsor.name
+                  )}
+                </p>
+              </div>
+            )}
+
+            {otherSponsors.length > 0 && (
+              <div className="sponsor-grid" data-reveal>
+                {otherSponsors.map((s) => (
+                  <div
+                    key={s.name}
+                    style={{ borderTop: "1px solid var(--color-paper-2)", paddingTop: "1.1rem" }}
+                  >
+                    <p style={{ ...monoLabel, margin: 0 }}>{s.role}</p>
+                    <p
+                      style={{
+                        margin: "0.35em 0 0",
+                        fontFamily: "var(--font-display)",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        fontSize: "clamp(1.15rem, 2vw, 1.6rem)",
+                        lineHeight: 1.05,
+                      }}
+                    >
+                      {s.href ? (
+                        <a
+                          href={s.href}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          style={{ color: "inherit", textDecoration: "none" }}
+                        >
+                          {s.name}
+                        </a>
+                      ) : (
+                        s.name
+                      )}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
         )}
 

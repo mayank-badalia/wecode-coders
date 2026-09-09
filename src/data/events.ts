@@ -41,7 +41,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Thirty hours to turn one problem worth solving into a working product. National, online, free to enter, ₹1,00,000 in prizes.",
+      "Thirty hours to turn one problem worth solving into a working product. National, online, free to enter, with ₹50,000 in cash and PPO opportunities for the top three teams.",
     description: [
       "WCC Launchpad 30 is a national online hackathon for students, developers, designers and anyone else who wants to find out what an idea looks like once it has to run.",
       "You get thirty hours to pick a problem that genuinely exists, build the one journey through it that matters, and show that it works. You do not need a startup, a rehearsed pitch, or years of experience behind you. You need a problem worth solving and the willingness to build.",
@@ -126,12 +126,15 @@ export const events: Event[] = [
       },
     ],
     rewards: [
-      "A share of the ₹1,00,000 prize pool",
-      "A functional product you can put on a résumé or in a portfolio",
+      "₹50,000 in cash, split across the top three teams",
+      "PPO opportunities for the top three teams",
+      "Over 100 reward recipients across the hackathon and the mini-challenges",
+      "T-shirts, pens and stickers",
+      "Miro AI access, a .XYZ domain and Lovable Premium",
       "A verifiable digital participation certificate",
+      "Sponsor challenges and surprise rewards through the thirty hours",
+      "A functional product you can put on a résumé or in a portfolio",
       "Feedback from judges, mentors and reviewers",
-      "AI tool credits, n8n and Lovable benefits, and a .XYZ domain",
-      "Workshops, mentor sessions and community access",
     ],
     sections: [
       {
@@ -255,18 +258,27 @@ export const events: Event[] = [
     ],
     stats: [
       { label: "Hours to build", value: "30" },
-      { label: "Prize pool", value: "₹1,00,000" },
-      { label: "Tracks", value: "3" },
+      { label: "Cash prize", value: "₹50,000" },
+      { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
+    sponsors: [
+      { name: "Inkloom", role: "Title sponsor" },
+      { name: "Miro", role: "Tooling partner" },
+      { name: ".XYZ", role: "Domain partner" },
+      { name: "Unstop", role: "Official event partner" },
+      { name: "We Code Coders", role: "Community partner" },
+    ],
     registration: {
-      note: "Free to enter. Joining details go out by email and the official event channel.",
+      href: "https://unstop.com/p/wcc-launchpad-30-wecodecoders-1751873",
+      label: "Register on Unstop",
+      note: "Free to enter, in teams of one to four. Registration and submissions run through Unstop; joining details go out by email and the official event channel.",
     },
     // The seed no longer composes anything — posterImage wins — but its ground
     // still tints hover states and the ring's glow, so it is chosen to land on
     // "paper", which is what the artwork is printed on.
     posterSeed: 8002,
-    posterImage: "/posters/wcc-launchpad-30-oct.webp",
+    posterImage: "/posters/wcc-launchpad-30-v3.webp",
   },
   {
     locked: false,

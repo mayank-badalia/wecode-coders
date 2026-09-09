@@ -131,6 +131,20 @@ export type Event = {
     note?: string;
   };
 
+  /**
+   * Who is backing the event, in the order they should be credited.
+   *
+   * `role` is the billing, not a description — "Title sponsor", "Domain
+   * partner" — because that is the thing a sponsor agreed to and the thing
+   * they check for. The first entry is rendered larger than the rest, so the
+   * title sponsor goes first and the order here is the order on the page.
+   *
+   * Names only, no logo files: a wall of mismatched PNGs at different weights
+   * and trims fights the typography everywhere else on the site, and a
+   * sponsor's mark rendered badly is worse for them than their name set well.
+   */
+  sponsors?: { name: string; role: string; href?: string }[];
+
   stats?: { label: string; value: string }[];
   /**
    * Drives the generative poster. Must be unique per event.
