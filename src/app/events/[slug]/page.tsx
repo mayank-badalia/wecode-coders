@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { notFound } from "next/navigation";
 import { Poster } from "@/components/poster/Poster";
@@ -176,12 +177,34 @@ export default async function EventPage({ params }: Params) {
                 maxWidth: "min(1680px, 92vw)",
                 margin: "0 auto",
                 display: "grid",
-                ["--cols" as string]: "minmax(0, 6fr) minmax(0, 5fr)",
+                ["--cols" as string]: "minmax(0, 5fr) minmax(0, 6fr)",
                 gap: "clamp(2.5rem, 6vw, 5rem)",
                 alignItems: "center",
               }}
             >
-              <div>
+              {/*
+                The poster leads, and comes first in the DOM so it takes the
+                left column without a reordering rule that a reader dragging
+                a keyboard through the page would feel as a jump.
+
+                On a phone the grid collapses to one column and that order
+                would push the title and the register button below a
+                full-height poster, so the copy is pulled back above it there
+                — see .detail-hero-copy in globals.css.
+              */}
+              <div
+                style={{
+                  position: "relative",
+                  // Bounded here rather than left to the image, so the box is
+                  // the right size before the file has loaded and the page
+                  // does not jump when it arrives.
+                  height: "min(68svh, 720px)",
+                }}
+              >
+                <Poster event={event} showTitle={false} fill fit="contain" priority />
+              </div>
+
+              <div className="detail-hero-copy">
                 <p style={{ ...monoLabel, color: "rgba(244,241,234,0.8)", margin: 0 }}>
                   {event.kicker}
                 </p>
@@ -237,18 +260,6 @@ export default async function EventPage({ params }: Params) {
                     </a>
                   </p>
                 )}
-              </div>
-
-              <div
-                style={{
-                  position: "relative",
-                  // Bounded here rather than left to the image, so the box is
-                  // the right size before the file has loaded and the page
-                  // does not jump when it arrives.
-                  height: "min(68svh, 720px)",
-                }}
-              >
-                <Poster event={event} showTitle={false} fill fit="contain" priority />
               </div>
             </div>
           </header>
@@ -636,30 +647,31 @@ export default async function EventPage({ params }: Params) {
                 <p style={{ ...monoLabel, margin: 0, color: "var(--color-signal)" }}>
                   {titleSponsor.role}
                 </p>
-                <p
-                  style={{
-                    margin: "0.2em 0 0",
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                    fontSize: "clamp(2.2rem, 6.5vw, 4.5rem)",
-                    lineHeight: 1,
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {titleSponsor.href ? (
-                    <a
-                      href={titleSponsor.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      style={{ color: "inherit", textDecoration: "none" }}
-                    >
-                      {titleSponsor.name}
-                    </a>
-                  ) : (
-                    titleSponsor.name
-                  )}
-                </p>
+                {titleSponsor.logo ? (
+                  <div className="sponsor-logo sponsor-logo--title">
+                    <Image
+                      src={titleSponsor.logo}
+                      alt={titleSponsor.name}
+                      fill
+                      sizes="(max-width: 900px) 70vw, 340px"
+                      style={{ objectFit: "contain", objectPosition: "left center" }}
+                    />
+                  </div>
+                ) : (
+                  <p
+                    style={{
+                      margin: "0.2em 0 0",
+                      fontFamily: "var(--font-display)",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      fontSize: "clamp(2.2rem, 6.5vw, 4.5rem)",
+                      lineHeight: 1,
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    {titleSponsor.name}
+                  </p>
+                )}
               </div>
             )}
 
@@ -671,29 +683,30 @@ export default async function EventPage({ params }: Params) {
                     style={{ borderTop: "1px solid var(--color-paper-2)", paddingTop: "1.1rem" }}
                   >
                     <p style={{ ...monoLabel, margin: 0 }}>{s.role}</p>
-                    <p
-                      style={{
-                        margin: "0.35em 0 0",
-                        fontFamily: "var(--font-display)",
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        fontSize: "clamp(1.15rem, 2vw, 1.6rem)",
-                        lineHeight: 1.05,
-                      }}
-                    >
-                      {s.href ? (
-                        <a
-                          href={s.href}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                          style={{ color: "inherit", textDecoration: "none" }}
-                        >
-                          {s.name}
-                        </a>
-                      ) : (
-                        s.name
-                      )}
-                    </p>
+                    {s.logo ? (
+                      <div className="sponsor-logo">
+                        <Image
+                          src={s.logo}
+                          alt={s.name}
+                          fill
+                          sizes="(max-width: 900px) 50vw, 180px"
+                          style={{ objectFit: "contain", objectPosition: "left center" }}
+                        />
+                      </div>
+                    ) : (
+                      <p
+                        style={{
+                          margin: "0.35em 0 0",
+                          fontFamily: "var(--font-display)",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          fontSize: "clamp(1.15rem, 2vw, 1.6rem)",
+                          lineHeight: 1.05,
+                        }}
+                      >
+                        {s.name}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>

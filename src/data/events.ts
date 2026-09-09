@@ -128,7 +128,7 @@ export const events: Event[] = [
     rewards: [
       "₹50,000 in cash, split across the top three teams",
       "PPO opportunities for the top three teams",
-      "Over 100 reward recipients across the hackathon and the mini-challenges",
+      "100+ winners across the hackathon and the mini-challenges",
       "T-shirts, pens and stickers",
       "Miro AI access, a .XYZ domain and Lovable Premium",
       "A verifiable digital participation certificate",
@@ -259,15 +259,19 @@ export const events: Event[] = [
     stats: [
       { label: "Hours to build", value: "30" },
       { label: "Cash prize", value: "₹50,000" },
-      { label: "Reward recipients", value: "100+" },
+      { label: "Winners", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
     sponsors: [
-      { name: "Inkloom", role: "Title sponsor" },
-      { name: "Miro", role: "Tooling partner" },
-      { name: ".XYZ", role: "Domain partner" },
-      { name: "Unstop", role: "Official event partner" },
-      { name: "We Code Coders", role: "Community partner" },
+      { name: "Inkloom", role: "Title sponsor", logo: "/sponsors/inkloom.png" },
+      { name: "Miro", role: "Tooling partner", logo: "/sponsors/miro.png" },
+      { name: ".XYZ", role: "Domain partner", logo: "/sponsors/xyz.png" },
+      { name: "Unstop", role: "Official event partner", logo: "/sponsors/unstop.png" },
+      {
+        name: "We Code Coders",
+        role: "Community partner",
+        logo: "/sponsors/we-code-coders.png",
+      },
     ],
     registration: {
       href: "https://unstop.com/p/wcc-launchpad-30-wecodecoders-1751873",

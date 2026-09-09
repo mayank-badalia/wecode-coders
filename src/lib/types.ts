@@ -139,11 +139,13 @@ export type Event = {
    * they check for. The first entry is rendered larger than the rest, so the
    * title sponsor goes first and the order here is the order on the page.
    *
-   * Names only, no logo files: a wall of mismatched PNGs at different weights
-   * and trims fights the typography everywhere else on the site, and a
-   * sponsor's mark rendered badly is worse for them than their name set well.
+   * `logo` is a path under /public. The files there are pre-processed: each
+   * one is knocked out to transparency, trimmed to its own ink and exported at
+   * a common height, so they sit on the paper ground as marks rather than as
+   * five mismatched rectangles. `name` stays required — it is the alt text,
+   * and the fallback when a logo has not been supplied.
    */
-  sponsors?: { name: string; role: string; href?: string }[];
+  sponsors?: { name: string; role: string; logo?: string; href?: string }[];
 
   stats?: { label: string; value: string }[];
   /**
