@@ -192,15 +192,12 @@ export default async function EventPage({ params }: Params) {
                 full-height poster, so the copy is pulled back above it there
                 — see .detail-hero-copy in globals.css.
               */}
-              <div
-                style={{
-                  position: "relative",
-                  // Bounded here rather than left to the image, so the box is
-                  // the right size before the file has loaded and the page
-                  // does not jump when it arrives.
-                  height: "min(68svh, 720px)",
-                }}
-              >
+              {/*
+                Sized in globals.css, not here. The box has to change shape on
+                one column — height-driven beside the copy, width-driven under
+                it — and an inline height would win against that media query.
+              */}
+              <div className="detail-hero-poster">
                 <Poster event={event} showTitle={false} fill fit="contain" priority />
               </div>
 
@@ -218,15 +215,13 @@ export default async function EventPage({ params }: Params) {
                     lineHeight: 0.92,
                     letterSpacing: "-0.02em",
                     textTransform: "uppercase",
-                    maxWidth: "13ch",
                   }}
                 >
                   {event.title}
                 </h1>
                 <p
+                  className="detail-hero-summary"
                   style={{
-                    margin: "1.2em 0 0",
-                    maxWidth: "46ch",
                     fontFamily: "var(--font-editorial)",
                     fontSize: "clamp(1.05rem, 1.5vw, 1.4rem)",
                     lineHeight: 1.55,

@@ -397,6 +397,28 @@ html[data-wcc-seen="1"] .loader-root {
   grid-template-columns: var(--cols);
 }
 
+/*
+  The event hero's two halves.
+
+  Beside the copy the poster box is height-driven — bounded here rather than
+  left to the image, so it is the right size before the file has loaded and
+  the page does not jump when it arrives. Under the copy it has to become
+  width-driven instead, which is why none of this is set inline.
+*/
+.detail-hero-poster {
+  position: relative;
+  height: min(68svh, 720px);
+}
+
+.detail-title {
+  max-width: 13ch;
+}
+
+.detail-hero-summary {
+  margin: 1.2em 0 0;
+  max-width: 46ch;
+}
+
 @media (max-width: 900px) {
   .about-grid,
   .detail-grid,
@@ -420,6 +442,41 @@ html[data-wcc-seen="1"] .loader-root {
   */
   .detail-hero-copy {
     order: -1;
+  }
+
+  /*
+    One centred column once the hero stacks.
+
+    The poster box is capped by height, so on a single column wider than
+    about 430px `contain` painted the picture at 392px and centred it inside
+    a box up to 827px wide — leaving the artwork 218px adrift of copy that
+    was hard against the left gutter. It read as a layout bug, because it
+    was one.
+
+    Under the copy the box is width-driven instead, capped so it does not
+    tower over the page, and the copy is given a measure and centred to meet
+    it. The two halves now share one axis at every width.
+  */
+  .detail-hero-poster {
+    height: auto;
+    width: min(100%, 380px);
+    aspect-ratio: 1003 / 1568;
+    margin-inline: auto;
+  }
+
+  .detail-hero-copy {
+    max-width: 34rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  /*
+    Both carry a measure meant for the desktop column. Inside a block that is
+    already bounded and centred they only pull the text back off centre.
+  */
+  .detail-hero-copy .detail-title,
+  .detail-hero-copy .detail-hero-summary {
+    max-width: none;
   }
 }
 
