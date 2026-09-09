@@ -282,7 +282,7 @@ export const events: Event[] = [
     // still tints hover states and the ring's glow, so it is chosen to land on
     // "paper", which is what the artwork is printed on.
     posterSeed: 8002,
-    posterImage: "/posters/wcc-launchpad-30-v3.webp",
+    posterImage: "/posters/wcc-launchpad-30-v4.webp",
   },
   {
     locked: false,
