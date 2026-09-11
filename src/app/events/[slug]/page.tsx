@@ -653,12 +653,12 @@ export default async function EventPage({ params }: Params) {
                     />
                   </div>
                 ) : (
+                  /* As written — see the partner fallback below. */
                   <p
                     style={{
                       margin: "0.2em 0 0",
                       fontFamily: "var(--font-display)",
                       fontWeight: 700,
-                      textTransform: "uppercase",
                       fontSize: "clamp(2.2rem, 6.5vw, 4.5rem)",
                       lineHeight: 1,
                       letterSpacing: "-0.02em",
@@ -689,13 +689,18 @@ export default async function EventPage({ params }: Params) {
                         />
                       </div>
                     ) : (
+                      /*
+                        Set as written, not upper-cased. A partner with no logo
+                        file falls back to their name in type, and forcing case
+                        on it misspells brands that are deliberately lower-case
+                        — n8n became "N8N" here.
+                      */
                       <p
                         style={{
                           margin: "0.35em 0 0",
                           fontFamily: "var(--font-display)",
                           fontWeight: 700,
-                          textTransform: "uppercase",
-                          fontSize: "clamp(1.15rem, 2vw, 1.6rem)",
+                          fontSize: "clamp(1.3rem, 2.2vw, 1.8rem)",
                           lineHeight: 1.05,
                         }}
                       >

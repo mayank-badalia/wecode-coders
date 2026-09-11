@@ -130,7 +130,7 @@ export const events: Event[] = [
       "PPO opportunities for the top three teams",
       "100+ winners across the hackathon and the mini-challenges",
       "T-shirts, pens and stickers",
-      "Miro AI access, a .XYZ domain and Lovable Premium",
+      "Miro AI access, n8n, a .XYZ domain and Lovable Premium",
       "A verifiable digital participation certificate",
       "Sponsor challenges and surprise rewards through the thirty hours",
       "A functional product you can put on a résumé or in a portfolio",
@@ -265,6 +265,7 @@ export const events: Event[] = [
     sponsors: [
       { name: "Inkloom", role: "Title sponsor", logo: "/sponsors/inkloom.png" },
       { name: "Miro", role: "Tooling partner", logo: "/sponsors/miro.png" },
+      { name: "n8n", role: "Tooling partner" },
       { name: ".XYZ", role: "Domain partner", logo: "/sponsors/xyz.png" },
       { name: "Unstop", role: "Official event partner", logo: "/sponsors/unstop.png" },
       {
@@ -282,7 +283,7 @@ export const events: Event[] = [
     // still tints hover states and the ring's glow, so it is chosen to land on
     // "paper", which is what the artwork is printed on.
     posterSeed: 8002,
-    posterImage: "/posters/wcc-launchpad-30-v5.webp",
+    posterImage: "/posters/wcc-launchpad-30-v6.webp",
   },
   {
     locked: false,
