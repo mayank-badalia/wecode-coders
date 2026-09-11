@@ -292,9 +292,8 @@ export const events: Event[] = [
     kicker: "QUIZ — ONE SITTING",
     format: "quiz",
     status: "upcoming",
-    startsAt: "2026-09-20T10:00:00+05:30",
-    endsAt: "2026-09-20T22:00:00+05:30",
-    startTimeNote: "Announced to registered participants before the event",
+    startsAt: "2026-10-03T17:00:00+05:30",
+    endsAt: "2026-10-03T19:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -327,7 +326,7 @@ export const events: Event[] = [
         when: "Before",
         what: "Register, join the official channel, read the participant guide and review the recommended MCP and ACP resources",
       },
-      { when: "20 Sep", what: "Join through the official link, check in, read the final instructions" },
+      { when: "3 Oct", what: "Join through the official link, check in, read the final instructions" },
       { when: "The quiz", what: "One attempt. The timer runs until you submit or it expires." },
       { when: "Alongside", what: "Optional mini-challenges, running separately from the main leaderboard" },
       { when: "After", what: "Responses validated, leaderboard reviewed, top 60 announced, certificates issued" },
@@ -427,7 +426,7 @@ export const events: Event[] = [
         kind: "list",
         label: "Format",
         intro:
-          "A timed online quiz, one official attempt. The final question count, duration and marking scheme come with the participant instructions.",
+          "Fifteen minutes, one official attempt, taken any time inside the two-hour access window. The final question count and marking scheme come with the participant instructions.",
         items: [
           "Multiple-choice and multiple-select questions",
           "Technical concept questions",
@@ -512,7 +511,14 @@ export const events: Event[] = [
       { label: "Winners", value: "60" },
       { label: "Rewards each", value: "3" },
       { label: "Entry fee", value: "₹0" },
-      { label: "Official attempts", value: "1" },
+      { label: "Quiz length", value: "15 min" },
+    ],
+    sponsors: [
+      { name: "Inkloom", role: "Title sponsor", logo: "/sponsors/inkloom.png" },
+      { name: "Miro", role: "Tooling partner", logo: "/sponsors/miro.png" },
+      { name: "n8n", role: "Tooling partner" },
+      { name: ".XYZ", role: "Domain partner", logo: "/sponsors/xyz.png" },
+      { name: "Unstop", role: "Official event partner", logo: "/sponsors/unstop.png" },
     ],
     registration: {
       note: "Free to enter. The quiz time and joining link go out by email and the official event channel.",
@@ -520,7 +526,7 @@ export const events: Event[] = [
     // As above: the seed only chooses the accent now, and "paper" matches the
     // poster it is tinting.
     posterSeed: 8016,
-    posterImage: "/posters/protocol-60.webp",
+    posterImage: "/posters/protocol-60-v2.webp",
   },
   {
     locked: true,

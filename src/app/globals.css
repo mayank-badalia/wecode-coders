@@ -460,7 +460,12 @@ html[data-wcc-seen="1"] .loader-root {
   .detail-hero-poster {
     height: auto;
     width: min(100%, 380px);
-    aspect-ratio: 1080 / 1350;
+    /*
+      Per event, from the poster file itself. One hardcoded ratio here served
+      whichever event it was copied from and letterboxed the other — the
+      number belongs to the picture, not to the stylesheet.
+    */
+    aspect-ratio: var(--poster-ratio, 3 / 4);
     margin-inline: auto;
   }
 

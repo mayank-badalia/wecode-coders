@@ -9,6 +9,7 @@ import { EventDetailMotion } from "@/components/site/EventDetailMotion";
 import { EventSections } from "@/components/site/EventSections";
 import { getAdjacentEvent, getAllEvents, getEventBySlug, getSite } from "@/lib/events";
 import { eventDurationHours, formatEventDate, formatEventTime } from "@/lib/format";
+import { webpSize } from "@/lib/imageSize";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -133,6 +134,10 @@ export default async function EventPage({ params }: Params) {
   const site = getSite();
   const hours = eventDurationHours(event.startsAt, event.endsAt);
 
+  // Read from the file, not declared beside it — see src/lib/imageSize.ts.
+  // Drives --poster-ratio so the stacked hero's box is the picture exactly.
+  const posterSize = event.posterImage ? webpSize(event.posterImage) : null;
+
   // The title sponsor is billed on its own line, above and larger than the
   // rest, so it is split off here rather than special-cased by index in JSX.
   const [titleSponsor, ...otherSponsors] = event.sponsors ?? [];
@@ -197,7 +202,16 @@ export default async function EventPage({ params }: Params) {
                 one column — height-driven beside the copy, width-driven under
                 it — and an inline height would win against that media query.
               */}
-              <div className="detail-hero-poster">
+              <div
+                className="detail-hero-poster"
+                style={
+                  posterSize
+                    ? {
+                        ["--poster-ratio" as string]: `${posterSize.width} / ${posterSize.height}`,
+                      }
+                    : undefined
+                }
+              >
                 <Poster event={event} showTitle={false} fill fit="contain" priority />
               </div>
 
