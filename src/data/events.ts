@@ -521,7 +521,9 @@ export const events: Event[] = [
       { name: "Unstop", role: "Official event partner", logo: "/sponsors/unstop.png" },
     ],
     registration: {
-      note: "Free to enter. The quiz time and joining link go out by email and the official event channel.",
+      href: "https://unstop.com/quiz/protocol-60-wecodecoders-1754684",
+      label: "Register on Unstop",
+      note: "Free to enter, one attempt per person. Registration runs through Unstop; the quiz time and joining link go out by email and the official event channel.",
     },
     // As above: the seed only chooses the accent now, and "paper" matches the
     // poster it is tinting.
