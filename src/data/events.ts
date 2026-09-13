@@ -68,12 +68,10 @@ export const events: Event[] = [
       "A showcase post on LinkedIn, Instagram and Reddit, links included",
     ],
     schedule: [
-      { when: "Sun 4 Oct, 10:00", what: "Kick-off, tracks explained, building starts" },
-      { when: "Sun 4 Oct, 14:00", what: "First checkpoint: who is your user, and how do you know" },
-      { when: "Sun 4 Oct, 20:00", what: "Mentor sessions and workshops" },
-      { when: "Mon 5 Oct, 09:00", what: "Second checkpoint: what are you cutting" },
+      { when: "Sun 4 Oct, 10:00", what: "The brief, the tracks and the submission list go out. Building starts." },
       { when: "Mon 5 Oct, 14:00", what: "Submissions close. Everything on the list is in, or it is not." },
-      { when: "Mon 5 Oct, 16:00", what: "Wrap. Shortlisted teams are invited to demo live." },
+      { when: "Mon 5 Oct, 16:00", what: "Building period ends. Judging begins on what was submitted." },
+      { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
     ],
     judging: [
       {
@@ -122,7 +120,7 @@ export const events: Event[] = [
         name: "Demonstration quality and learning velocity",
         weight: "5 points",
         detail:
-          "Does the demo show real progress made during the thirty hours? Can you say what changed, what broke, what you learned and what you would fix next?",
+          "Does the demo video show real progress made during the thirty hours? Does it say what changed, what broke, what you learned and what you would fix next?",
       },
     ],
     rewards: [
@@ -134,7 +132,7 @@ export const events: Event[] = [
       "A verifiable digital participation certificate",
       "Sponsor challenges and surprise rewards through the thirty hours",
       "A functional product you can put on a résumé or in a portfolio",
-      "Feedback from judges, mentors and reviewers",
+      "Written feedback and a score from the judges on what you submitted",
     ],
     sections: [
       {
@@ -246,14 +244,14 @@ export const events: Event[] = [
     faq: [
       { q: "Is it free?", a: "Yes. Registration costs nothing." },
       { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
-      { q: "Can beginners enter?", a: "Yes. The event is built for first-timers and experienced builders in the same room." },
+      { q: "Can beginners enter?", a: "Yes. The event is built for first-timers and experienced builders alike, judged on the same criteria." },
       { q: "Do I need an idea before I register?", a: "No. Register first and choose your problem before the building period starts." },
       { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones in your submission." },
       { q: "Can I change track?", a: "Yes, any time before final submission. Only one primary track can be selected." },
       { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable demo and a video." },
       { q: "Do the social posts really matter?", a: "Yes — all three are required. They are worth 5 points, judged on clarity and honesty. Likes and views count for nothing." },
-      { q: "Will everyone get a certificate?", a: "Certificates go to registered participants who check in, submit a valid project on time, post the three showcases and follow the rules. Registering alone does not qualify." },
+      { q: "Will everyone get a certificate?", a: "Certificates go to participants who submit a valid project on time, post the three showcases and follow the rules. Registering alone does not qualify." },
       { q: "Are the tool credits guaranteed?", a: "No. Credits, domains and subscriptions have their own eligibility rules and depend on partner confirmation and availability." },
     ],
     stats: [
