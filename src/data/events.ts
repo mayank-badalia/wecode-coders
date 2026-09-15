@@ -1,6 +1,6 @@
-// MIXED. The first two records (wcc-launchpad-30, protocol-60) are real,
-// announced events with real posters. Everything after them is still
-// placeholder and still locked.
+// MIXED. The first three records (wcc-launchpad-30, protocol-60,
+// wcc-forge-48) are real, announced events with real posters. Everything
+// after them is still placeholder and still locked.
 //
 // Every placeholder record is invented so the layout, the horizontal rail and the
 // events ring have something true-shaped to hold. No real person, partner
@@ -28,8 +28,8 @@ import type { Event } from "@/lib/types";
 
 export const events: Event[] = [
   {
-    // LIVE. The first two announced events — real content, real posters.
-    // Everything above and below this pair is still placeholder and locked.
+    // LIVE. One of three announced events — real content, real posters.
+    // Everything after them is still placeholder and locked.
     locked: false,
     slug: "wcc-launchpad-30",
     title: "WCC Launchpad 30",
@@ -527,6 +527,232 @@ export const events: Event[] = [
     // poster it is tinting.
     posterSeed: 8016,
     posterImage: "/posters/protocol-60-v2.webp",
+  },
+  {
+    // LIVE. Third announced event.
+    locked: false,
+    slug: "wcc-forge-48",
+    title: "WCC Forge 48",
+    kicker: "HACKATHON — 48 HOURS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-10-30T18:00:00+05:30",
+    endsAt: "2026-11-01T18:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "Forty-eight hours to turn a problem worth solving into a product that runs. National, online, free to enter, with ₹25,000 in cash and PPO opportunities for the top three teams.",
+    description: [
+      "WCC Forge 48 asks for one thing: a working product. Not a deck, not a concept, not an idea you would build if you had more time — something a person can open and use by the time the clock stops.",
+      "You get forty-eight hours to find a problem that genuinely exists, decide which single journey through it matters most, and build that journey until it runs reliably. Scope is the hard part. Most teams that struggle here are not short of ideas; they are short of decisions.",
+      "Projects are judged on whether they work and whether they are worth using. A narrow product with one dependable workflow beats a broad one held together with screenshots.",
+    ],
+    forWho: "Students, developers, designers, AI builders and first-time hackers.",
+    tags: [
+      "agentic ai",
+      "digital twins",
+      "human-computer interaction",
+      "open innovation",
+      "online",
+      "product building",
+    ],
+    teamSize: "1 to 4. Every member registers individually under the same team name.",
+    eligibility:
+      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is free and open nationally.",
+    brief:
+      "Find a problem worth solving and build the one workflow that solves it, in forty-eight hours.",
+    deliverables: [
+      "A working prototype or deployed product whose main workflow runs",
+      "A two-to-three-minute demonstration video and a short pitch deck",
+      "A GitHub repository judges can reach",
+      "Problem statement, solution summary and technology stack",
+      "Team-member contributions, and disclosure of external tools, APIs and reused components",
+    ],
+    schedule: [
+      { when: "15 Sep — 29 Oct", what: "Registration open. Form a team, join the official channel, take part in the giveaways and mini-challenges." },
+      { when: "Thu 29 Oct, 23:59", what: "Registration closes." },
+      { when: "Fri 30 Oct, 18:00", what: "Opening session: briefing, tracks, judging criteria and submission requirements. The 48 hours begin." },
+      { when: "Sun 1 Nov, 18:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Within 7–10 days", what: "Judging on what was submitted, then results and certificates are announced." },
+    ],
+    judging: [
+      {
+        name: "Working product and execution",
+        weight: "30%",
+        detail:
+          "Does it actually run? The central workflow has to work end to end, not in a screenshot. Reliability counts for more than surface area.",
+      },
+      {
+        name: "Real-world usefulness and impact",
+        weight: "20%",
+        detail:
+          "Is the problem real, is the user specific, and does the product measurably beat what that person does today?",
+      },
+      {
+        name: "Innovation and originality",
+        weight: "20%",
+        detail:
+          "What makes this different from the tools that already exist and the ideas that turn up at every hackathon? A distinctive insight, interaction or approach.",
+      },
+      {
+        name: "Technical implementation",
+        weight: "20%",
+        detail:
+          "How well is it built? Architecture, data flows, integrations and AI components put together with thought rather than glued together to demo once.",
+      },
+      {
+        name: "Presentation and user experience",
+        weight: "10%",
+        detail:
+          "Could the intended user work it out without a walkthrough? Does the demo video and deck explain the product clearly and honestly?",
+      },
+    ],
+    rewards: [
+      "₹25,000 in cash, shared among the top three teams",
+      "PPO opportunities for the top three teams",
+      "100+ reward recipients across the hackathon, giveaways and mini-challenges",
+      "Special awards for exceptional projects",
+      "n8n Cloud Pro, Lovable Premium, Miro Enterprise and AI tools, and a .XYZ domain",
+      "T-shirts, stickers, pens and merchandise",
+      "Workshops, technical resources and community access",
+      "Winner, finalist and participation certificates",
+      "Your project promoted through We Code Coders and its partner communities",
+    ],
+    sections: [
+      {
+        kind: "columns",
+        label: "Tracks",
+        intro:
+          "Pick one primary track. Interdisciplinary projects are welcome, but the entry has to say which track it belongs to.",
+        items: [
+          {
+            code: "01",
+            name: "Agentic AI",
+            blurb:
+              "Autonomous agents that reason, plan, use tools and finish multi-step work — with a human still able to see and steer what they do.",
+            points: [
+              "Multi-agent business systems",
+              "Research and knowledge agents",
+              "AI coding and testing agents",
+              "Autonomous education assistants",
+              "Workflow and productivity agents",
+            ],
+          },
+          {
+            code: "02",
+            name: "Digital Twins & Predictive Intelligence",
+            blurb:
+              "A digital representation of a real system, fed by data, used to monitor it, simulate it or predict what it does next.",
+            points: [
+              "Smart campus digital twins",
+              "Supply-chain simulations",
+              "Traffic and mobility prediction",
+              "Energy-consumption monitoring",
+              "Healthcare operations",
+              "Disaster-management systems",
+            ],
+          },
+          {
+            code: "03",
+            name: "Next-Generation HCI",
+            blurb:
+              "New ways for people to talk to software — beyond a form and a button. Judged on whether the interface genuinely suits the task.",
+            points: [
+              "Voice-controlled applications",
+              "Gesture-based systems",
+              "Computer-vision interfaces",
+              "AR and VR experiences",
+              "Multimodal AI applications",
+              "Accessibility-focused interfaces",
+            ],
+          },
+          {
+            code: "04",
+            name: "Open Innovation",
+            blurb:
+              "Any real problem, any industry, any stack. The problem should be specific and the user should be someone you can name.",
+            points: [
+              "Choose your own industry and audience",
+              "Any technology or framework",
+              "Judged on the same criteria as every other track",
+            ],
+          },
+        ],
+      },
+      {
+        kind: "list",
+        label: "What you must submit",
+        numbered: true,
+        intro:
+          "One final submission per team. The product does not need to be commercially launched, but its main workflow has to run and be demonstrable.",
+        items: [
+          "Project name",
+          "Selected track",
+          "Problem statement",
+          "Solution description",
+          "Working prototype or deployed product",
+          "GitHub repository judges can access",
+          "Two-to-three-minute demonstration video",
+          "Short pitch deck",
+          "Technology stack",
+          "Team-member contributions",
+          "Details of external tools, APIs, datasets and existing components used",
+        ],
+      },
+      {
+        kind: "list",
+        label: "Rules",
+        numbered: true,
+        items: [
+          "Teams may have one to four members.",
+          "Every team member registers individually, under the same team name.",
+          "AI tools, APIs, open-source libraries and frameworks are allowed.",
+          "All reused code, APIs, datasets and templates must be disclosed.",
+          "The main solution and its implementation must be built during the hackathon.",
+          "Existing projects cannot be resubmitted without significant new development.",
+          "Plagiarised or copied submissions are disqualified.",
+          "One final submission per team.",
+          "Late or incomplete submissions may not be evaluated.",
+          "A valid final submission is required for a participation certificate.",
+          "The organisers' decision on eligibility, evaluation and prizes is final.",
+        ],
+      },
+    ],
+    faq: [
+      { q: "Is it free?", a: "Yes. Registration costs nothing." },
+      { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
+      { q: "Can beginners enter?", a: "Yes. The tracks are broad enough that a first project and an experienced team can both find something to build." },
+      { q: "Does every team member have to register?", a: "Yes, individually — and everyone must use the same team name so the entries can be matched up." },
+      { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
+      { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones, along with any reused code, APIs and datasets, in your submission." },
+      { q: "Can I bring an existing project?", a: "Not as it stands. The main solution has to be built during the 48 hours, and an old project resubmitted without significant new work does not qualify." },
+      { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable prototype and a video that shows it running." },
+      { q: "When are results announced?", a: "Within seven to ten days of the hackathon ending, once every eligible submission has been judged." },
+      { q: "Will everyone get a certificate?", a: "A verifiable participation certificate goes to every eligible participant who makes a valid final submission. Registering without submitting does not qualify." },
+      { q: "Are the tool credits guaranteed?", a: "No. Credits, domains and subscriptions have their own eligibility rules and depend on sponsor availability, redemption conditions and any announced event tasks." },
+      { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
+      { q: "Are the PPO opportunities guaranteed?", a: "No. They are subject to the recruiting partner's own eligibility requirements and selection process." },
+    ],
+    stats: [
+      { label: "Hours to build", value: "48" },
+      { label: "Cash prize", value: "₹25,000" },
+      { label: "Reward recipients", value: "100+" },
+      { label: "Per team", value: "1–4" },
+    ],
+    sponsors: [
+      { name: "Inkloom", role: "Title sponsor", logo: "/sponsors/inkloom.png" },
+      { name: "Unstop", role: "Official event partner", logo: "/sponsors/unstop.png" },
+      { name: "n8n", role: "Tooling partner" },
+      { name: "Miro", role: "Tooling partner", logo: "/sponsors/miro.png" },
+      { name: ".XYZ", role: "Domain partner", logo: "/sponsors/xyz.png" },
+    ],
+    registration: {
+      note: "Free to enter, in teams of one to four. Registration closes 29 October at 23:59 IST; every member registers individually under the same team name.",
+    },
+    // Chosen so the generated ground is "paper", matching the artwork the
+    // hover tint and the ring's glow are pulled from.
+    posterSeed: 9001,
+    posterImage: "/posters/wcc-forge-48.webp",
   },
   {
     locked: true,

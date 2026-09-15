@@ -57,9 +57,10 @@ describe("webpSize", () => {
       expect(size, `${e.slug} poster header should parse`).not.toBeNull();
       expect(size!.width).toBeGreaterThan(200);
       expect(size!.height).toBeGreaterThan(200);
-      // Every poster on this site is portrait. A landscape result would mean
-      // the width and height fields were read in the wrong order.
-      expect(size!.height).toBeGreaterThan(size!.width);
+      // Portrait or square — never landscape. Forge 48's artwork is square,
+      // so this cannot demand portrait, but a landscape result would still
+      // mean the width and height fields were read in the wrong order.
+      expect(size!.height).toBeGreaterThanOrEqual(size!.width);
     }
   });
 
