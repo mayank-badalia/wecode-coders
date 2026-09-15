@@ -763,7 +763,7 @@ export default async function EventPage({ params }: Params) {
               >
                 {event.registration.href
                   ? (event.registration.label ?? "Register now")
-                  : "Registration opens soon"}
+                  : (event.registration.label ?? "Registration opens soon")}
               </p>
               {event.registration.note && (
                 <p
