@@ -747,10 +747,9 @@ export const events: Event[] = [
       { name: ".XYZ", role: "Domain partner", logo: "/sponsors/xyz.png" },
     ],
     registration: {
-      // No link yet. `label` carries the state so the page says what is true
-      // rather than defaulting to "Registration opens soon", which it is not.
-      label: "Registrations are open",
-      note: "Free to enter, in teams of one to four. Registration closes 29 October at 23:59 IST, and every member registers individually under the same team name. The registration link goes out on the official channel and the We Code Coders socials.",
+      href: "https://unstop.com/p/wcc-forge-48-wecodecoders-1756040",
+      label: "Register on Unstop",
+      note: "Free to enter, in teams of one to four. Registration closes 29 October at 23:59 IST, and every member registers individually on Unstop under the same team name.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
