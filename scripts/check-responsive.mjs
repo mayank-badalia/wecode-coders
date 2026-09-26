@@ -38,7 +38,14 @@ async function detailRoutes(page, base) {
   return [published, locked].filter(Boolean);
 }
 
-const ROUTES = ["/", "/events", "/about"];
+/*
+  /verify is here because the certificate lookup is the one page a stranger
+  reaches from a phone camera, having scanned a QR off a printed certificate.
+  It is the most likely of all our routes to be seen on a small screen first.
+  The [id] result page is covered by a known-bad id, which renders the
+  not-found state — same layout, no dependency on a record existing.
+*/
+const ROUTES = ["/", "/events", "/about", "/verify", "/verify/L30-ZZZZZZ"];
 const MIN_FONT = 11;
 const MIN_TAP = 40;
 

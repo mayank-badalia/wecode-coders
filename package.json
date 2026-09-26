@@ -14,7 +14,9 @@
     "check": "tsc --noEmit && eslint . && vitest run && node scripts/check-burst.mjs",
     "filmstrip": "node scripts/filmstrip.mjs",
     "gen:logo": "node scripts/gen-logo.mjs",
-    "check:responsive": "node scripts/check-responsive.mjs"
+    "check:responsive": "node scripts/check-responsive.mjs",
+    "certs:issue": "tsx scripts/issue-certificates.mjs",
+    "certs:render": "tsx scripts/render-certificates.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -41,6 +43,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.3",
     "jsdom": "^30.0.1",
+    "qrcode": "^1.5.4",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.11"

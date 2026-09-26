@@ -1,0 +1,114 @@
+#!/usr/bin/env node
+/*
+  Issue certificates from a registration CSV.
+
+  Idempotent on (email, event): running it twice does not give anyone a second
+  certificate, and re-running after adding rows only issues the new ones. That
+  matters because the store is committed — a duplicate would be a second valid
+  id for the same person, and there would be no way to tell which is "the" one.
+
+  Names are normalised through the same function the site uses, so what is
+  printed matches what /verify shows, character for character.
+
+  Run it with tsx, not node: it imports the shared helpers from
+  src/lib/certificates.ts, and only tsx resolves the "@/" path alias.
+
+  Usage:
+    npx tsx scripts/issue-certificates.mjs <csv> <event-slug> <id-prefix> [--role=participant] [--write]
+
+  Without --write it prints what it would do and changes nothing.
+*/
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
+import { normaliseName, generateCertificateId, isCertificateId } from "../src/lib/certificates.ts";
+
+const [csvPath, eventSlug, prefix] = process.argv.slice(2);
+const flags = process.argv.slice(2).filter((a) => a.startsWith("--"));
+const write = flags.includes("--write");
+const role = (flags.find((f) => f.startsWith("--role="))?.split("=")[1] ?? "participant").trim();
+
+if (!csvPath || !eventSlug || !prefix) {
+  console.error("usage: npx tsx scripts/issue-certificates.mjs <csv> <event-slug> <id-prefix> [--role=participant] [--write]");
+  process.exit(1);
+}
+if (!["participant", "finalist", "winner"].includes(role)) {
+  console.error(`unknown role "${role}" — use participant, finalist or winner`);
+  process.exit(1);
+}
+
+/* Minimal CSV reader: quoted fields, embedded commas and doubled quotes. */
+function parseCsv(text) {
+  const rows = [];
+  let row = [], field = "", quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quoted) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; }
+        else quoted = false;
+      } else field += c;
+    } else if (c === '"') quoted = true;
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+    else if (c !== "\r") field += c;
+  }
+  if (field || row.length) { row.push(field); rows.push(row); }
+  return rows.filter((r) => r.some((f) => f.trim() !== ""));
+}
+
+const raw = readFileSync(csvPath, "utf8").replace(/^﻿/, "");
+const [header, ...dataRows] = parseCsv(raw);
+const col = (name) => header.findIndex((h) => h.trim().toLowerCase() === name.toLowerCase());
+
+const iName = col("Candidate's Name");
+const iEmail = col("Candidate's Email");
+const iTeam = col("Team Name");
+if (iName === -1 || iEmail === -1) {
+  console.error(`CSV needs "Candidate's Name" and "Candidate's Email" columns. Found: ${header.join(", ")}`);
+  process.exit(1);
+}
+
+const storePath = join("src", "data", "certificates", `${eventSlug}.json`);
+const existing = existsSync(storePath) ? JSON.parse(readFileSync(storePath, "utf8")) : [];
+
+// Issued-to is keyed by email so a re-run is a no-op, and ids are checked for
+// collisions against everything already issued for this event.
+const byEmail = new Map(existing.map((c) => [String(c.email ?? "").toLowerCase(), c]));
+const usedIds = new Set(existing.map((c) => c.id));
+
+const issuedAt = new Date().toISOString().slice(0, 10);
+const added = [];
+const skipped = [];
+
+for (const r of dataRows) {
+  const email = (r[iEmail] ?? "").trim().toLowerCase();
+  const name = normaliseName(r[iName] ?? "");
+  if (!email || !name) { skipped.push(`${email || "(no email)"}: missing name or email`); continue; }
+  if (byEmail.has(email)) { skipped.push(`${email}: already has ${byEmail.get(email).id}`); continue; }
+
+  let id;
+  do { id = generateCertificateId(prefix); } while (usedIds.has(id));
+  usedIds.add(id);
+
+  const team = iTeam === -1 ? "" : (r[iTeam] ?? "").trim();
+  const cert = { id, name, email, event: eventSlug, role, issuedAt, ...(team ? { teamName: team } : {}) };
+  if (!isCertificateId(id)) throw new Error(`generated an id that fails validation: ${id}`);
+  added.push(cert);
+  byEmail.set(email, cert);
+}
+
+console.log(`csv rows         ${dataRows.length}`);
+console.log(`already issued   ${skipped.filter((s) => s.includes("already has")).length}`);
+console.log(`unusable rows    ${skipped.filter((s) => s.includes("missing")).length}`);
+console.log(`to issue         ${added.length}`);
+for (const a of added.slice(0, 5)) console.log(`   ${a.id}  ${a.name}`);
+if (added.length > 5) console.log(`   … and ${added.length - 5} more`);
+
+if (!write) {
+  console.log("\nDry run — nothing written. Re-run with --write to issue.");
+  process.exit(0);
+}
+
+const merged = [...existing, ...added];
+writeFileSync(storePath, JSON.stringify(merged, null, 2) + "\n");
+console.log(`\nWrote ${merged.length} certificates to ${storePath}`);

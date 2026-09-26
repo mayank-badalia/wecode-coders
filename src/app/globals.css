@@ -716,6 +716,71 @@ a.detail-cta--signal:focus-visible {
 }
 
 /*
+  The certificate lookup form.
+
+  Geometry lives here rather than inline so the coarse-pointer rules below can
+  reach it — the input and the button both have to clear the 44px tap floor,
+  and an inline height would beat that media query.
+*/
+.verify-form {
+  max-width: 34rem;
+}
+
+.verify-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.7rem;
+}
+
+.verify-input {
+  flex: 1 1 14rem;
+  min-height: 48px;
+  padding: 0.7em 1em;
+  border: 1px solid rgba(243, 239, 229, 0.3);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.verify-input::placeholder {
+  color: rgba(243, 239, 229, 0.4);
+  text-transform: uppercase;
+}
+
+.verify-input:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+.verify-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  min-height: 48px;
+  padding: 0.7em 1.6em;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-signal);
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.verify-submit:hover,
+.verify-submit:focus-visible {
+  opacity: 0.9;
+}
+
+/*
   Touch targets.
 
   An audit across eight viewports found controls as small as 46x20 — a Close

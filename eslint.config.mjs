@@ -52,8 +52,12 @@ const eslintConfig = defineConfig([
     rules: { "no-restricted-imports": "off" },
   },
   {
-    // The seam itself must import the data modules directly.
-    files: ["src/lib/events.ts"],
+    /*
+      The seams themselves must import the data modules directly. Certificates
+      are their own seam: records live in src/data/certificates and everything
+      else reads them through "@/lib/certificates".
+    */
+    files: ["src/lib/events.ts", "src/lib/certificates.ts"],
     rules: { "no-restricted-imports": "off" },
   },
   {
