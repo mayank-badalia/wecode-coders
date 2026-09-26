@@ -180,4 +180,96 @@ describe("events seam", () => {
       expect(s.label).toBeTruthy();
     }
   });
+
+  /*
+    We do not issue problem statements, and no page may suggest otherwise.
+
+    A team that arrives expecting a brief has already lost the first fifteen
+    points, which are awarded for finding a real problem and evidencing it.
+    This scans every published word for copy that promises one, while leaving
+    alone the legitimate uses — asking a team to *submit* the problem it chose,
+    or saying outright that none are given.
+  */
+  it("never promises that problem statements will be provided", () => {
+    const PROMISED =
+      /problem statements? (?:will be|are|is|shall be)\s+(?:given|provided|shared|released|announced|revealed|sent|assigned|issued|published)|(?:we|organisers?|judges?) (?:will )?(?:give|provide|share|release|announce|assign|issue)\s+(?:the |a |you )?problem statements?/i;
+    // "No problem statements are issued" is the opposite of a promise, so a
+    // negated sentence is checked no further. Sentence-level, not line-level:
+    // a "no" three sentences away must not excuse a promise.
+    const NEGATED = /\b(?:no|not|never|none|without|nobody)\b/i;
+    const sentences = (line: string) => line.split(/(?<=[.!?])\s+/);
+
+    const words = (e: (typeof published)[number]): string[] => [
+      e.summary,
+      e.brief,
+      e.forWho,
+      e.eligibility,
+      ...e.description,
+      ...e.deliverables,
+      ...(e.rewards ?? []),
+      ...(e.faq ?? []).flatMap((f) => [f.q, f.a]),
+      ...(e.schedule ?? []).map((r) => r.what),
+      ...(e.judging ?? []).map((j) => j.detail),
+      ...(e.sections ?? []).flatMap((sec) =>
+        sec.kind === "list"
+          ? [sec.label, sec.intro ?? "", ...sec.items]
+          : [sec.label, sec.intro ?? "", ...sec.items.flatMap((i) => [i.name, i.blurb ?? "", ...i.points])],
+      ),
+    ];
+
+    for (const e of published) {
+      for (const line of words(e)) {
+        for (const sentence of sentences(line)) {
+          if (NEGATED.test(sentence)) continue;
+          expect(
+            sentence,
+            `${e.slug} promises a problem statement: ${sentence}`,
+          ).not.toMatch(PROMISED);
+        }
+      }
+    }
+  });
+
+  /*
+    The series is judged on identical criteria, which is a promise made to
+    entrants who pick between two events on the same weekend. Shared constants
+    make that true today; this keeps it true after someone edits one record.
+  */
+  it("judges the October series on identical criteria", () => {
+    const series = published.filter((e) => e.posterSeed >= 9101 && e.posterSeed <= 9106);
+    expect(series).toHaveLength(6);
+
+    const shape = (e: (typeof series)[number]) =>
+      JSON.stringify((e.judging ?? []).map((j) => [j.name, j.weight]));
+    expect(new Set(series.map(shape)).size).toBe(1);
+
+    const total = (e: (typeof series)[number]) =>
+      (e.judging ?? []).reduce((sum, j) => sum + Number.parseInt(j.weight ?? "0", 10), 0);
+    for (const e of series) expect(total(e), e.slug).toBe(100);
+
+    // Three tracks, the same three, and no others.
+    for (const e of series) {
+      const tracks = e.sections?.find((sec) => sec.label === "Tracks");
+      expect(tracks?.kind, e.slug).toBe("columns");
+      if (tracks?.kind !== "columns") continue;
+      expect(tracks.items.map((i) => i.name)).toEqual([
+        "Agentic AI",
+        "Full-Stack Product Engineering",
+        "Open Innovation",
+      ]);
+    }
+  });
+
+  it("tells the series it must build inside the hackathon window", () => {
+    const series = published.filter((e) => e.posterSeed >= 9101 && e.posterSeed <= 9106);
+    for (const e of series) {
+      const rules = e.sections?.find((sec) => sec.label === "Rules");
+      expect(rules?.kind, e.slug).toBe("list");
+      if (rules?.kind !== "list") continue;
+      const text = rules.items.join(" ");
+      expect(text, e.slug).toMatch(/inside the official hackathon window/i);
+      // The deterrent only works if the page says the checking happens.
+      expect(text, e.slug).toMatch(/commit history|timestamps|build logs/i);
+    }
+  });
 });
