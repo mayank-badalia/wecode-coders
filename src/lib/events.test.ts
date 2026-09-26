@@ -85,6 +85,108 @@ describe("events seam", () => {
     expect(ranks[0]).toBe(0);
   });
 
+  it("scores every event out of 100, and scores none of them on posts", () => {
+    /*
+      The showcase posts are mandatory and unscored. They were worth 5, which
+      meant a team could lose marks on the product and make them back on a
+      caption; now every point on the sheet is for the thing that was built,
+      and the rules are what require the posts.
+
+      The total matters because the weights are published. Taking a criterion
+      out without moving its points would quietly rescale everyone's score.
+    */
+    for (const e of published) {
+      if (!e.judging) continue;
+
+      for (const j of e.judging) {
+        expect(
+          `${j.name} ${j.detail}`,
+          `${e.slug} scores posts: ${j.name}`,
+        ).not.toMatch(/linkedin|instagram|storytelling|showcase post/i);
+      }
+
+      /*
+        Protocol//60 is a quiz and publishes its criteria without weights, by
+        design — see the `weight` field on the Event type. A table either
+        publishes weights or it does not; a half-weighted one would print a
+        total nobody can act on.
+      */
+      const weighted = e.judging.filter((j) => j.weight);
+      if (weighted.length === 0) continue;
+      expect(weighted.length, `${e.slug} weights only some criteria`).toBe(
+        e.judging.length,
+      );
+
+      const total = weighted.reduce(
+        (sum, j) => sum + Number.parseInt(j.weight ?? "0", 10),
+        0,
+      );
+      expect(total, `${e.slug} totals ${total}`).toBe(100);
+    }
+  });
+
+  it("still requires the posts it no longer scores", () => {
+    /*
+      Dropping them from judging must not quietly drop them from the ask.
+
+      Only for events that ask: Forge 48 never wanted showcase posts and has
+      no rule about them, which is correct and not something to enforce onto
+      every event on the site.
+    */
+    for (const e of published) {
+      const asks = e.deliverables.some((d) => /linkedin|instagram/i.test(d));
+      if (!asks) continue;
+      const rules = e.sections?.find((sec) => sec.label === "Rules");
+      expect(rules?.kind, `${e.slug} asks for posts but publishes no rules`).toBe(
+        "list",
+      );
+      if (rules?.kind !== "list") continue;
+      expect(rules.items.join(" "), e.slug).toMatch(/showcase posts/i);
+    }
+  });
+
+  it("runs for as long as its kicker says it does", () => {
+    /*
+      "Runs for" on a detail page is computed from startsAt and endsAt, not
+      from the kicker — so a window that disagrees with the label publishes
+      both numbers on the same page. Five events said HACKATHON — 48 HOURS
+      while their timestamps spanned 56, because they ran 10:00 to 18:00 two
+      days later.
+    */
+    for (const e of published) {
+      const claimed = /(\d+)\s*HOURS/i.exec(e.kicker);
+      if (!claimed) continue;
+      const hours =
+        (new Date(e.endsAt).getTime() - new Date(e.startsAt).getTime()) / 3_600_000;
+      expect(hours, `${e.slug} says ${claimed[1]}h`).toBe(Number(claimed[1]));
+    }
+  });
+
+  it("agrees with itself about team size", () => {
+    // FutureStack takes teams of six and everything else takes four. The
+    // number appears in teamSize, in the stats strip, in the schedule and in
+    // the registration note, and a page that contradicts the poster beside it
+    // is worse than one that says nothing.
+    for (const e of published) {
+      const max = /1 to (\d+)/.exec(e.teamSize)?.[1];
+      if (!max) continue;
+      const stat = e.stats?.find((x) => x.label === "Per team")?.value;
+      if (stat) expect(stat, e.slug).toBe(`1\u2013${max}`);
+
+      const words: Record<string, string> = { "4": "four", "6": "six" };
+      const word = words[max];
+      const prose = [
+        e.registration?.note ?? "",
+        ...(e.schedule ?? []).map((r) => r.what),
+      ].join(" ");
+      if (word && /one to (four|six)/.test(prose)) {
+        expect(prose, e.slug).not.toMatch(
+          new RegExp(`one to (?!${word})(four|six)`),
+        );
+      }
+    }
+  });
+
   it("publishes no locked events at all today", () => {
     // The placeholder run is gone. This is not a permanent rule — it records
     // that nothing is currently held back, so the vacuous leak tests below
@@ -269,10 +371,6 @@ describe("events seam", () => {
     const shape = (e: (typeof series)[number]) =>
       JSON.stringify((e.judging ?? []).map((j) => [j.name, j.weight]));
     expect(new Set(series.map(shape)).size).toBe(1);
-
-    const total = (e: (typeof series)[number]) =>
-      (e.judging ?? []).reduce((sum, j) => sum + Number.parseInt(j.weight ?? "0", 10), 0);
-    for (const e of series) expect(total(e), e.slug).toBe(100);
 
     // Three tracks, the same three, and no others.
     for (const e of series) {

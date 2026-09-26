@@ -125,6 +125,12 @@ const SERIES_TRACKS: EventSection = {
  * Takes the duration in words only because the last criterion names it. The
  * weights total 100 and are published, so a team can see where the marks are
  * before it decides what to spend its hours on.
+ *
+ * Nothing here scores the showcase posts. They are still required — a
+ * submission without them is incomplete, and the rules say so — but they are
+ * a condition of entry rather than a way to earn marks, so every point on the
+ * sheet is for the product. The five they used to carry went back to the
+ * solution, the engineering and the usability.
  */
 function seriesJudging(durationWords: string) {
   return [
@@ -136,13 +142,13 @@ function seriesJudging(durationWords: string) {
     },
     {
       name: "Strength of the core solution",
-      weight: "20 points",
+      weight: "22 points",
       detail:
         "Does the product solve the problem you named, directly? Is the main workflow focused, useful, and does it produce a clear outcome?",
     },
     {
       name: "Technical depth and reliability",
-      weight: "20 points",
+      weight: "22 points",
       detail:
         "How well have you used what you chose? Does it work consistently? Are the integrations, data flows and AI components put together with thought?",
     },
@@ -154,7 +160,7 @@ function seriesJudging(durationWords: string) {
     },
     {
       name: "Real-world usability",
-      weight: "10 points",
+      weight: "11 points",
       detail:
         "Could the intended user work it out without a walkthrough? Is it accessible and practical in the setting it is meant for?",
     },
@@ -163,12 +169,6 @@ function seriesJudging(durationWords: string) {
       weight: "10 points",
       detail:
         "Privacy, security, bias, transparency, accessibility and human oversight, where they are relevant. Do users keep control of the decisions that matter?",
-    },
-    {
-      name: "Public product storytelling",
-      weight: "5 points",
-      detail:
-        "How well do your LinkedIn and Instagram posts explain the product and why it matters? Judged on clarity and honesty, never on likes.",
     },
     {
       name: "Demonstration quality and learning velocity",
@@ -227,15 +227,13 @@ function seriesFaq(durationWords: string) {
     { q: "Are problem statements provided?", a: "No. You pick one of the three tracks and choose your own problem to solve inside it. Showing that the problem is real is worth 15 points." },
     { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
     { q: "Can beginners enter?", a: "Yes. The event is built for first-timers and experienced builders alike, judged on the same criteria." },
-    { q: "Do I need an idea before I register?", a: `No. Register first and choose your problem before the ${durationWords} start.` },
     { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
     { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones in your submission." },
     { q: "Can I use something I built earlier?", a: "No. The product has to be built during the event, and submissions are checked. Disclosed reusable components are fine; a finished project is not." },
     { q: "Can I change track?", a: "Yes, any time before final submission. Only one primary track can be selected." },
     { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable demo and a video." },
-    { q: "Do the social posts really matter?", a: "Yes — both are required. They are worth 5 points, judged on clarity and honesty. Likes and views count for nothing." },
+    { q: "Do the social posts really matter?", a: "Yes. Both are required and a submission without them is incomplete — but they carry no points. Every mark on the sheet is for the product." },
     { q: "Will everyone get a certificate?", a: "Certificates go to participants who submit a valid project on time and follow the rules. Registering alone does not qualify." },
-    { q: "Are the tool credits guaranteed?", a: "No. Credits, domains and subscriptions have their own eligibility rules and depend on partner confirmation and availability." },
   ];
 }
 
@@ -307,13 +305,13 @@ export const events: Event[] = [
       },
       {
         name: "Strength of the core solution",
-        weight: "20 points",
+        weight: "22 points",
         detail:
           "Does the product solve the problem you named, directly? Is the main workflow focused, useful, and does it produce a clear outcome?",
       },
       {
         name: "Technical depth and reliability",
-        weight: "20 points",
+        weight: "22 points",
         detail:
           "How well have you used what you chose? Does it work consistently? Are the integrations, data flows and AI components put together with thought?",
       },
@@ -325,7 +323,7 @@ export const events: Event[] = [
       },
       {
         name: "Real-world usability",
-        weight: "10 points",
+        weight: "11 points",
         detail:
           "Could the intended user work it out without a walkthrough? Is it accessible and practical in the setting it is meant for?",
       },
@@ -334,12 +332,6 @@ export const events: Event[] = [
         weight: "10 points",
         detail:
           "Privacy, security, bias, transparency, accessibility and human oversight, where they are relevant. Do users keep control of the decisions that matter?",
-      },
-      {
-        name: "Public product storytelling",
-        weight: "5 points",
-        detail:
-          "How well do your LinkedIn and Instagram posts explain the product and why it matters? Judged on clarity and honesty, never on likes.",
       },
       {
         name: "Demonstration quality and learning velocity",
@@ -446,14 +438,12 @@ export const events: Event[] = [
       { q: "Is it free?", a: "Yes. Registration costs nothing." },
       { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
       { q: "Can beginners enter?", a: "Yes. The event is built for first-timers and experienced builders alike, judged on the same criteria." },
-      { q: "Do I need an idea before I register?", a: "No. Register first and choose your problem before the building period starts." },
       { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones in your submission." },
       { q: "Can I change track?", a: "Yes, any time before final submission. Only one primary track can be selected." },
       { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable demo and a video." },
-      { q: "Do the social posts really matter?", a: "Yes — both are required. They are worth 5 points, judged on clarity and honesty. Likes and views count for nothing." },
+      { q: "Do the social posts really matter?", a: "Yes. Both are required and a submission without them is incomplete — but they carry no points. Every mark on the sheet is for the product." },
       { q: "Will everyone get a certificate?", a: "Certificates go to participants who submit a valid project on time, post both showcases and follow the rules. Registering alone does not qualify." },
-      { q: "Are the tool credits guaranteed?", a: "No. Credits, domains and subscriptions have their own eligibility rules and depend on partner confirmation and availability." },
     ],
     stats: [
       { label: "Hours to build", value: "30" },
@@ -910,7 +900,6 @@ export const events: Event[] = [
       { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable prototype and a video that shows it running." },
       { q: "When are results announced?", a: "Within seven to ten days of the hackathon ending, once every eligible submission has been judged." },
       { q: "Will everyone get a certificate?", a: "A verifiable participation certificate goes to every eligible participant who makes a valid final submission. Registering without submitting does not qualify." },
-      { q: "Are the tool credits guaranteed?", a: "No. Credits, domains and subscriptions have their own eligibility rules and depend on sponsor availability, redemption conditions and any announced event tasks." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
       { q: "Are the PPO opportunities guaranteed?", a: "No. They are subject to the recruiting partner's own eligibility requirements and selection process." },
     ],
@@ -948,7 +937,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
-    endsAt: "2026-10-22T18:00:00+05:30",
+    endsAt: "2026-10-22T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1026,7 +1015,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
-    endsAt: "2026-10-22T18:00:00+05:30",
+    endsAt: "2026-10-22T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1045,7 +1034,7 @@ export const events: Event[] = [
       "national",
       "48 hours",
     ],
-    teamSize: "1 to 4. Every participant belongs to one team only.",
+    teamSize: "1 to 6. Every participant belongs to one team only.",
     eligibility:
       "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is free and open nationally.",
     brief:
@@ -1058,7 +1047,7 @@ export const events: Event[] = [
       "A showcase post on LinkedIn and Instagram, links included",
     ],
     schedule: [
-      { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official channel." },
+      { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to six and join the official channel." },
       { when: "Tue 20 Oct", what: "The tracks, the judging criteria and the submission list go out. The 48 hours begin." },
       { when: "Thu 22 Oct", what: "Submissions close. Everything on the list is in, or it is not." },
       { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
@@ -1079,19 +1068,19 @@ export const events: Event[] = [
     stats: [
       { label: "Hours to build", value: "48" },
       { label: "Reward recipients", value: "100+" },
-      { label: "Per team", value: "1–4" },
+      { label: "Per team", value: "1–6" },
       { label: "Entry", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/futurestack-hackathon-wecodecoders-1758558",
       label: "Register on Unstop",
-      note: "Free to enter, in teams of one to four. Registration closes 19 October at 23:59 IST.",
+      note: "Free to enter, in teams of one to six. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
     posterSeed: 9102,
-    posterImage: "/posters/future-stack-v2.webp",
+    posterImage: "/posters/future-stack-v3.webp",
   },
   {
     // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
@@ -1104,7 +1093,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
-    endsAt: "2026-10-22T18:00:00+05:30",
+    endsAt: "2026-10-22T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1182,7 +1171,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-24T10:00:00+05:30",
-    endsAt: "2026-10-26T18:00:00+05:30",
+    endsAt: "2026-10-26T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1338,7 +1327,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-28T10:00:00+05:30",
-    endsAt: "2026-10-30T18:00:00+05:30",
+    endsAt: "2026-10-30T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
