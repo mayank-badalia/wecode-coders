@@ -25,6 +25,22 @@ export type Certificate = {
   issuedAt: string;
   /** Shown on the verify page when present. */
   teamName?: string;
+  /*
+    What the certificate actually says the holder did.
+
+    Kept on the certificate rather than derived from the event record, because
+    the two are not always the same thing: this batch is a sponsored challenge
+    that ran inside WCC Launchpad 30 on its own days, so taking the title and
+    dates off the parent event printed a date nine days in the future.
+  */
+  award?: {
+    /** Headline of the thing taken part in. */
+    title: string;
+    /** Where it sits — e.g. the parent event. */
+    context?: string;
+    /** "36 hours". Printed as part of the citation. */
+    duration?: string;
+  };
 };
 
 /*

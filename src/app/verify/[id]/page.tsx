@@ -4,8 +4,6 @@ import { TransitionLink } from "@/components/motion/TransitionLink";
 import { Arrow } from "@/components/site/Arrow";
 import { Certificate } from "@/components/site/Certificate";
 import { certificatesWithin, findCertificate } from "@/lib/certificates";
-import { getEventBySlug } from "@/lib/events";
-import { formatEventDate } from "@/lib/format";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -45,10 +43,6 @@ export default async function VerifyPage({ params }: Params) {
   // When an id does not resolve, it is usually two ids joined by a mail client
   // rather than a forgery. Offer what is actually in there.
   const embedded = cert ? [] : certificatesWithin(id);
-
-  const event = cert ? getEventBySlug(cert.event) : null;
-  const eventTitle = event && !event.locked ? event.title : (cert?.event ?? "");
-  const eventDates = event && !event.locked ? formatEventDate(event.startsAt, event.endsAt) : "";
 
   const verifyUrl = cert ? `${SITE}/verify/${cert.id}` : "";
   const qr = cert
@@ -91,8 +85,6 @@ export default async function VerifyPage({ params }: Params) {
             <div style={{ margin: "clamp(2rem, 5vh, 3rem) 0 0" }}>
               <Certificate
                 cert={cert}
-                eventTitle={eventTitle}
-                eventDates={eventDates}
                 verifyUrl={verifyUrl.replace(/^https?:\/\//, "")}
                 qr={qr}
               />
@@ -110,7 +102,9 @@ export default async function VerifyPage({ params }: Params) {
             >
               {[
                 ["Issued to", cert.name],
-                ["Event", eventTitle],
+                ["Awarded for", cert.award?.title ?? cert.event],
+                ...(cert.award?.context ? [["Part of", cert.award.context]] : []),
+                ...(cert.award?.duration ? [["Format", `${cert.award.duration} challenge`]] : []),
                 ["Awarded as", ROLE_COPY[cert.role] ?? cert.role],
                 ...(cert.teamName ? [["Team", cert.teamName]] : []),
                 ["Issued", cert.issuedAt],

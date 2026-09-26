@@ -716,10 +716,10 @@ a.detail-cta--signal:focus-visible {
 }
 
 /*
-  The certificate, shown at true A4 landscape proportions.
+  The certificate, at true A4 landscape proportions.
 
-  One root font-size in cqw drives every dimension, so the whole thing scales
-  from a 1440px desktop down to a 360px phone without a single breakpoint and
+  One root font-size in cqw drives every dimension, so it scales from a 1440px
+  desktop to a 360px phone to an A4 print page without a single breakpoint and
   without ever changing shape. That is why nothing here is in px.
 */
 .cert-stage {
@@ -735,49 +735,55 @@ a.detail-cta--signal:focus-visible {
   font-size: 2.15cqw;
   font-family: var(--font-body);
   overflow: hidden;
-  border-radius: 0.3em;
 }
 
+/* Two rules, not a box: a hairline inset inside a heavier one reads as print. */
 .cert-frame {
   position: absolute;
-  inset: 2.2em;
-  border: 0.07em solid var(--color-ink);
+  inset: 1.7em;
+  border: 0.16em solid var(--color-ink);
+}
+
+.cert-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0.42em;
+  border: 0.035em solid var(--color-ink);
+  opacity: 0.45;
 }
 
 .cert-inner {
   position: absolute;
-  inset: 4em 4.6em;
+  inset: 3.6em 4.4em;
   display: flex;
   flex-direction: column;
 }
 
 .cert-mono {
   font-family: var(--font-mono);
-  font-size: 0.62em;
-  letter-spacing: 0.16em;
+  font-size: 0.6em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  margin: 0;
 }
 
 .cert-head {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: baseline;
+  gap: 2em;
+  padding-bottom: 1.1em;
+  border-bottom: 0.05em solid var(--color-paper-2);
 }
 
-.cert-wordmark {
-  font-weight: 800;
-  font-size: 1.05em;
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-}
-
-.cert-wordmark span {
+.cert-kind {
   color: var(--color-signal);
+  font-weight: 600;
 }
 
-.cert-event {
-  text-align: right;
+.cert-context {
   color: var(--color-ink-60);
+  text-align: right;
 }
 
 .cert-body {
@@ -785,6 +791,7 @@ a.detail-cta--signal:focus-visible {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 1.4em 0;
 }
 
 .cert-awarded {
@@ -792,23 +799,23 @@ a.detail-cta--signal:focus-visible {
 }
 
 .cert-name {
-  font-size: 3.4em;
+  font-size: 3.5em;
   font-weight: 800;
   line-height: 1.02;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
-  margin: 0.12em 0 0.16em;
+  margin: 0.14em 0 0.18em;
 }
 
-/* Four-word names exist in the real data; they get a step down, not a crop. */
+/* Four-word names are real in this data; they get a step down, not a crop. */
 .cert-name[data-length="long"] {
-  font-size: 2.5em;
+  font-size: 2.45em;
 }
 
 .cert-citation {
-  font-size: 0.86em;
-  line-height: 1.55;
-  max-width: 34em;
+  font-size: 0.88em;
+  line-height: 1.6;
+  max-width: 38em;
   color: var(--color-ink-60);
   margin: 0;
 }
@@ -816,6 +823,38 @@ a.detail-cta--signal:focus-visible {
 .cert-citation strong {
   color: var(--color-ink);
   font-weight: 600;
+}
+
+/* Credits: who ran it, who backed it. */
+.cert-credits {
+  display: flex;
+  gap: 5.5em;
+  align-items: flex-end;
+  padding: 1.3em 0;
+  border-top: 0.05em solid var(--color-paper-2);
+}
+
+.cert-credit-role {
+  color: var(--color-ink-60);
+  margin-bottom: 0.7em;
+}
+
+/*
+  Logos are height-matched by eye, not by box: the We Code Coders mark is a
+  two-line lockup and the Inkloom mark a wide wordmark, so equal heights would
+  make one shout over the other.
+*/
+.cert-logo {
+  display: block;
+  width: auto;
+}
+
+.cert-logo--wcc {
+  height: 2.8em;
+}
+
+.cert-logo--inkloom {
+  height: 1.8em;
 }
 
 .cert-foot {
@@ -835,17 +874,18 @@ a.detail-cta--signal:focus-visible {
 
 .cert-meta dt {
   color: var(--color-ink-60);
-  margin-bottom: 0.4em;
+  margin-bottom: 0.45em;
 }
 
 .cert-meta dd {
   margin: 0;
-  font-size: 0.75em;
+  font-size: 0.72em;
   font-weight: 600;
 }
 
 .cert-id {
   font-family: var(--font-mono);
+  letter-spacing: 0.06em;
 }
 
 .cert-verify {
@@ -857,19 +897,52 @@ a.detail-cta--signal:focus-visible {
 
 .cert-verify-label {
   color: var(--color-ink-60);
-  margin: 0 0 0.4em;
+  margin-bottom: 0.45em;
 }
 
 .cert-verify-url {
-  margin: 0;
-  font-size: 0.5em;
+  font-size: 0.48em;
   white-space: nowrap;
 }
 
 .cert-qr {
-  width: 4.4em;
-  height: 4.4em;
+  width: 4.2em;
+  height: 4.2em;
   display: block;
+}
+
+/*
+  Print surface for the PDF renderer: the certificate alone on an A4 sheet.
+
+  The print route lives inside the same root layout as every other page, so
+  the nav, footer, loader, grain, grid and cursor are all still in the
+  document. Rather than restructuring the app into route groups to escape one
+  layout, everything is hidden and the certificate alone is shown again —
+  keyed off the surface being present, so no other page is affected.
+*/
+body:has(.cert-print) {
+  background: var(--color-paper);
+  overflow: hidden;
+}
+
+body:has(.cert-print) > * {
+  visibility: hidden;
+}
+
+body:has(.cert-print) .cert-print,
+body:has(.cert-print) .cert-print * {
+  visibility: visible;
+}
+
+.cert-print {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  margin: 0;
+}
+
+.cert-print .cert {
+  font-size: 2.15vw;
 }
 
 /*
