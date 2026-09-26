@@ -75,10 +75,20 @@ export function normaliseName(raw: string): string {
   const collapsed = raw.replace(/\s+/g, " ").trim();
   if (!collapsed) return "";
 
-  // Shouting is a caps-lock accident, not a spelling. Only re-case when there
-  // is no lower case at all, so intentional casing survives untouched.
-  const shouted = collapsed === collapsed.toUpperCase() && /[A-Z]/.test(collapsed);
-  const cased = shouted
+  /*
+    Case is only corrected when it is uniform — ALL CAPS or all lower. Both are
+    keyboard accidents rather than spellings, and a certificate reading "karan
+    dnyandeo ghorpade" is as wrong as one reading "RITESH KOLEY".
+
+    Anything with mixed case is left exactly as typed, which is what protects
+    McDonald, de Souza and "K S". The known cost is a name like "van der berg",
+    typed entirely lower case, becoming "Van Der Berg" — rarer in this data
+    than the lowercase names this fixes, and still a name the holder can read.
+  */
+  const hasUpper = /[A-Z]/.test(collapsed);
+  const hasLower = /[a-z]/.test(collapsed);
+  const uniformCase = hasUpper !== hasLower;
+  const cased = uniformCase
     ? collapsed
         .toLowerCase()
         .replace(/(^|[\s'-])([a-z])/g, (_, lead: string, ch: string) => lead + ch.toUpperCase())

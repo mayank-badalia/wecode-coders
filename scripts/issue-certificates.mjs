@@ -60,13 +60,44 @@ const raw = readFileSync(csvPath, "utf8").replace(/^﻿/, "");
 const [header, ...dataRows] = parseCsv(raw);
 const col = (name) => header.findIndex((h) => h.trim().toLowerCase() === name.toLowerCase());
 
-const iName = col("Candidate's Name");
-const iEmail = col("Candidate's Email");
-const iTeam = col("Team Name");
+/*
+  Column names differ by source: Unstop exports "Candidate's Name", a Google
+  Form exports whatever the question was called, usually numbered ("2. Full
+  Name"). Rather than a flag per source, match on what the header contains.
+*/
+const clean = (h) => h.trim().toLowerCase().replace(/^\d+[.)]\s*/, "").replace(/\s+/g, " ");
+
+/*
+  Needles are tried in priority order, each against every column, exact match
+  before substring. Scanning columns in the outer loop instead put the name of
+  the *hackathon* on every certificate: "1. ENTER THE NAME OF THE
+  HACKATHON/COMPETITION" contains "name" and came first in the file.
+*/
+const findCol = (...needles) => {
+  for (const n of needles) {
+    const exact = header.findIndex((h) => clean(h) === n);
+    if (exact !== -1) return exact;
+  }
+  for (const n of needles) {
+    const partial = header.findIndex((h) => clean(h).includes(n) && !NOT_A_PERSON.test(clean(h)));
+    if (partial !== -1) return partial;
+  }
+  return -1;
+};
+
+// Columns that contain "name" but never a person's.
+const NOT_A_PERSON = /hackathon|competition|event|project|team|repo|user|company|college/;
+
+const iName = findCol("candidate's name", "full name", "name");
+const iEmail = findCol("candidate's email", "email address", "email");
+const iTeam = header.findIndex((h) => clean(h) === "team name");
 if (iName === -1 || iEmail === -1) {
-  console.error(`CSV needs "Candidate's Name" and "Candidate's Email" columns. Found: ${header.join(", ")}`);
+  console.error(`Could not find name and email columns. Header was:\n  ${header.join("\n  ")}`);
   process.exit(1);
 }
+console.log(`name column      ${header[iName]}`);
+console.log(`email column     ${header[iEmail]}`);
+console.log(`team column      ${iTeam === -1 ? "(none)" : header[iTeam]}`);
 
 const storePath = join("src", "data", "certificates", `${eventSlug}.json`);
 const existing = existsSync(storePath) ? JSON.parse(readFileSync(storePath, "utf8")) : [];

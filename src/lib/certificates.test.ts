@@ -63,6 +63,11 @@ describe("normaliseName", () => {
     expect(normaliseName("MD RASHID IQBAL KHAN")).toBe("Md Rashid Iqbal Khan");
   });
 
+  it("fixes all-lowercase, which is the same accident the other way", () => {
+    expect(normaliseName("karan dnyandeo ghorpade")).toBe("Karan Dnyandeo Ghorpade");
+    expect(normaliseName("aditi sharma")).toBe("Aditi Sharma");
+  });
+
   it("collapses a surname pasted twice", () => {
     expect(normaliseName("Sakshi Pandey Pandey")).toBe("Sakshi Pandey");
     expect(normaliseName("Amulya s Amulya s s")).toBe("Amulya s Amulya s");

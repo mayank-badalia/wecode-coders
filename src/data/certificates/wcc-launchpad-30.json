@@ -1,1 +1,497 @@
-[]
+[
+  {
+    "id": "L30-JFWX36",
+    "name": "Anuska Gupta",
+    "email": "24ad127@kpriet.ac.in",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "KITKAT"
+  },
+  {
+    "id": "L30-HY7GCU",
+    "name": "Pratibha Shahi",
+    "email": "24cs267@kpriet.ac.in",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "KITKAT"
+  },
+  {
+    "id": "L30-EZRZBS",
+    "name": "Kokila Muppu",
+    "email": "kokilamuppu50@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "Rebals"
+  },
+  {
+    "id": "L30-UYJZS2",
+    "name": "Karan Dnyandeo Ghorpade",
+    "email": "contact.karanghorpade@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "void"
+  },
+  {
+    "id": "L30-NAF96A",
+    "name": "Usnish Banerjee",
+    "email": "banerjeeusnish2@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "SYNTAX SURGEONS"
+  },
+  {
+    "id": "L30-H462WJ",
+    "name": "Darshan Patil",
+    "email": "darshanpatilhere@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "ALONEXWARRIOR"
+  },
+  {
+    "id": "L30-AMU8BQ",
+    "name": "Debasmita Banik",
+    "email": "db04050607@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "Syntax Surgeons"
+  },
+  {
+    "id": "L30-SANTPX",
+    "name": "Debosmita Chowdhury",
+    "email": "debosmitachowdhury20@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "SYNTAX SURGEONS"
+  },
+  {
+    "id": "L30-23AX4R",
+    "name": "Chinta Durga Siva Manikanta Reddy",
+    "email": "sivareddych5377@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "sivareddych5377"
+  },
+  {
+    "id": "L30-ERQ445",
+    "name": "Jyansh Jain",
+    "email": "jjyanshjain@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "UNIQUE SOLVER"
+  },
+  {
+    "id": "L30-MPC4VS",
+    "name": "Vanshika",
+    "email": "vanshikaxbishnoi@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "HAAR KE JEETNE WALE"
+  },
+  {
+    "id": "L30-6576JF",
+    "name": "Shrijana Bhujel",
+    "email": "sollbhujel19@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "HAAR KE JEETNE WALE"
+  },
+  {
+    "id": "L30-V72P6A",
+    "name": "Pratik Rout",
+    "email": "routpratik2023@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "SYNTAX SURGEONS"
+  },
+  {
+    "id": "L30-HG9Z5M",
+    "name": "Riya Mishra",
+    "email": "riya.mishra200609@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "Hacks404"
+  },
+  {
+    "id": "L30-ZK2JZB",
+    "name": "Krishiv Katariya",
+    "email": "krishivkatariya8116@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "krishiv"
+  },
+  {
+    "id": "L30-9JSPJ4",
+    "name": "Anto Kingsly Christofer D",
+    "email": "antokingsly07@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "CODYSSEY"
+  },
+  {
+    "id": "L30-EC6ZM5",
+    "name": "Akshayaa Mahendran",
+    "email": "akshayaamahendran811@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "HACK FUSION"
+  },
+  {
+    "id": "L30-QHYF9E",
+    "name": "Shreemitha.v",
+    "email": "vshree0321@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "HACK FUSION"
+  },
+  {
+    "id": "L30-KM5ZT4",
+    "name": "Rohit R S",
+    "email": "rohitsaravanan925@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "HACK FUSION"
+  },
+  {
+    "id": "L30-UREQBF",
+    "name": "Narasimha reddy",
+    "email": "chennupallihari199@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "WE MAKE THINGS (SOMETIMES)"
+  },
+  {
+    "id": "L30-YNFH9K",
+    "name": "Ananya Kumari",
+    "email": "ananyakumari4712@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "coding pagluz"
+  },
+  {
+    "id": "L30-T8FMUB",
+    "name": "Shaik Sameer",
+    "email": "sameer.erml@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "WE Make Things (SOMETIMES)"
+  },
+  {
+    "id": "L30-G3PHVE",
+    "name": "Aadrita Ghosh",
+    "email": "silverari2009@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "MINDFUL MANIACS"
+  },
+  {
+    "id": "L30-V2D94M",
+    "name": "Nitya Bhoi",
+    "email": "nitya2010v@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "NityaBuilds"
+  },
+  {
+    "id": "L30-CXHCY3",
+    "name": "Raiqua Maryam",
+    "email": "raiquamaryam08@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "MINDFUL MANIACS"
+  },
+  {
+    "id": "L30-XT7UQN",
+    "name": "Aman raj",
+    "email": "aman.240101065@iiitbh.ac.in",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "FLASH DEV"
+  },
+  {
+    "id": "L30-KJ43FB",
+    "name": "Aliya Manal",
+    "email": "aliyamanal320@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "Flash dev"
+  },
+  {
+    "id": "L30-CZRU3W",
+    "name": "Singh Bhoomika",
+    "email": "sbhoomika295@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "EKLAVYA"
+  },
+  {
+    "id": "L30-QHS95V",
+    "name": "Midhula V",
+    "email": "midhulav17r@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "NEURA NOVA"
+  },
+  {
+    "id": "L30-GTJT84",
+    "name": "Tejas. N",
+    "email": "tejas38293@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "tejas38293"
+  },
+  {
+    "id": "L30-AYHTFW",
+    "name": "Logeswari M",
+    "email": "logeswari30122006@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "NEURA NOVA"
+  },
+  {
+    "id": "L30-W2E3YV",
+    "name": "Himanshu Tiwari",
+    "email": "himanshut2610@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "EKLAVYA"
+  },
+  {
+    "id": "L30-NY4Z6A",
+    "name": "Mayur More",
+    "email": "mayurpmore25@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "HACKHIVE"
+  },
+  {
+    "id": "L30-V62KUR",
+    "name": "Parshva Julesh Shah",
+    "email": "parshvapjs2007@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "HACKHIVE"
+  },
+  {
+    "id": "L30-Q4AHZV",
+    "name": "Kaustubh Subhash Chavan",
+    "email": "chavankaustubh977@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "HACKHIVE"
+  },
+  {
+    "id": "L30-67GFQZ",
+    "name": "Tanya Garg",
+    "email": "tanyagarg5315@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "YOUNGINNOVATOR"
+  },
+  {
+    "id": "L30-SS5V6N",
+    "name": "Sanjay S",
+    "email": "sanjaylearn4@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "HACK FUSION"
+  },
+  {
+    "id": "L30-AJDV44",
+    "name": "Stavan Wadekar",
+    "email": "stavan794@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "INNOVEXA"
+  },
+  {
+    "id": "L30-5DBMCE",
+    "name": "Anisha Anil Singh",
+    "email": "ans8593221@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "INNOVEXA"
+  },
+  {
+    "id": "L30-BGQ6AV",
+    "name": "Krushna Babasaheb Dhokane",
+    "email": "dhokanekrushna467@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "CODE WITH US"
+  },
+  {
+    "id": "L30-YXBB2R",
+    "name": "Vinay Rajendra Velanjkar",
+    "email": "vinayvelanjkar58@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "CODE WITH US"
+  },
+  {
+    "id": "L30-RX43JU",
+    "name": "Pagidikalva Obula Jaswanth",
+    "email": "obulajaswanthp@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "STACK SPRINTERS"
+  },
+  {
+    "id": "L30-SVB4JU",
+    "name": "Aakash",
+    "email": "aakashintern2026@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "Akaza"
+  },
+  {
+    "id": "L30-54BHE5",
+    "name": "Swikriti Das Biswas",
+    "email": "swikritidasbiswas07@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "Axiom"
+  },
+  {
+    "id": "L30-NSCP52",
+    "name": "Hiya Ladani",
+    "email": "hiya.ladani@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "NO BR(AI)NERS"
+  },
+  {
+    "id": "L30-CRPQZT",
+    "name": "Bhavya Varshney",
+    "email": "bhavya2907varshney@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "NO BR(AI)NERS"
+  },
+  {
+    "id": "L30-JFCVQM",
+    "name": "Yashi Yadav",
+    "email": "yashiyadav2811@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "NO BR(AI)NERS"
+  },
+  {
+    "id": "L30-AUE873",
+    "name": "Aishani Bhatt",
+    "email": "aishanibhatt2007@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "NO BR(AI)NERS"
+  },
+  {
+    "id": "L30-QCFGMR",
+    "name": "Rohit Pandey",
+    "email": "rohitpdev10@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "WALTER SAFED"
+  },
+  {
+    "id": "L30-TZZ2AB",
+    "name": "Vraj Prajapati",
+    "email": "mnvraj80@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "WALTER SAFED"
+  },
+  {
+    "id": "L30-GBVKF3",
+    "name": "Shaurya Jain",
+    "email": "shauryajain.it@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "WALTER SAFED"
+  },
+  {
+    "id": "L30-VDRDSK",
+    "name": "Vignesh Vijayan Nair",
+    "email": "vigvishnair@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "WALTER SAFED"
+  },
+  {
+    "id": "L30-U8CJAX",
+    "name": "Pranjal Mishra",
+    "email": "pranjalmishra9431@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "WIld Card Entry"
+  },
+  {
+    "id": "L30-4D28FW",
+    "name": "Yuvraj Singh",
+    "email": "yuvraj.0121singh@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "yuvraj.0121singh"
+  },
+  {
+    "id": "L30-AE982W",
+    "name": "Devi prashad tripathi",
+    "email": "mrravitripathi1331@gmail.com",
+    "event": "wcc-launchpad-30",
+    "role": "participant",
+    "issuedAt": "2026-09-26",
+    "teamName": "Ravi team"
+  }
+]
