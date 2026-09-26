@@ -13,7 +13,7 @@ import { Arrow } from "@/components/site/Arrow";
 import { formatEventDate } from "@/lib/format";
 import type { PublicEvent } from "@/lib/types";
 import { groundFor } from "@/components/poster/layouts";
-import { CAMERA_Z, EventRing } from "./EventRing";
+import { cameraZFor, EventRing } from "./EventRing";
 import { RingFallback } from "./RingFallback";
 
 const mono: React.CSSProperties = {
@@ -103,29 +103,43 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
     permanently in one flat colour no matter what was under the pointer. It is
     now driven straight from the ring's raycast, and takes that event's own
     ground colour.
-  */
-  useEffect(() => {
-    const target = hovered === null ? null : events[hovered];
-    if (!target) {
-      setCursorTarget(null);
-      return;
-    }
-    /*
-      The bubble takes the poster's own ground, and a contrasting ring keeps it
-      readable on top of it.
 
-      Inverting it instead collapsed the whole set to two colours — every
-      ground's foreground is either paper or ink — so the bubble stopped
-      changing between events, which was the point of colouring it at all.
-    */
-    const ground = groundFor(target);
-    setCursorTarget({
-      label: target.locked ? "Locked" : "Open",
-      color: ground.bg,
-      ink: ground.fg,
-      ring: ground.fg,
-    });
-  }, [hovered, events]);
+    Driven from the raycast callback rather than from an effect on `hovered`.
+    Going through React state put a full render and a passive effect between
+    the frame that detected the poster and the frame that moved the bubble —
+    which is why it lagged, and why it sometimes never arrived at all when two
+    hover changes landed inside one render pass and the intermediate value was
+    dropped. The bubble is not React state; it is a GSAP tween on a fixed
+    element, so it is told directly. `hovered` is still tracked, because the
+    stage's CSS cursor reads it, but nothing time-critical waits on it now.
+  */
+  const handleHoverChange = useCallback(
+    (index: number | null) => {
+      setHovered(index);
+
+      const target = index === null ? null : events[index];
+      if (!target) {
+        setCursorTarget(null);
+        return;
+      }
+      /*
+        The bubble takes the poster's own ground, and a contrasting ring keeps
+        it readable on top of it.
+
+        Inverting it instead collapsed the whole set to two colours — every
+        ground's foreground is either paper or ink — so the bubble stopped
+        changing between events, which was the point of colouring it at all.
+      */
+      const ground = groundFor(target);
+      setCursorTarget({
+        label: target.locked ? "Locked" : "Open",
+        color: ground.bg,
+        ink: ground.fg,
+        ring: ground.fg,
+      });
+    },
+    [events],
+  );
 
   // Leaving the route, the window, or the tab must all release the bubble.
   useEffect(() => {
@@ -374,7 +388,7 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
             point. The loop is paused when the tab is hidden.
           */
           frameloop="always"
-          camera={{ position: [0, 0.15, CAMERA_Z], fov: 46 }}
+          camera={{ position: [0, 0.15, cameraZFor(events.length)], fov: 46 }}
           // Capped at 1.5 rather than 2: a retina panel at full DPR is four
           // times the pixels for no visible gain at this scale, and that
           // headroom is what keeps the ring smooth on ordinary laptops.
@@ -386,7 +400,7 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
             events={events}
             focused={focused}
             onFocusChange={setFocused}
-            onHoverChange={setHovered}
+            onHoverChange={handleHoverChange}
             consumeInput={consumeInput}
           />
         </Canvas>

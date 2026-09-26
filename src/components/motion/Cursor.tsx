@@ -127,15 +127,38 @@ export function Cursor() {
         else hide();
       };
 
-      // Direct targeting, used by the WebGL scene.
+      /*
+        Direct targeting, used by the WebGL scene.
+
+        A null is held for a moment before it collapses the bubble. Dragging
+        across the ring puts the pointer over the seam between two posters for
+        a frame or two, and hiding on that emitted a full 0.28s collapse
+        followed by a 0.35s pop for the poster arriving next — read as the
+        bubble lagging, stuttering, or missing entirely on a fast sweep. A
+        target arriving inside the grace period cancels the hide, so crossing
+        a seam just recolours, and a real exit still clears within a blink.
+      */
+      let releaseTimer: number | undefined;
+      const cancelRelease = () => {
+        if (releaseTimer !== undefined) {
+          window.clearTimeout(releaseTimer);
+          releaseTimer = undefined;
+        }
+      };
+
       const onTarget = (e: Event) => {
         const target = (e as CustomEvent<CursorTarget | null>).detail;
         if (!target) {
-          forced = false;
-          hide();
+          cancelRelease();
+          releaseTimer = window.setTimeout(() => {
+            releaseTimer = undefined;
+            forced = false;
+            hide();
+          }, 90);
           return;
         }
 
+        cancelRelease();
         forced = true;
         const signature = ["forced", target.label, target.color].join("|");
         if (signature === active) return;
@@ -161,6 +184,7 @@ export function Cursor() {
       window.addEventListener(CURSOR_EVENT, onTarget);
 
       return () => {
+        cancelRelease();
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("pointerdown", onMove);
         document.removeEventListener("pointerleave", hide);

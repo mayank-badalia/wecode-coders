@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { angularDistance, nearestSlot, slotAngle } from "./ring";
+import { angularDistance, nearestSlot, ringRadius, slotAngle } from "./ring";
 
 const TAU = Math.PI * 2;
 
@@ -47,3 +47,38 @@ describe("ring maths", () => {
     }
   });
 });
+
+describe("ringRadius", () => {
+  const W = 2.15;
+  const chord = (n: number, r: number) => 2 * r * Math.sin(Math.PI / n);
+
+  it("reproduces the original ten-event ring", () => {
+    // 3.4 was the hand-tuned constant. The formula has to land back on it, or
+    // this change silently restyles the ring at its original count.
+    expect(ringRadius(10, W)).toBeCloseTo(3.4, 2);
+  });
+
+  it("keeps the gap between neighbours constant as events are added", () => {
+    const gaps = [6, 10, 16, 24, 40].map((n) => chord(n, ringRadius(n, W)));
+    for (const g of gaps) expect(g).toBeCloseTo(gaps[0]!, 6);
+  });
+
+  it("never lets a panel overlap its neighbour by more than a hair", () => {
+    for (const n of [3, 6, 10, 16, 24, 40, 100]) {
+      // Overlap is what buried 38% of each poster at sixteen events.
+      expect(chord(n, ringRadius(n, W)), `n=${n}`).toBeGreaterThan(W * 0.97);
+    }
+  });
+
+  it("grows with the number of events", () => {
+    const radii = [6, 10, 16, 24].map((n) => ringRadius(n, W));
+    for (let i = 1; i < radii.length; i++) {
+      expect(radii[i]!).toBeGreaterThan(radii[i - 1]!);
+    }
+  });
+
+  it("stays finite for degenerate counts", () => {
+    for (const n of [0, 1, 2]) expect(Number.isFinite(ringRadius(n, W))).toBe(true);
+  });
+});
+

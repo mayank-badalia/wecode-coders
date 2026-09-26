@@ -5,19 +5,34 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { groundFor } from "@/components/poster/layouts";
 import { posterToCanvas } from "@/components/poster/posterCanvas";
-import { angularDistance, nearestSlot, slotAngle } from "@/lib/ring";
+import { angularDistance, nearestSlot, ringRadius, slotAngle } from "@/lib/ring";
 import type { PublicEvent } from "@/lib/types";
 import { ringFragment, ringVertex, worldFragment, worldVertex } from "./ringShader";
 
-const RADIUS = 3.4;
 /** How much the ring expands once the camera is at its centre. */
 const INSIDE_RADIUS_GAIN = 1.5;
 const PLANE_W = 2.15;
 const PLANE_H = 2.85;
 const TAU = Math.PI * 2;
 
+/**
+ * How far in front of the nearest poster the camera sits.
+ *
+ * Added to the radius rather than used as an absolute position, so the
+ * focused poster is always this far away whatever the ring's size. A fixed
+ * camera distance would have shrunk every poster as the ring grew.
+ */
+const CAMERA_GAP = 4.9;
+
+/** The radius this many events need to sit side by side without overlapping. */
+export function ringRadiusFor(count: number): number {
+  return ringRadius(count, PLANE_W);
+}
+
 /** Where the camera sits before it travels inside. */
-export const CAMERA_Z = RADIUS + 4.9;
+export function cameraZFor(count: number): number {
+  return ringRadiusFor(count) + CAMERA_GAP;
+}
 
 export type RingInput = {
   drag: number;
@@ -44,6 +59,16 @@ export function EventRing({
   onHoverChange,
   consumeInput,
 }: EventRingProps) {
+  /*
+    Sized from the count, not from a constant.
+
+    Sixteen events on the ten-event radius buried 38% of every poster under
+    its neighbour, which is what "merged" looked like from outside and from
+    the centre alike.
+  */
+  const radius = ringRadiusFor(events.length);
+  const cameraZ = radius + CAMERA_GAP;
+
   const group = useRef<THREE.Group>(null);
   const planes = useRef<(THREE.Mesh | null)[]>([]);
   const reportedHover = useRef<number | null>(null);
@@ -206,7 +231,7 @@ export function EventRing({
     inside.current += (targetInside - inside.current) * Math.min(1, dt * 2.4);
 
     const cam = state.camera as THREE.PerspectiveCamera;
-    cam.position.z = CAMERA_Z * (1 - inside.current) + 0.001;
+    cam.position.z = cameraZ * (1 - inside.current) + 0.001;
     cam.position.y = 0.15 * (1 - inside.current);
 
     /*
@@ -305,7 +330,7 @@ export function EventRing({
           return (
             <mesh
               key={event.slug}
-              position={[Math.sin(angle) * RADIUS, 0, Math.cos(angle) * RADIUS]}
+              position={[Math.sin(angle) * radius, 0, Math.cos(angle) * radius]}
               rotation={[0, angle, 0]}
               material={materials[i]}
               ref={(node) => {

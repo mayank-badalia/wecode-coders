@@ -162,7 +162,7 @@ function seriesJudging(durationWords: string) {
       name: "Public product storytelling",
       weight: "5 points",
       detail:
-        "How well do your LinkedIn, Instagram and Reddit posts explain the product and why it matters? Judged on clarity and honesty, never on likes.",
+        "How well do your LinkedIn and Instagram posts explain the product and why it matters? Judged on clarity and honesty, never on likes.",
     },
     {
       name: "Demonstration quality and learning velocity",
@@ -172,31 +172,6 @@ function seriesJudging(durationWords: string) {
     },
   ];
 }
-
-const SERIES_SUBMISSION: EventSection = {
-  kind: "list",
-  label: "What you must submit",
-  numbered: true,
-  intro:
-    "One final submission per team. The product does not need to be commercially launched, but its central workflow has to run and be demonstrable. Repositories may be private as long as judges get access before the deadline.",
-  items: [
-    "Project name",
-    "Selected track",
-    "The problem you chose, in your own words",
-    "Short solution summary",
-    "List of team members",
-    "Technology stack",
-    "Source-code repository",
-    "Working product or demo link",
-    "Two-to-three-minute demonstration video",
-    "Short pitch deck",
-    "Future development plan",
-    "Disclosure of AI tools, templates and pre-existing assets used",
-    "A LinkedIn post showcasing the product",
-    "An Instagram post or reel showcasing the product",
-    "A Reddit post showcasing the product",
-  ],
-};
 
 /**
  * Rules, identical across the series.
@@ -228,7 +203,7 @@ const SERIES_RULES: EventSection = {
     "Respect software licences, intellectual property and user privacy.",
     "Projects must not promote illegal, harmful or discriminatory activity.",
     "Everything on the submission list has to arrive before the deadline.",
-    "The three showcase posts must be written by team members and describe the product accurately.",
+    "Both showcase posts must be written by team members and describe the product accurately.",
     "No bots, paid engagement, misleading claims or spam to promote those posts.",
     "Judges may ask for repository access or other proof of development at any point.",
     "Organisers may remove anyone who disrupts the event or breaks community guidelines.",
@@ -237,7 +212,7 @@ const SERIES_RULES: EventSection = {
 };
 
 /** The three shared blocks, in the order they appear on a detail page. */
-const SERIES_SECTIONS: EventSection[] = [SERIES_TRACKS, SERIES_SUBMISSION, SERIES_RULES];
+const SERIES_SECTIONS: EventSection[] = [SERIES_TRACKS, SERIES_RULES];
 
 /** FAQ, identical across the series. */
 function seriesFaq(durationWords: string) {
@@ -252,7 +227,7 @@ function seriesFaq(durationWords: string) {
     { q: "Can I use something I built earlier?", a: "No. The product has to be built during the event, and submissions are checked. Disclosed reusable components are fine; a finished project is not." },
     { q: "Can I change track?", a: "Yes, any time before final submission. Only one primary track can be selected." },
     { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable demo and a video." },
-    { q: "Do the social posts really matter?", a: "Yes — all three are required. They are worth 5 points, judged on clarity and honesty. Likes and views count for nothing." },
+    { q: "Do the social posts really matter?", a: "Yes — both are required. They are worth 5 points, judged on clarity and honesty. Likes and views count for nothing." },
     { q: "Will everyone get a certificate?", a: "Certificates go to participants who submit a valid project on time and follow the rules. Registering alone does not qualify." },
     { q: "Are the tool credits guaranteed?", a: "No. Credits, domains and subscriptions have their own eligibility rules and depend on partner confirmation and availability." },
   ];
@@ -309,7 +284,7 @@ export const events: Event[] = [
       "A working product or prototype whose central workflow actually runs",
       "A two-to-three-minute demo video and a short pitch deck",
       "Source code judges can reach before the deadline",
-      "A showcase post on LinkedIn, Instagram and Reddit, links included",
+      "A showcase post on LinkedIn and Instagram, links included",
     ],
     schedule: [
       { when: "Sun 4 Oct, 10:00", what: "The brief, the tracks and the submission list go out. Building starts." },
@@ -358,7 +333,7 @@ export const events: Event[] = [
         name: "Public product storytelling",
         weight: "5 points",
         detail:
-          "How well do your LinkedIn, Instagram and Reddit posts explain the product and why it matters? Judged on clarity and honesty, never on likes.",
+          "How well do your LinkedIn and Instagram posts explain the product and why it matters? Judged on clarity and honesty, never on likes.",
       },
       {
         name: "Demonstration quality and learning velocity",
@@ -438,30 +413,6 @@ export const events: Event[] = [
       },
       {
         kind: "list",
-        label: "What you must submit",
-        numbered: true,
-        intro:
-          "The product does not need to be commercially launched, but its central workflow has to run and be demonstrable. Repositories may be private as long as judges get access before the deadline.",
-        items: [
-          "Project name",
-          "Selected track",
-          "Problem statement",
-          "Short solution summary",
-          "List of team members",
-          "Technology stack",
-          "Source-code repository",
-          "Working product or demo link",
-          "Two-to-three-minute demonstration video",
-          "Short pitch deck",
-          "Future development plan",
-          "Disclosure of AI tools, templates and pre-existing assets used",
-          "A LinkedIn post showcasing the product",
-          "An Instagram post or reel showcasing the product",
-          "A Reddit post showcasing the product",
-        ],
-      },
-      {
-        kind: "list",
         label: "Rules",
         numbered: true,
         items: [
@@ -477,7 +428,7 @@ export const events: Event[] = [
           "Respect software licences, intellectual property and user privacy.",
           "Projects must not promote illegal, harmful or discriminatory activity.",
           "Everything on the submission list has to arrive before the deadline.",
-          "The three showcase posts must be written by team members and describe the product accurately.",
+          "Both showcase posts must be written by team members and describe the product accurately.",
           "No bots, paid engagement, misleading claims or spam to promote those posts.",
           "Judges may ask for repository access or other proof of development.",
           "Organisers may remove anyone who disrupts the event or breaks community guidelines.",
@@ -494,8 +445,8 @@ export const events: Event[] = [
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones in your submission." },
       { q: "Can I change track?", a: "Yes, any time before final submission. Only one primary track can be selected." },
       { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable demo and a video." },
-      { q: "Do the social posts really matter?", a: "Yes — all three are required. They are worth 5 points, judged on clarity and honesty. Likes and views count for nothing." },
-      { q: "Will everyone get a certificate?", a: "Certificates go to participants who submit a valid project on time, post the three showcases and follow the rules. Registering alone does not qualify." },
+      { q: "Do the social posts really matter?", a: "Yes — both are required. They are worth 5 points, judged on clarity and honesty. Likes and views count for nothing." },
+      { q: "Will everyone get a certificate?", a: "Certificates go to participants who submit a valid project on time, post both showcases and follow the rules. Registering alone does not qualify." },
       { q: "Are the tool credits guaranteed?", a: "No. Credits, domains and subscriptions have their own eligibility rules and depend on partner confirmation and availability." },
     ],
     stats: [
@@ -925,26 +876,6 @@ export const events: Event[] = [
       },
       {
         kind: "list",
-        label: "What you must submit",
-        numbered: true,
-        intro:
-          "One final submission per team. The product does not need to be commercially launched, but its main workflow has to run and be demonstrable.",
-        items: [
-          "Project name",
-          "Selected track",
-          "Problem statement",
-          "Solution description",
-          "Working prototype or deployed product",
-          "GitHub repository judges can access",
-          "Two-to-three-minute demonstration video",
-          "Short pitch deck",
-          "Technology stack",
-          "Team-member contributions",
-          "Details of external tools, APIs, datasets and existing components used",
-        ],
-      },
-      {
-        kind: "list",
         label: "Rules",
         numbered: true,
         items: [
@@ -1039,7 +970,7 @@ export const events: Event[] = [
       "A two-to-three-minute demo video and a short pitch deck",
       "Source code judges can reach before the deadline",
       "The problem you chose and the evidence that it is real",
-      "A showcase post on LinkedIn, Instagram and Reddit, links included",
+      "A showcase post on LinkedIn and Instagram, links included",
     ],
     schedule: [
       { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1075,7 +1006,7 @@ export const events: Event[] = [
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
     posterSeed: 9101,
-    posterImage: "/posters/tech-circuit-v1.webp",
+    posterImage: "/posters/tech-circuit-v2.webp",
   },
   {
     // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
@@ -1116,7 +1047,7 @@ export const events: Event[] = [
       "A two-to-three-minute demo video and a short pitch deck",
       "Source code judges can reach before the deadline",
       "The problem you chose and the evidence that it is real",
-      "A showcase post on LinkedIn, Instagram and Reddit, links included",
+      "A showcase post on LinkedIn and Instagram, links included",
     ],
     schedule: [
       { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1152,7 +1083,7 @@ export const events: Event[] = [
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
     posterSeed: 9102,
-    posterImage: "/posters/future-stack-v1.webp",
+    posterImage: "/posters/future-stack-v2.webp",
   },
   {
     // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
@@ -1193,7 +1124,7 @@ export const events: Event[] = [
       "A two-to-three-minute demo video and a short pitch deck",
       "Source code judges can reach before the deadline",
       "The problem you chose and the evidence that it is real",
-      "A showcase post on LinkedIn, Instagram and Reddit, links included",
+      "A showcase post on LinkedIn and Instagram, links included",
     ],
     schedule: [
       { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1229,7 +1160,7 @@ export const events: Event[] = [
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
     posterSeed: 9103,
-    posterImage: "/posters/code-axis-v1.webp",
+    posterImage: "/posters/code-axis-v2.webp",
   },
   {
     // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
@@ -1270,7 +1201,7 @@ export const events: Event[] = [
       "A two-to-three-minute demo video and a short pitch deck",
       "Source code judges can reach before the deadline",
       "The problem you chose and the evidence that it is real",
-      "A showcase post on LinkedIn, Instagram and Reddit, links included",
+      "A showcase post on LinkedIn and Instagram, links included",
     ],
     schedule: [
       { when: "Before the event", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1347,7 +1278,7 @@ export const events: Event[] = [
       "A two-to-three-minute demo video and a short pitch deck",
       "Source code judges can reach before the deadline",
       "The problem you chose and the evidence that it is real",
-      "A showcase post on LinkedIn, Instagram and Reddit, links included",
+      "A showcase post on LinkedIn and Instagram, links included",
     ],
     schedule: [
       { when: "Before the event", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1424,7 +1355,7 @@ export const events: Event[] = [
       "A two-to-three-minute demo video and a short pitch deck",
       "Source code judges can reach before the deadline",
       "The problem you chose and the evidence that it is real",
-      "A showcase post on LinkedIn, Instagram and Reddit, links included",
+      "A showcase post on LinkedIn and Instagram, links included",
     ],
     schedule: [
       { when: "Before the event", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1459,7 +1390,7 @@ export const events: Event[] = [
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
     posterSeed: 9106,
-    posterImage: "/posters/codehack-india-v1.webp",
+    posterImage: "/posters/codehack-india-v2.webp",
   },
   {
     locked: true,
