@@ -17,12 +17,7 @@ export const ringFragment = /* glsl */ `
   uniform float uVelocity;   // rad/sec — drives the channel split
   uniform float uDistance;   // 0 at focus, 1 far away
   uniform float uFocus;      // 1 for the focused plane
-  uniform vec3 uAccent;      // this event's own ground colour
   varying vec2 vUv;
-
-  float hash(vec2 p) {
-    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-  }
 
   void main() {
     /*
@@ -33,34 +28,60 @@ export const ringFragment = /* glsl */ `
     vec2 uv = gl_FrontFacing ? vUv : vec2(1.0 - vUv.x, vUv.y);
 
     /*
-      A hint of channel separation, not a smear.
+      A hint of channel separation while the ring is actually turning, and an
+      untouched sample the moment it stops.
 
-      At the previous strength the split was wide enough to make a spinning
-      poster's title unreadable, which defeats the point of showing titles.
+      The split used to run at every speed including zero, so a poster at rest
+      was permanently sampled three times at three offsets — a standing colour
+      fringe on every edge in the artwork. Branching on movement means a still
+      poster is the texture, exactly.
     */
-    float amt = clamp(abs(uVelocity) * 0.005, 0.0, 0.012);
-    float r = texture2D(uTex, uv + vec2(amt, 0.0)).r;
-    float g = texture2D(uTex, uv).g;
-    float b = texture2D(uTex, uv - vec2(amt, 0.0)).b;
-    vec3 col = vec3(r, g, b);
+    float amt = clamp(abs(uVelocity) * 0.004, 0.0, 0.008);
+    vec3 col;
+    if (amt > 0.0002) {
+      col = vec3(
+        texture2D(uTex, uv + vec2(amt, 0.0)).r,
+        texture2D(uTex, uv).g,
+        texture2D(uTex, uv - vec2(amt, 0.0)).b
+      );
+    } else {
+      col = texture2D(uTex, uv).rgb;
+    }
 
     float d = clamp(uDistance, 0.0, 1.0);
+
+    /*
+      Depth is carried by light, not by hue.
+
+      These are someone's finished posters and the colours in them are the
+      brand's, not ours to restyle: the orange 48 on Codex, the magenta INDIA
+      on CodeHack. Two things used to overwrite them. A 0.72 desaturation
+      ramp drained everything off focus toward grey, and — worse — the
+      focused poster had its own ground colour added on a mask of
+      pow(1 - |x - 0.5| * 2, 4), which peaks at 1.0 dead centre. It was
+      written as a rim and behaved as a wash straight across the middle of the
+      artwork, which is why every focused poster came out red.
+
+      What is left is a gentle squared falloff in saturation and brightness,
+      so distance still reads without any poster being recoloured.
+    */
     float grey = dot(col, vec3(0.299, 0.587, 0.114));
-    col = mix(col, vec3(grey), d * 0.72);
-    col *= mix(0.5, 1.0, 1.0 - d);
+    col = mix(col, vec3(grey), d * d * 0.26);
+    col *= mix(0.6, 1.0, 1.0 - d * d);
 
-    // The focused poster is rimmed in its own accent rather than a fixed hue.
-    float edge = pow(1.0 - abs(uv.x - 0.5) * 2.0, 4.0);
-    col += uAccent * edge * uFocus * 0.45;
+    /*
+      A hairline that stays one pixel wide at any distance.
 
-    // And every plane keeps a hairline border, so a dark poster still reads
-    // as a card in space rather than dissolving into the background.
-    float bx = min(uv.x, 1.0 - uv.x);
-    float by = min(uv.y, 1.0 - uv.y);
-    float border = 1.0 - smoothstep(0.0, 0.006, min(bx, by));
-    col = mix(col, vec3(0.95, 0.94, 0.90), border * 0.5);
+      A fixed uv threshold is a fat soft band on the poster in front and
+      invisible on the ones at the back. Scaling it by the screen-space
+      derivative of the edge distance gives every plate the same crisp rule,
+      which is what makes the ring read as a set of cards rather than a
+      smudge.
+    */
+    float e = min(min(uv.x, 1.0 - uv.x), min(uv.y, 1.0 - uv.y));
+    float border = 1.0 - smoothstep(0.0, fwidth(e) * 1.6, e);
+    col = mix(col, vec3(0.96, 0.95, 0.92), border * mix(0.3, 0.8, uFocus));
 
-    col += (hash(uv * 900.0) - 0.5) * 0.04;
     gl_FragColor = vec4(col, 1.0);
   }
 `;

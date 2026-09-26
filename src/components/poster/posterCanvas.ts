@@ -12,8 +12,20 @@ import { GROUNDS, TITLE_TREATMENTS, groundFor, tint } from "./layouts";
   change to the palette lands in both.
 */
 
-const W = 768;
-const H = 1024;
+/*
+  The plate the ring's posters are painted onto.
+
+  1024 wide, not the 768 it was. The source posters are 1254px across and the
+  focused plate covers roughly 460 CSS pixels, which is 920 device pixels on a
+  retina panel — so a 768px texture was being magnified on the one surface
+  where the artwork is the entire design, and the fine print on it turned to
+  mush. 1024 lands just under the source and just over the screen.
+
+  Bigger is not free: this is nine textures with mipmaps, and 2048 would be
+  four times the video memory for detail past what the panel can resolve.
+*/
+const W = 1024;
+const H = 1365;
 
 /**
  * next/font generates a hashed family name, so the real name has to be read
@@ -38,7 +50,8 @@ function resolveFamily(cssVar: string): string {
  */
 export function posterToCanvas(
   event: PublicEvent,
-  onRepaint?: () => void,
+  /** Called once the artwork is painted, with its aspect ratio (w / h). */
+  onRepaint?: (ratio: number) => void,
 ): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
   canvas.width = W;
@@ -108,18 +121,37 @@ export function posterToCanvas(
     img.decoding = "async";
     img.onload = () => {
       /*
-        Contain, so the whole poster is on the plate.
+        The plate becomes the artwork, rather than the artwork being letterboxed
+        onto a fixed plate.
 
-        Cover cropped a 2:3 poster into this 3:4 plane, which cut a band off
-        the artwork on the one page where the posters are the entire design.
-        The plate is painted in the event's ground first, so what shows either
-        side of the poster is a narrow mount rather than a hole.
+        Containing a square poster on a 3:4 plate left a quarter of the tile
+        filled with the event's seeded ground — a pink slab above and below
+        Codex 48, a red one around CodeAxis. Read as a mount in theory and as
+        a colour bar in practice, and it is the first thing that made the ring
+        look unfinished. Resizing the canvas to the poster means there is no
+        mount to look at, and the ring's plane is reshaped to match so nothing
+        is stretched.
+
+        Capped on the long edge: past this the texture costs video memory for
+        detail no panel resolves, and there are nine of them.
       */
-      const scale = Math.min(W / img.width, H / img.height);
-      const w = img.width * scale;
-      const h = img.height * scale;
-      ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
-      onRepaint?.();
+      const CAP = 1280;
+      const fit = Math.min(1, CAP / Math.max(img.width, img.height));
+      const w = Math.max(1, Math.round(img.width * fit));
+      const h = Math.max(1, Math.round(img.height * fit));
+
+      /*
+        Resizing clears the bitmap and resets the context's state, so the draw
+        happens after it. The context object itself survives a resize, which is
+        why this keeps using the one it already has rather than asking for it
+        again — a second getContext() would also be a second chance to get null.
+      */
+      canvas.width = w;
+      canvas.height = h;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(img, 0, 0, w, h);
+      onRepaint?.(w / h);
     };
     img.src = event.posterImage;
     return canvas;

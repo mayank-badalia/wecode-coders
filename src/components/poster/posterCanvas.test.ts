@@ -159,11 +159,19 @@ describe("posterToCanvas — real poster image", () => {
       mode: "online",
     } as unknown as PublicEvent;
     let repainted = false;
-    posterToCanvas(event, () => {
+    let ratio: number | undefined;
+    posterToCanvas(event, (r) => {
       repainted = true;
+      ratio = r;
     });
     spy.mockRestore();
-    return { ctx, fills, repainted: () => repainted, ground: groundFor(event) };
+    return {
+      ctx,
+      fills,
+      repainted: () => repainted,
+      ratio: () => ratio,
+      ground: groundFor(event),
+    };
   }
 
   it("paints the ground straight away so the plane is never blank", () => {
@@ -179,17 +187,34 @@ describe("posterToCanvas — real poster image", () => {
     expect(repainted()).toBe(true);
   });
 
-  it("fits the whole poster on the plate rather than cropping it", async () => {
-    // A 2:3 poster on a 3:4 plate must sit inside the plate with a mount
-    // either side, never overflow it — cropping loses part of the artwork.
+  it("reports the artwork's aspect ratio, which the ring reshapes its plane from", async () => {
+    // Without this the plane keeps its 3:4 default and a square poster is
+    // stretched tall on it — the mount removed and a distortion put back.
+    const square = drawWithImage(1254, 1254);
+    await Promise.resolve();
+    expect(square.ratio()).toBeCloseTo(1, 3);
+
+    const portrait = drawWithImage(1122, 1402);
+    await Promise.resolve();
+    expect(portrait.ratio()).toBeCloseTo(1122 / 1402, 2);
+  });
+
+  it("makes the plate the artwork, with no mount and no crop", async () => {
+    /*
+      The plate used to be a fixed 3:4 with the poster letterboxed onto it, so
+      a square poster sat in a quarter-tile of the event's seeded ground — a
+      pink slab above and below Codex 48. The plate is now resized to the
+      artwork: drawn from the origin, filling it, at the source aspect.
+    */
     const { ctx } = drawWithImage(1200, 1800);
     await Promise.resolve();
     const call = (ctx.drawImage as unknown as { mock: { calls: number[][] } }).mock.calls[0]!;
     const [, dx, dy, dw, dh] = call;
-    expect(dw!).toBeLessThanOrEqual(768);
-    expect(dh!).toBeLessThanOrEqual(1024);
-    expect(dx!).toBeGreaterThanOrEqual(0);
-    expect(dy!).toBeGreaterThanOrEqual(0);
+    // No mount: the artwork starts at the origin and is the whole plate.
+    expect(dx!).toBe(0);
+    expect(dy!).toBe(0);
+    // Capped on the long edge so nine textures stay affordable.
+    expect(Math.max(dw!, dh!)).toBeLessThanOrEqual(1280);
     // Aspect preserved: 1200/1800 in, the same ratio out.
     expect(dw! / dh!).toBeCloseTo(1200 / 1800, 3);
   });

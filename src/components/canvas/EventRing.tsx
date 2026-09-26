@@ -1,9 +1,8 @@
 "use client";
 
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { groundFor } from "@/components/poster/layouts";
 import { posterToCanvas } from "@/components/poster/posterCanvas";
 import { angularDistance, nearestSlot, ringRadius, slotAngle } from "@/lib/ring";
 import type { PublicEvent } from "@/lib/types";
@@ -82,29 +81,62 @@ export function EventRing({
   const settled = useRef(false);
   const inside = useRef(0);
 
+  /*
+    Anisotropic filtering, at whatever the GPU actually offers.
+
+    Every poster except the focused one is seen at a steep angle, which is the
+    exact case trilinear filtering handles worst: it picks a mip level for the
+    squashed axis and smears the other one. It was pinned at 4; asking the
+    renderer for its maximum is free and is most of the difference between a
+    legible poster at the edge of the ring and a grey smudge.
+  */
+  const maxAnisotropy = useThree((state) => state.gl.capabilities.getMaxAnisotropy());
+
   const textures = useMemo(
     () =>
       events.map((e) => {
-        // The canvas for an event with a real poster is painted once the
-        // image decodes, after this texture already exists — hence the
-        // callback rather than a second useMemo pass.
+        /*
+          The canvas for an event with a real poster is painted once the image
+          decodes, after this texture already exists — hence the callback
+          rather than a second useMemo pass.
+
+          The artwork's aspect is recorded on the texture itself. It belongs
+          with the thing it describes, it arrives at the same moment, and the
+          frame loop that reshapes the plane already has the texture to hand.
+        */
         const tex: THREE.CanvasTexture = new THREE.CanvasTexture(
-          posterToCanvas(e, () => {
+          posterToCanvas(e, (ratio) => {
+            tex.userData.ratio = ratio;
+            /*
+              The plate is resized to the artwork when it decodes, and
+              needsUpdate alone does not survive that.
+
+              needsUpdate re-uploads pixels into the allocation three already
+              made, which is still the pre-resize size — so the GPU kept
+              showing the holding colour and every tile came out a flat slab
+              of its ground. dispose() drops that allocation, and the next
+              render builds a new one from the canvas as it now is. Verified
+              in the browser that the canvas itself redraws correctly, so the
+              re-upload was the only thing missing.
+            */
+            tex.dispose();
             tex.needsUpdate = true;
           }),
         );
         tex.colorSpace = THREE.SRGBColorSpace;
-        tex.anisotropy = 4;
+        tex.anisotropy = maxAnisotropy;
+        tex.generateMipmaps = true;
+        tex.minFilter = THREE.LinearMipmapLinearFilter;
+        tex.magFilter = THREE.LinearFilter;
         tex.needsUpdate = true;
         return tex;
       }),
-    [events],
+    [events, maxAnisotropy],
   );
 
   const materials = useMemo(
     () =>
       textures.map((tex, i) => {
-        const ground = groundFor(events[i]!);
         return new THREE.ShaderMaterial({
           vertexShader: ringVertex,
           fragmentShader: ringFragment,
@@ -120,11 +152,12 @@ export function EventRing({
             uDistance: { value: i === 0 ? 0 : 1 },
             uFocus: { value: i === 0 ? 1 : 0 },
             uCurve: { value: 0.05 },
-            uAccent: { value: new THREE.Color(ground.bg) },
           },
         });
       }),
-    [textures, events],
+    // No longer reads `events`: the accent wash it fed is gone, and the
+    // textures array already changes whenever the events do.
+    [textures],
   );
 
   const worldMaterial = useMemo(
@@ -301,6 +334,22 @@ export function EventRing({
       reportedHover.current = hoveredIndex;
       onHoverChange?.(hoveredIndex);
     }
+
+    /*
+      Reshape each plane to its poster.
+
+      The plates are no longer letterboxed, so a square poster on the default
+      3:4 plane would be stretched tall. Width is what the ring's spacing is
+      built on and stays fixed; the height follows the artwork. Applied here
+      rather than at mount because the ratio only arrives once the image has
+      decoded, and it is a no-op on every frame after the first.
+    */
+    planes.current.forEach((mesh, i) => {
+      const ratio = textures[i]?.userData.ratio as number | undefined;
+      if (!mesh || !ratio) return;
+      const wanted = PLANE_W / ratio / PLANE_H;
+      if (Math.abs(mesh.scale.y - wanted) > 0.0001) mesh.scale.y = wanted;
+    });
 
     const slot = nearestSlot(-rotation.current, events.length);
     if (slot !== focused) onFocusChange(slot);
