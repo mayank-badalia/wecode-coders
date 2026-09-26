@@ -121,6 +121,20 @@ export function allCertificates(): Certificate[] {
   return Object.values(STORES).flat();
 }
 
+/*
+  Ids pasted together.
+
+  A plain-text email that puts a verify link at the end of one line and an id
+  at the start of the next invites the mail client to join them: the link
+  arrives as /verify/L30-HY7GCUL30-EZRZBS, and both halves are real
+  certificates. Rather than a flat "not found", the page can offer them.
+*/
+export function certificatesWithin(raw: string): Certificate[] {
+  const text = raw.trim().toUpperCase();
+  if (!text || isCertificateId(text)) return [];
+  return allCertificates().filter((c) => text.includes(c.id.toUpperCase()));
+}
+
 export function findCertificate(id: string): Certificate | null {
   if (!isCertificateId(id)) return null;
   const wanted = id.trim().toUpperCase();

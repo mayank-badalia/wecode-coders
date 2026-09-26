@@ -716,6 +716,163 @@ a.detail-cta--signal:focus-visible {
 }
 
 /*
+  The certificate, shown at true A4 landscape proportions.
+
+  One root font-size in cqw drives every dimension, so the whole thing scales
+  from a 1440px desktop down to a 360px phone without a single breakpoint and
+  without ever changing shape. That is why nothing here is in px.
+*/
+.cert-stage {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.cert {
+  position: relative;
+  aspect-ratio: 297 / 210;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-size: 2.15cqw;
+  font-family: var(--font-body);
+  overflow: hidden;
+  border-radius: 0.3em;
+}
+
+.cert-frame {
+  position: absolute;
+  inset: 2.2em;
+  border: 0.07em solid var(--color-ink);
+}
+
+.cert-inner {
+  position: absolute;
+  inset: 4em 4.6em;
+  display: flex;
+  flex-direction: column;
+}
+
+.cert-mono {
+  font-family: var(--font-mono);
+  font-size: 0.62em;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.cert-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cert-wordmark {
+  font-weight: 800;
+  font-size: 1.05em;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.cert-wordmark span {
+  color: var(--color-signal);
+}
+
+.cert-event {
+  text-align: right;
+  color: var(--color-ink-60);
+}
+
+.cert-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cert-awarded {
+  color: var(--color-ink-60);
+}
+
+.cert-name {
+  font-size: 3.4em;
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0.12em 0 0.16em;
+}
+
+/* Four-word names exist in the real data; they get a step down, not a crop. */
+.cert-name[data-length="long"] {
+  font-size: 2.5em;
+}
+
+.cert-citation {
+  font-size: 0.86em;
+  line-height: 1.55;
+  max-width: 34em;
+  color: var(--color-ink-60);
+  margin: 0;
+}
+
+.cert-citation strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.cert-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2em;
+  padding-top: 1.2em;
+  border-top: 0.05em solid var(--color-paper-2);
+}
+
+.cert-meta {
+  display: flex;
+  gap: 2.6em;
+  margin: 0;
+}
+
+.cert-meta dt {
+  color: var(--color-ink-60);
+  margin-bottom: 0.4em;
+}
+
+.cert-meta dd {
+  margin: 0;
+  font-size: 0.75em;
+  font-weight: 600;
+}
+
+.cert-id {
+  font-family: var(--font-mono);
+}
+
+.cert-verify {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.9em;
+  text-align: right;
+}
+
+.cert-verify-label {
+  color: var(--color-ink-60);
+  margin: 0 0 0.4em;
+}
+
+.cert-verify-url {
+  margin: 0;
+  font-size: 0.5em;
+  white-space: nowrap;
+}
+
+.cert-qr {
+  width: 4.4em;
+  height: 4.4em;
+  display: block;
+}
+
+/*
   The certificate lookup form.
 
   Geometry lives here rather than inline so the coarse-pointer rules below can
