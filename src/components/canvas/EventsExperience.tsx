@@ -480,12 +480,31 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
               style={{
                 margin: "0.2em 0 0",
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(1.7rem, 3.6vw, 3.2rem)",
+                /*
+                  Stepped down for a title with a long unbreakable word.
+
+                  "TECHCIRCUIT" and "FUTURESTACK" are eleven characters with
+                  nowhere to wrap, so at full size they overran the column and
+                  the break-word below split them mid-word — "TECHCIRCUI" over
+                  "T". A multi-word title of the same length is fine, because
+                  it wraps at its spaces, so the test is the longest word
+                  rather than the length of the whole title.
+
+                  Set inline because the size beside it is: a clamp() in a
+                  style attribute beats any rule that tries to override it,
+                  and a half-inline, half-stylesheet pair of sizes is exactly
+                  how this build has lost the argument before.
+                */
+                fontSize:
+                  Math.max(...event.title.split(/\s+/).map((w) => w.length)) > 9
+                    ? "clamp(1.35rem, 2.7vw, 2.4rem)"
+                    : "clamp(1.7rem, 3.6vw, 3.2rem)",
                 fontWeight: 700,
                 lineHeight: 0.96,
                 textTransform: "uppercase",
-                // Long titles wrap inside the panel instead of running out
-                // across whichever poster is behind it.
+                // Last resort, for a title longer than the step-down handles:
+                // wrap inside the panel rather than run out across whichever
+                // poster is behind it.
                 overflowWrap: "break-word",
               }}
             >

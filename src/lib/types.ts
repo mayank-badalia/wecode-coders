@@ -45,6 +45,16 @@ export type Event = {
    */
   locked?: boolean;
 
+  /**
+   * Lead every list on the site, ahead of events with earlier dates.
+   *
+   * An editorial choice about what the community is actively pushing, not a
+   * claim about the event — so it says nothing a visitor could be misled by,
+   * and it is safe to move between records as campaigns change. Within the
+   * featured group, and within the rest, ordering stays chronological.
+   */
+  featured?: boolean;
+
   /** URL segment. Stable — changing it breaks any link already shared. */
   slug: string;
   title: string;

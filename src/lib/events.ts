@@ -26,31 +26,31 @@ import type { Event, PublicEvent, SiteData } from "./types";
  * anything that reads events gets the safe shape by construction, and there is
  * exactly one place to audit.
  */
-function toPublic(event: Event, order: number): PublicEvent {
+export function toPublic(event: Event, order: number): PublicEvent {
   if (!event.locked) return { ...event, locked: false };
   return { locked: true, slug: `locked-${order + 1}`, order };
 }
 
 export function getAllEvents(): PublicEvent[] {
   /*
-    Announced events lead; locked ones follow, still in date order.
+    Featured events lead, then everything else, then anything locked. Each
+    group stays in date order.
 
-    Chronological order alone buried both announced events in the middle of
-    seven sealed plates: the home rail opened on a locked card and the events
-    ring focused one on load, so the first thing a visitor met was a padlock.
-    What is actually open to them comes first, and the locked run reads as
-    what it is — the rest of the year, not yet announced.
+    Chronological order alone is the wrong answer twice over. It once buried
+    the announced events among seven sealed plates, so the home rail opened on
+    a locked card and the ring focused one on load — the first thing a visitor
+    met was a padlock. It would now open on an event from earlier in the month
+    rather than on the series registration is actually open for.
 
-    This publishes nothing new. A locked event's position already told you
-    only where it sits among the others, and grouping them at the end tells
-    you less about their dates than interleaving them did.
+    `featured` is what the community is currently pushing; it is editorial,
+    and it says nothing about an event that a visitor could be misled by. The
+    locked group is last because a padlock is the least useful thing to lead
+    with, and grouping tells you less about its date than interleaving did.
   */
+  const rank = (e: Event) => (e.locked ? 2 : e.featured ? 0 : 1);
+
   return [...events]
-    .sort((a, b) => {
-      const lockedDiff = Number(Boolean(a.locked)) - Number(Boolean(b.locked));
-      if (lockedDiff !== 0) return lockedDiff;
-      return a.startsAt.localeCompare(b.startsAt);
-    })
+    .sort((a, b) => rank(a) - rank(b) || a.startsAt.localeCompare(b.startsAt))
     .map(toPublic);
 }
 

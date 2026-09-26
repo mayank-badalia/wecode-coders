@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { events as rawEvents } from "@/data/events";
+import type { Event } from "./types";
 import {
   getAdjacentEvent,
   getAllEvents,
@@ -11,6 +12,7 @@ import {
   getPastEvents,
   getSite,
   getUpcomingEvents,
+  toPublic,
 } from "./events";
 
 /** Everything the seam is allowed to publish. */
@@ -53,17 +55,42 @@ describe("events seam", () => {
   });
 
   it("is sorted chronologically within each group", () => {
-    const dates = published.map((e) => e.startsAt);
-    expect([...dates].sort()).toEqual(dates);
+    // Across groups it deliberately is not: a featured event leads even when
+    // an unfeatured one starts earlier. Within a group, dates still rule.
+    const featured = rawEvents.filter((e) => e.featured).map((e) => e.slug);
+    const group = (e: (typeof published)[number]) =>
+      featured.includes(e.slug) ? 0 : 1;
+
+    for (const g of [0, 1]) {
+      const dates = published.filter((e) => group(e) === g).map((e) => e.startsAt);
+      expect([...dates].sort(), `group ${g}`).toEqual(dates);
+    }
   });
 
-  it("leads with the announced events and puts the locked run after them", () => {
-    // A visitor's first card, and the ring's first focus, must be something
-    // they can actually act on rather than a padlock.
-    const all = getAllEvents();
-    const firstLocked = all.findIndex((e) => e.locked);
-    if (firstLocked === -1) return;
-    expect(all.slice(firstLocked).every((e) => e.locked)).toBe(true);
+  it("leads with the featured events, then the rest, then anything locked", () => {
+    /*
+      A visitor's first card, and the ring's first focus, must be the thing
+      the community is actually pushing — not an event from earlier in the
+      month, and never a padlock.
+    */
+    const featured = new Set(rawEvents.filter((e) => e.featured).map((e) => e.slug));
+    const ranks = getAllEvents().map((e) =>
+      e.locked ? 2 : featured.has(e.slug) ? 0 : 1,
+    );
+    expect([...ranks].sort()).toEqual(ranks);
+
+    // Something has to be featured, or the flag is dead and the lead slot is
+    // whatever happens to be earliest.
+    expect(featured.size).toBeGreaterThan(0);
+    expect(ranks[0]).toBe(0);
+  });
+
+  it("publishes no locked events at all today", () => {
+    // The placeholder run is gone. This is not a permanent rule — it records
+    // that nothing is currently held back, so the vacuous leak tests below
+    // are vacuous for a known reason rather than a forgotten one.
+    expect(getLockedCount()).toBe(0);
+    expect(getAllEvents().every((e) => !e.locked)).toBe(true);
   });
 
   it("every published event carries the fields the detail page renders", () => {
@@ -290,5 +317,62 @@ describe("events seam", () => {
       // The deterrent only works if the page says the checking happens.
       expect(text, e.slug).toMatch(/we verify this|submissions are checked/i);
     }
+  });
+
+  /*
+    The redaction itself, tested on a synthetic record.
+
+    Every other locked test in this file reads src/data, and nothing there is
+    locked any more — so they all pass by having nothing to check. This one
+    feeds toPublic a fully-written locked event and asserts none of it comes
+    back out, which keeps the "locked events must not leak" rule genuinely
+    enforced while the data happens to contain none.
+  */
+  it("strips a locked event to an opaque placeholder", () => {
+    const secret: Event = {
+      locked: true,
+      slug: "unannounced-thing",
+      title: "Hexadecimal Sunrise",
+      kicker: "HACKATHON — SECRET",
+      format: "hackathon",
+      status: "upcoming",
+      startsAt: "2027-03-01T10:00:00+05:30",
+      endsAt: "2027-03-02T10:00:00+05:30",
+      mode: "online",
+      venue: { name: "A room nobody has been told about", place: "Pune" },
+      summary: "A summary that must never reach a browser.",
+      description: ["Paragraph one.", "Paragraph two."],
+      forWho: "People who do not know yet",
+      tags: ["confidential"],
+      teamSize: "1 to 4",
+      eligibility: "Anyone",
+      brief: "The brief is the most sensitive line here.",
+      deliverables: ["A thing"],
+      posterSeed: 12345,
+    };
+
+    const redacted = toPublic(secret, 3);
+
+    expect(redacted.locked).toBe(true);
+    // Position survives, because ordering needs it. Nothing else does.
+    expect(redacted).toEqual({ locked: true, slug: "locked-4", order: 3 });
+
+    const payload = JSON.stringify(redacted);
+    for (const leak of [
+      secret.title,
+      secret.summary,
+      secret.brief,
+      secret.kicker,
+      secret.venue.name,
+      secret.venue.place,
+      secret.forWho,
+      secret.startsAt,
+      ...secret.description,
+      ...secret.tags,
+    ]) {
+      expect(payload, `leaked: ${leak}`).not.toContain(leak);
+    }
+    // The real slug is the giveaway a title-derived placeholder would carry.
+    expect(payload).not.toContain(secret.slug);
   });
 });
