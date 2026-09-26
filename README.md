@@ -133,10 +133,27 @@ targets under 40px on touch devices. Run it against a running server.
 Decorative marquee text and the visually-hidden crawler list are exempt —
 neither is reading material or a touch target.
 
+## Recruitment
+
+`/hiring` publishes the open roles — organiser, creators, campus and city
+leads. Its copy lives in `src/data/roles.ts` and is read through
+`@/lib/roles`, a third seam alongside events and certificates.
+
+Unlike `src/data/events.ts` and `src/data/site.ts`, **that file is real**. The
+conditional wording in it is load-bearing: the programme pays nothing by
+default, and "eligible", "subject to availability" and "not guaranteed" are
+what keep a list of benefits from reading as a list of promises.
+`src/lib/roles.test.ts` fails the build if a sentence mentioning money loses
+its condition.
+
+Applications are not open. `programme.application` carries no `href`, so the
+page says so and renders no button; adding the URL there is the only edit
+needed to open it.
+
 ## Not built
 
 Deliberately absent, and not to be added speculatively: seasons, a projects
-showcase, partners or sponsors, host-an-event, signup, login, registration,
+showcase, partners or sponsors, host-an-event, login, registration,
 ticketing, payments, organizer or judge dashboards, a CMS, a backend, and
 analytics.
 
@@ -149,7 +166,7 @@ src/components/site/     Loader, Nav, Hero, TapeStack, Manifesto, EventRail, Tim
 src/components/canvas/   the events ring, its shader, and the non-WebGL fallback
 src/components/poster/   generative posters (DOM and canvas twins)
 src/lib/                 pure logic: rail metrics, marquee integration, ring angles
-src/data/                the files you edit
+src/data/                the files you edit (events and site are placeholder; roles is not)
 scripts/                 filmstrip, shot, check-burst, check-links, gen-logo
 ```
 

@@ -195,3 +195,58 @@ export type PublicEvent =
       /** Position in the schedule, so ordering survives without a date. */
       order: number;
     };
+
+/**
+ * One open role in the recruitment programme.
+ *
+ * `anchor` is the fragment the role is linked by (`/hiring#organiser`), so it
+ * is stable the same way an event slug is — changing it breaks any link
+ * already shared. `support` is optional because only the organiser role has
+ * something the community provides back; the other two would carry an empty
+ * heading.
+ */
+export type Role = {
+  /** Short ordinal shown large, e.g. "01". */
+  code: string;
+  anchor: string;
+  title: string;
+  /** Short mono label under the title. */
+  kicker: string;
+  /** One or two sentences. What the role actually is. */
+  summary: string;
+  responsibilities: string[];
+  /** What the person gets. Conditional items keep their conditions. */
+  benefits: string[];
+  /** What We Code Coders provides to make the role possible. */
+  support?: { intro: string; items: string[] };
+  /** Not requirements — the shape of a strong applicant. */
+  skills?: string[];
+  /** Targets the role is measured against, where it has any. */
+  milestones?: string[];
+};
+
+/**
+ * The terms that apply to every role.
+ *
+ * These are not fine print and the page does not render them as such. The
+ * programme is performance-based with no guaranteed salary, and an applicant
+ * has to be able to read that before they read a list of benefits — so it
+ * lives in its own type rather than as a paragraph appended to each role.
+ */
+export type Programme = {
+  /** The one-line statement of what this is. */
+  premise: string;
+  /** The pay position, stated plainly. */
+  compensation: string;
+  commitment: { label: string; detail: string }[];
+  rounds: { round: string; title: string; detail: string; items?: string[] }[];
+  conditions: string[];
+  /**
+   * Where applications are taken.
+   *
+   * No `href` is the honest state before the form exists: the page says
+   * applications have not opened rather than rendering a button that goes
+   * nowhere. Adding the URL here is the only edit needed to open it.
+   */
+  application: { href?: string; label?: string; note: string };
+};

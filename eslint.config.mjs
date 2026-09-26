@@ -55,9 +55,10 @@ const eslintConfig = defineConfig([
     /*
       The seams themselves must import the data modules directly. Certificates
       are their own seam: records live in src/data/certificates and everything
-      else reads them through "@/lib/certificates".
+      else reads them through "@/lib/certificates". Recruitment copy is a third:
+      src/data/roles, read through "@/lib/roles".
     */
-    files: ["src/lib/events.ts", "src/lib/certificates.ts"],
+    files: ["src/lib/events.ts", "src/lib/certificates.ts", "src/lib/roles.ts"],
     rules: { "no-restricted-imports": "off" },
   },
   {

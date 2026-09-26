@@ -141,10 +141,11 @@ export default function AboutPage() {
                 maxWidth: "66ch",
               }}
             >
-              There is no application form and no screening call. There is a date, a
-              room, and whatever you are working on. The only thing we ask is that you
-              are willing to show it before it is finished, because a room full of
-              polished work goes quiet and a room full of broken work does not.
+              To take part in something we run there is no application form and no
+              screening call. There is a date, a room, and whatever you are working on.
+              The only thing we ask is that you are willing to show it before it is
+              finished, because a room full of polished work goes quiet and a room full
+              of broken work does not.
             </p>
           </div>
 

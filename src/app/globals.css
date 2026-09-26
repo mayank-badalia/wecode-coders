@@ -393,6 +393,7 @@ html[data-wcc-seen="1"] .loader-root {
 .about-grid,
 .detail-grid,
 .detail-hero,
+.hiring-grid,
 .manifesto-grid {
   grid-template-columns: var(--cols);
 }
@@ -423,6 +424,7 @@ html[data-wcc-seen="1"] .loader-root {
   .about-grid,
   .detail-grid,
   .detail-hero,
+  .hiring-grid,
   .manifesto-grid,
   .hero-rail {
     grid-template-columns: minmax(0, 1fr);
@@ -537,6 +539,34 @@ html[data-wcc-seen="1"] .loader-root {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/*
+  The lists on /hiring.
+
+  Two columns at most, never the four that auto-fit gave a 1325px shell: these
+  are sequential lists someone reads against their own situation, and four
+  short columns turn a list into scattered fragments with ragged half-empty
+  rows. Two keeps the page walkable without making a 34-item role a scroll
+  marathon.
+
+  Set here rather than inline for the usual reason — a grid-template-columns
+  in a style attribute beats every media query under it, which is the trap that
+  has already cost this build the tape positions, the rail cards, the
+  transition label and the poster height.
+*/
+.hiring-list,
+.hiring-conditions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 clamp(1.5rem, 4vw, 3rem);
+}
+
+@media (min-width: 900px) {
+  .hiring-list,
+  .hiring-conditions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

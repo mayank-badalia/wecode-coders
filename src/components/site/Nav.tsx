@@ -13,6 +13,7 @@ import { NavOverlay } from "./NavOverlay";
 const LINKS = [
   { index: "01", label: "Events", href: "/events" },
   { index: "02", label: "About", href: "/about" },
+  { index: "03", label: "Hiring", href: "/hiring" },
 ] as const;
 
 /** A label that rolls up on hover: one line out, its echo in. */

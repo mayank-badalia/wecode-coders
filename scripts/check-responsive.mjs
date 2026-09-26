@@ -45,7 +45,7 @@ async function detailRoutes(page, base) {
   The [id] result page is covered by a known-bad id, which renders the
   not-found state — same layout, no dependency on a record existing.
 */
-const ROUTES = ["/", "/events", "/about", "/verify", "/verify/L30-ZZZZZZ"];
+const ROUTES = ["/", "/events", "/about", "/hiring", "/verify", "/verify/L30-ZZZZZZ"];
 const MIN_FONT = 11;
 const MIN_TAP = 40;
 
