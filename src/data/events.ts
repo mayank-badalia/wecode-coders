@@ -204,6 +204,10 @@ const SERIES_SUBMISSION: EventSection = {
  * Rules 1 to 3 are the anti-backdating rules and they are deliberately blunt.
  * A hackathon that cannot say this plainly gets submissions that were built
  * the week before, and the teams who respected the clock lose to them.
+ *
+ * They state that the checking happens and stop there. Naming the signals we
+ * look at would be a checklist for defeating them, so the rule says we do not
+ * discuss the method — and nothing anywhere on this site should.
  */
 const SERIES_RULES: EventSection = {
   kind: "list",
@@ -211,7 +215,7 @@ const SERIES_RULES: EventSection = {
   numbered: true,
   items: [
     "The product must be built inside the official hackathon window. Work that existed before the clock started does not count.",
-    "We can tell. Commit history, repository and file timestamps, deployment and build logs, package metadata and hosting records all carry dates, and judges may ask for any of them.",
+    "We verify this. Submissions are checked, judges may ask a team to evidence that the work was done inside the window, and we do not discuss how those checks are run.",
     "A project found to have been built before the event does not win, however good it is. There is no partial credit for this and no appeal.",
     "You may research, plan and discuss ideas before the event. Thinking is not building.",
     "Existing libraries, APIs, frameworks and open-source components are allowed.",
@@ -245,7 +249,7 @@ function seriesFaq(durationWords: string) {
     { q: "Do I need an idea before I register?", a: `No. Register first and choose your problem before the ${durationWords} start.` },
     { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
     { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones in your submission." },
-    { q: "Can I use something I built earlier?", a: "No. The product has to be built during the event, and we check timestamps. Disclosed reusable components are fine; a finished project is not." },
+    { q: "Can I use something I built earlier?", a: "No. The product has to be built during the event, and submissions are checked. Disclosed reusable components are fine; a finished project is not." },
     { q: "Can I change track?", a: "Yes, any time before final submission. Only one primary track can be selected." },
     { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable demo and a video." },
     { q: "Do the social posts really matter?", a: "Yes — all three are required. They are worth 5 points, judged on clarity and honesty. Likes and views count for nothing." },
@@ -1047,7 +1051,7 @@ export const events: Event[] = [
     rewards: [
       "PPO opportunities for the top three teams",
       "Incubation opportunities for the top three teams",
-      "A complimentary .XYZ domain for the top ten teams",
+      "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
       "A verifiable digital certificate for every participant who makes a valid submission",
@@ -1064,6 +1068,8 @@ export const events: Event[] = [
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
+      href: "https://unstop.com/hackathons/techcircuit-hackathon-wecodecoders-1758409",
+      label: "Register on Unstop",
       note: "Free to enter, in teams of one to four. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
@@ -1122,7 +1128,7 @@ export const events: Event[] = [
     rewards: [
       "PPO opportunities for the top three teams",
       "Incubation opportunities for the top three teams",
-      "A complimentary .XYZ domain for the top ten teams",
+      "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
       "A verifiable digital certificate for every participant who makes a valid submission",
@@ -1139,6 +1145,8 @@ export const events: Event[] = [
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
+      href: "https://unstop.com/hackathons/futurestack-hackathon-wecodecoders-1758558",
+      label: "Register on Unstop",
       note: "Free to enter, in teams of one to four. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
@@ -1197,7 +1205,7 @@ export const events: Event[] = [
     rewards: [
       "PPO opportunities for the top three teams",
       "Incubation opportunities for the top three teams",
-      "A complimentary .XYZ domain for the top ten teams",
+      "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
       "A verifiable digital certificate for every participant who makes a valid submission",
@@ -1214,6 +1222,8 @@ export const events: Event[] = [
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
+      href: "https://unstop.com/hackathons/codeaxis-hackathon-wecodecoders-1758538",
+      label: "Register on Unstop",
       note: "Free to enter, in teams of one to four. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
@@ -1239,7 +1249,7 @@ export const events: Event[] = [
     description: [
       "Codex 48 is a national-level AI and full-stack online hackathon. Forty-eight hours, one original idea, one working product at the end of it.",
       "There are three tracks and no problem statements. You choose what to build and who it is for, and the first thing the judges look at is whether the problem you picked is real.",
-      "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and the rules explain exactly how that gets checked.",
+      "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and submissions are checked.",
     ],
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
@@ -1272,7 +1282,7 @@ export const events: Event[] = [
     rewards: [
       "Paid internship opportunities for the top three teams",
       "Incubation and product-development support for the top three teams",
-      "A complimentary .XYZ domain for every eligible participant",
+      "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
       "A verifiable digital certificate for every participant who makes a valid submission",
@@ -1289,6 +1299,8 @@ export const events: Event[] = [
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
+      href: "https://unstop.com/hackathons/codex-48-national-level-hackathon-wecodecoders-1761082",
+      label: "Register on Unstop",
       note: "Free to enter, in teams of one to four.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
@@ -1302,18 +1314,18 @@ export const events: Event[] = [
     locked: false,
     slug: "codestar-30",
     title: "CodeStar 30",
-    kicker: "HACKATHON — 30 HOURS",
+    kicker: "HACKATHON — 48 HOURS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-25T10:00:00+05:30",
-    endsAt: "2026-10-26T16:00:00+05:30",
+    endsAt: "2026-10-27T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Thirty hours for students and young builders to develop and present a functional technology product. National, online, free, with paid internship and incubation opportunities for the top three teams.",
+      "Forty-eight hours for students and young builders to develop and present a functional technology product. National, online, free, with paid internship and incubation opportunities for the top three teams.",
     description: [
-      "CodeStar 30 is a national-level AI and full-stack online hackathon built around a shorter clock: thirty hours from brief to submission.",
-      "Thirty hours rewards scope discipline. Choose one of the three tracks, choose a problem inside it, and build the single journey that proves your idea works rather than the five that show what it could become.",
+      "CodeStar 30 is a national-level AI and full-stack online hackathon: forty-eight hours from the opening brief to the submission deadline.",
+      "Forty-eight hours rewards scope discipline. Choose one of the three tracks, choose a problem inside it, and build the single journey that proves your idea works rather than the five that show what it could become.",
       "There are no problem statements. What you build and who it is for is your decision, and how well you justify it is the first thing scored.",
     ],
     forWho: "Students, developers, designers and first-time builders.",
@@ -1323,13 +1335,13 @@ export const events: Event[] = [
       "open innovation",
       "online",
       "national",
-      "30 hours",
+      "48 hours",
     ],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
       "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is free and open nationally.",
     brief:
-      "Develop and present a functional product in thirty hours.",
+      "Develop and present a functional product in forty-eight hours.",
     deliverables: [
       "A working product or prototype whose central workflow actually runs",
       "A two-to-three-minute demo video and a short pitch deck",
@@ -1339,15 +1351,15 @@ export const events: Event[] = [
     ],
     schedule: [
       { when: "Before the event", what: "Registration open. Form a team of one to four and join the official channel." },
-      { when: "Sun 25 Oct", what: "The tracks, the judging criteria and the submission list go out. The 30 hours begin." },
-      { when: "Mon 26 Oct", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Sun 25 Oct", what: "The tracks, the judging criteria and the submission list go out. The 48 hours begin." },
+      { when: "Tue 27 Oct", what: "Submissions close. Everything on the list is in, or it is not." },
       { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
     ],
-    judging: seriesJudging("thirty hours"),
+    judging: seriesJudging("forty-eight hours"),
     rewards: [
       "Paid internship opportunities for the top three teams",
       "Incubation and product-development support for the top three teams",
-      "A complimentary .XYZ domain for every eligible participant",
+      "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
       "A verifiable digital certificate for every participant who makes a valid submission",
@@ -1355,15 +1367,17 @@ export const events: Event[] = [
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: SERIES_SECTIONS,
-    faq: seriesFaq("thirty hours"),
+    faq: seriesFaq("forty-eight hours"),
     stats: [
-      { label: "Hours to build", value: "30" },
+      { label: "Hours to build", value: "48" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
       { label: "Entry", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
+      href: "https://unstop.com/hackathons/codestar-30-national-level-hackathon-wecodecoders-1760472",
+      label: "Register on Unstop",
       note: "Free to enter, in teams of one to four.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
@@ -1422,7 +1436,7 @@ export const events: Event[] = [
     rewards: [
       "Paid internship opportunities for the top three teams",
       "Incubation and product-development support for the top three teams",
-      "A complimentary .XYZ domain for every eligible participant",
+      "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "A verifiable digital certificate for every participant who makes a valid submission",
       "Written feedback and a score from the judges on what you submitted",
@@ -1438,6 +1452,8 @@ export const events: Event[] = [
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
+      href: "https://unstop.com/p/codehack-india-national-level-hackathon-wecodecoders-1762158",
+      label: "Register on Unstop",
       note: "Free to enter, in teams of one to four.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the

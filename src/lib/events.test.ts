@@ -260,6 +260,25 @@ describe("events seam", () => {
     }
   });
 
+  /*
+    The rules must say the checking happens without saying how.
+
+    Listing the signals we look at is a checklist for defeating them, so the
+    method stays off the site. This is the guard on that: it fails if anyone
+    reintroduces the specifics while editing the rule.
+  */
+  it("never publishes how backdating is detected", () => {
+    const METHOD = /commit history|git log|file timestamps?|build logs?|deployment logs?|package metadata|hosting records|repository timestamps?/i;
+    for (const e of published) {
+      const text = [
+        ...(e.faq ?? []).map((f) => f.a),
+        ...e.description,
+        ...(e.sections ?? []).flatMap((sec) => (sec.kind === "list" ? sec.items : [])),
+      ].join(" ");
+      expect(text, e.slug).not.toMatch(METHOD);
+    }
+  });
+
   it("tells the series it must build inside the hackathon window", () => {
     const series = published.filter((e) => e.posterSeed >= 9101 && e.posterSeed <= 9106);
     for (const e of series) {
@@ -269,7 +288,7 @@ describe("events seam", () => {
       const text = rules.items.join(" ");
       expect(text, e.slug).toMatch(/inside the official hackathon window/i);
       // The deterrent only works if the page says the checking happens.
-      expect(text, e.slug).toMatch(/commit history|timestamps|build logs/i);
+      expect(text, e.slug).toMatch(/we verify this|submissions are checked/i);
     }
   });
 });
