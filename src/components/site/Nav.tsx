@@ -30,7 +30,16 @@ function HiringCta() {
   return (
     <TransitionLink href="/hiring" label="Hiring" className="nav-hiring">
       <span className="nav-hiring-dot" aria-hidden="true" />
-      We&rsquo;re hiring
+      {/*
+        Two labels rather than one.
+
+        "We're hiring" plus the logo plus Menu overflowed a 390px bar: the
+        logo collapsed to nothing and Menu was pushed off the right edge.
+        Which one shows is a media query, so there is no hydration mismatch
+        and no layout shift.
+      */}
+      <span className="nav-hiring-long">We&rsquo;re hiring</span>
+      <span className="nav-hiring-short">Hiring</span>
     </TransitionLink>
   );
 }
@@ -264,7 +273,8 @@ export function Nav() {
           href="/"
           label="Home"
           aria-label="We Code Coders, home"
-          style={{ position: "relative", display: "block", pointerEvents: "auto", width: 132, height: 44 }}
+          className="nav-home"
+          style={{ position: "relative", display: "block", pointerEvents: "auto" }}
         >
           <span className="nav-wordmark" style={{ position: "absolute", inset: 0, display: "block" }}>
             {/* The mark matches the links rather than staying branded red. */}

@@ -120,6 +120,29 @@ html[data-wcc-seen="1"] .loader-root {
 }
 
 /*
+  The wordmark.
+
+  flex-shrink: 0 is the whole point. It is a flex item beside a nav row that
+  cannot wrap, so when the hiring pill widened the row the wordmark absorbed
+  every pixel of the overflow and collapsed to nothing — on a phone the bar
+  showed the pill alone, with the logo at zero width and Menu pushed past the
+  right edge. Its size lives here rather than inline because it has to shrink
+  on a narrow screen, and an inline width beats every media query under it.
+*/
+.nav-home {
+  flex-shrink: 0;
+  width: 132px;
+  height: 44px;
+}
+
+@media (max-width: 430px) {
+  .nav-home {
+    width: 104px;
+    height: 35px;
+  }
+}
+
+/*
   The hiring call to action.
 
   Everything about it is set here rather than inline: the padding has to grow
@@ -146,8 +169,24 @@ a.nav-hiring {
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  animation: nav-hiring-shake 5.5s ease-in-out infinite;
+  flex-shrink: 0;
+  animation: nav-hiring-shake 2.6s ease-in-out infinite;
   transition: transform 0.25s ease;
+}
+
+/* One label per width. See the note in Nav.tsx. */
+.nav-hiring-short {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .nav-hiring-long {
+    display: none;
+  }
+
+  .nav-hiring-short {
+    display: inline;
+  }
 }
 
 /* A live dot, so it reads as open now rather than as a page that exists. */
@@ -167,19 +206,22 @@ a.nav-hiring:focus-visible {
 }
 
 /*
-  Two quick shakes, then five seconds of nothing.
+  A wobble every couple of seconds, with a rest between.
 
-  A continuous wobble is noise and gets tuned out within a second. The long
-  quiet tail is what keeps it noticeable on a page someone is reading.
+  Shorter cycle and a wider swing than the first pass, which rested five
+  seconds and was easy to miss entirely. A continuous wobble would still be
+  noise, so the rest stays — it is the contrast that gets it noticed, not the
+  amount of movement.
 */
 @keyframes nav-hiring-shake {
-  0%, 84%, 100% { transform: rotate(0deg) translateX(0); }
-  86% { transform: rotate(-2.5deg) translateX(-2px); }
-  88% { transform: rotate(2.5deg) translateX(2px); }
-  90% { transform: rotate(-2deg) translateX(-2px); }
-  92% { transform: rotate(2deg) translateX(2px); }
-  94% { transform: rotate(-1deg) translateX(-1px); }
-  96% { transform: rotate(0deg) translateX(0); }
+  0%, 62%, 100% { transform: rotate(0deg) translateX(0) scale(1); }
+  66% { transform: rotate(-4deg) translateX(-3px) scale(1.04); }
+  70% { transform: rotate(4deg) translateX(3px) scale(1.04); }
+  74% { transform: rotate(-3.5deg) translateX(-3px) scale(1.03); }
+  78% { transform: rotate(3.5deg) translateX(3px) scale(1.03); }
+  82% { transform: rotate(-2deg) translateX(-2px) scale(1.02); }
+  86% { transform: rotate(2deg) translateX(2px) scale(1.01); }
+  90% { transform: rotate(0deg) translateX(0) scale(1); }
 }
 
 @keyframes nav-hiring-pulse {
@@ -332,6 +374,15 @@ a.nav-hiring:focus-visible {
   */
   .ring-canvas,
   .ring-fallback {
+    /*
+      Clear of the fixed bar.
+
+      The stage is inset: 0, so on a phone the focused poster was centred in a
+      band that starts at y=0 and rode up underneath the logo, the hiring pill
+      and "drag or scroll". There is no such collision on desktop, where the
+      posters are small against a much wider frame.
+    */
+    top: 5.5rem;
     bottom: 42%;
   }
 

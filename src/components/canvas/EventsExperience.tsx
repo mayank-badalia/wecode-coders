@@ -198,6 +198,28 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
     [events.length],
   );
 
+  /*
+    Travel accumulated toward the next event, for the non-WebGL path.
+
+    The fallback has no ring to spin, so it steps whole events. Accumulating
+    across input events and subtracting a threshold at a time is what makes a
+    long swipe move several events and a short one move exactly one — the drag
+    handler used to test each pointermove's own delta, so a fast swipe with
+    30px deltas stepped on every frame and a slow one never stepped at all.
+  */
+  const fallbackTravel = useRef(0);
+  const advanceFallback = useCallback(
+    (delta: number, threshold: number) => {
+      fallbackTravel.current += delta;
+      while (Math.abs(fallbackTravel.current) >= threshold) {
+        const dir = fallbackTravel.current > 0 ? 1 : -1;
+        step(dir);
+        fallbackTravel.current -= dir * threshold;
+      }
+    },
+    [step],
+  );
+
   useEffect(() => {
     lenis?.stop();
 
@@ -207,18 +229,13 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
     html.style.overflow = "hidden";
     window.scrollTo(0, 0);
 
-    let fallbackAccum = 0;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
 
       // Without a ring to spin, the fallback steps a whole event once enough
       // wheel travel has accumulated.
       if (webglRef.current === false) {
-        fallbackAccum += e.deltaY;
-        if (Math.abs(fallbackAccum) > 240) {
-          step(fallbackAccum > 0 ? 1 : -1);
-          fallbackAccum = 0;
-        }
+        advanceFallback(e.deltaY, 240);
         return;
       }
 
@@ -229,13 +246,37 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
     };
 
     let lastTouchY = 0;
+    let lastTouchX = 0;
     const onTouchStart = (e: TouchEvent) => {
       lastTouchY = e.touches[0]?.clientY ?? 0;
+      lastTouchX = e.touches[0]?.clientX ?? 0;
     };
     const onTouchMove = (e: TouchEvent) => {
       const y = e.touches[0]?.clientY ?? 0;
-      input.current.scroll -= (lastTouchY - y) * 0.009;
+      const x = e.touches[0]?.clientX ?? 0;
+      // Positive means the finger moved up, or left.
+      const dy = lastTouchY - y;
+      const dx = lastTouchX - x;
       lastTouchY = y;
+      lastTouchX = x;
+
+      /*
+        The fallback needs its own branch here, exactly as the wheel does.
+
+        Without it this wrote to input.current.scroll, which only the WebGL
+        ring ever reads — and the ring is deliberately off on a small touch
+        screen. So every phone on the site had a poster carousel that did
+        nothing at all when you dragged a finger down it.
+
+        Either axis moves it: the layout is a coverflow, and swiping sideways
+        across it is the obvious gesture even though the page scrolls down.
+      */
+      if (webglRef.current === false) {
+        advanceFallback(Math.abs(dx) > Math.abs(dy) ? dx : dy, 80);
+        return;
+      }
+
+      input.current.scroll -= dy * 0.009;
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -250,7 +291,7 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
       html.style.overflow = prev.htmlOverflow;
       lenis?.start();
     };
-  }, [lenis, step]);
+  }, [lenis, advanceFallback]);
 
 
   // Pointer drag, used by both the WebGL ring and the fallback.
@@ -286,7 +327,9 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
       const dx = e.clientX - lastPointerX.current;
       lastPointerX.current = e.clientX;
       input.current.drag += dx * 0.005;
-      if (!webgl && Math.abs(dx) > 24) step(dx > 0 ? -1 : 1);
+      // Dragging right carries the posters right, so it goes to the previous
+      // event — hence the sign flip before the accumulator.
+      if (!webgl) advanceFallback(-dx, 60);
     };
     const up = (e: PointerEvent) => {
       input.current.dragging = false;
@@ -328,7 +371,7 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
       el.removeEventListener("pointerup", up);
       el.removeEventListener("pointercancel", up);
     };
-  }, [webgl, step, events, router, playExit, isBusy]);
+  }, [webgl, advanceFallback, events, router, playExit, isBusy]);
 
   // Keyboard: arrow keys rotate the ring, so it is operable without a pointer.
   useEffect(() => {
