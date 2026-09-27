@@ -26,9 +26,8 @@ const mono: React.CSSProperties = {
 /**
  * Decides whether this device should run the WebGL ring at all.
  *
- * Three ways to fail: the visitor asked for reduced motion, the device is a
- * small touch screen, or a short frame-time sample shows it cannot hold a
- * usable rate. Any of them mounts the CSS fallback instead.
+ * Two ways to fail: the visitor asked for reduced motion, or the browser
+ * cannot give us a context at all. Either mounts the CSS fallback instead.
  */
 function useCanRunWebGL(reduced: boolean) {
   const [ok, setOk] = useState<boolean | null>(null);
@@ -45,16 +44,26 @@ function useCanRunWebGL(reduced: boolean) {
       looked fine in automation and was broken on real machines.
 
       The remaining checks are the ones that are actually knowable up front:
-      the visitor asked for less motion, the device is a small touch screen, or
-      the browser cannot give us a context at all. Frame rate is handled by
-      degrading resolution while running, not by refusing to start.
+      the visitor asked for less motion, or the browser cannot give us a
+      context at all. Frame rate is handled by degrading resolution while
+      running, not by refusing to start.
+
+      Small touch screens used to be excluded outright, which meant a phone
+      got the CSS coverflow — a flat row of cards with none of the ring's
+      curve, and none of the camera travel that takes the visitor inside it.
+      The two looked like different websites. They now run the same scene, at
+      a lower pixel ratio and with smaller textures; see the Canvas below and
+      the CAP in posterCanvas.
+
+      A device that reports 2GB or less is still sent to the fallback. That is
+      a real constraint rather than a guess about touch: nine textures and a
+      WebGL context on 2GB is how you get a tab killed mid-scroll.
     */
     const decide = () => {
       if (reduced) return setOk(false);
 
-      if (window.matchMedia("(max-width: 900px) and (pointer: coarse)").matches) {
-        return setOk(false);
-      }
+      const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+      if (typeof memory === "number" && memory <= 2) return setOk(false);
 
       const probe = document.createElement("canvas");
       const gl =
@@ -92,6 +101,21 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
 
   const reduced = useReducedMotion();
   const webgl = useCanRunWebGL(reduced);
+  /*
+    Touch, decided once on the client.
+
+    Read in an effect rather than during render: matchMedia does not exist on
+    the server, and branching on it while rendering would make the first
+    client paint disagree with the markup that came down the wire.
+  */
+  const [coarse, setCoarse] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse)");
+    const sync = () => setCoarse(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
   useEffect(() => {
     webglRef.current = webgl;
   }, [webgl]);
@@ -418,7 +442,23 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
         cursor: hovered === null ? "grab" : "pointer",
       }}
     >
+      {/*
+        The Canvas is wrapped rather than classed directly.
+
+        React Three Fiber writes `position: relative; width: 100%; height:
+        100%` inline on its own wrapper, and an inline style beats every rule
+        in the stylesheet — so `.ring-canvas { position: absolute; inset: 0 }`
+        had never applied to it, and neither had the mobile rule that shrinks
+        it to the top of the screen. On desktop that went unnoticed because
+        filling the stage is what it should do anyway; on a phone the ring
+        covered the whole viewport and ran underneath the copy. The CSS
+        fallback looked correct throughout precisely because it is our own div
+        with no inline style to lose to.
+
+        Our div owns the box; R3F's fills it.
+      */}
       {webgl === true && (
+        <div className="ring-canvas">
         <Canvas
           /*
             A continuous loop, not "demand".
@@ -435,9 +475,14 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
           // Capped at 1.5 rather than 2: a retina panel at full DPR is four
           // times the pixels for no visible gain at this scale, and that
           // headroom is what keeps the ring smooth on ordinary laptops.
-          dpr={[1, 1.5]}
+          /*
+            Capped lower on a phone. A 1.5x ratio on a 3x panel is four times
+            the fragments for detail nobody can resolve at arm's length, and
+            it is the first thing to give on a mid-range Android.
+          */
+          dpr={coarse ? [1, 1.25] : [1, 1.5]}
           gl={{ antialias: true }}
-          className="ring-canvas"
+          style={{ width: "100%", height: "100%" }}
         >
           <EventRing
             events={events}
@@ -447,6 +492,7 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
             consumeInput={consumeInput}
           />
         </Canvas>
+        </div>
       )}
 
       {webgl === false && <RingFallback events={events} focused={focused} />}

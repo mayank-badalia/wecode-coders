@@ -135,7 +135,12 @@ export function posterToCanvas(
         Capped on the long edge: past this the texture costs video memory for
         detail no panel resolves, and there are nine of them.
       */
-      const CAP = 1280;
+      /*
+        Smaller on a phone: nine of these live on the GPU at once, and 1280px
+        of poster is detail no handset resolves at arm's length. 1280 stays on
+        a desktop panel, where the focused poster covers 900 device pixels.
+      */
+      const CAP = window.matchMedia("(pointer: coarse)").matches ? 768 : 1280;
       const fit = Math.min(1, CAP / Math.max(img.width, img.height));
       const w = Math.max(1, Math.round(img.width * fit));
       const h = Math.max(1, Math.round(img.height * fit));
