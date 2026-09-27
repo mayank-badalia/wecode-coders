@@ -16,7 +16,7 @@ export const programme: Programme = {
     headline: "₹10,000 a month",
     gate: "once you clear your milestone",
     detail:
-      "You are selected first. Then you complete your milestone — five approved events if you organise, your registration target if you lead a campus. Once the team has reviewed and signed the work off, you move onto paid events and start being paid ₹10,000 a month. The full terms are shared with you when you are selected.",
+      "You are selected first. Then you complete your milestone — five approved events if you organise, your registration target if you lead a campus. Once the team has reviewed and signed the work off, you move onto paid events and start being paid ₹10,000 a month. The full terms are shared with you when you are selected. Creator and designer roles are not paid; they run on credit, collaborations and reach, and that is set out in full under the role.",
   },
 
   commitment: [
@@ -116,7 +116,9 @@ export const roles: Role[] = [
       "Run the event professionally and submit the final report, participant data and feedback.",
       "Follow all branding, safety, privacy and sponsor guidelines.",
     ],
-    pay: {
+    openings: 3,
+    reward: {
+      kind: "pay",
       headline: "₹10,000 a month after five events",
       detail:
         "Run five approved hackathons. Once those five are signed off by the team — the events delivered, the participant data in, the reports complete — you move onto paid events and start being paid ₹10,000 a month.",
@@ -172,13 +174,17 @@ export const roles: Role[] = [
       "Maintain professional conduct while representing the community.",
       "Share campaign performance or reach data when requested.",
     ],
-    pay: {
-      headline: "Paid assignments once your first campaign is approved",
+    openings: 3,
+    reward: {
+      kind: "recognition",
+      headline: "Credit, collaborations and reach",
       detail:
-        "Deliver your first campaign in full — the assets on brief and on time — and once the team has reviewed and approved it you move onto paid assignments. The rate and the schedule are set out in your offer letter.",
+        "This role is not paid. What it gives you is visibility: your credit on the work, collaboration posts on selected events, and your name in front of a national community of student builders — including on the event pages themselves. If you are building a portfolio or an audience, that is the trade.",
     },
     benefits: [
       "Creator credit on the posts, posters and reels you make.",
+      "Collaboration posts with We Code Coders on selected events.",
+      "Your work shown on the event pages it was made for.",
       "Tagging or collaboration posts where appropriate.",
       "Recognition in front of the We Code Coders community.",
       "Verified contribution certificates for completed work.",
@@ -212,7 +218,9 @@ export const roles: Role[] = [
       "Strong performers may be promoted to Campus Lead or City Lead.",
       "Leadership selection depends on verified registrations, consistency, communication, participant feedback and overall conduct.",
     ],
-    pay: {
+    openings: 5,
+    reward: {
+      kind: "pay",
       headline: "₹10,000 a month once you hit your target",
       detail:
         "Clear the registration target you are set — between 100 and 500 verified registrations, depending on the campaign. Once those registrations are verified and your campaign is reviewed, you move onto paid campaigns and start being paid ₹10,000 a month.",

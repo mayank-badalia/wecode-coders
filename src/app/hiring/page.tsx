@@ -150,13 +150,22 @@ function RoleList({
 }
 
 /**
- * The pay line for a role.
- *
- * On ink, in display type, at the top of the role rather than inside a bullet
+ * What a role returns, at the top of the role rather than inside a bullet
  * list. It is the thing people scroll for, and a page that makes them hunt
  * for it is answering a question nobody asked.
+ *
+ * The label follows the kind. Creators are not paid, and heading their block
+ * "What you are paid" would be the one lie that matters on this page.
  */
-function PayBlock({ headline, detail }: { headline: string; detail: string }) {
+function RewardBlock({
+  kind,
+  headline,
+  detail,
+}: {
+  kind: "pay" | "recognition";
+  headline: string;
+  detail: string;
+}) {
   return (
     <div
       data-reveal
@@ -167,7 +176,9 @@ function PayBlock({ headline, detail }: { headline: string; detail: string }) {
         padding: "clamp(1.4rem, 3vw, 2rem) clamp(1.4rem, 3vw, 2.2rem)",
       }}
     >
-      <p style={{ ...TYPE.mono, margin: 0, opacity: 0.6 }}>What you are paid</p>
+      <p style={{ ...TYPE.mono, margin: 0, opacity: 0.6 }}>
+        {kind === "pay" ? "What you are paid" : "What you get for it"}
+      </p>
       <p
         style={{
           margin: "0.5rem 0 0",
@@ -275,7 +286,9 @@ export default function HiringPage() {
                 {programme.pay.gate}
               </p>
             </div>
-            <p style={{ ...TYPE.body, margin: 0, maxWidth: "52ch" }}>{programme.pay.detail}</p>
+            <p style={{ ...TYPE.body, margin: 0, maxWidth: "52ch" }}>
+              {programme.pay.detail}
+            </p>
           </div>
         </section>
 
@@ -332,11 +345,29 @@ export default function HiringPage() {
                   >
                     {role.kicker}
                   </p>
+                  {/* Scarcity, stated plainly rather than implied. */}
+                  <p
+                    style={{
+                      ...TYPE.mono,
+                      margin: "0.8rem 0 0",
+                      display: "inline-block",
+                      padding: "0.5em 0.9em",
+                      border: "1px solid var(--color-ink-40)",
+                      borderRadius: 999,
+                      color: "var(--color-ink-60)",
+                    }}
+                  >
+                    Only {role.openings} open
+                  </p>
                 </div>
                 <p style={{ ...TYPE.body, margin: 0, maxWidth: "62ch" }}>{role.summary}</p>
               </div>
 
-              <PayBlock headline={role.pay.headline} detail={role.pay.detail} />
+              <RewardBlock
+                kind={role.reward.kind}
+                headline={role.reward.headline}
+                detail={role.reward.detail}
+              />
 
               <RoleList label="What you do" items={role.responsibilities} />
               {role.milestones && <RoleList label="How it is measured" items={role.milestones} />}

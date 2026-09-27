@@ -225,13 +225,21 @@ export type Role = {
   /** One or two sentences. What the role actually is. */
   summary: string;
   responsibilities: string[];
+  /** How many people we are taking for this role. */
+  openings: number;
+
   /**
-   * The pay line for this role, rendered first and rendered large.
+   * What the role returns, rendered first and rendered large.
    *
    * It leads because it is the thing applicants scroll looking for, and on
    * the first version of this page it sat sixth in a list of nine bullets.
+   *
+   * `kind` exists because not every role pays. Creators are recognition
+   * only — credit, tagging, collaborations and exposure — and labelling that
+   * block "What you are paid" would be a lie on the one page where being
+   * straight about money matters most.
    */
-  pay: { headline: string; detail: string };
+  reward: { kind: "pay" | "recognition"; headline: string; detail: string };
 
   /** What the person gets, beyond the pay. */
   benefits: string[];

@@ -33,12 +33,31 @@ describe("roles", () => {
     for (const anchor of anchors) expect(anchor).toMatch(/^[a-z0-9-]+$/);
   });
 
-  it("leads every role with its pay", () => {
-    // The pay is a field of its own rather than a bullet, precisely so it
-    // cannot drift back down into a list of nine other things.
+  it("leads every role with what it returns", () => {
+    // A field of its own rather than a bullet, precisely so it cannot drift
+    // back down into a list of nine other things.
     for (const role of roles) {
-      expect(role.pay.headline.length, role.anchor).toBeGreaterThan(0);
-      expect(role.pay.detail.length, role.anchor).toBeGreaterThan(0);
+      expect(role.reward.headline.length, role.anchor).toBeGreaterThan(0);
+      expect(role.reward.detail.length, role.anchor).toBeGreaterThan(0);
+      expect(role.openings, role.anchor).toBeGreaterThan(0);
+    }
+  });
+
+  it("never labels an unpaid role as paid", () => {
+    /*
+      Creators are recognition only. The block above their role is headed
+      "What you get for it" rather than "What you are paid", and nothing in
+      it may read as a wage — this is the one page where being straight about
+      money matters most, and an implied rate would be the worst kind of
+      error to ship.
+    */
+    const WAGE = /₹|\bsalar|\bstipend|\bper month\b|a month\b|\bpaid assignment/i;
+    for (const role of roles) {
+      if (role.reward.kind === "pay") continue;
+      const text = `${role.reward.headline} ${role.reward.detail} ${role.benefits.join(" ")}`;
+      expect(text, `${role.anchor} implies a wage`).not.toMatch(WAGE);
+      // And it must say so outright, not merely omit it.
+      expect(role.reward.detail, role.anchor).toMatch(/not paid|no payment|unpaid/i);
     }
   });
 
@@ -64,7 +83,9 @@ describe("roles", () => {
       // checked as the unit the reader sees, not as two loose strings.
       `${programme.pay.headline} ${programme.pay.gate}`,
       programme.pay.detail,
-      ...roles.map((r) => `${r.pay.headline} ${r.pay.detail}`),
+      ...roles
+        .filter((r) => r.reward.kind === "pay")
+        .map((r) => `${r.reward.headline} ${r.reward.detail}`),
       ...roles.flatMap((r) => r.benefits),
       ...programme.conditions,
       // `support` is deliberately absent: those are sponsor perks the
@@ -113,7 +134,7 @@ describe("roles", () => {
       programme.pay.detail,
       programme.onboarding.detail,
       ...programme.conditions,
-      ...roles.flatMap((r) => [r.summary, r.pay.headline, r.pay.detail, ...r.benefits]),
+      ...roles.flatMap((r) => [r.summary, r.reward.headline, r.reward.detail, ...r.benefits]),
     ];
     for (const line of everything) {
       expect(line, `discouraging line: ${line}`).not.toMatch(DISCOURAGING);

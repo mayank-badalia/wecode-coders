@@ -16,6 +16,25 @@ const LINKS = [
   { index: "03", label: "Hiring", href: "/hiring" },
 ] as const;
 
+/*
+  Hiring is pulled out of the roll-links and given its own button.
+
+  As one of three identical labels it was invisible, and below 900px the whole
+  row is hidden and it disappeared entirely — which is the opposite of what a
+  recruiting page needs. This sits beside Menu at every width, carries the
+  signal red so it reads as an action rather than a destination, and shakes
+  every few seconds so it is noticed without being a nuisance. The shake is
+  off under prefers-reduced-motion; see globals.css.
+*/
+function HiringCta() {
+  return (
+    <TransitionLink href="/hiring" label="Hiring" className="nav-hiring">
+      <span className="nav-hiring-dot" aria-hidden="true" />
+      We&rsquo;re hiring
+    </TransitionLink>
+  );
+}
+
 /** A label that rolls up on hover: one line out, its echo in. */
 function RollLink({
   index,
@@ -271,8 +290,10 @@ export function Nav() {
           style={{
             whiteSpace: "nowrap",
             display: "flex",
-            alignItems: "baseline",
-            gap: "clamp(1.4rem, 3.4vw, 3rem)",
+            // Centre, not baseline: the hiring pill has its own box and sat
+            // a few pixels low against the text links when aligned on text.
+            alignItems: "center",
+            gap: "clamp(1rem, 2.6vw, 2.4rem)",
             fontFamily: "var(--font-display)",
             fontSize: "clamp(0.85rem, 1.15vw, 1.05rem)",
             fontWeight: 600,
@@ -282,10 +303,12 @@ export function Nav() {
           }}
         >
           <span className="nav-links">
-            {LINKS.map((l) => (
+            {LINKS.filter((l) => l.href !== "/hiring").map((l) => (
               <RollLink key={l.href} {...l} />
             ))}
           </span>
+
+          <HiringCta />
 
           <button
             ref={menuButton}
