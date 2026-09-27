@@ -183,6 +183,7 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
 
   const input = useRef({ drag: 0, scroll: 0, nudge: 0, dragging: false, pointerOver: false });
   const lastPointerX = useRef(0);
+  const lastPointerY = useRef(0);
   const pointerStart = useRef({ x: 0, y: 0 });
   const lenis = useLenis();
   // Read inside the listeners, which are bound once.
@@ -296,7 +297,14 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
         across it is the obvious gesture even though the page scrolls down.
       */
       if (webglRef.current === false) {
-        advanceFallback(Math.abs(dx) > Math.abs(dy) ? dx : dy, 80);
+        /*
+          Only when no pointer drag is running. A touch fires pointerdown, so
+          the pointer handler is normally the one stepping the fallback — both
+          acting on the same gesture stepped it twice per swipe.
+        */
+        if (!input.current.dragging) {
+          advanceFallback(Math.abs(dx) > Math.abs(dy) ? dx : dy, 80);
+        }
         return;
       }
 
@@ -340,6 +348,7 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
     const down = (e: PointerEvent) => {
       input.current.dragging = true;
       lastPointerX.current = e.clientX;
+      lastPointerY.current = e.clientY;
       pointerStart.current = { x: e.clientX, y: e.clientY };
       el.setPointerCapture(e.pointerId);
     };
@@ -356,11 +365,36 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
 
       if (!input.current.dragging) return;
       const dx = e.clientX - lastPointerX.current;
+      const dy = e.clientY - lastPointerY.current;
       lastPointerX.current = e.clientX;
-      input.current.drag += dx * 0.005;
-      // Dragging right carries the posters right, so it goes to the previous
-      // event — hence the sign flip before the accumulator.
-      if (!webgl) advanceFallback(-dx, 60);
+      lastPointerY.current = e.clientY;
+
+      /*
+        Both axes turn the ring on a touch screen.
+
+        A finger on a phone swipes up and down — that is what "scroll" means
+        there — and a vertical swipe has almost no horizontal delta. The ring
+        only ever read this handler's horizontal component, so a vertical
+        swipe moved it by nothing at all.
+
+        The touchmove handler further up does write vertical travel, but into
+        `scroll`, and the ring ignores `scroll` for as long as a drag is in
+        progress. A touch fires pointerdown, so a drag is always in progress:
+        every vertical swipe on the site was being written to a field nothing
+        was reading. Feeding it through `drag` puts it on the path that is
+        actually live, and leaves the scroll write as the fallback for when
+        the browser cancels the pointer mid-gesture.
+      */
+      input.current.drag += dx * 0.005 + (coarse ? dy * 0.008 : 0);
+      /*
+        Dragging right, or swiping down, carries the posters forward — so both
+        are negated before the accumulator. Whichever axis the finger is
+        actually travelling on wins, the same rule the ring uses.
+      */
+      if (!webgl) {
+        const vertical = coarse && Math.abs(dy) > Math.abs(dx);
+        advanceFallback(vertical ? -dy : -dx, 60);
+      }
     };
     const up = (e: PointerEvent) => {
       input.current.dragging = false;
@@ -402,7 +436,7 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
       el.removeEventListener("pointerup", up);
       el.removeEventListener("pointercancel", up);
     };
-  }, [webgl, advanceFallback, events, router, playExit, isBusy]);
+  }, [webgl, coarse, advanceFallback, events, router, playExit, isBusy]);
 
   // Keyboard: arrow keys rotate the ring, so it is operable without a pointer.
   useEffect(() => {
@@ -445,7 +479,16 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
         background: "var(--color-ink)",
         color: "var(--color-paper)",
         overflow: "hidden",
-        touchAction: "pan-y",
+        /*
+          The stage owns every touch gesture.
+
+          "pan-y" told the browser that vertical drags were its to handle. The
+          page does not scroll here — the body is fixed and a scroll is a
+          rotation — so there was nothing for it to pan, but it still claimed
+          the gesture and fired pointercancel partway through, dropping the
+          drag it had already started.
+        */
+        touchAction: "none",
         cursor: hovered === null ? "grab" : "pointer",
       }}
     >
