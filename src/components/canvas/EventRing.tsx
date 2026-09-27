@@ -277,17 +277,33 @@ export function EventRing({
       }
       idle.current += dt;
 
-      // Once the visitor stops, settle onto the nearest event.
-      if (idle.current > 0.28) {
+      /*
+        Once the visitor stops, settle onto the nearest event.
+
+        0.28s of waiting before the snap even begins, then a slow lerp, put
+        most of a second between letting go and the ring coming to rest.
+      */
+      if (idle.current > 0.16) {
         const slot = nearestSlot(-target.current, events.length);
         const nearest = -slotAngle(slot, events.length);
         const turns = Math.round((target.current - nearest) / TAU);
-        target.current += (nearest + turns * TAU - target.current) * Math.min(1, dt * 3.4);
+        target.current += (nearest + turns * TAU - target.current) * Math.min(1, dt * 5.5);
       }
     }
 
-    // Frame-rate independent easing toward the target.
-    rotation.current += (target.current - rotation.current) * (1 - Math.exp(-dt / 0.16));
+    /*
+      Frame-rate independent easing toward the target, tighter under a finger.
+
+      One time constant for both cases was the wrong call. At 0.16s the ring
+      trails a moving finger by about 160ms of travel, which on a touch screen
+      is not smoothing — it is the poster sliding along a beat behind the
+      thumb, and it reads as the whole page being slow to respond. Direct
+      manipulation wants to feel stuck to the finger; a flick that has been
+      let go wants the long tail. So the drag gets 45ms and everything else
+      keeps the 0.16 it always had.
+    */
+    const tau = input.dragging ? 0.045 : 0.16;
+    rotation.current += (target.current - rotation.current) * (1 - Math.exp(-dt / tau));
     velocity.current = (rotation.current - previous) / Math.max(dt, 0.0001);
     settled.current = Math.abs(target.current - rotation.current) < 0.0005;
 
