@@ -543,28 +543,24 @@ html[data-wcc-seen="1"] .loader-root {
 }
 
 /*
-  The lists on /hiring.
+  The conditions list on /hiring.
 
-  Two columns at most, never the four that auto-fit gave a 1325px shell: these
-  are sequential lists someone reads against their own situation, and four
-  short columns turn a list into scattered fragments with ragged half-empty
-  rows. Two keeps the page walkable without making a 34-item role a scroll
-  marathon.
+  Two columns on a wide screen and one on a phone. The role lists that used to
+  share this rule are single-column now at a 64ch measure: they are read in
+  order against your own situation, and two columns meant hunting for the top
+  of the second one after every list.
 
   Set here rather than inline for the usual reason — a grid-template-columns
   in a style attribute beats every media query under it, which is the trap that
   has already cost this build the tape positions, the rail cards, the
   transition label and the poster height.
 */
-.hiring-list,
 .hiring-conditions {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 0 clamp(1.5rem, 4vw, 3rem);
 }
 
 @media (min-width: 900px) {
-  .hiring-list,
   .hiring-conditions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

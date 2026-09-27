@@ -225,7 +225,15 @@ export type Role = {
   /** One or two sentences. What the role actually is. */
   summary: string;
   responsibilities: string[];
-  /** What the person gets. Conditional items keep their conditions. */
+  /**
+   * The pay line for this role, rendered first and rendered large.
+   *
+   * It leads because it is the thing applicants scroll looking for, and on
+   * the first version of this page it sat sixth in a list of nine bullets.
+   */
+  pay: { headline: string; detail: string };
+
+  /** What the person gets, beyond the pay. */
   benefits: string[];
   /** What We Code Coders provides to make the role possible. */
   support?: { intro: string; items: string[] };
@@ -246,10 +254,19 @@ export type Role = {
 export type Programme = {
   /** The one-line statement of what this is. */
   premise: string;
-  /** The pay position, stated plainly. */
-  compensation: string;
+  /**
+   * How and when someone starts being paid.
+   *
+   * `headline` is the number, set large near the top of the page — this is
+   * what an applicant is reading for, and burying it under process was the
+   * old page's worst habit. `gate` is the milestone that unlocks it, and
+   * `detail` is the sentence underneath.
+   */
+  pay: { headline: string; gate: string; detail: string };
   commitment: { label: string; detail: string }[];
   rounds: { round: string; title: string; detail: string; items?: string[] }[];
+  /** What happens between "selected" and "started". */
+  onboarding: { title: string; detail: string };
   conditions: string[];
   /**
    * Where applications are taken.
