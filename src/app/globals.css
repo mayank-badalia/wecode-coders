@@ -372,16 +372,17 @@ a.nav-hiring:focus-visible {
     make room here. Both are listed because the media query also catches a
     narrow desktop window, where the canvas is the one on screen.
   */
-  .ring-canvas,
-  .ring-fallback {
-    /*
-      Clear of the fixed bar.
+  /*
+    The ring keeps the whole screen on a phone, exactly as it does on a
+    desktop. It used to be boxed into the top 58%, which left it small in a
+    letterbox with a slab of navy under it — the two looked like different
+    sites. The camera reframes itself for a portrait aspect (see frameGap) and
+    the ring lifts clear of the panel, so nothing needs to be cropped to fit.
 
-      The stage is inset: 0, so on a phone the focused poster was centred in a
-      band that starts at y=0 and rode up underneath the logo, the hiring pill
-      and "drag or scroll". There is no such collision on desktop, where the
-      posters are small against a much wider frame.
-    */
+    The CSS fallback keeps its band: it has no camera to reframe, and a flat
+    coverflow at full bleed is just a bigger flat coverflow.
+  */
+  .ring-fallback {
     top: 5.5rem;
     bottom: 42%;
   }
@@ -391,14 +392,21 @@ a.nav-hiring:focus-visible {
     width: min(54vw, 260px);
   }
 
+  /*
+    The panel now sits over a full-bleed ring rather than under a cropped one,
+    so it carries its own contrast. Opaque where the words are and fading out
+    above them, which keeps the copy legible over whatever poster happens to
+    be behind it without cutting the ring off at a hard edge.
+  */
   .ring-panel {
     top: auto;
     width: 100%;
     background: linear-gradient(
       0deg,
       var(--color-ink) 0%,
-      var(--color-ink) 62%,
-      color-mix(in srgb, var(--color-ink) 70%, transparent) 88%,
+      var(--color-ink) 68%,
+      color-mix(in srgb, var(--color-ink) 88%, transparent) 84%,
+      color-mix(in srgb, var(--color-ink) 45%, transparent) 94%,
       transparent 100%
     );
   }

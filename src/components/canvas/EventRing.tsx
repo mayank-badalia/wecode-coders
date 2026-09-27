@@ -15,20 +15,73 @@ const PLANE_H = 2.85;
 const TAU = Math.PI * 2;
 
 /**
- * How far in front of the nearest poster the camera sits.
+ * How far in front of the nearest poster the camera sits, at minimum.
  *
  * Added to the radius rather than used as an absolute position, so the
- * focused poster is always this far away whatever the ring's size. A fixed
- * camera distance would have shrunk every poster as the ring grew.
+ * focused poster is always at least this far away whatever the ring's size.
+ * A fixed camera distance would have shrunk every poster as the ring grew.
+ *
+ * On a portrait screen the camera pulls back further — see frameGap.
  */
 const CAMERA_GAP = 4.9;
+
+/** The tallest a plane gets, once reshaped to a 4:5 poster. */
+const PLANE_H_MAX = 2.7;
+
+/**
+ * The camera gap that frames the focused poster for a given viewport.
+ *
+ * A 46° field of view is vertical, so the horizontal one collapses with the
+ * aspect ratio: the gap that puts a poster across 32% of a 1440x900 window
+ * puts it across 112% of a 390x844 phone, overflowing the screen on both
+ * sides. Solving for the distance that keeps the poster inside a fraction of
+ * both axes is what makes a phone and a desktop show the same composition
+ * rather than the same numbers.
+ *
+ * The floor is CAMERA_GAP, so nothing about a wide screen changes.
+ */
+export function frameGap(aspect: number, fovDegrees: number): number {
+  const t = Math.tan((fovDegrees * Math.PI) / 360);
+  const portrait = aspect < 1;
+  /*
+    A portrait screen has to leave room for two things a wide one does not:
+    the fixed bar across the top, and the panel across the bottom. Filling
+    82% of its width put the poster under both. 62% of the width and 46% of
+    the height leaves the poster in a clean band between them.
+  */
+  const wFrac = portrait ? 0.62 : 0.82;
+  const hFrac = portrait ? 0.46 : 0.66;
+  const byWidth = PLANE_W / (2 * t * Math.max(aspect, 0.2) * wFrac);
+  const byHeight = PLANE_H_MAX / (2 * t * hFrac);
+  return Math.max(CAMERA_GAP, byWidth, byHeight);
+}
+
+/**
+ * How far up the ring sits, in world units, for a given camera gap.
+ *
+ * Proportional to what the camera can see, so the ring holds its place in
+ * the composition whatever the screen — a fixed offset drifts as the frame
+ * changes. Zero on a landscape window, where the panel is down the left side
+ * and there is nothing to clear.
+ */
+export function ringLift(aspect: number, fovDegrees: number, gap: number): number {
+  if (aspect >= 1) return 0;
+  const visibleHeight = 2 * gap * Math.tan((fovDegrees * Math.PI) / 360);
+  return visibleHeight * 0.12;
+}
 
 /** The radius this many events need to sit side by side without overlapping. */
 export function ringRadiusFor(count: number): number {
   return ringRadius(count, PLANE_W);
 }
 
-/** Where the camera sits before it travels inside. */
+/**
+ * Where the camera starts, before the frame loop reframes it.
+ *
+ * Only the initial prop on <Canvas>; the loop corrects it on the first frame
+ * from the real aspect, so this just needs to be close enough that nothing
+ * visibly jumps.
+ */
 export function cameraZFor(count: number): number {
   return ringRadiusFor(count) + CAMERA_GAP;
 }
@@ -66,7 +119,6 @@ export function EventRing({
     the centre alike.
   */
   const radius = ringRadiusFor(events.length);
-  const cameraZ = radius + CAMERA_GAP;
 
   const group = useRef<THREE.Group>(null);
   const planes = useRef<(THREE.Mesh | null)[]>([]);
@@ -241,6 +293,14 @@ export function EventRing({
 
     if (group.current) {
       group.current.rotation.y = rotation.current;
+      /*
+        Lifted on a portrait screen, so the ring sits above the panel that
+        overlays the bottom of the page rather than behind it. On a landscape
+        window the panel is down the left side and there is nothing to clear.
+      */
+      const view = state.camera as THREE.PerspectiveCamera;
+      const lift = ringLift(view.aspect, view.fov, frameGap(view.aspect, view.fov));
+      group.current.position.y = lift * (1 - inside.current);
       // Push the posters back as the camera arrives, so standing at the centre
       // reads as being surrounded rather than as being pinned against them.
       const scale = 1 + inside.current * (INSIDE_RADIUS_GAIN - 1);
@@ -264,7 +324,15 @@ export function EventRing({
     inside.current += (targetInside - inside.current) * Math.min(1, dt * 2.4);
 
     const cam = state.camera as THREE.PerspectiveCamera;
-    cam.position.z = cameraZ * (1 - inside.current) + 0.001;
+    /*
+      Reframed every frame from the camera's own aspect.
+
+      Cheap — two tangents — and it covers a phone rotating, a desktop window
+      being dragged narrow, and the browser chrome collapsing on scroll, none
+      of which fire a resize we would otherwise act on.
+    */
+    const gap = frameGap(cam.aspect, cam.fov);
+    cam.position.z = (radius + gap) * (1 - inside.current) + 0.001;
     cam.position.y = 0.15 * (1 - inside.current);
 
     /*

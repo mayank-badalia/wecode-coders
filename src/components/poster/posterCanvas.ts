@@ -136,11 +136,12 @@ export function posterToCanvas(
         detail no panel resolves, and there are nine of them.
       */
       /*
-        Smaller on a phone: nine of these live on the GPU at once, and 1280px
-        of poster is detail no handset resolves at arm's length. 1280 stays on
-        a desktop panel, where the focused poster covers 900 device pixels.
+        Slightly smaller on a phone. Nine of these live on the GPU at once, so
+        1280 everywhere is memory for nothing — but the poster now covers
+        about 82% of a 390pt screen, which is 960 device pixels on a 3x panel,
+        so 768 was visibly soft and 1024 is the honest match.
       */
-      const CAP = window.matchMedia("(pointer: coarse)").matches ? 768 : 1280;
+      const CAP = window.matchMedia("(pointer: coarse)").matches ? 1024 : 1280;
       const fit = Math.min(1, CAP / Math.max(img.width, img.height));
       const w = Math.max(1, Math.round(img.width * fit));
       const h = Math.max(1, Math.round(img.height * fit));

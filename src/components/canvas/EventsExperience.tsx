@@ -300,7 +300,14 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
         return;
       }
 
-      input.current.scroll -= dy * 0.009;
+      /*
+        A touch drags the ring further than a wheel tick does.
+
+        A thumb swipe is a couple of hundred pixels at most, where a trackpad
+        will happily emit thousands — at the wheel's rate the ring barely
+        moved and the whole thing felt stuck.
+      */
+      input.current.scroll -= dy * 0.016;
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -481,7 +488,12 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
             it is the first thing to give on a mid-range Android.
           */
           dpr={coarse ? [1, 1.25] : [1, 1.5]}
-          gl={{ antialias: true }}
+          /*
+            No multisampling on a phone. MSAA is the single most expensive
+            thing in this scene on a mobile GPU, and at 1.25x on a 3x panel
+            the edges it smooths are already sub-pixel.
+          */
+          gl={{ antialias: !coarse, powerPreference: "high-performance" }}
           style={{ width: "100%", height: "100%" }}
         >
           <EventRing
