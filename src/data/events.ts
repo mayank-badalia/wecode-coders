@@ -1385,6 +1385,8 @@ export const events: Event[] = [
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
+      href: "https://unstop.com/hackathons/codeverse-india-national-level-hackathon-wecodecoders-1763003",
+      label: "Register on Unstop",
       note: "Free to enter, in teams of one to four. Registration closes 29 October at 07:30 IST.",
     },
     links: [
