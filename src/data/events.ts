@@ -1318,6 +1318,88 @@ export const events: Event[] = [
   },
   {
     // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
+    // judging and rules are shared with the other six.
+    locked: false,
+    featured: true,
+    slug: "codeverse-india",
+    title: "CodeVerse India",
+    kicker: "HACKATHON \u2014 48 HOURS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-10-30T09:00:00+05:30",
+    endsAt: "2026-11-01T09:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A national online AI and coding hackathon: forty-eight hours, one working product. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
+    description: [
+      "CodeVerse India is a national-level online AI and coding hackathon. Forty-eight hours, one idea, one thing that runs at the end of it.",
+      "Three tracks and no problem statements. You choose what to build and who it is for, and the first thing the judges look at is whether the problem you picked is real.",
+      "Open to undergraduates, postgraduates and students from engineering, management, arts, commerce and the sciences alike. The criteria are the same for everyone.",
+    ],
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: [
+      "agentic ai",
+      "full-stack",
+      "open innovation",
+      "online",
+      "national",
+      "48 hours",
+    ],
+    teamSize: "1 to 4. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers, AI and no-code builders and first-timers. Registration is free and open nationally.",
+    brief:
+      "Build a working product in forty-eight hours, in the track of your choosing.",
+    deliverables: [
+      "A working product or prototype whose central workflow actually runs",
+      "A two-to-three-minute demo video and a short pitch deck",
+      "Source code judges can reach before the deadline",
+      "The problem you chose and the evidence that it is real",
+      "A showcase post on LinkedIn and Instagram, links included",
+    ],
+    schedule: [
+      { when: "Until Thu 29 Oct, 07:30", what: "Registration open. Form a team of one to four and join the official group." },
+      { when: "Fri 30 Oct", what: "The tracks, the judging criteria and the submission list go out. The 48 hours begin." },
+      { when: "Sun 1 Nov", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
+    ],
+    judging: seriesJudging("forty-eight hours"),
+    rewards: [
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development support for the top three teams",
+      "A complimentary .XYZ domain for every participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "100+ reward recipients across the hackathon",
+      "A verifiable digital certificate for every participant who makes a valid submission",
+      "Written feedback and a score from the judges on what you submitted",
+      "A functional product you can put on a r\u00e9sum\u00e9 or in a portfolio",
+    ],
+    sections: SERIES_SECTIONS,
+    faq: seriesFaq("forty-eight hours"),
+    stats: [
+      { label: "Hours to build", value: "48" },
+      { label: "Reward recipients", value: "100+" },
+      { label: "Per team", value: "1\u20134" },
+      { label: "Entry", value: "Free" },
+    ],
+    sponsors: SERIES_SPONSORS,
+    registration: {
+      note: "Free to enter, in teams of one to four. Registration closes 29 October at 07:30 IST.",
+    },
+    links: [
+      {
+        label: "Official WhatsApp group",
+        href: "https://chat.whatsapp.com/JAwVa0s9siI2LUoyL7Hha1",
+      },
+    ],
+    // Chosen so the generated ground is "paper", matching the artwork the
+    // hover tint and the ring's glow are pulled from.
+    posterSeed: 9107,
+    posterImage: "/posters/codeverse-india-v1.webp",
+  },
+  {
+    // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
     // judging and rules are shared with the other five.
     locked: false,
     featured: true,

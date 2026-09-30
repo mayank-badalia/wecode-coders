@@ -802,6 +802,47 @@ export default async function EventPage({ params }: Params) {
                   </a>
                 </p>
               )}
+
+              {/*
+                Anywhere else an event asks people to go — an official group,
+                a channel. Rendered here because it is part of joining, and it
+                is the only reason the `links` field on the Event type exists.
+              */}
+              {event.links && event.links.length > 0 && (
+                <ul
+                  style={{
+                    listStyle: "none",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "clamp(1rem, 3vw, 2rem)",
+                    margin: "1.6rem 0 0",
+                    padding: 0,
+                  }}
+                >
+                  {event.links.map((l) => (
+                    <li key={l.href}>
+                      <a
+                        href={l.href}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        style={{
+                          ...monoLabel,
+                          color: "var(--color-paper)",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.6em",
+                          borderBottom: "1px solid currentColor",
+                          paddingBottom: "0.3em",
+                          textDecoration: "none",
+                        }}
+                      >
+                        {l.label}
+                        <Arrow direction="up-right" style={{ width: 13, height: 13 }} />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </section>
         )}

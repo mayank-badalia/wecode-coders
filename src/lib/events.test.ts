@@ -308,6 +308,14 @@ describe("events seam", () => {
       expect(s.href).toMatch(/^https?:\/\//);
       expect(s.label).toBeTruthy();
     }
+    // Event links are rendered as anchors on the detail page, so a relative
+    // or empty href there is a dead link the crawler cannot see.
+    for (const e of published) {
+      for (const l of e.links ?? []) {
+        expect(l.href, e.slug).toMatch(/^https?:\/\//);
+        expect(l.label, e.slug).toBeTruthy();
+      }
+    }
   });
 
   /*
