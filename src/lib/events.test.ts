@@ -400,6 +400,39 @@ describe("events seam", () => {
     method stays off the site. This is the guard on that: it fails if anyone
     reintroduces the specifics while editing the rule.
   */
+  it("promises no feedback to teams", () => {
+    /*
+      Judges do not write anything back to entrants. The copy used to say
+      scores and written feedback went to every team that submitted, which is
+      a commitment nobody is in a position to honour across a national
+      hackathon — and an unanswered promise is worse than never making it.
+    */
+    for (const e of published) {
+      const words = [
+        e.summary,
+        ...e.description,
+        ...(e.rewards ?? []),
+        ...(e.schedule ?? []).map((r) => r.what),
+        ...(e.faq ?? []).flatMap((f) => [f.q, f.a]),
+        ...e.deliverables,
+      ].join(" ");
+      expect(words, e.slug).not.toMatch(/feedback/i);
+    }
+  });
+
+  it("tells every entrant to choose a track and bring their own problem", () => {
+    // The tracks block is where this is explained, so every event that
+    // publishes tracks has to explain it the same way.
+    for (const e of published) {
+      const tracks = e.sections?.find((sec) => sec.label === "Tracks");
+      if (!tracks) continue;
+      expect(tracks.intro, e.slug).toBeTruthy();
+      expect(tracks.intro, e.slug).toMatch(/choose one track/i);
+      expect(tracks.intro, e.slug).toMatch(/your own\s+problem/i);
+      expect(tracks.intro, e.slug).toMatch(/not a problem statement/i);
+    }
+  });
+
   it("never publishes how backdating is detected", () => {
     const METHOD = /commit history|git log|file timestamps?|build logs?|deployment logs?|package metadata|hosting records|repository timestamps?/i;
     for (const e of published) {

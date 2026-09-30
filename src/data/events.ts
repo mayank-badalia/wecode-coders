@@ -65,7 +65,7 @@ const SERIES_TRACKS: EventSection = {
   kind: "columns",
   label: "Tracks",
   intro:
-    "Three tracks, and you pick one. A track is the area you work in — not a problem statement. Nobody hands you a problem to solve: finding one worth solving, and showing it is real, is the first thing the judges score. Interdisciplinary projects are welcome, but the entry has to name its primary track.",
+"Choose one track from those below. A track is the area you work in — it is not a problem statement. Inside the track you pick, you identify your own problem and build the solution to it. Nobody hands you a brief, and finding a problem worth solving — then showing it is real — is the first thing the judges score. Interdisciplinary projects are welcome, but the entry has to name its primary track.",
   items: [
     {
       code: "01",
@@ -294,7 +294,7 @@ export const events: Event[] = [
       { when: "Sun 4 Oct, 10:00", what: "The brief, the tracks and the submission list go out. Building starts." },
       { when: "Mon 5 Oct, 14:00", what: "Submissions close. Everything on the list is in, or it is not." },
       { when: "Mon 5 Oct, 16:00", what: "Building period ends. Judging begins on what was submitted." },
-      { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
+      { when: "After the event", what: "Judging on what was submitted, and then the winners are announced." },
     ],
     judging: [
       {
@@ -349,14 +349,13 @@ export const events: Event[] = [
       "A verifiable digital participation certificate",
       "Sponsor challenges and surprise rewards through the thirty hours",
       "A functional product you can put on a résumé or in a portfolio",
-      "Written feedback and a score from the judges on what you submitted",
     ],
     sections: [
       {
         kind: "columns",
         label: "Tracks",
         intro:
-          "Pick one primary track. Interdisciplinary projects are welcome, but the entry has to say which track it belongs to.",
+          "Choose one track from those below. A track is the area you work in — it is not a problem statement. Inside the track you pick, you identify your own problem and build the solution to it. Nobody hands you a brief, and finding a problem worth solving — then showing it is real — is the first thing the judges score. Interdisciplinary projects are welcome, but the entry has to name its primary track.",
         items: [
           {
             code: "01",
@@ -814,7 +813,7 @@ export const events: Event[] = [
         kind: "columns",
         label: "Tracks",
         intro:
-          "Pick one primary track. Interdisciplinary projects are welcome, but the entry has to say which track it belongs to.",
+          "Choose one track from those below. A track is the area you work in — it is not a problem statement. Inside the track you pick, you identify your own problem and build the solution to it. Nobody hands you a brief, and finding a problem worth solving — then showing it is real — is the first thing the judges score. Interdisciplinary projects are welcome, but the entry has to name its primary track.",
         items: [
           {
             code: "01",
@@ -972,7 +971,7 @@ export const events: Event[] = [
       { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Tue 20 Oct", what: "The tracks, the judging criteria and the submission list go out. The 48 hours begin." },
       { when: "Thu 22 Oct", what: "Submissions close. Everything on the list is in, or it is not." },
-      { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
+      { when: "After the event", what: "Judging on what was submitted, and then the winners are announced." },
     ],
     judging: seriesJudging("forty-eight hours"),
     rewards: [
@@ -982,7 +981,6 @@ export const events: Event[] = [
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
       "A verifiable digital certificate for every participant who makes a valid submission",
-      "Written feedback and a score from the judges on what you submitted",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: SERIES_SECTIONS,
@@ -1050,7 +1048,7 @@ export const events: Event[] = [
       { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to six and join the official channel." },
       { when: "Tue 20 Oct", what: "The tracks, the judging criteria and the submission list go out. The 48 hours begin." },
       { when: "Thu 22 Oct", what: "Submissions close. Everything on the list is in, or it is not." },
-      { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
+      { when: "After the event", what: "Judging on what was submitted, and then the winners are announced." },
     ],
     judging: seriesJudging("forty-eight hours"),
     rewards: [
@@ -1060,7 +1058,6 @@ export const events: Event[] = [
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
       "A verifiable digital certificate for every participant who makes a valid submission",
-      "Written feedback and a score from the judges on what you submitted",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: SERIES_SECTIONS,
@@ -1128,7 +1125,7 @@ export const events: Event[] = [
       { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Tue 20 Oct", what: "The tracks, the judging criteria and the submission list go out. The 48 hours begin." },
       { when: "Thu 22 Oct", what: "Submissions close. Everything on the list is in, or it is not." },
-      { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
+      { when: "After the event", what: "Judging on what was submitted, and then the winners are announced." },
     ],
     judging: seriesJudging("forty-eight hours"),
     rewards: [
@@ -1138,7 +1135,6 @@ export const events: Event[] = [
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
       "A verifiable digital certificate for every participant who makes a valid submission",
-      "Written feedback and a score from the judges on what you submitted",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: SERIES_SECTIONS,
@@ -1206,7 +1202,7 @@ export const events: Event[] = [
       { when: "Before the event", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Sat 24 Oct", what: "The tracks, the judging criteria and the submission list go out. The 48 hours begin." },
       { when: "Mon 26 Oct", what: "Submissions close. Everything on the list is in, or it is not." },
-      { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
+      { when: "After the event", what: "Judging on what was submitted, and then the winners are announced." },
     ],
     judging: seriesJudging("forty-eight hours"),
     rewards: [
@@ -1216,7 +1212,6 @@ export const events: Event[] = [
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
       "A verifiable digital certificate for every participant who makes a valid submission",
-      "Written feedback and a score from the judges on what you submitted",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: SERIES_SECTIONS,
@@ -1284,7 +1279,7 @@ export const events: Event[] = [
       { when: "Before the event", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Sun 25 Oct", what: "The tracks, the judging criteria and the submission list go out. The 48 hours begin." },
       { when: "Tue 27 Oct", what: "Submissions close. Everything on the list is in, or it is not." },
-      { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
+      { when: "After the event", what: "Judging on what was submitted, and then the winners are announced." },
     ],
     judging: seriesJudging("forty-eight hours"),
     rewards: [
@@ -1294,7 +1289,6 @@ export const events: Event[] = [
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
       "A verifiable digital certificate for every participant who makes a valid submission",
-      "Written feedback and a score from the judges on what you submitted",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: SERIES_SECTIONS,
@@ -1362,7 +1356,7 @@ export const events: Event[] = [
       { when: "Until Thu 29 Oct, 07:30", what: "Registration open. Form a team of one to four and join the official group." },
       { when: "Fri 30 Oct", what: "The tracks, the judging criteria and the submission list go out. The 48 hours begin." },
       { when: "Sun 1 Nov", what: "Submissions close. Everything on the list is in, or it is not." },
-      { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
+      { when: "After the event", what: "Judging on what was submitted, and then the winners are announced." },
     ],
     judging: seriesJudging("forty-eight hours"),
     rewards: [
@@ -1372,7 +1366,6 @@ export const events: Event[] = [
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across the hackathon",
       "A verifiable digital certificate for every participant who makes a valid submission",
-      "Written feedback and a score from the judges on what you submitted",
       "A functional product you can put on a r\u00e9sum\u00e9 or in a portfolio",
     ],
     sections: SERIES_SECTIONS,
@@ -1419,7 +1412,7 @@ export const events: Event[] = [
     description: [
       "CodeHack India is a national-level online technology hackathon that asks for one thing: a working solution, built in forty-eight hours.",
       "Three tracks, and the problem inside your track is yours to choose. No problem statements are issued, and no brief arrives to tell you what to make — identifying something worth fixing is part of what is being judged.",
-      "Submissions are scored on the same eight published criteria as every other event in this series, and every team that submits gets its scores and written feedback back.",
+      "Submissions are scored on the same eight published criteria as every other event in this series, and those criteria are published here before you start.",
     ],
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
@@ -1446,7 +1439,7 @@ export const events: Event[] = [
       { when: "Before the event", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Wed 28 Oct", what: "The tracks, the judging criteria and the submission list go out. The 48 hours begin." },
       { when: "Fri 30 Oct", what: "Submissions close. Everything on the list is in, or it is not." },
-      { when: "After the event", what: "Scores and written feedback go to every team that submitted, and the winners are announced." },
+      { when: "After the event", what: "Judging on what was submitted, and then the winners are announced." },
     ],
     judging: seriesJudging("forty-eight hours"),
     rewards: [
@@ -1455,7 +1448,6 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "A verifiable digital certificate for every participant who makes a valid submission",
-      "Written feedback and a score from the judges on what you submitted",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: SERIES_SECTIONS,
