@@ -22,6 +22,14 @@ export type EventSection =
         /** Short ordinal shown large, e.g. "01". */
         code: string;
         name: string;
+        /**
+         * A short line above the name, set bold.
+         *
+         * Holds the dates a round runs. They differ per event, which is why
+         * the rounds block is built from the start date rather than being a
+         * single shared constant.
+         */
+        meta?: string;
         blurb?: string;
         points: string[];
       }[];
@@ -88,6 +96,15 @@ export type Event = {
   summary: string;
   /** Paragraphs for the detail page. */
   description: string[];
+  /**
+   * One line under the description, set in signal red.
+   *
+   * For the single thing a reader must not skim past. On the three-round
+   * events that is the fact that no problem statement is issued — people
+   * arrive expecting a brief, and finding out otherwise three sections later
+   * is too late.
+   */
+  emphasis?: string;
   forWho: string;
   tags: string[];
 

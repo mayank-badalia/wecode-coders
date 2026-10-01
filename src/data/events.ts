@@ -133,7 +133,39 @@ const SERIES_TRACKS: EventSection = {
  * qualification updates reach the teams that qualify, and that is all this
  * says.
  */
-const SERIES_ROUNDS: EventSection = {
+/**
+ * The dates a round covers, from the event's own start.
+ *
+ * Rounds sit on fixed offsets — 1-2, 5-7 and 10-12 — so every event can build
+ * its own dates from one number. Written out rather than left to the reader
+ * to work out from a start date and a round length, because "Round 2 — The
+ * build" with no dates on it is the question everyone asks next.
+ */
+function span(startsAt: string, fromDay: number, toDay: number): string {
+  const day = (offset: number) => {
+    const d = new Date(startsAt);
+    d.setDate(d.getDate() + offset);
+    return d;
+  };
+  const fmt = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    timeZone: "Asia/Kolkata",
+  });
+  const a = fmt.format(day(fromDay));
+  const b = fmt.format(day(toDay));
+  return a === b ? a : `${a} — ${b}`;
+}
+
+/**
+ * The three rounds, dated for one event.
+ *
+ * A function rather than a constant because the dates differ per event while
+ * everything else is identical — the structure stays shared, which is what
+ * the promise of "judged the same way" rests on.
+ */
+function seriesRounds(startsAt: string): EventSection {
+  return {
   kind: "columns",
   label: "How the three rounds run",
   intro:
@@ -141,6 +173,7 @@ const SERIES_ROUNDS: EventSection = {
   items: [
     {
       code: "01",
+      meta: span(startsAt, 0, 1),
       name: "Round 1 — The plan",
       blurb:
         "Two days to make the case for what you are going to build. One PDF, on the format we provide: the problem, who has it, how you intend to solve it, what you will build and in what order. This round is the thinking — you are judged on how clear, original, feasible and promising the plan is, and the code comes in the rounds that follow.",
@@ -160,6 +193,7 @@ const SERIES_ROUNDS: EventSection = {
     },
     {
       code: "02",
+      meta: span(startsAt, 4, 6),
       name: "Round 2 — The build",
       blurb:
         "Three days to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not.",
@@ -175,6 +209,7 @@ const SERIES_ROUNDS: EventSection = {
     },
     {
       code: "03",
+      meta: span(startsAt, 9, 11),
       name: "Round 3 — The finish",
       blurb:
         "Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product.",
@@ -190,7 +225,8 @@ const SERIES_ROUNDS: EventSection = {
       ],
     },
   ],
-};
+  };
+}
 
 /**
  * Judging, identical across the series and to WCC Launchpad 30.
@@ -298,9 +334,15 @@ const SERIES_RULES: EventSection = {
  * it runs the same three rounds and is judged on the same rules — so it takes
  * these two and keeps its own first block.
  */
-const SERIES_TRAILING_SECTIONS: EventSection[] = [SERIES_ROUNDS, SERIES_RULES];
+const seriesTrailingSections = (startsAt: string): EventSection[] => [
+  seriesRounds(startsAt),
+  SERIES_RULES,
+];
 
-const SERIES_SECTIONS: EventSection[] = [SERIES_TRACKS, ...SERIES_TRAILING_SECTIONS];
+const seriesSections = (startsAt: string): EventSection[] => [
+  SERIES_TRACKS,
+  ...seriesTrailingSections(startsAt),
+];
 
 /** FAQ, identical across the series. */
 function seriesFaq() {
@@ -816,6 +858,8 @@ export const events: Event[] = [
       "Three rounds to find a problem that genuinely exists, choose the single journey through it that matters most, and build that journey until it runs reliably. Scope is the hard part. Teams here rarely run out of ideas — they run out of decisions.",
       "Projects are judged on whether they work and whether they are worth using. A narrow product with one dependable workflow beats a broad one held together with screenshots.",
     ],
+    emphasis:
+      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
     forWho: "Students, developers, designers, AI builders and first-time hackers.",
     tags: [
       "agentic ai",
@@ -948,7 +992,7 @@ export const events: Event[] = [
           },
         ],
       },
-      ...SERIES_TRAILING_SECTIONS,
+      ...seriesTrailingSections("2026-10-30T18:00:00+05:30"),
     ],
     faq: [
       { q: "Is it free?", a: "Yes. Registration costs nothing." },
@@ -1003,9 +1047,10 @@ export const events: Event[] = [
       "A national online hackathon where students, developers and designers build functional technology products that address real problems. Three rounds, free to enter, teams of one to four.",
     description: [
       "TechCircuit is a national-level online hackathon for students, developers and designers who want to build something that actually runs.",
-      "You get three rounds, one of three tracks, and a problem of your own choosing. Nobody hands you a problem statement — finding one worth solving and showing that it is real is the first thing the judges score.",
       "The aim is not the biggest project in the room. It is the clearest possible proof that your idea works. One reliable, well-made workflow beats a pile of half-finished features almost every time.",
     ],
+    emphasis:
+      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1047,7 +1092,7 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: SERIES_SECTIONS,
+    sections: seriesSections("2026-10-20T10:00:00+05:30"),
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
@@ -1084,9 +1129,10 @@ export const events: Event[] = [
       "Three rounds to turn an idea into a finished product with modern tooling. National, online, free to enter, with PPO and incubation opportunities for the top three teams.",
     description: [
       "FutureStack is a national-level online hackathon for students, developers and designers who want to turn an idea into something functional.",
-      "You choose one of three tracks and the problem you want to solve inside it. There is no problem statement to wait for — the judges score how well you found a real problem before they score anything you built on top of it.",
       "Modern tooling is encouraged and AI tools are allowed, as long as you disclose the significant ones. What is judged is whether the thing runs and whether it helps somebody.",
     ],
+    emphasis:
+      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1128,7 +1174,7 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: SERIES_SECTIONS,
+    sections: seriesSections("2026-10-20T10:00:00+05:30"),
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
@@ -1165,9 +1211,10 @@ export const events: Event[] = [
       "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Three rounds, three tracks, free to enter.",
     description: [
       "CodeAxis is a national-level online hackathon about practical solutions rather than impressive-sounding ones.",
-      "Pick a track, pick a problem inside it, and build the part that proves it can work. We do not issue problem statements; the problem is yours to find, and the evidence that it is real is worth fifteen points before a line of code is read.",
       "A small product with one dependable workflow is a better submission than an ambitious one that cannot be demonstrated.",
     ],
+    emphasis:
+      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1209,7 +1256,7 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: SERIES_SECTIONS,
+    sections: seriesSections("2026-10-20T10:00:00+05:30"),
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
@@ -1246,9 +1293,10 @@ export const events: Event[] = [
       "Three rounds to turn an original idea into a finished, working product. National, online, free, with paid internship and incubation opportunities for the top three teams.",
     description: [
       "Codex 48 is a national-level AI and full-stack online hackathon, run across three rounds — one original idea carried from a plan to a product that runs.",
-      "There are three tracks and no problem statements. You choose what to build and who it is for, and the first thing the judges look at is whether the problem you picked is real.",
       "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and submissions are checked.",
     ],
+    emphasis:
+      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1290,7 +1338,7 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: SERIES_SECTIONS,
+    sections: seriesSections("2026-10-24T10:00:00+05:30"),
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
@@ -1328,8 +1376,9 @@ export const events: Event[] = [
     description: [
       "CodeStar 30 is a national-level AI and full-stack online hackathon, run across three rounds.",
       "The format rewards scope discipline. Choose one of the three tracks, choose a problem inside it, and build the single journey that proves your idea works rather than the five that show what it could become.",
-      "There are no problem statements. What you build and who it is for is your decision, and how well you justify it is the first thing scored.",
     ],
+    emphasis:
+      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1371,7 +1420,7 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: SERIES_SECTIONS,
+    sections: seriesSections("2026-10-25T10:00:00+05:30"),
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
@@ -1408,9 +1457,10 @@ export const events: Event[] = [
       "A national online AI and coding hackathon: three rounds, one finished product. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
     description: [
       "CodeVerse India is a national-level online AI and coding hackathon, run across three rounds — one idea carried from a plan to a thing that runs.",
-      "Three tracks and no problem statements. You choose what to build and who it is for, and the first thing the judges look at is whether the problem you picked is real.",
       "Open to undergraduates, postgraduates and students from engineering, management, arts, commerce and the sciences alike. The criteria are the same for everyone.",
     ],
+    emphasis:
+      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1452,7 +1502,7 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: SERIES_SECTIONS,
+    sections: seriesSections("2026-10-30T09:00:00+05:30"),
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
@@ -1495,9 +1545,10 @@ export const events: Event[] = [
       "A national online technology hackathon: three rounds to build a working solution. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
     description: [
       "CodeHack India is a national-level online technology hackathon that asks for one thing: a working solution, planned, built and finished across three rounds.",
-      "Three tracks, and the problem inside your track is yours to choose. No problem statements are issued, and no brief arrives to tell you what to make — identifying something worth fixing is part of what is being judged.",
       "Submissions are scored on the same eight published criteria as every other event in this series, and those criteria are published here before you start.",
     ],
+    emphasis:
+      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1538,7 +1589,7 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: SERIES_SECTIONS,
+    sections: seriesSections("2026-10-28T10:00:00+05:30"),
     faq: seriesFaq(),
     stats: [
       { label: "Per team", value: "1–4" },

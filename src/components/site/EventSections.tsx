@@ -63,9 +63,32 @@ function Columns({ section }: { section: Extract<EventSection, { kind: "columns"
           >
             {item.code}
           </p>
+          {/*
+            The dates this item covers, above its name.
+
+            "Round 2 — The build" with no dates on it is the question every
+            reader asks next, and the schedule further down the page answers
+            it too late. Mono and bold so it reads as a fact rather than as
+            part of the prose.
+          */}
+          {item.meta && (
+            <p
+              style={{
+                margin: "0.5em 0 0",
+                fontFamily: "var(--font-mono)",
+                fontSize: "clamp(0.78rem, 1vw, 0.88rem)",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--color-signal)",
+              }}
+            >
+              {item.meta}
+            </p>
+          )}
           <h3
             style={{
-              margin: "0.35em 0 0",
+              margin: item.meta ? "0.25em 0 0" : "0.35em 0 0",
               fontFamily: "var(--font-editorial)",
               fontSize: "clamp(1.25rem, 2vw, 1.7rem)",
               lineHeight: 1.15,

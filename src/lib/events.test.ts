@@ -145,6 +145,53 @@ describe("events seam", () => {
     }
   });
 
+  it("dates every round from the event's own start", () => {
+    /*
+      The rounds sit on fixed offsets — days 1-2, 5-7 and 10-12 — but the
+      dates differ per event, which is why the block is built from startsAt
+      rather than shared as a constant. This checks the dates printed on the
+      cards are that event's, not another's.
+    */
+    const series = published.filter((e) =>
+      e.sections?.some((sec) => sec.label === "How the three rounds run"),
+    );
+    const fmt = new Intl.DateTimeFormat("en-GB", {
+      day: "numeric",
+      month: "short",
+      timeZone: "Asia/Kolkata",
+    });
+    const dayAfter = (iso: string, offset: number) => {
+      const d = new Date(iso);
+      d.setDate(d.getDate() + offset);
+      return fmt.format(d);
+    };
+
+    for (const e of series) {
+      const rounds = e.sections?.find((sec) => sec.label === "How the three rounds run");
+      if (rounds?.kind !== "columns") continue;
+
+      for (const [i, [from, to]] of ([[0, 1], [4, 6], [9, 11]] as const).entries()) {
+        const meta = rounds.items[i]?.meta;
+        expect(meta, `${e.slug} round ${i + 1} has no dates`).toBeTruthy();
+        expect(meta, `${e.slug} round ${i + 1}`).toContain(dayAfter(e.startsAt, from));
+        expect(meta, `${e.slug} round ${i + 1}`).toContain(dayAfter(e.startsAt, to));
+      }
+    }
+  });
+
+  it("puts the no-problem-statement line where it cannot be skimmed", () => {
+    // People arrive expecting a brief. Every three-round event says there is
+    // not one, in its own field, so it renders apart from the body copy.
+    const series = published.filter((e) =>
+      e.sections?.some((sec) => sec.label === "How the three rounds run"),
+    );
+    expect(series.length).toBeGreaterThanOrEqual(8);
+    for (const e of series) {
+      expect(e.emphasis, e.slug).toBeTruthy();
+      expect(e.emphasis, e.slug).toMatch(/problem statement/i);
+    }
+  });
+
   it("asks every three-round event for the same three rounds", () => {
     /*
       The twelve-day events promise entrants an identical structure, so the

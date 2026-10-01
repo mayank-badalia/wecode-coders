@@ -265,7 +265,16 @@ export default async function EventPage({ params }: Params) {
                   style={{
                     margin: 0,
                     fontFamily: "var(--font-mono)",
-                    fontSize: "clamp(0.72rem, 0.95vw, 0.8rem)",
+                    /*
+                      The dates are the row people scan this table for, so
+                      they are set larger and bold instead of sharing the
+                      weight of "Kind: hackathon".
+                    */
+                    fontSize:
+                      row.label === "Date"
+                        ? "clamp(0.86rem, 1.15vw, 1rem)"
+                        : "clamp(0.72rem, 0.95vw, 0.8rem)",
+                    fontWeight: row.label === "Date" ? 700 : 400,
                     lineHeight: 1.5,
                   }}
                 >
@@ -312,6 +321,33 @@ export default async function EventPage({ params }: Params) {
                   {para}
                 </p>
               ))}
+
+              {/*
+                The one line that must not be skimmed.
+
+                People arrive at a hackathon page expecting a brief, and on
+                these events there is not one. Buried as the second paragraph
+                of the description it read like any other sentence; in signal
+                red against the body copy it is the thing the eye lands on.
+              */}
+              {event.emphasis && (
+                <p
+                  data-reveal
+                  style={{
+                    margin: "1.6em 0 0",
+                    paddingLeft: "clamp(0.9rem, 1.5vw, 1.2rem)",
+                    borderLeft: "3px solid var(--color-signal)",
+                    color: "var(--color-signal)",
+                    fontFamily: "var(--font-editorial)",
+                    fontSize: "clamp(1.1rem, 1.55vw, 1.45rem)",
+                    fontWeight: 600,
+                    lineHeight: 1.5,
+                    maxWidth: "62ch",
+                  }}
+                >
+                  {event.emphasis}
+                </p>
+              )}
             </div>
 
             {event.stats && event.stats.length > 0 && (
