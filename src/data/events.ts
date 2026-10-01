@@ -71,7 +71,7 @@ const SERIES_TRACKS: EventSection = {
   kind: "columns",
   label: "Tracks",
   intro:
-    "Choose one track from those below. A track is the area you work in — it is not a problem statement. Inside the track you pick, either take a problem that already exists there or define your own, and build the solution to it. Nobody hands you a brief, and finding a problem worth solving — then showing it is real — is the first thing the judges score. Interdisciplinary projects are welcome, but the entry has to name its primary track.",
+    "Pick one track. A track is a field to work in, not a brief: we do not set the problem. Within your track, take on a problem that already exists or one you have found yourself, and build something that solves it. Proving that problem is real is the first thing judges score, before anything you have built on top of it. Work that spans more than one track is welcome, as long as the entry names its primary one.",
   items: [
     {
       code: "01",
@@ -616,7 +616,6 @@ export const events: Event[] = [
       },
     ],
     rewards: [
-      "Top 60 each receive n8n access or benefits",
       "Top 60 each receive Lovable access or benefits",
       "Top 60 each receive one .XYZ domain",
       "A verifiable digital participation certificate for everyone who completes the quiz",
@@ -759,7 +758,7 @@ export const events: Event[] = [
       { q: "Can beginners take part?", a: "Yes. Recommended learning resources go out before the event." },
       {
         q: "What do the top 60 get?",
-        a: "Each of them gets the full bundle: n8n benefits, Lovable benefits and one .XYZ domain. The rewards are not split into separate categories.",
+        a: "Each of them gets the full bundle: Lovable benefits and one .XYZ domain. The rewards are not split into separate categories.",
       },
       {
         q: "Will everyone get a certificate?",
@@ -790,8 +789,6 @@ export const events: Event[] = [
     ],
     sponsors: [
       { name: "Inkloom", role: "Title sponsor", logo: "/sponsors/inkloom.png" },
-      { name: "Miro", role: "Tooling partner", logo: "/sponsors/miro.png" },
-      { name: "n8n", role: "Tooling partner" },
       { name: ".XYZ", role: "Domain partner", logo: "/sponsors/xyz.png" },
       { name: "Unstop", role: "Official event partner", logo: "/sponsors/unstop.png" },
     ],
@@ -816,7 +813,7 @@ export const events: Event[] = [
       "Three rounds to turn a problem worth solving into a product that runs. National, online, free to enter, with ₹25,000 in cash and PPO opportunities for the top three teams.",
     description: [
       "WCC Forge 48 asks for one thing: a working product. Not a deck, not a concept, not an idea you would build if you had more time — something a person can open and use by the time the last round closes.",
-      "You get three rounds to find a problem that genuinely exists, decide which single journey through it matters most, and build that journey until it runs reliably. Scope is the hard part. Most teams that struggle here are not short of ideas; they are short of decisions.",
+      "Three rounds to find a problem that genuinely exists, choose the single journey through it that matters most, and build that journey until it runs reliably. Scope is the hard part. Teams here rarely run out of ideas — they run out of decisions.",
       "Projects are judged on whether they work and whether they are worth using. A narrow product with one dependable workflow beats a broad one held together with screenshots.",
     ],
     forWho: "Students, developers, designers, AI builders and first-time hackers.",
@@ -884,7 +881,7 @@ export const events: Event[] = [
       "PPO opportunities for the top three teams",
       "100+ reward recipients across the hackathon, giveaways and mini-challenges",
       "Special awards for exceptional projects",
-      "n8n Cloud Pro, Lovable Premium, Miro Enterprise and AI tools, and a .XYZ domain",
+      "Lovable Premium, AI tools and a .XYZ domain",
       "T-shirts, stickers, pens and merchandise",
       "Workshops, technical resources and community access",
       "Winner, finalist and participation certificates",
@@ -895,7 +892,7 @@ export const events: Event[] = [
         kind: "columns",
         label: "Tracks",
         intro:
-          "Choose one track from those below. A track is the area you work in — it is not a problem statement. Inside the track you pick, either take a problem that already exists there or define your own, and build the solution to it. Nobody hands you a brief, and finding a problem worth solving — then showing it is real — is the first thing the judges score. Interdisciplinary projects are welcome, but the entry has to name its primary track.",
+          "Pick one track. A track is a field to work in, not a brief: we do not set the problem. Within your track, take on a problem that already exists or one you have found yourself, and build something that solves it. Proving that problem is real is the first thing judges score, before anything you have built on top of it. Work that spans more than one track is welcome, as long as the entry names its primary one.",
         items: [
           {
             code: "01",
@@ -976,8 +973,6 @@ export const events: Event[] = [
     sponsors: [
       { name: "Inkloom", role: "Title sponsor", logo: "/sponsors/inkloom.png" },
       { name: "Unstop", role: "Official event partner", logo: "/sponsors/unstop.png" },
-      { name: "n8n", role: "Tooling partner" },
-      { name: "Miro", role: "Tooling partner", logo: "/sponsors/miro.png" },
       { name: ".XYZ", role: "Domain partner", logo: "/sponsors/xyz.png" },
     ],
     registration: {

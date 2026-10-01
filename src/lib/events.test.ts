@@ -153,7 +153,9 @@ describe("events seam", () => {
       three major improvements, and that a submission comes from the team
       leader rather than from each member.
     */
-    const series = published.filter((e) => /12 DAYS, 3 ROUNDS/.test(e.kicker));
+    const series = published.filter((e) =>
+      e.sections?.some((sec) => sec.label === "How the three rounds run"),
+    );
     expect(series.length).toBeGreaterThanOrEqual(8);
 
     for (const e of series) {
@@ -192,7 +194,9 @@ describe("events seam", () => {
   });
 
   it("asks for no social posts or video demos on a three-round event", () => {
-    const series = published.filter((e) => /12 DAYS, 3 ROUNDS/.test(e.kicker));
+    const series = published.filter((e) =>
+      e.sections?.some((sec) => sec.label === "How the three rounds run"),
+    );
     for (const e of series) {
       const words = [
         ...e.deliverables,
@@ -513,15 +517,19 @@ describe("events seam", () => {
       const tracks = e.sections?.find((sec) => sec.label === "Tracks");
       if (!tracks) continue;
       expect(tracks.intro, e.slug).toBeTruthy();
-      expect(tracks.intro, e.slug).toMatch(/choose one track/i);
-      expect(tracks.intro, e.slug).toMatch(/not a problem statement/i);
       /*
-        The problem is the entrant's to bring. The three-round events say so
-        as "take a problem that already exists there or define your own";
-        WCC Launchpad 30 keeps its own earlier phrasing, "you identify your
-        own problem", because it is deliberately left on its original format.
+        Asserted on meaning rather than phrasing. Both of these have been
+        reworded more than once, and a test that pins the sentence fails on
+        every edit while proving nothing about what it says.
       */
-      expect(tracks.intro, e.slug).toMatch(/define your own|identify your own problem/i);
+      // One track, chosen by the entrant.
+      expect(tracks.intro, e.slug).toMatch(/\b(pick|choose) one track\b/i);
+      // A track is not a brief.
+      expect(tracks.intro, e.slug).toMatch(/not a (brief|problem statement)/i);
+      // And the problem is theirs to bring.
+      expect(tracks.intro, e.slug).toMatch(
+        /we do not set the problem|found yourself|define your own|identify your own problem/i,
+      );
     }
   });
 
