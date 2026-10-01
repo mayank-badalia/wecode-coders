@@ -10,39 +10,21 @@ import { Arrow } from "./Arrow";
 import { Logo } from "./Logo";
 import { NavOverlay } from "./NavOverlay";
 
+/*
+  /hiring is deliberately absent.
+
+  The page is still built and still reachable by its own URL, so a link
+  already shared keeps working — it is simply not advertised anywhere on the
+  site while recruitment is closed, and /hiring itself is set to noindex.
+
+  Putting it back means this line, the footer's, and a call to action using
+  the .nav-hiring styles that are still in globals.css.
+*/
 const LINKS = [
   { index: "01", label: "Events", href: "/events" },
   { index: "02", label: "About", href: "/about" },
-  { index: "03", label: "Hiring", href: "/hiring" },
 ] as const;
 
-/*
-  Hiring is pulled out of the roll-links and given its own button.
-
-  As one of three identical labels it was invisible, and below 900px the whole
-  row is hidden and it disappeared entirely — which is the opposite of what a
-  recruiting page needs. This sits beside Menu at every width, carries the
-  signal red so it reads as an action rather than a destination, and shakes
-  every few seconds so it is noticed without being a nuisance. The shake is
-  off under prefers-reduced-motion; see globals.css.
-*/
-function HiringCta() {
-  return (
-    <TransitionLink href="/hiring" label="Hiring" className="nav-hiring">
-      <span className="nav-hiring-dot" aria-hidden="true" />
-      {/*
-        Two labels rather than one.
-
-        "We're hiring" plus the logo plus Menu overflowed a 390px bar: the
-        logo collapsed to nothing and Menu was pushed off the right edge.
-        Which one shows is a media query, so there is no hydration mismatch
-        and no layout shift.
-      */}
-      <span className="nav-hiring-long">We&rsquo;re hiring</span>
-      <span className="nav-hiring-short">Hiring</span>
-    </TransitionLink>
-  );
-}
 
 /** A label that rolls up on hover: one line out, its echo in. */
 function RollLink({
@@ -313,12 +295,10 @@ export function Nav() {
           }}
         >
           <span className="nav-links">
-            {LINKS.filter((l) => l.href !== "/hiring").map((l) => (
+            {LINKS.map((l) => (
               <RollLink key={l.href} {...l} />
             ))}
           </span>
-
-          <HiringCta />
 
           <button
             ref={menuButton}

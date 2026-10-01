@@ -6,6 +6,14 @@ import { applicationsOpen, getProgramme, getRoles } from "@/lib/roles";
 
 export const metadata: Metadata = {
   title: "Hiring — We Code Coders",
+  /*
+    Unlisted while recruitment is closed.
+
+    Nothing on the site links here any more, and this keeps it out of search
+    results too — the page stays reachable for anyone holding the URL, which
+    is the point, but it is not something a visitor can stumble into.
+  */
+  robots: { index: false, follow: false },
   description:
     "Open roles across India: hackathon organisers, creators and designers, campus and city leads. Clear your milestone and you are paid ₹10,000 a month.",
 };

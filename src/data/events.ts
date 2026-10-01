@@ -126,7 +126,7 @@ const SERIES_TRACKS: EventSection = {
 };
 
 /**
- * The twelve days, as three rounds.
+ * The three rounds.
  *
  * Deliberately silent about what happens in the gaps between rounds. The
  * judging intervals are internal; what an entrant needs to know is that
@@ -137,7 +137,7 @@ const SERIES_ROUNDS: EventSection = {
   kind: "columns",
   label: "How the three rounds run",
   intro:
-    "Three rounds across twelve calendar days, each asking for something the last did not. Qualification updates and the instructions for the next stage go directly to the teams that qualify, between rounds. One submission per round per team, made by the team leader — not one per member. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
+    "Three rounds, each asking for something the last did not. Qualification updates and the instructions for the next stage go directly to the teams that qualify, between rounds. One submission per round per team, made by the team leader — not one per member. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
   items: [
     {
       code: "01",
@@ -152,7 +152,7 @@ const SERIES_ROUNDS: EventSection = {
         "The main features you intend to build",
         "The technology stack you plan to use",
         "Who on the team is responsible for what",
-        "A development plan across the twelve days",
+        "A development plan for the three rounds",
         "The impact you expect it to have",
         "Where the product could go after the event",
         "Team and participant details",
@@ -196,7 +196,7 @@ const SERIES_ROUNDS: EventSection = {
  * Judging, identical across the series and to WCC Launchpad 30.
  *
  * The weights total 100 and are published, so a team can see where the marks
- * are before it decides what to spend twelve days on.
+ * are before it decides what to spend the three rounds on.
  *
  * Nothing here scores the showcase posts. They are still required — a
  * submission without them is incomplete, and the rules say so — but they are
@@ -295,7 +295,7 @@ const SERIES_RULES: EventSection = {
  * Everything after the tracks, for an event that publishes its own.
  *
  * WCC Forge 48 has four tracks of its own rather than the series' three, but
- * it runs the same twelve days and is judged on the same rules — so it takes
+ * it runs the same three rounds and is judged on the same rules — so it takes
  * these two and keeps its own first block.
  */
 const SERIES_TRAILING_SECTIONS: EventSection[] = [SERIES_ROUNDS, SERIES_RULES];
@@ -306,7 +306,7 @@ const SERIES_SECTIONS: EventSection[] = [SERIES_TRACKS, ...SERIES_TRAILING_SECTI
 function seriesFaq() {
   return [
     { q: "Is it free?", a: "Yes. Registration costs nothing." },
-    { q: "How long does it run?", a: "Twelve calendar days, in three rounds: two days for the idea, three for a working product, three for finishing it." },
+    { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
     { q: "Are problem statements provided?", a: "No. You pick one of the three tracks, then either take a problem that already exists in it or define your own. Showing that the problem is real is worth 15 points." },
     { q: "What happens between rounds?", a: "Qualification updates and the instructions for the next stage go directly to the teams that qualify." },
     { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
@@ -805,7 +805,7 @@ export const events: Event[] = [
     locked: false,
     slug: "wcc-forge-48",
     title: "WCC Forge 48",
-    kicker: "HACKATHON — 12 DAYS, 3 ROUNDS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-30T18:00:00+05:30",
@@ -813,10 +813,10 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Twelve days and three rounds to turn a problem worth solving into a product that runs. National, online, free to enter, with ₹25,000 in cash and PPO opportunities for the top three teams.",
+      "Three rounds to turn a problem worth solving into a product that runs. National, online, free to enter, with ₹25,000 in cash and PPO opportunities for the top three teams.",
     description: [
       "WCC Forge 48 asks for one thing: a working product. Not a deck, not a concept, not an idea you would build if you had more time — something a person can open and use by the time the last round closes.",
-      "You get twelve days across three rounds to find a problem that genuinely exists, decide which single journey through it matters most, and build that journey until it runs reliably. Scope is the hard part. Most teams that struggle here are not short of ideas; they are short of decisions.",
+      "You get three rounds to find a problem that genuinely exists, decide which single journey through it matters most, and build that journey until it runs reliably. Scope is the hard part. Most teams that struggle here are not short of ideas; they are short of decisions.",
       "Projects are judged on whether they work and whether they are worth using. A narrow product with one dependable workflow beats a broad one held together with screenshots.",
     ],
     forWho: "Students, developers, designers, AI builders and first-time hackers.",
@@ -997,7 +997,7 @@ export const events: Event[] = [
     featured: true,
     slug: "tech-circuit",
     title: "TechCircuit",
-    kicker: "HACKATHON — 12 DAYS, 3 ROUNDS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
@@ -1005,10 +1005,10 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon where students, developers and designers build functional technology products that address real problems. Twelve days, three rounds, free to enter, teams of one to four.",
+      "A national online hackathon where students, developers and designers build functional technology products that address real problems. Three rounds, free to enter, teams of one to four.",
     description: [
       "TechCircuit is a national-level online hackathon for students, developers and designers who want to build something that actually runs.",
-      "You get twelve days across three rounds, one of three tracks, and a problem of your own choosing. Nobody hands you a problem statement — finding one worth solving and showing that it is real is the first thing the judges score.",
+      "You get three rounds, one of three tracks, and a problem of your own choosing. Nobody hands you a problem statement — finding one worth solving and showing that it is real is the first thing the judges score.",
       "The aim is not the biggest project in the room. It is the clearest possible proof that your idea works. One reliable, well-made workflow beats a pile of half-finished features almost every time.",
     ],
     forWho: "Students, developers, designers and first-time builders.",
@@ -1078,7 +1078,7 @@ export const events: Event[] = [
     featured: true,
     slug: "future-stack",
     title: "FutureStack",
-    kicker: "HACKATHON — 12 DAYS, 3 ROUNDS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
@@ -1086,7 +1086,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Twelve days and three rounds to turn an idea into a finished product with modern tooling. National, online, free to enter, with PPO and incubation opportunities for the top three teams.",
+      "Three rounds to turn an idea into a finished product with modern tooling. National, online, free to enter, with PPO and incubation opportunities for the top three teams.",
     description: [
       "FutureStack is a national-level online hackathon for students, developers and designers who want to turn an idea into something functional.",
       "You choose one of three tracks and the problem you want to solve inside it. There is no problem statement to wait for — the judges score how well you found a real problem before they score anything you built on top of it.",
@@ -1159,7 +1159,7 @@ export const events: Event[] = [
     featured: true,
     slug: "code-axis",
     title: "CodeAxis",
-    kicker: "HACKATHON — 12 DAYS, 3 ROUNDS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
@@ -1167,7 +1167,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Twelve days, three rounds, three tracks, free to enter.",
+      "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Three rounds, three tracks, free to enter.",
     description: [
       "CodeAxis is a national-level online hackathon about practical solutions rather than impressive-sounding ones.",
       "Pick a track, pick a problem inside it, and build the part that proves it can work. We do not issue problem statements; the problem is yours to find, and the evidence that it is real is worth fifteen points before a line of code is read.",
@@ -1240,7 +1240,7 @@ export const events: Event[] = [
     featured: true,
     slug: "codex-48",
     title: "Codex 48",
-    kicker: "HACKATHON — 12 DAYS, 3 ROUNDS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-24T10:00:00+05:30",
@@ -1248,9 +1248,9 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Twelve days and three rounds to turn an original idea into a finished, working product. National, online, free, with paid internship and incubation opportunities for the top three teams.",
+      "Three rounds to turn an original idea into a finished, working product. National, online, free, with paid internship and incubation opportunities for the top three teams.",
     description: [
-      "Codex 48 is a national-level AI and full-stack online hackathon, run across twelve days and three rounds — one original idea carried from a plan to a product that runs.",
+      "Codex 48 is a national-level AI and full-stack online hackathon, run across three rounds — one original idea carried from a plan to a product that runs.",
       "There are three tracks and no problem statements. You choose what to build and who it is for, and the first thing the judges look at is whether the problem you picked is real.",
       "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and submissions are checked.",
     ],
@@ -1321,7 +1321,7 @@ export const events: Event[] = [
     featured: true,
     slug: "codestar-30",
     title: "CodeStar 30",
-    kicker: "HACKATHON — 12 DAYS, 3 ROUNDS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-25T10:00:00+05:30",
@@ -1329,9 +1329,9 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Twelve days and three rounds for students and young builders to develop and present a functional technology product. National, online, free, with paid internship and incubation opportunities for the top three teams.",
+      "Three rounds for students and young builders to develop and present a functional technology product. National, online, free, with paid internship and incubation opportunities for the top three teams.",
     description: [
-      "CodeStar 30 is a national-level AI and full-stack online hackathon, run across twelve days and three rounds.",
+      "CodeStar 30 is a national-level AI and full-stack online hackathon, run across three rounds.",
       "The format rewards scope discipline. Choose one of the three tracks, choose a problem inside it, and build the single journey that proves your idea works rather than the five that show what it could become.",
       "There are no problem statements. What you build and who it is for is your decision, and how well you justify it is the first thing scored.",
     ],
@@ -1402,7 +1402,7 @@ export const events: Event[] = [
     featured: true,
     slug: "codeverse-india",
     title: "CodeVerse India",
-    kicker: "HACKATHON — 12 DAYS, 3 ROUNDS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-30T09:00:00+05:30",
@@ -1410,9 +1410,9 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online AI and coding hackathon: twelve days, three rounds, one finished product. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
+      "A national online AI and coding hackathon: three rounds, one finished product. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
     description: [
-      "CodeVerse India is a national-level online AI and coding hackathon, run across twelve days and three rounds — one idea carried from a plan to a thing that runs.",
+      "CodeVerse India is a national-level online AI and coding hackathon, run across three rounds — one idea carried from a plan to a thing that runs.",
       "Three tracks and no problem statements. You choose what to build and who it is for, and the first thing the judges look at is whether the problem you picked is real.",
       "Open to undergraduates, postgraduates and students from engineering, management, arts, commerce and the sciences alike. The criteria are the same for everyone.",
     ],
@@ -1489,7 +1489,7 @@ export const events: Event[] = [
     featured: true,
     slug: "codehack-india",
     title: "CodeHack India",
-    kicker: "HACKATHON — 12 DAYS, 3 ROUNDS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-28T10:00:00+05:30",
@@ -1497,7 +1497,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online technology hackathon: twelve days and three rounds to build a working solution. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
+      "A national online technology hackathon: three rounds to build a working solution. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
     description: [
       "CodeHack India is a national-level online technology hackathon that asks for one thing: a working solution, planned, built and finished across three rounds.",
       "Three tracks, and the problem inside your track is yours to choose. No problem statements are issued, and no brief arrives to tell you what to make — identifying something worth fixing is part of what is being judged.",

@@ -2,14 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { notFound } from "next/navigation";
-import { Poster } from "@/components/poster/Poster";
 import { Arrow } from "@/components/site/Arrow";
 import { LockGlyph } from "@/components/site/LockGlyph";
 import { EventDetailMotion } from "@/components/site/EventDetailMotion";
 import { EventSections } from "@/components/site/EventSections";
 import { getAdjacentEvent, getAllEvents, getEventBySlug, getSite } from "@/lib/events";
 import { eventDurationHours, formatEventDate, formatEventTime } from "@/lib/format";
-import { webpSize } from "@/lib/imageSize";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -134,10 +132,6 @@ export default async function EventPage({ params }: Params) {
   const site = getSite();
   const hours = eventDurationHours(event.startsAt, event.endsAt);
 
-  // Read from the file, not declared beside it — see src/lib/imageSize.ts.
-  // Drives --poster-ratio so the stacked hero's box is the picture exactly.
-  const posterSize = event.posterImage ? webpSize(event.posterImage) : null;
-
   // The title sponsor is billed on its own line, above and larger than the
   // rest, so it is split off here rather than special-cased by index in JSX.
   const [titleSponsor, ...otherSponsors] = event.sponsors ?? [];
@@ -167,168 +161,79 @@ export default async function EventPage({ params }: Params) {
     <EventDetailMotion>
       <article style={{ position: "relative", zIndex: 2 }}>
         {/*
-          Two headers, because there are two kinds of poster.
+          One header, no poster.
 
-          A generated poster composes to whatever box it is handed, so it can
-          run full bleed with the title laid over it. A real poster is someone's
-          finished artwork at a fixed portrait ratio: cropping it to a landscape
-          band cuts the design in half, and setting our own title over it
-          duplicates the one already printed on it. That one gets shown whole,
-          against the ink ground, with the copy beside it.
+          There used to be two: a full-bleed generated poster with the title
+          laid over it, and a real poster shown whole beside the copy. Both are
+          gone. The artwork already does its job on the events ring and on the
+          Unstop listing someone arrives from, and repeating it at the top of
+          the detail page pushed the thing they came for — what the event is,
+          and the way in — below the fold on a laptop.
         */}
-        {event.posterImage ? (
-          <header
-            data-nav-theme="dark"
-            style={{
-              background: "var(--color-ink)",
-              color: "var(--color-paper)",
-              padding:
-                "clamp(7rem, 16vh, 10rem) clamp(1.25rem, 4vw, 3rem) clamp(3rem, 8vh, 5rem)",
-            }}
-          >
-            <div
-              className="detail-hero"
+        <header
+          data-nav-theme="dark"
+          style={{
+            background: "var(--color-ink)",
+            color: "var(--color-paper)",
+            padding:
+              "clamp(7rem, 16vh, 10rem) clamp(1.25rem, 4vw, 3rem) clamp(3rem, 8vh, 5rem)",
+          }}
+        >
+          <div style={{ maxWidth: "min(1680px, 92vw)", margin: "0 auto" }}>
+            <p style={{ ...monoLabel, color: "rgba(244,241,234,0.8)", margin: 0 }}>
+              {event.kicker}
+            </p>
+            <h1
+              className="detail-title"
               style={{
-                maxWidth: "min(1680px, 92vw)",
-                margin: "0 auto",
-                display: "grid",
-                ["--cols" as string]: "minmax(0, 5fr) minmax(0, 6fr)",
-                gap: "clamp(2.5rem, 6vw, 5rem)",
-                alignItems: "center",
+                margin: "0.3em 0 0",
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(2.4rem, 7.5vw, 6.5rem)",
+                fontWeight: 700,
+                lineHeight: 0.92,
+                letterSpacing: "-0.02em",
+                textTransform: "uppercase",
               }}
             >
-              {/*
-                The poster leads, and comes first in the DOM so it takes the
-                left column without a reordering rule that a reader dragging
-                a keyboard through the page would feel as a jump.
-
-                On a phone the grid collapses to one column and that order
-                would push the title and the register button below a
-                full-height poster, so the copy is pulled back above it there
-                — see .detail-hero-copy in globals.css.
-              */}
-              {/*
-                Sized in globals.css, not here. The box has to change shape on
-                one column — height-driven beside the copy, width-driven under
-                it — and an inline height would win against that media query.
-              */}
-              <div
-                className="detail-hero-poster"
-                style={
-                  posterSize
-                    ? {
-                        ["--poster-ratio" as string]: `${posterSize.width} / ${posterSize.height}`,
-                      }
-                    : undefined
-                }
-              >
-                <Poster event={event} showTitle={false} fill fit="contain" priority />
-              </div>
-
-              <div className="detail-hero-copy">
-                <p style={{ ...monoLabel, color: "rgba(244,241,234,0.8)", margin: 0 }}>
-                  {event.kicker}
-                </p>
-                <h1
-                  className="detail-title"
-                  style={{
-                    margin: "0.3em 0 0",
-                    fontFamily: "var(--font-display)",
-                    fontSize: "clamp(2.4rem, 6.5vw, 6rem)",
-                    fontWeight: 700,
-                    lineHeight: 0.92,
-                    letterSpacing: "-0.02em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {event.title}
-                </h1>
-                <p
-                  className="detail-hero-summary"
-                  style={{
-                    fontFamily: "var(--font-editorial)",
-                    fontSize: "clamp(1.05rem, 1.5vw, 1.4rem)",
-                    lineHeight: 1.55,
-                    opacity: 0.82,
-                  }}
-                >
-                  {event.summary}
-                </p>
-
-                {/*
-                  Register, at the top of the page.
-
-                  The red band at the foot is the full call to action, but it
-                  sits behind the entire brief — tracks, submission list,
-                  rules, judging — and someone who arrives already intending to
-                  sign up should not have to read to the end to find the link.
-
-                  Rendered only when there is a real URL, so it can never
-                  appear as a button that goes nowhere.
-                */}
-                {event.registration?.href && (
-                  <p style={{ margin: "1.6em 0 0" }}>
-                    <a
-                      href={event.registration.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="detail-cta detail-cta--signal"
-                    >
-                      {event.registration.label ?? "Register now"}
-                      <Arrow direction="up-right" style={{ width: 15, height: 15 }} />
-                    </a>
-                  </p>
-                )}
-              </div>
-            </div>
-          </header>
-        ) : (
-          <header
-            data-nav-theme="dark"
-            style={{
-              position: "relative",
-              minHeight: "min(78svh, 720px)",
-              display: "flex",
-              alignItems: "flex-end",
-              overflow: "hidden",
-              padding: "clamp(6rem, 14vh, 9rem) clamp(1.25rem, 4vw, 3rem) clamp(2rem, 6vh, 4rem)",
-            }}
-          >
-            <div className="detail-poster" style={{ position: "absolute", inset: "-10% 0 -10% 0" }}>
-              <Poster event={event} showTitle={false} fill priority />
-            </div>
-            <div
-              aria-hidden="true"
+              {event.title}
+            </h1>
+            <p
+              className="detail-hero-summary"
               style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(to top, rgba(19,28,51,0.82) 0%, rgba(19,28,51,0.25) 60%, transparent 100%)",
+                fontFamily: "var(--font-editorial)",
+                fontSize: "clamp(1.1rem, 1.7vw, 1.55rem)",
+                lineHeight: 1.5,
+                opacity: 0.82,
               }}
-            />
+            >
+              {event.summary}
+            </p>
 
-            <div style={{ position: "relative", color: "var(--color-paper)" }}>
-              <p style={{ ...monoLabel, color: "rgba(244,241,234,0.8)", margin: 0 }}>
-                {event.kicker}
+            {/*
+              Register, at the top of the page.
+
+              The red band at the foot is the full call to action, but it sits
+              behind the entire brief, and someone who arrives already meaning
+              to sign up should not have to read to the end to find the link.
+
+              Rendered only when there is a real URL, so it can never appear as
+              a button that goes nowhere.
+            */}
+            {event.registration?.href && event.status !== "past" && (
+              <p style={{ margin: "2em 0 0" }}>
+                <a
+                  href={event.registration.href}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="detail-cta detail-cta--signal"
+                >
+                  {event.registration.label ?? "Register now"}
+                  <Arrow direction="up-right" style={{ width: 15, height: 15 }} />
+                </a>
               </p>
-              <h1
-                className="detail-title"
-                style={{
-                  margin: "0.3em 0 0",
-                  fontFamily: "var(--font-display)",
-                  fontSize: "clamp(2.6rem, 9vw, 8rem)",
-                  fontWeight: 700,
-                  lineHeight: 0.92,
-                  letterSpacing: "-0.02em",
-                  textTransform: "uppercase",
-                  maxWidth: "14ch",
-                }}
-              >
-                {event.title}
-              </h1>
-            </div>
-          </header>
-        )}
+            )}
+          </div>
+        </header>
 
         <div
           style={{
