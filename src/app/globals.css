@@ -1020,7 +1020,14 @@ a.detail-cta--signal:focus-visible {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 1.1em 0;
+  /*
+    Tight on purpose. The body is the only block that can grow — a two-line
+    name plus a citation carrying team, seat and result is the worst case, and
+    at 1.1em of padding it overran the footer rule by 25px. Measured, not
+    guessed: see the overlap probe in the commit that introduced team roles.
+  */
+  padding: 0.55em 0;
+  overflow: hidden;
 }
 
 .cert-kind {
@@ -1041,7 +1048,7 @@ a.detail-cta--signal:focus-visible {
   flex-shrink: 0;
   width: 3.6em;
   height: 0.08em;
-  margin: 0.95em 0 1.35em;
+  margin: 0.7em 0 1em;
   background: var(--color-ink);
   opacity: 0.4;
 }
@@ -1056,7 +1063,7 @@ a.detail-cta--signal:focus-visible {
   line-height: 1.04;
   letter-spacing: -0.025em;
   text-transform: uppercase;
-  margin: 0.2em 0 0.18em;
+  margin: 0.14em 0 0.14em;
   max-width: 100%;
 }
 
@@ -1073,7 +1080,7 @@ a.detail-cta--signal:focus-visible {
   font-size: 0.86em;
   line-height: 1.5;
   color: var(--color-ink-60);
-  margin: 0 0 0.55em;
+  margin: 0 0 0.45em;
   max-width: 34em;
 }
 
@@ -1110,7 +1117,7 @@ a.detail-cta--signal:focus-visible {
   line-height: 1.6;
   max-width: 34em;
   color: var(--color-ink-60);
-  margin: 1.3em 0 0;
+  margin: 1em 0 0;
 }
 
 .cert-citation strong {

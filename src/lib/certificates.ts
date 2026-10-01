@@ -26,6 +26,15 @@ export type Certificate = {
   /** Shown on the verify page when present. */
   teamName?: string;
   /*
+    Which seat the holder had on that team.
+
+    A team hackathon certificate that says only "with team X" leaves the
+    reader guessing what the holder actually did, and the one person who
+    organised the team has nothing to show for it. The submission form asks
+    this directly, so it is recorded rather than inferred.
+  */
+  teamRole?: "leader" | "member";
+  /*
     What the certificate actually says the holder did.
 
     Kept on the certificate rather than derived from the event record, because
@@ -139,9 +148,12 @@ export function normaliseName(raw: string): string {
 
 /* ------------------------------------------------------------- lookups */
 
-import participantsLaunchpad from "@/data/certificates/wcc-launchpad-30.json";
 import quizProtocol60 from "@/data/certificates/protocol-60.json";
 import quizProtocol60Pre from "@/data/certificates/protocol-60-pre-quiz.json";
+import preLaunchpad30 from "@/data/certificates/wcc-launchpad-30-pre-hackathon.json";
+import preForge48 from "@/data/certificates/wcc-forge-48-pre-hackathon.json";
+import preTechCircuit from "@/data/certificates/tech-circuit-pre-hackathon.json";
+import preCodeAxis from "@/data/certificates/code-axis-pre-hackathon.json";
 
 /*
   Imported statically rather than read from disk so the verify page can be
@@ -159,9 +171,15 @@ import quizProtocol60Pre from "@/data/certificates/protocol-60-pre-quiz.json";
   Nothing reads these keys — everything is looked up by id across the lot.
 */
 const STORES: Record<string, Certificate[]> = {
-  "wcc-launchpad-30": participantsLaunchpad as Certificate[],
   "protocol-60": quizProtocol60 as Certificate[],
   "protocol-60-pre-quiz": quizProtocol60Pre as Certificate[],
+  // Four Inkloom-sponsored pre-hackathons, one store each. Same shape as the
+  // pre-quiz: the award is not the event it ran under, and a person can hold
+  // one from more than one of them.
+  "wcc-launchpad-30-pre-hackathon": preLaunchpad30 as Certificate[],
+  "wcc-forge-48-pre-hackathon": preForge48 as Certificate[],
+  "tech-circuit-pre-hackathon": preTechCircuit as Certificate[],
+  "code-axis-pre-hackathon": preCodeAxis as Certificate[],
 };
 
 export function allCertificates(): Certificate[] {

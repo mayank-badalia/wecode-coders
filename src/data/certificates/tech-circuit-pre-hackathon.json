@@ -1,0 +1,287 @@
+[
+  {
+    "id": "TC-R7G62C",
+    "name": "Ganjikunta Sai Varshitha",
+    "email": "svganjikunta@gmail.com",
+    "event": "tech-circuit",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "teamName": "TECH EXPLORER",
+    "teamRole": "leader",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-BA9ANC",
+    "name": "Zoya Qureshi",
+    "email": "zoyaqureshi28103@gmail.com",
+    "event": "tech-circuit",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "teamName": "Beat Bytes",
+    "teamRole": "member",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-7VHN8B",
+    "name": "Sandip Maitra",
+    "email": "maitrasandip99@gmail.com",
+    "event": "tech-circuit",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "teamName": "QuadraBots",
+    "teamRole": "leader",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-82HH6U",
+    "name": "Sanchayan Biswas",
+    "email": "sanchayanb9@gmail.com",
+    "event": "tech-circuit",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "teamName": "QuadraBots",
+    "teamRole": "member",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-T6P2YK",
+    "name": "Sayan Ghosh",
+    "email": "sg8880965@gmail.com",
+    "event": "tech-circuit",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "teamName": "QuadraBots",
+    "teamRole": "member",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-7J9S2S",
+    "name": "Suraj Saini",
+    "email": "suraj19012010@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "Team UnCliche",
+    "teamRole": "leader",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-ZFXKZU",
+    "name": "Himanshi garg",
+    "email": "garghimanshi968@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "DATA DRIFTERS",
+    "teamRole": "leader",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-RBA2N5",
+    "name": "Vishwanath Vichchhu Gupta",
+    "email": "vishwanathnirmala67@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "ORBITAL MINDS",
+    "teamRole": "leader",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-SHW74B",
+    "name": "Sujal Gawas",
+    "email": "sgclgdocs123@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "ORBITAL MINDS",
+    "teamRole": "member",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-XGG75U",
+    "name": "Ankitaa Panpatil",
+    "email": "ankitapanpatil459@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "Ankitaa Panpatil",
+    "teamRole": "leader",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-2SUZN7",
+    "name": "Vinay kumar Bethapudi",
+    "email": "bethapudivinaykumar308@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "veditpulse",
+    "teamRole": "leader",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-XM2E6Z",
+    "name": "Arjun Bhardwaj",
+    "email": "arjun.bhardwaj_cs25@gla.ac.in",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "CODE IGNITOR",
+    "teamRole": "leader",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-ZEPTU6",
+    "name": "Mayuresh Sharad saner",
+    "email": "mayureshsaner11@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "ONEANDONLY",
+    "teamRole": "leader",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-6AAEMT",
+    "name": "Anjali Saxena",
+    "email": "anjalisaxena1301@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "ORBITAL MINDS",
+    "teamRole": "member",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-PZY4CA",
+    "name": "Sarang Sanjay Patil",
+    "email": "sarangpatil2604@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "Flash",
+    "teamRole": "member",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-SXT7XT",
+    "name": "Raviprasad Balasaheb Kumbhar",
+    "email": "raviprasadkumbhar741@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "FLASH",
+    "teamRole": "leader",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-4NRCK9",
+    "name": "Prasad Somanath Digole",
+    "email": "prasaddigole81@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "Flash",
+    "teamRole": "member",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-982HYP",
+    "name": "J.Arunsai",
+    "email": "arunsaijalleda17@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "Veditpulse",
+    "teamRole": "member",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "TC-R69SKA",
+    "name": "K. Sai Dinesh",
+    "email": "saidineshkanugolu@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "veditpulse",
+    "teamRole": "member",
+    "award": {
+      "title": "TechCircuit Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  }
+]

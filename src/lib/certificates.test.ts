@@ -211,11 +211,18 @@ describe("the issued store", () => {
   });
 
   it("gives an individual event's certificates no team name", () => {
-    // Protocol//60 is attempted alone. "with team X" on one of those is a
-    // detail someone would have to explain away to whoever they showed it to.
+    /*
+      Protocol//60 is attempted alone. "with team X" on one of those is a
+      detail someone would have to explain away to whoever they showed it to.
+
+      Anchored to the start of the field, not a bare /individual/ search:
+      WCC Forge 48 reads "1 to 4. Every member registers individually using
+      the same team name", which is a sentence about how you sign up, not an
+      individual event — and the loose version failed every Forge team record.
+    */
     for (const c of certs) {
       const event = events.find((e) => e.slug === c.event);
-      if (!event || !/individual/i.test(event.teamSize ?? "")) continue;
+      if (!event || !/^\s*individual\b/i.test(event.teamSize ?? "")) continue;
       expect(c.teamName, `${c.id} carries a team on an individual event`).toBeUndefined();
     }
   });

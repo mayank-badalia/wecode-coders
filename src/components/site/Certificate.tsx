@@ -23,6 +23,11 @@ const ROLE_COPY: Record<string, string> = {
   winner: "a winner",
 };
 
+const TEAM_ROLE_COPY: Record<string, string> = {
+  leader: "team leader",
+  member: "a team member",
+};
+
 /*
   The heading is the role, not a constant.
 
@@ -42,8 +47,16 @@ const ROLE_TITLE: Record<string, string> = {
   for the worst one.
 */
 function nameStep(name: string): string {
-  if (name.length > 34) return "xlong";
-  if (name.length > 24) return "long";
+  /*
+    Thresholds are low because character count is only a proxy for width:
+    "Tanvi Pavan Bhageshwar" is 22 characters and still wrapped to two lines
+    at the top size, which pushed the citation onto the footer rule. 20 was
+    not low enough either: "Shubham Kumar Sharma" is exactly 20 and wrapped.
+    Every threshold here was set by measuring all issued certificates for a
+    citation that collides with the footer rule, not by eye.
+  */
+  if (name.length > 30) return "xlong";
+  if (name.length > 18) return "long";
   return "normal";
 }
 
@@ -141,7 +154,11 @@ export function Certificate({
             <p className="cert-citation">
               {cert.teamName ? (
                 <>
-                  with team <strong>{cert.teamName}</strong>,{" "}
+                  with team <strong>{cert.teamName}</strong>
+                  {cert.teamRole ? (
+                    <> as <strong>{TEAM_ROLE_COPY[cert.teamRole]}</strong></>
+                  ) : null}
+                  ,{" "}
                 </>
               ) : null}
               {heldOn ? <>held on {heldOn}, </> : null}

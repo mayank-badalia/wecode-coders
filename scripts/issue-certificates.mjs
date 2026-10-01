@@ -106,6 +106,8 @@ const NOT_A_PERSON = /hackathon|competition|event|project|team|repo|user|company
 const iName = findCol("candidate's name", "full name", "name");
 const iEmail = findCol("candidate's email", "email address", "email");
 const iTeam = header.findIndex((h) => clean(h) === "team name");
+// Optional. "leader" or "member" — what the holder's own submission said.
+const iTeamRole = header.findIndex((h) => clean(h) === "team role");
 if (iName === -1 || iEmail === -1) {
   console.error(`Could not find name and email columns. Header was:\n  ${header.join("\n  ")}`);
   process.exit(1);
@@ -146,9 +148,14 @@ for (const r of dataRows) {
   usedIds.add(id);
 
   const team = iTeam === -1 ? "" : (r[iTeam] ?? "").trim();
+  const rawTeamRole = iTeamRole === -1 ? "" : (r[iTeamRole] ?? "").trim().toLowerCase();
+  if (rawTeamRole && !["leader", "member"].includes(rawTeamRole)) {
+    throw new Error(`unknown team role ${JSON.stringify(rawTeamRole)} for ${email}`);
+  }
   const cert = {
     id, name, email, event: eventSlug, role, issuedAt,
     ...(team ? { teamName: team } : {}),
+    ...(rawTeamRole ? { teamRole: rawTeamRole } : {}),
     ...(award ? { award } : {}),
   };
   if (!isCertificateId(id)) throw new Error(`generated an id that fails validation: ${id}`);

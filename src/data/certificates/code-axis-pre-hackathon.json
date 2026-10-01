@@ -1,0 +1,332 @@
+[
+  {
+    "id": "CAX-UHW8MH",
+    "name": "Mayuri Ghansaram Rathod",
+    "email": "mayurathod983@gmail.com",
+    "event": "code-axis",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "teamName": "NMIMS",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-EDTWCR",
+    "name": "Chahit Doshi",
+    "email": "chahit2006@gmail.com",
+    "event": "code-axis",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "teamName": "CODE NINJAS",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-CSWBGZ",
+    "name": "Krish Divyesh Dodiya",
+    "email": "krishhdodiya13@gmail.com",
+    "event": "code-axis",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "teamName": "CODE NINJAS",
+    "teamRole": "leader",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-K73THW",
+    "name": "Srushti Shelar",
+    "email": "srushtishelar729@gmail.com",
+    "event": "code-axis",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "teamName": "Muted Mavericks",
+    "teamRole": "leader",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-TNWY9B",
+    "name": "Rakshit Singh Negi",
+    "email": "negi28573@gmail.com",
+    "event": "code-axis",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "teamName": "Code Ninjas",
+    "teamRole": "leader",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-BPPK9Q",
+    "name": "Prathmesh Sanjay Mante",
+    "email": "prathmeshmantebuldana@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "CODE LEAP",
+    "teamRole": "leader",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-2W4EZK",
+    "name": "Modi Abhishek",
+    "email": "abhishekmodi051@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "wecodecoders11",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-CTDCDH",
+    "name": "Shubham Kumar Chavan",
+    "email": "chavanshubham291207@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "CODECRAFT",
+    "teamRole": "leader",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-HSB82Q",
+    "name": "Ayush Tripathi",
+    "email": "tripathi.yash8591@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "PROMPT PIRATES",
+    "teamRole": "leader",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-R3WJPY",
+    "name": "Akhand Shukla",
+    "email": "2k25cse2510451e@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "PROMPT PIRATES",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-NDBVJW",
+    "name": "Ranjeet Kumar",
+    "email": "rajranjeet7680@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "RAJRANJEET7680",
+    "teamRole": "leader",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-6Q5ZPM",
+    "name": "Poonam Rajnikant Ugale",
+    "email": "ugalepoonam922@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "CODECRAFT",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-DKB224",
+    "name": "Tejaswini Laxman Thorat",
+    "email": "tejaswinithorat296@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "CODECRAFT",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-NF9KVM",
+    "name": "Jay Neve",
+    "email": "jay.neve.jn@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "CODECRAFT",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-WCKZDM",
+    "name": "Ashwin sai sinkala",
+    "email": "ashwinsai102@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "LAN",
+    "teamRole": "leader",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-AK7EWP",
+    "name": "Kuldeep singh",
+    "email": "24ai051@ipec.org.in",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "Code Ninja",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-SGWWT8",
+    "name": "Bhumika Pursharthi",
+    "email": "bhumikapursharthi@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "INNOVATEX",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-C6A5BC",
+    "name": "Girish Chinchpure",
+    "email": "girishchinchpure970@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "InnovateX",
+    "teamRole": "leader",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-M5UWB2",
+    "name": "Anusha Kulkarni",
+    "email": "kool.anu1412@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "INNOVATE X",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-YX867D",
+    "name": "Tanishqa Band",
+    "email": "tanishqaband333@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "InnovateX",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-TFSGB7",
+    "name": "Nupul Patil",
+    "email": "nupulpatil@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "PROCODE",
+    "teamRole": "member",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "CAX-FXXB2T",
+    "name": "Divesh Patil",
+    "email": "diveshpatil0009@gmail.com",
+    "event": "code-axis",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "teamName": "PROCODE",
+    "teamRole": "leader",
+    "award": {
+      "title": "CodeAxis Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  }
+]
