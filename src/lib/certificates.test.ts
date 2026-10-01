@@ -5,7 +5,9 @@ import {
   generateCertificateId,
   isCertificateId,
   normaliseName,
+  allCertificates,
 } from "./certificates";
+import { events } from "@/data/events";
 
 describe("certificate ids", () => {
   it("never emits characters that get misread off a printed page", () => {
@@ -91,5 +93,70 @@ describe("normaliseName", () => {
 
   it("returns empty for empty input rather than throwing", () => {
     expect(normaliseName("   ")).toBe("");
+  });
+});
+
+describe("the issued store", () => {
+  /*
+    These guard the records themselves, not the helpers.
+
+    The store is committed and public: every id in it is a live URL on
+    wecodecoders.in, and a duplicate or a malformed id is a certificate that
+    either verifies as the wrong person or fails to verify at all. Both are
+    worse than a build failure.
+  */
+  const certs = allCertificates();
+
+  it("issues at least one certificate per event store", () => {
+    expect(certs.length).toBeGreaterThan(0);
+    const byEvent = new Set(certs.map((c) => c.event));
+    expect(byEvent.size).toBeGreaterThan(1);
+  });
+
+  it("gives every record a well-formed, unique id", () => {
+    const ids = certs.map((c) => c.id);
+    expect(new Set(ids).size, "duplicate certificate id").toBe(ids.length);
+    for (const c of certs) expect(isCertificateId(c.id), `bad id: ${c.id}`).toBe(true);
+  });
+
+  it("points every record at a real event", () => {
+    // A record naming an event that does not exist verifies to a citation
+    // nobody can check against anything.
+    const slugs = new Set(events.map((e) => e.slug));
+    for (const c of certs) {
+      expect(slugs.has(c.event), `${c.id} names unknown event ${c.event}`).toBe(true);
+    }
+  });
+
+  it("finds every issued certificate by its own id", () => {
+    for (const c of certs) expect(findCertificate(c.id)?.name).toBe(c.name);
+  });
+
+  it("never calls a quiz a challenge", () => {
+    /*
+      The citation reads "a {duration} {kind}". `kind` defaults to "challenge"
+      because every record used to come from a hackathon — so a quiz that
+      forgets to set it prints "a 15-minute challenge", which is not what the
+      holder sat. Checked against the event's own format rather than a list of
+      slugs, so a new quiz is covered the day it is added.
+    */
+    for (const c of certs) {
+      const event = events.find((e) => e.slug === c.event);
+      if (event?.format !== "quiz") continue;
+      if (!c.award?.duration) continue;
+      expect(c.award.kind, `${c.id} prints a quiz as a "${c.award.kind ?? "challenge"}"`).toBe(
+        "quiz",
+      );
+    }
+  });
+
+  it("gives an individual event's certificates no team name", () => {
+    // Protocol//60 is attempted alone. "with team X" on one of those is a
+    // detail someone would have to explain away to whoever they showed it to.
+    for (const c of certs) {
+      const event = events.find((e) => e.slug === c.event);
+      if (!event || !/individual/i.test(event.teamSize ?? "")) continue;
+      expect(c.teamName, `${c.id} carries a team on an individual event`).toBeUndefined();
+    }
   });
 });

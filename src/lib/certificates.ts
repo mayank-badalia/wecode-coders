@@ -38,8 +38,16 @@ export type Certificate = {
     title: string;
     /** Where it sits — e.g. the parent event. */
     context?: string;
-    /** "36 hours". Printed as part of the citation. */
+    /** "36-hour". Printed as part of the citation. */
     duration?: string;
+    /*
+      The noun the duration qualifies — "challenge", "quiz", "sprint".
+
+      Hardcoding "challenge" was fine while every record came from a
+      hackathon. Protocol//60 is a quiz, and "a 15-minute challenge" is
+      simply not what the holder sat.
+    */
+    kind?: string;
   };
 };
 
@@ -123,6 +131,7 @@ export function normaliseName(raw: string): string {
 /* ------------------------------------------------------------- lookups */
 
 import participantsLaunchpad from "@/data/certificates/wcc-launchpad-30.json";
+import quizProtocol60 from "@/data/certificates/protocol-60.json";
 
 /*
   Imported statically rather than read from disk so the verify page can be
@@ -131,6 +140,7 @@ import participantsLaunchpad from "@/data/certificates/wcc-launchpad-30.json";
 */
 const STORES: Record<string, Certificate[]> = {
   "wcc-launchpad-30": participantsLaunchpad as Certificate[],
+  "protocol-60": quizProtocol60 as Certificate[],
 };
 
 export function allCertificates(): Certificate[] {

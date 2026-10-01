@@ -1,0 +1,30 @@
+[
+  {
+    "id": "P60-KKP8J4",
+    "name": "Mayank Badalia",
+    "email": "mayankbadalia874@gmail.com",
+    "event": "protocol-60",
+    "role": "participant",
+    "issuedAt": "2026-10-01",
+    "award": {
+      "title": "Protocol//60",
+      "context": "National Online Quiz — MCP & ACP",
+      "duration": "15-minute",
+      "kind": "quiz"
+    }
+  },
+  {
+    "id": "P60-WQT52F",
+    "name": "Mayank Badalia",
+    "email": "mayankbadalia874@gmail.com",
+    "event": "protocol-60",
+    "role": "winner",
+    "issuedAt": "2026-10-01",
+    "award": {
+      "title": "Protocol//60",
+      "context": "National Online Quiz — MCP & ACP",
+      "duration": "15-minute",
+      "kind": "quiz"
+    }
+  }
+]
