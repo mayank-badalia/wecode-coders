@@ -22,6 +22,13 @@
   the event it is filed under. Without it the records have no citation, and
   certificates.test.ts fails the build rather than letting a blank one ship.
 
+  --store names the file to write, when it should not be the event slug. One
+  event can run two things people hold separate certificates for: Protocol//60
+  had a pre-quiz, and 52 of the 86 who sat it also sat the main quiz. The
+  no-double-issue check below is keyed on email within one store, so filing
+  both under protocol-60.json would silently skip those 52 — including two of
+  the three pre-quiz winners. Separate stores, one record each, same event.
+
   Without --write it prints what it would do and changes nothing.
 */
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
@@ -33,6 +40,7 @@ const flags = process.argv.slice(2).filter((a) => a.startsWith("--"));
 const write = flags.includes("--write");
 const role = (flags.find((f) => f.startsWith("--role="))?.split("=")[1] ?? "participant").trim();
 const awardPath = flags.find((f) => f.startsWith("--award="))?.split("=").slice(1).join("=").trim();
+const storeName = (flags.find((f) => f.startsWith("--store="))?.split("=")[1] ?? "").trim();
 
 if (!csvPath || !eventSlug || !prefix) {
   console.error("usage: npx tsx scripts/issue-certificates.mjs <csv> <event-slug> <id-prefix> [--role=participant] [--write]");
@@ -114,7 +122,8 @@ if (awardPath) {
   console.log(`award            ${award.title}${award.heldOn ? `, held ${award.heldOn}` : ""}`);
 }
 
-const storePath = join("src", "data", "certificates", `${eventSlug}.json`);
+const storePath = join("src", "data", "certificates", `${storeName || eventSlug}.json`);
+if (storeName) console.log(`store            ${storePath}`);
 const existing = existsSync(storePath) ? JSON.parse(readFileSync(storePath, "utf8")) : [];
 
 // Issued-to is keyed by email so a re-run is a no-op, and ids are checked for

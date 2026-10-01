@@ -141,15 +141,27 @@ export function normaliseName(raw: string): string {
 
 import participantsLaunchpad from "@/data/certificates/wcc-launchpad-30.json";
 import quizProtocol60 from "@/data/certificates/protocol-60.json";
+import quizProtocol60Pre from "@/data/certificates/protocol-60-pre-quiz.json";
 
 /*
   Imported statically rather than read from disk so the verify page can be
   prerendered and the whole set ships as part of the bundle for that route.
-  A new event means one more import here.
+  A new batch means one more import here.
+
+  Keys are store names, not event slugs. Usually they are the same, but one
+  event can run two separate things people hold separate certificates for —
+  Protocol//60 had a pre-quiz a week before the main quiz, and 52 of the 86
+  who sat it also sat the main one. Those are two awards, so two records per
+  person, and they cannot share a store: the issuer is idempotent on
+  (email, store), which is exactly what stops a re-run issuing anyone a second
+  certificate for the same thing.
+
+  Nothing reads these keys — everything is looked up by id across the lot.
 */
 const STORES: Record<string, Certificate[]> = {
   "wcc-launchpad-30": participantsLaunchpad as Certificate[],
   "protocol-60": quizProtocol60 as Certificate[],
+  "protocol-60-pre-quiz": quizProtocol60Pre as Certificate[],
 };
 
 export function allCertificates(): Certificate[] {
