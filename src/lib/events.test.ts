@@ -240,19 +240,30 @@ describe("events seam", () => {
     }
   });
 
-  it("asks for no social posts or video demos on a three-round event", () => {
-    const series = published.filter((e) =>
-      e.sections?.some((sec) => sec.label === "How the three rounds run"),
-    );
-    for (const e of series) {
+  it("asks no event for social posts or a video demo", () => {
+    /*
+      Was scoped to the three-round events while WCC Launchpad 30 and Forge 48
+      still asked for a demo video and showcase posts. Neither does now, so
+      the rule covers everything — there is no event this is allowed on.
+    */
+    for (const e of published) {
       const words = [
         ...e.deliverables,
         ...(e.rewards ?? []),
         ...(e.sections ?? []).flatMap((sec) =>
           sec.kind === "list" ? sec.items : sec.items.flatMap((i) => i.points),
         ),
+        ...(e.judging ?? []).map((j) => `${j.name} ${j.detail}`),
+        /*
+          The FAQ is deliberately absent. "Are social media posts required?
+          No. Nothing on LinkedIn, Instagram or anywhere else is part of a
+          submission" is the answer people come looking for — naming them in
+          order to rule them out is the opposite of asking for them.
+        */
       ].join(" ");
-      expect(words, e.slug).not.toMatch(/linkedin|instagram|showcase post|demo video|demonstration video/i);
+      expect(words, e.slug).not.toMatch(
+        /linkedin|instagram|showcase post|demo video|demonstration video|social post/i,
+      );
     }
   });
 

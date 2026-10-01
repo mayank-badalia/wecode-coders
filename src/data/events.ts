@@ -415,9 +415,8 @@ export const events: Event[] = [
       "Take one problem worth solving and turn it into something people can use, in thirty hours.",
     deliverables: [
       "A working product or prototype whose central workflow actually runs",
-      "A two-to-three-minute demo video and a short pitch deck",
       "Source code judges can reach before the deadline",
-      "A showcase post on LinkedIn and Instagram, links included",
+      "The problem you chose and the evidence that it is real",
     ],
     schedule: [
       { when: "Sun 4 Oct, 10:00", what: "The brief, the tracks and the submission list go out. Building starts." },
@@ -434,13 +433,13 @@ export const events: Event[] = [
       },
       {
         name: "Strength of the core solution",
-        weight: "22 points",
+        weight: "24 points",
         detail:
           "Does the product solve the problem you named, directly? Is the main workflow focused, useful, and does it produce a clear outcome?",
       },
       {
         name: "Technical depth and reliability",
-        weight: "22 points",
+        weight: "24 points",
         detail:
           "How well have you used what you chose? Does it work consistently? Are the integrations, data flows and AI components put together with thought?",
       },
@@ -452,7 +451,7 @@ export const events: Event[] = [
       },
       {
         name: "Real-world usability",
-        weight: "11 points",
+        weight: "12 points",
         detail:
           "Could the intended user work it out without a walkthrough? Is it accessible and practical in the setting it is meant for?",
       },
@@ -461,12 +460,6 @@ export const events: Event[] = [
         weight: "10 points",
         detail:
           "Privacy, security, bias, transparency, accessibility and human oversight, where they are relevant. Do users keep control of the decisions that matter?",
-      },
-      {
-        name: "Demonstration quality and learning velocity",
-        weight: "5 points",
-        detail:
-          "Does the demo video show real progress made during the thirty hours? Does it say what changed, what broke, what you learned and what you would fix next?",
       },
     ],
     rewards: [
@@ -554,8 +547,6 @@ export const events: Event[] = [
           "Respect software licences, intellectual property and user privacy.",
           "Projects must not promote illegal, harmful or discriminatory activity.",
           "Everything on the submission list has to arrive before the deadline.",
-          "Both showcase posts must be written by team members and describe the product accurately.",
-          "No bots, paid engagement, misleading claims or spam to promote those posts.",
           "Judges may ask for repository access or other proof of development.",
           "Organisers may remove anyone who disrupts the event or breaks community guidelines.",
           "The judges' decision is final.",
@@ -570,8 +561,7 @@ export const events: Event[] = [
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones in your submission." },
       { q: "Can I change track?", a: "Yes, any time before final submission. Only one primary track can be selected." },
       { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable demo and a video." },
-      { q: "Do the social posts really matter?", a: "Yes. Both are required and a submission without them is incomplete — but they carry no points. Every mark on the sheet is for the product." },
-      { q: "Will everyone get a certificate?", a: "Certificates go to participants who submit a valid project on time, post both showcases and follow the rules. Registering alone does not qualify." },
+      { q: "Will everyone get a certificate?", a: "Certificates go to participants who submit a valid project on time and follow the rules. Registering alone does not qualify." },
     ],
     stats: [
       { label: "Hours to build", value: "30" },
@@ -914,7 +904,7 @@ export const events: Event[] = [
           "How well is it built? Architecture, data flows, integrations and AI components put together with thought rather than glued together to demo once.",
       },
       {
-        name: "Presentation and user experience",
+        name: "Usability and real-world fit",
         weight: "10%",
         detail:
           "Could the intended user work it out without a walkthrough? Is it accessible and practical in the setting it is meant for?",
@@ -1002,7 +992,7 @@ export const events: Event[] = [
       { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones, along with any reused code, APIs and datasets, in your submission." },
       { q: "Can I bring an existing project?", a: "Not as it stands. The main solution has to be built during the event, and an old project resubmitted without significant new work does not qualify." },
-      { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable prototype and a video that shows it running." },
+      { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable the judges can run." },
       { q: "When are results announced?", a: "Within seven to ten days of the hackathon ending, once every eligible submission has been judged." },
       { q: "Will everyone get a certificate?", a: "A verifiable participation certificate goes to every eligible participant who makes a valid final submission. Registering without submitting does not qualify." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
