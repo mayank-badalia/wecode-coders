@@ -150,6 +150,45 @@ describe("the issued store", () => {
     }
   });
 
+  it("never dates a certificate before the thing it certifies", () => {
+    /*
+      This is the check that caught Protocol//60: the event was recorded as
+      3 October while its certificates were dated 1 October, so the store
+      asserted that people had sat a quiz that had not happened yet — and the
+      verify page would have printed both dates, side by side, for anyone who
+      looked.
+
+      Only records whose award *is* the event are compared against it. The
+      Launchpad batch is for the Inkloom Pre-Hackathon, a sponsored challenge
+      that ran inside WCC Launchpad 30 on its own earlier days, and its dates
+      legitimately precede the parent event — the same distinction the `award`
+      field exists to express. The first version of this test did not make it
+      and failed on all 55 of those.
+    */
+    for (const c of certs) {
+      const event = events.find((e) => e.slug === c.event);
+      if (!event) continue;
+      const awardIsTheEvent = !c.award?.title || c.award.title === event.title;
+      if (!awardIsTheEvent) continue;
+
+      const issued = new Date(`${c.issuedAt}T23:59:59+05:30`);
+      expect(
+        issued.getTime() >= new Date(event.startsAt).getTime(),
+        `${c.id} is dated ${c.issuedAt}, before ${event.slug} starts on ${event.startsAt}`,
+      ).toBe(true);
+    }
+  });
+
+  it("issues nothing in the future", () => {
+    // Whatever the award is, a certificate dated after today certifies
+    // something that has not happened.
+    const today = Date.now();
+    for (const c of certs) {
+      const issued = new Date(`${c.issuedAt}T00:00:00+05:30`).getTime();
+      expect(issued <= today, `${c.id} is dated ${c.issuedAt}, in the future`).toBe(true);
+    }
+  });
+
   it("gives an individual event's certificates no team name", () => {
     // Protocol//60 is attempted alone. "with team X" on one of those is a
     // detail someone would have to explain away to whoever they showed it to.

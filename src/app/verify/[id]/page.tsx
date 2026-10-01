@@ -90,6 +90,23 @@ export default async function VerifyPage({ params }: Params) {
               />
             </div>
 
+            {/*
+              Certificates are delivered as this link rather than as an
+              attachment, so this page has to be where the holder gets their
+              copy. A plain anchor, not a transition link: the print route
+              deliberately sits outside the site chrome.
+            */}
+            <p style={{ margin: "clamp(1.2rem, 3vh, 1.8rem) 0 0" }}>
+              <a
+                href={`/verify/${cert.id}/print`}
+                className="verify-download"
+                style={mono}
+              >
+                Download your certificate
+                <Arrow style={{ width: 15, height: 15 }} />
+              </a>
+            </p>
+
             <dl
               style={{
                 display: "grid",
@@ -104,7 +121,9 @@ export default async function VerifyPage({ params }: Params) {
                 ["Issued to", cert.name],
                 ["Awarded for", cert.award?.title ?? cert.event],
                 ...(cert.award?.context ? [["Part of", cert.award.context]] : []),
-                ...(cert.award?.duration ? [["Format", `${cert.award.duration} challenge`]] : []),
+                ...(cert.award?.duration
+                  ? [["Format", `${cert.award.duration} ${cert.award.kind ?? "challenge"}`]]
+                  : []),
                 ["Awarded as", ROLE_COPY[cert.role] ?? cert.role],
                 ...(cert.teamName ? [["Team", cert.teamName]] : []),
                 ["Issued", cert.issuedAt],

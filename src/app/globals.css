@@ -1168,6 +1168,64 @@ body:has(.cert-print) .cert-print * {
 }
 
 /*
+  The holder's save button, on screen only.
+
+  `display: none` in print media keeps it off the saved sheet and out of the
+  batch PDFs, which are printed from this same route — page.pdf() emulates
+  print media, so the renderer never sees it.
+*/
+.cert-print-action {
+  position: fixed;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  z-index: 3;
+  min-height: 44px;
+  padding: 0.7em 1.5em;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-signal);
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.cert-print-action:focus-visible {
+  outline: 2px solid var(--color-paper);
+  outline-offset: 3px;
+}
+
+@media print {
+  .cert-print-action {
+    display: none;
+  }
+}
+
+/*
+  The holder's download link on the verify page. Sized here rather than
+  inline so the coarse-pointer rules below can reach it — it has to clear the
+  44px tap floor, and an inline height would beat that media query.
+*/
+.verify-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  min-height: 44px;
+  padding: 0.7em 1.6em;
+  border-radius: 999px;
+  background: var(--color-signal);
+  color: var(--color-paper);
+  text-decoration: none;
+}
+
+.verify-download:focus-visible {
+  outline: 2px solid var(--color-paper);
+  outline-offset: 3px;
+}
+
+/*
   The certificate lookup form.
 
   Geometry lives here rather than inline so the coarse-pointer rules below can

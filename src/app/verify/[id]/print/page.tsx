@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import QRCode from "qrcode";
 import { Certificate } from "@/components/site/Certificate";
+import { PrintButton } from "@/components/site/PrintButton";
 import { findCertificate } from "@/lib/certificates";
 
 type Params = { params: Promise<{ id: string }> };
@@ -39,6 +40,7 @@ export default async function PrintPage({ params }: Params) {
   return (
     <div className="cert-print">
       <Certificate cert={cert} verifyUrl={verifyUrl.replace(/^https?:\/\//, "")} qr={qr} />
+      <PrintButton />
     </div>
   );
 }
