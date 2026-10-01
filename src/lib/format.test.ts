@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  eventDurationHours,
-  formatEventDate,
-  formatEventDuration,
-  formatEventTime,
-} from "./format";
+import { eventDurationHours, formatEventDate, formatEventTime } from "./format";
 
 describe("formatEventDate", () => {
   it("uses the stated offset when deciding what day it is", () => {
@@ -55,35 +50,5 @@ describe("eventDurationHours", () => {
 
   it("is zero for an instant", () => {
     expect(eventDurationHours("2026-09-12T10:00:00Z", "2026-09-12T10:00:00Z")).toBe(0);
-  });
-});
-
-describe("formatEventDuration", () => {
-  const start = "2026-10-20T10:00:00+05:30";
-  const after = (hours: number) =>
-    formatEventDuration(
-      start,
-      new Date(new Date(start).getTime() + hours * 3_600_000).toISOString(),
-    );
-
-  it("keeps hours for anything under two days", () => {
-    expect(after(30)).toBe("30 hours");
-    expect(after(47)).toBe("47 hours");
-  });
-
-  it("switches to days once hours stop being useful", () => {
-    // A twelve-day hackathon printed "288 hours", which is accurate and says
-    // nothing at all to the person reading it.
-    expect(after(48)).toBe("3 days");
-    expect(after(288)).toBe("13 days");
-  });
-
-  it("counts days inclusively, the way the events are published", () => {
-    /*
-      The three-round events run from D to D + 11 and are published as twelve
-      calendar days. That is 264 elapsed hours; dividing by 24 gives eleven
-      and contradicts the rest of the listing.
-    */
-    expect(after(11 * 24)).toBe("12 days");
   });
 });

@@ -8,7 +8,7 @@ import { LockGlyph } from "@/components/site/LockGlyph";
 import { EventDetailMotion } from "@/components/site/EventDetailMotion";
 import { EventSections } from "@/components/site/EventSections";
 import { getAdjacentEvent, getAllEvents, getEventBySlug, getSite } from "@/lib/events";
-import { formatEventDate, formatEventDuration, formatEventTime } from "@/lib/format";
+import { eventDurationHours, formatEventDate, formatEventTime } from "@/lib/format";
 import { webpSize } from "@/lib/imageSize";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -132,7 +132,7 @@ export default async function EventPage({ params }: Params) {
   const next = getAdjacentEvent(slug);
   const nextAnnounced = next && !next.locked ? next : undefined;
   const site = getSite();
-  const runsFor = formatEventDuration(event.startsAt, event.endsAt);
+  const hours = eventDurationHours(event.startsAt, event.endsAt);
 
   // Read from the file, not declared beside it — see src/lib/imageSize.ts.
   // Drives --poster-ratio so the stacked hero's box is the picture exactly.
@@ -145,9 +145,19 @@ export default async function EventPage({ params }: Params) {
   const spec: { label: string; value: string }[] = [
     { label: "Date", value: formatEventDate(event.startsAt, event.endsAt) },
     { label: "Starts", value: event.startTimeNote ?? formatEventTime(event.startsAt) },
-    // A duration measured from a start time that has not been announced is
-    // fiction, so it is dropped alongside the time it is derived from.
-    ...(event.startTimeNote ? [] : [{ label: "Runs for", value: runsFor }]),
+    /*
+      "Runs for" only when hours are the useful unit.
+
+      A duration measured from a start time that has not been announced is
+      fiction, so it is dropped alongside the time it is derived from. And on
+      a multi-day event it was restating the date range directly above it —
+      "30 Oct — 10 Nov 2026" followed by "Runs for 12 days" is the same fact
+      twice. Under two days the hour count is the thing a reader wants and
+      the dates do not give them.
+    */
+    ...(event.startTimeNote || hours >= 48
+      ? []
+      : [{ label: "Runs for", value: `${hours} hours` }]),
     { label: "Joining", value: event.venue.name },
     { label: "Kind", value: event.format.replace("-", " ") },
     { label: "Who it is for", value: event.forWho },
