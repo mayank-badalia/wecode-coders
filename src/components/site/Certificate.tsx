@@ -10,6 +10,11 @@ import type { Certificate as CertificateRecord } from "@/lib/certificates";
   Everything is sized in `em` off one root that scales with the container, so
   the same component serves a 1440px desktop, a 360px phone and an A4 page at
   identical proportions.
+
+  The layout is centred and symmetrical because that is what the document is
+  imitating, and because a certificate is read in one glance from across a
+  desk rather than scanned left to right. Two things carry that glance: who it
+  belongs to, and what they did. Everything else is set quiet around them.
 */
 
 const ROLE_COPY: Record<string, string> = {
@@ -33,15 +38,29 @@ const ROLE_TITLE: Record<string, string> = {
 
 /*
   Long names are the failure mode: "Chinta Durga Siva Manikanta Reddy" is a
-  real holder, and "Pagidikalva Obula Jaswanth" already wraps to two lines at
-  the top size. Stepping down by length beats setting every name small enough
-  for the worst one, and the third step exists because two was not enough —
-  the longest names in the Launchpad data overran the frame.
+  real holder. Stepping down by length beats setting every name small enough
+  for the worst one.
 */
 function nameStep(name: string): string {
   if (name.length > 34) return "xlong";
   if (name.length > 24) return "long";
   return "normal";
+}
+
+/*
+  "30 September 2026" — written out, in the timezone the event ran in.
+
+  A certificate is a document somebody keeps, so 2026-09-30 is the wrong
+  register for the line a reader actually reads, and parsing it as UTC would
+  print the day before for an evening event in India.
+*/
+function heldOnLabel(iso: string): string {
+  return new Date(`${iso}T12:00:00+05:30`).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Asia/Kolkata",
+  });
 }
 
 export function Certificate({
@@ -53,9 +72,8 @@ export function Certificate({
   verifyUrl: string;
   qr: string;
 }) {
-  const title = cert.award?.title ?? "";
-  const duration = cert.award?.duration;
-  const kind = cert.award?.kind ?? "challenge";
+  const award = cert.award;
+  const heldOn = award?.heldOn ? heldOnLabel(award.heldOn) : null;
 
   return (
     <div className="cert-stage">
@@ -63,19 +81,14 @@ export function Certificate({
         <div className="cert-frame" aria-hidden="true" />
         <div className="cert-inner">
           {/*
-            Credits sit at the top, as a letterhead.
-
-            They used to run as a band between the citation and the footer,
-            which is what pushed the administrative strip past the frame on
-            longer names — two logos at 2.8em plus their labels is most of a
-            line of body copy, and it was competing for the space the name
-            needed. Up here they cost a fixed, small amount of height and read
-            the way a letterhead does: who issued this, before what it says.
+            Credits as a letterhead. They used to run as a band between the
+            citation and the footer, where two logos plus their labels
+            competed with the name for the only flexible space on the sheet —
+            on a two-line name the footer lost and printed outside the frame.
 
             Print-sized logo copies, not the full-resolution marks used on the
-            event page. Each certificate embeds both, and at the size they
-            render here the originals added ~170KB per PDF for detail no one
-            can see — 14MB across a batch of 55.
+            event page: at this size the originals added ~170KB per PDF for
+            detail no one can see.
           */}
           <div className="cert-credits">
             <div className="cert-credit">
@@ -96,29 +109,43 @@ export function Certificate({
             </div>
           </div>
 
-          <header className="cert-head">
-            <p className="cert-mono cert-kind">{ROLE_TITLE[cert.role] ?? ROLE_TITLE.participant}</p>
-            {cert.award?.context && <p className="cert-mono cert-context">{cert.award.context}</p>}
-          </header>
-
           <div className="cert-body">
-            <p className="cert-mono cert-awarded">This certifies that</p>
+            <p className="cert-mono cert-kind">{ROLE_TITLE[cert.role] ?? ROLE_TITLE.participant}</p>
+            <span className="cert-ornament" aria-hidden="true" />
+
+            <p className="cert-mono cert-awarded">This is to certify that</p>
             <h1 className="cert-name" data-length={nameStep(cert.name)}>
               {cert.name}
             </h1>
+            <p className="cert-lead">took part in</p>
+
+            {/*
+              The competition, set as the second focal point. It is the thing
+              a reader is looking for after the name — and the thing that was
+              hardest to find in the previous layout, where it sat mid-sentence
+              in grey body copy.
+            */}
+            <p className="cert-event">{award?.title ?? cert.event}</p>
+            {(award?.context || award?.detail) && (
+              <p className="cert-mono cert-event-sub">
+                {[award?.context, award?.detail].filter(Boolean).join("  ·  ")}
+              </p>
+            )}
+
+            {/*
+              The closing line carries whatever is true of this record. Team
+              used to split the lead — "took part, with team X, in" — which
+              put a subordinate clause between the reader and the thing they
+              were looking for.
+            */}
             <p className="cert-citation">
-              took part in <strong>{title}</strong>
-              {duration ? (
-                <>
-                  , a {duration} {kind}
-                </>
-              ) : null}
               {cert.teamName ? (
                 <>
-                  , with team <strong>{cert.teamName}</strong>
+                  with team <strong>{cert.teamName}</strong>,{" "}
                 </>
               ) : null}
-              , and is recognised as <strong>{ROLE_COPY[cert.role] ?? cert.role}</strong>.
+              {heldOn ? <>held on {heldOn}, </> : null}
+              and is recognised as <strong>{ROLE_COPY[cert.role] ?? cert.role}</strong>.
             </p>
           </div>
 

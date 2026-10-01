@@ -121,9 +121,8 @@ export default async function VerifyPage({ params }: Params) {
                 ["Issued to", cert.name],
                 ["Awarded for", cert.award?.title ?? cert.event],
                 ...(cert.award?.context ? [["Part of", cert.award.context]] : []),
-                ...(cert.award?.duration
-                  ? [["Format", `${cert.award.duration} ${cert.award.kind ?? "challenge"}`]]
-                  : []),
+                ...(cert.award?.detail ? [["Format", cert.award.detail]] : []),
+                ...(cert.award?.heldOn ? [["Held on", cert.award.heldOn]] : []),
                 ["Awarded as", ROLE_COPY[cert.role] ?? cert.role],
                 ...(cert.teamName ? [["Team", cert.teamName]] : []),
                 ["Issued", cert.issuedAt],

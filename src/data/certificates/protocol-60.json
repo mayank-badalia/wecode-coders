@@ -9,8 +9,8 @@
     "award": {
       "title": "Protocol//60",
       "context": "National Online Quiz — MCP & ACP",
-      "duration": "15-minute",
-      "kind": "quiz"
+      "detail": "15 questions",
+      "heldOn": "2026-09-30"
     }
   },
   {
@@ -23,8 +23,8 @@
     "award": {
       "title": "Protocol//60",
       "context": "National Online Quiz — MCP & ACP",
-      "duration": "15-minute",
-      "kind": "quiz"
+      "detail": "15 questions",
+      "heldOn": "2026-09-30"
     }
   }
 ]

@@ -958,6 +958,7 @@ a.detail-cta--signal:focus-visible {
   align-items: flex-start;
   gap: 2em;
   padding-bottom: 1.1em;
+  border-bottom: 0.05em solid var(--color-paper-2);
 }
 
 /*
@@ -1004,13 +1005,22 @@ a.detail-cta--signal:focus-visible {
   height: 1.2em;
 }
 
-.cert-head {
+/*
+  The body is centred and symmetrical, which is the register the document is
+  imitating. It is also the only flexible block on the sheet: `min-height: 0`
+  is what lets it give ground rather than push the footer out of the frame —
+  without it a flex item refuses to shrink below its content, and
+  `overflow: hidden` on the card turns that refusal into a cropped footer.
+*/
+.cert-body {
+  flex: 1;
+  min-height: 0;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 2em;
-  padding-bottom: 1em;
-  border-bottom: 0.05em solid var(--color-paper-2);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.1em 0;
 }
 
 .cert-kind {
@@ -1018,24 +1028,22 @@ a.detail-cta--signal:focus-visible {
   font-weight: 600;
 }
 
-.cert-context {
-  color: var(--color-ink-60);
-  text-align: right;
-}
-
 /*
-  The only flexible block on the sheet. `min-height: 0` is what lets it give
-  ground rather than push the footer out of the frame: without it a flex item
-  refuses to shrink below its content, and `overflow: hidden` on the card
-  turns that refusal into a silently cropped footer.
+  A hairline under the heading, the width of a word. Print convention.
+
+  `flex-shrink: 0` is load-bearing. As a flex item its basis is barely one
+  device pixel, and the browser shrank it to exactly zero — the rule rendered
+  as nothing at all, with no overflow anywhere to explain it. Measured: with
+  shrink disabled it is 1.31px and the body still fits in 411px either way.
 */
-.cert-body {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1.3em 0;
+.cert-ornament {
+  display: block;
+  flex-shrink: 0;
+  width: 3.6em;
+  height: 0.08em;
+  margin: 0.95em 0 1.35em;
+  background: var(--color-ink);
+  opacity: 0.4;
 }
 
 .cert-awarded {
@@ -1043,29 +1051,66 @@ a.detail-cta--signal:focus-visible {
 }
 
 .cert-name {
-  font-size: 3.3em;
+  font-size: 3.1em;
   font-weight: 800;
   line-height: 1.04;
   letter-spacing: -0.025em;
   text-transform: uppercase;
-  margin: 0.16em 0 0.2em;
+  margin: 0.2em 0 0.18em;
+  max-width: 100%;
 }
 
 /* Four- and five-word names are real in this data; they step down, not crop. */
 .cert-name[data-length="long"] {
-  font-size: 2.4em;
+  font-size: 2.25em;
 }
 
 .cert-name[data-length="xlong"] {
-  font-size: 1.9em;
+  font-size: 1.8em;
+}
+
+.cert-lead {
+  font-size: 0.86em;
+  line-height: 1.5;
+  color: var(--color-ink-60);
+  margin: 0 0 0.55em;
+  max-width: 34em;
+}
+
+.cert-lead strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+/*
+  The competition, as the second focal point.
+
+  Signal red rather than ink: the name and the competition are the two things
+  a reader is actually looking for, and setting both in the same weight of
+  navy made the glance land on whichever was longer. This was previously
+  mid-sentence in grey body copy, which is why it was hard to find at all.
+*/
+.cert-event {
+  font-size: 1.55em;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--color-signal);
+  margin: 0;
+  max-width: 100%;
+}
+
+.cert-event-sub {
+  color: var(--color-ink-60);
+  margin-top: 0.75em;
 }
 
 .cert-citation {
   font-size: 0.86em;
   line-height: 1.6;
-  max-width: 36em;
+  max-width: 34em;
   color: var(--color-ink-60);
-  margin: 0;
+  margin: 1.3em 0 0;
 }
 
 .cert-citation strong {

@@ -34,20 +34,29 @@ export type Certificate = {
     dates off the parent event printed a date nine days in the future.
   */
   award?: {
-    /** Headline of the thing taken part in. */
+    /** Headline of the thing taken part in. It is the line that is set large. */
     title: string;
-    /** Where it sits — e.g. the parent event. */
+    /** Where it sits — e.g. the parent event. Set beneath the title. */
     context?: string;
-    /** "36-hour". Printed as part of the citation. */
-    duration?: string;
     /*
-      The noun the duration qualifies — "challenge", "quiz", "sprint".
+      What the thing was, in the holder's own terms: "36-hour challenge",
+      "15 questions".
 
-      Hardcoding "challenge" was fine while every record came from a
-      hackathon. Protocol//60 is a quiz, and "a 15-minute challenge" is
-      simply not what the holder sat.
+      This was `duration` plus a `kind` noun, which worked only while every
+      record came from a hackathon — a hackathon has a length, and a quiz has
+      a number of questions, and forcing the second into the first printed
+      "a 15-minute quiz" on something that was fifteen questions long. One
+      free descriptor says the true thing in both cases.
     */
-    kind?: string;
+    detail?: string;
+    /*
+      The day the thing was actually held — not the day the certificate was
+      issued, which is usually later and is what `issuedAt` records.
+
+      A certificate that only carries its issue date makes the holder look
+      like they did the work on a day they did not.
+    */
+    heldOn?: string;
   };
 };
 

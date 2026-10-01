@@ -132,21 +132,36 @@ describe("the issued store", () => {
     for (const c of certs) expect(findCertificate(c.id)?.name).toBe(c.name);
   });
 
-  it("never calls a quiz a challenge", () => {
+  it("never describes a quiz in a hackathon's terms", () => {
     /*
-      The citation reads "a {duration} {kind}". `kind` defaults to "challenge"
-      because every record used to come from a hackathon — so a quiz that
-      forgets to set it prints "a 15-minute challenge", which is not what the
-      holder sat. Checked against the event's own format rather than a list of
-      slugs, so a new quiz is covered the day it is added.
+      A hackathon has a length and a quiz has a number of questions, and the
+      award used to carry only a duration — so Protocol//60 printed "a
+      15-minute quiz" on something that was fifteen questions long.
+
+      Checked against the event's own format rather than a list of slugs, so
+      the next quiz is covered the day it is added.
     */
     for (const c of certs) {
       const event = events.find((e) => e.slug === c.event);
-      if (event?.format !== "quiz") continue;
-      if (!c.award?.duration) continue;
-      expect(c.award.kind, `${c.id} prints a quiz as a "${c.award.kind ?? "challenge"}"`).toBe(
-        "quiz",
-      );
+      if (event?.format !== "quiz" || !c.award?.detail) continue;
+      expect(
+        c.award.detail,
+        `${c.id} describes a quiz as "${c.award.detail}"`,
+      ).not.toMatch(/challenge|hackathon|\bhour|\bminute/i);
+    }
+  });
+
+  it("says when the thing was held, not only when it was issued", () => {
+    /*
+      The issue date is almost always later than the event — these were issued
+      on 1 October for a quiz held on 30 September. A certificate carrying
+      only the former quietly misdates the holder's own work.
+    */
+    for (const c of certs) {
+      const event = events.find((e) => e.slug === c.event);
+      // Only where the award IS the event; a sub-event's date is its own.
+      if (!event || (c.award?.title && c.award.title !== event.title)) continue;
+      expect(c.award?.heldOn, `${c.id} does not say when it was held`).toBeTruthy();
     }
   });
 
@@ -169,12 +184,18 @@ describe("the issued store", () => {
       const event = events.find((e) => e.slug === c.event);
       if (!event) continue;
       const awardIsTheEvent = !c.award?.title || c.award.title === event.title;
-      if (!awardIsTheEvent) continue;
+      // `heldOn` is the award's own day and beats the parent event's start.
+      const held = c.award?.heldOn
+        ? new Date(`${c.award.heldOn}T00:00:00+05:30`)
+        : awardIsTheEvent
+          ? new Date(event.startsAt)
+          : null;
+      if (!held) continue;
 
       const issued = new Date(`${c.issuedAt}T23:59:59+05:30`);
       expect(
-        issued.getTime() >= new Date(event.startsAt).getTime(),
-        `${c.id} is dated ${c.issuedAt}, before ${event.slug} starts on ${event.startsAt}`,
+        issued.getTime() >= held.getTime(),
+        `${c.id} is dated ${c.issuedAt}, before ${held.toISOString()}`,
       ).toBe(true);
     }
   });

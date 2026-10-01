@@ -47,6 +47,13 @@ const browser = await chromium.launch();
 // width, so this is what fixes the scale of everything on the sheet.
 const page = await browser.newPage({ viewport: { width: 1123, height: 794 } });
 
+/*
+  Print media for both output modes. page.pdf() emulates it anyway; forcing it
+  here means a --png review render shows exactly what the PDF will, rather
+  than including screen-only furniture like the Save as PDF button.
+*/
+await page.emulateMedia({ media: "print" });
+
 // Fail loudly on a base url that is not serving the site, rather than
 // producing 55 identical pages of a 404.
 const probe = await page.goto(`${base}/verify/${certs[0].id}/print`, { waitUntil: "networkidle" });
