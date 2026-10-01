@@ -14,7 +14,13 @@
   src/lib/certificates.ts, and only tsx resolves the "@/" path alias.
 
   Usage:
-    npx tsx scripts/issue-certificates.mjs <csv> <event-slug> <id-prefix> [--role=participant] [--write]
+    npx tsx scripts/issue-certificates.mjs <csv> <event-slug> <id-prefix>
+        [--role=participant] [--award=path.json] [--write]
+
+  --award points at a JSON file holding the award block every record in this
+  run carries: what the certificate says the holder did, which is not always
+  the event it is filed under. Without it the records have no citation, and
+  certificates.test.ts fails the build rather than letting a blank one ship.
 
   Without --write it prints what it would do and changes nothing.
 */
@@ -26,6 +32,7 @@ const [csvPath, eventSlug, prefix] = process.argv.slice(2);
 const flags = process.argv.slice(2).filter((a) => a.startsWith("--"));
 const write = flags.includes("--write");
 const role = (flags.find((f) => f.startsWith("--role="))?.split("=")[1] ?? "participant").trim();
+const awardPath = flags.find((f) => f.startsWith("--award="))?.split("=").slice(1).join("=").trim();
 
 if (!csvPath || !eventSlug || !prefix) {
   console.error("usage: npx tsx scripts/issue-certificates.mjs <csv> <event-slug> <id-prefix> [--role=participant] [--write]");
@@ -99,6 +106,14 @@ console.log(`name column      ${header[iName]}`);
 console.log(`email column     ${header[iEmail]}`);
 console.log(`team column      ${iTeam === -1 ? "(none)" : header[iTeam]}`);
 
+let award = null;
+if (awardPath) {
+  if (!existsSync(awardPath)) { console.error(`No award file at ${awardPath}`); process.exit(1); }
+  award = JSON.parse(readFileSync(awardPath, "utf8"));
+  if (!award?.title) { console.error(`${awardPath} has no "title"`); process.exit(1); }
+  console.log(`award            ${award.title}${award.heldOn ? `, held ${award.heldOn}` : ""}`);
+}
+
 const storePath = join("src", "data", "certificates", `${eventSlug}.json`);
 const existing = existsSync(storePath) ? JSON.parse(readFileSync(storePath, "utf8")) : [];
 
@@ -122,7 +137,11 @@ for (const r of dataRows) {
   usedIds.add(id);
 
   const team = iTeam === -1 ? "" : (r[iTeam] ?? "").trim();
-  const cert = { id, name, email, event: eventSlug, role, issuedAt, ...(team ? { teamName: team } : {}) };
+  const cert = {
+    id, name, email, event: eventSlug, role, issuedAt,
+    ...(team ? { teamName: team } : {}),
+    ...(award ? { award } : {}),
+  };
   if (!isCertificateId(id)) throw new Error(`generated an id that fails validation: ${id}`);
   added.push(cert);
   byEmail.set(email, cert);
