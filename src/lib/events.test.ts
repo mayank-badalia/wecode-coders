@@ -157,7 +157,7 @@ describe("events seam", () => {
     expect(series.length).toBeGreaterThanOrEqual(8);
 
     for (const e of series) {
-      const rounds = e.sections?.find((sec) => sec.label === "How the twelve days run");
+      const rounds = e.sections?.find((sec) => sec.label === "How the three rounds run");
       expect(rounds?.kind, e.slug).toBe("columns");
       if (rounds?.kind !== "columns") continue;
 
@@ -334,6 +334,18 @@ describe("events seam", () => {
     for (const e of published) {
       if (e.status !== "past") continue;
       expect(e.registration?.href, `${e.slug} still links to registration`).toBeUndefined();
+    }
+  });
+
+  it("never suggests a finished event as the next one", () => {
+    // Protocol//60 kept being offered from the page before it after it had
+    // run. A reader following "next event" should land on something they can
+    // still enter.
+    for (const e of published) {
+      const next = getAdjacentEvent(e.slug);
+      if (!next || next.locked) continue;
+      expect(next.status, `${e.slug} suggests ${next.slug}`).not.toBe("past");
+      expect(next.slug, e.slug).not.toBe(e.slug);
     }
   });
 

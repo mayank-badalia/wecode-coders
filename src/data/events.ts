@@ -71,7 +71,7 @@ const SERIES_TRACKS: EventSection = {
   kind: "columns",
   label: "Tracks",
   intro:
-    "Choose one track from those below. A track is the area you work in \u2014 it is not a problem statement. Inside the track you pick, either take a problem that already exists there or define your own, and build the solution to it. Nobody hands you a brief, and finding a problem worth solving \u2014 then showing it is real \u2014 is the first thing the judges score. Interdisciplinary projects are welcome, but the entry has to name its primary track.",
+    "Choose one track from those below. A track is the area you work in — it is not a problem statement. Inside the track you pick, either take a problem that already exists there or define your own, and build the solution to it. Nobody hands you a brief, and finding a problem worth solving — then showing it is real — is the first thing the judges score. Interdisciplinary projects are welcome, but the entry has to name its primary track.",
   items: [
     {
       code: "01",
@@ -135,15 +135,15 @@ const SERIES_TRACKS: EventSection = {
  */
 const SERIES_ROUNDS: EventSection = {
   kind: "columns",
-  label: "How the twelve days run",
+  label: "How the three rounds run",
   intro:
-    "Three rounds across twelve calendar days, each asking for something the last did not. Qualification updates and the instructions for the next stage go directly to the teams that qualify, between rounds. One submission per round per team, made by the team leader \u2014 not one per member. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
+    "Three rounds across twelve calendar days, each asking for something the last did not. Qualification updates and the instructions for the next stage go directly to the teams that qualify, between rounds. One submission per round per team, made by the team leader — not one per member. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
   items: [
     {
       code: "01",
-      name: "Round 1 \u2014 Idea and planning",
+      name: "Round 1 — The plan",
       blurb:
-        "Two days. Judged on how clear, original, feasible and promising the proposed idea is. A working product is not required yet \u2014 this round is one PDF, on the official format we provide.",
+        "Two days to make the case for what you are going to build. One PDF, on the format we provide: the problem, who has it, how you intend to solve it, what you will build and in what order. This round is the thinking — you are judged on how clear, original, feasible and promising the plan is, and the code comes in the rounds that follow.",
       points: [
         "The problem statement you chose or defined",
         "Who the users are",
@@ -160,9 +160,9 @@ const SERIES_ROUNDS: EventSection = {
     },
     {
       code: "02",
-      name: "Round 2 \u2014 Functional product",
+      name: "Round 2 — The build",
       blurb:
-        "Three days. Turn the proposal into a working minimum viable product: the central workflow and the essential features you described in Round 1 have to run. It does not need to be polished. It does need to work.",
+        "Three days to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not.",
       points: [
         "A link to the functioning project",
         "The source-code repository",
@@ -170,14 +170,14 @@ const SERIES_ROUNDS: EventSection = {
         "The list of features you completed",
         "Technology and implementation details",
         "An explanation of anything you changed from the original proposal",
-        "The three major improvements you will make in Round 3 \u2014 substantial work on the product, not cosmetic tweaks, and you are judged on delivering them",
+        "The three major improvements you will make in Round 3 — substantial work on the product, not cosmetic tweaks, and you are judged on delivering them",
       ],
     },
     {
       code: "03",
-      name: "Round 3 \u2014 Completion and improvement",
+      name: "Round 3 — The finish",
       blurb:
-        "Three days. Round 2 proves the central idea works; Round 3 asks whether you can turn that into a complete, reliable, usable product \u2014 finishing features, strengthening the interface, fixing what is broken, testing the main workflows and documenting it.",
+        "Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product.",
       points: [
         "The final working project link",
         "The final source-code repository",
@@ -283,7 +283,7 @@ const SERIES_RULES: EventSection = {
     "Everything on each round's submission list has to arrive before that round's deadline.",
     "One submission per round per team, made by the team leader. Individual members do not submit separately, and a second entry from the same team is not counted.",
     "Missing a round's deadline ends the event for that team. There is no late window.",
-    "The three major improvements named at Round 2 are what Round 3 is measured against \u2014 name substantial work, then deliver it.",
+    "The three major improvements named at Round 2 are what Round 3 is measured against — name substantial work, then deliver it.",
     "Judges may ask for repository access or other proof of development at any point.",
     "Organisers may remove anyone who disrupts the event or breaks community guidelines.",
     "The judges' decision is final.",
@@ -310,7 +310,7 @@ function seriesFaq() {
     { q: "Are problem statements provided?", a: "No. You pick one of the three tracks, then either take a problem that already exists in it or define your own. Showing that the problem is real is worth 15 points." },
     { q: "What happens between rounds?", a: "Qualification updates and the instructions for the next stage go directly to the teams that qualify." },
     { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
-    { q: "Do I need a working product in Round 1?", a: "No. Round 1 is one PDF on the official format \u2014 the problem, the users, the solution, the workflow, the features, the stack and the plan." },
+    { q: "Do I need a working product in Round 1?", a: "No. Round 1 is one PDF on the official format — the problem, the users, the solution, the workflow, the features, the stack and the plan." },
     { q: "What are the three improvements in Round 2?", a: "At Round 2 you name the three major improvements you will make in Round 3. They have to be substantial work on the product, not cosmetic changes, and Round 3 is measured against delivering them." },
     { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
     { q: "Can beginners enter?", a: "Yes. The event is built for first-timers and experienced builders alike, judged on the same criteria." },
@@ -834,10 +834,10 @@ export const events: Event[] = [
     brief:
       "Find a problem worth solving and build the one workflow that solves it, across three rounds.",
     deliverables: [
-      "Round 1: one PDF on the official format — the problem you chose, the users, the solution, the workflow, the features, the stack and the plan",
-      "Round 2: a functioning product whose central workflow runs, its repository, and the three major improvements you commit to for Round 3",
-      "Round 3: the finished product, its documentation, the improvements delivered and a roadmap",
-      "One submission per round, made by the team leader",
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A certificate at the level you reached — participant, Round 2 qualifier, finalist or winner",
+      "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1026,10 +1026,10 @@ export const events: Event[] = [
     brief:
       "Find a problem worth solving, plan it, build it and finish it across three rounds.",
     deliverables: [
-      "Round 1: one PDF on the official format — the problem you chose, the users, the solution, the workflow, the features, the stack and the plan",
-      "Round 2: a functioning product whose central workflow runs, its repository, and the three major improvements you commit to for Round 3",
-      "Round 3: the finished product, its documentation, the improvements delivered and a roadmap",
-      "One submission per round, made by the team leader",
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A certificate at the level you reached — participant, Round 2 qualifier, finalist or winner",
+      "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1107,10 +1107,10 @@ export const events: Event[] = [
     brief:
       "Take an idea, choose a track, and carry it from a plan to a finished product.",
     deliverables: [
-      "Round 1: one PDF on the official format — the problem you chose, the users, the solution, the workflow, the features, the stack and the plan",
-      "Round 2: a functioning product whose central workflow runs, its repository, and the three major improvements you commit to for Round 3",
-      "Round 3: the finished product, its documentation, the improvements delivered and a roadmap",
-      "One submission per round, made by the team leader",
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A certificate at the level you reached — participant, Round 2 qualifier, finalist or winner",
+      "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to six and join the official channel." },
@@ -1188,10 +1188,10 @@ export const events: Event[] = [
     brief:
       "Build a practical solution to a real problem, and finish it across three rounds.",
     deliverables: [
-      "Round 1: one PDF on the official format — the problem you chose, the users, the solution, the workflow, the features, the stack and the plan",
-      "Round 2: a functioning product whose central workflow runs, its repository, and the three major improvements you commit to for Round 3",
-      "Round 3: the finished product, its documentation, the improvements delivered and a roadmap",
-      "One submission per round, made by the team leader",
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A certificate at the level you reached — participant, Round 2 qualifier, finalist or winner",
+      "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1269,10 +1269,10 @@ export const events: Event[] = [
     brief:
       "Turn an original idea into a finished product across three rounds.",
     deliverables: [
-      "Round 1: one PDF on the official format — the problem you chose, the users, the solution, the workflow, the features, the stack and the plan",
-      "Round 2: a functioning product whose central workflow runs, its repository, and the three major improvements you commit to for Round 3",
-      "Round 3: the finished product, its documentation, the improvements delivered and a roadmap",
-      "One submission per round, made by the team leader",
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A certificate at the level you reached — participant, Round 2 qualifier, finalist or winner",
+      "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1350,10 +1350,10 @@ export const events: Event[] = [
     brief:
       "Develop and present a functional product across three rounds.",
     deliverables: [
-      "Round 1: one PDF on the official format — the problem you chose, the users, the solution, the workflow, the features, the stack and the plan",
-      "Round 2: a functioning product whose central workflow runs, its repository, and the three major improvements you commit to for Round 3",
-      "Round 3: the finished product, its documentation, the improvements delivered and a roadmap",
-      "One submission per round, made by the team leader",
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A certificate at the level you reached — participant, Round 2 qualifier, finalist or winner",
+      "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
@@ -1431,10 +1431,10 @@ export const events: Event[] = [
     brief:
       "Build a working product across three rounds, in the track of your choosing.",
     deliverables: [
-      "Round 1: one PDF on the official format — the problem you chose, the users, the solution, the workflow, the features, the stack and the plan",
-      "Round 2: a functioning product whose central workflow runs, its repository, and the three major improvements you commit to for Round 3",
-      "Round 3: the finished product, its documentation, the improvements delivered and a roadmap",
-      "One submission per round, made by the team leader",
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A certificate at the level you reached — participant, Round 2 qualifier, finalist or winner",
+      "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Until Thu 29 Oct, 07:30", what: "Registration open. Form a team of one to four and join the official group." },
@@ -1455,7 +1455,7 @@ export const events: Event[] = [
       "A National Round 2 Qualifier Certificate for teams that reach Round 2",
       "A National Finalist Certificate for teams that reach Round 3",
       "A National Winner Certificate for the winning teams",
-      "A functional product you can put on a r\u00e9sum\u00e9 or in a portfolio",
+      "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: SERIES_SECTIONS,
     faq: seriesFaq(),
@@ -1518,10 +1518,10 @@ export const events: Event[] = [
     brief:
       "Build a working solution to a problem you chose, across three rounds.",
     deliverables: [
-      "Round 1: one PDF on the official format — the problem you chose, the users, the solution, the workflow, the features, the stack and the plan",
-      "Round 2: a functioning product whose central workflow runs, its repository, and the three major improvements you commit to for Round 3",
-      "Round 3: the finished product, its documentation, the improvements delivered and a roadmap",
-      "One submission per round, made by the team leader",
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A certificate at the level you reached — participant, Round 2 qualifier, finalist or winner",
+      "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },

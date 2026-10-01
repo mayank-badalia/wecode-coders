@@ -78,11 +78,27 @@ export function getPastEvents(): PublicEvent[] {
   return getAllEvents().filter((e) => !e.locked && e.status === "past");
 }
 
-/** The next event in the list, wrapping at the end. Used by "next event" links. */
+/**
+ * The next event worth sending someone to, wrapping at the end.
+ *
+ * Skips anything already finished. The footer of every detail page offers a
+ * "next event", and once Protocol//60 was marked past it was still being
+ * suggested from the page before it — pointing a reader at a quiz that had
+ * already run. A past event is reachable by its own link and from the events
+ * page; it is not something to recommend.
+ */
 export function getAdjacentEvent(slug: string): PublicEvent | undefined {
   const all = getAllEvents();
   const i = all.findIndex((e) => e.slug === slug);
-  return i === -1 ? undefined : all[(i + 1) % all.length];
+  if (i === -1) return undefined;
+
+  for (let step = 1; step <= all.length; step++) {
+    const candidate = all[(i + step) % all.length];
+    if (!candidate || candidate.slug === slug) continue;
+    if (!candidate.locked && candidate.status === "past") continue;
+    return candidate;
+  }
+  return undefined;
 }
 
 export function getSite(): SiteData {

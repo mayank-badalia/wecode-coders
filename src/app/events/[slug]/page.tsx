@@ -521,7 +521,7 @@ export default async function EventPage({ params }: Params) {
         >
           {event.schedule && event.schedule.length > 0 && (
             <section>
-              <p style={{ ...monoLabel, margin: "0 0 1.4rem" }}>[ Schedule ] // How the day runs</p>
+              <p style={{ ...monoLabel, margin: "0 0 1.4rem" }}>[ Schedule ]</p>
               <ol style={{ listStyle: "none", margin: 0, padding: 0 }}>
                 {event.schedule.map((row) => (
                   <li
