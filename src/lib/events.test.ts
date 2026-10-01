@@ -145,6 +145,66 @@ describe("events seam", () => {
     }
   });
 
+  it("asks every three-round event for the same three rounds", () => {
+    /*
+      The twelve-day events promise entrants an identical structure, so the
+      rounds block is shared and this proves it stayed shared. It also pins
+      the two things most easily lost in an edit: that Round 2 asks for the
+      three major improvements, and that a submission comes from the team
+      leader rather than from each member.
+    */
+    const series = published.filter((e) => /12 DAYS, 3 ROUNDS/.test(e.kicker));
+    expect(series.length).toBeGreaterThanOrEqual(8);
+
+    for (const e of series) {
+      const rounds = e.sections?.find((sec) => sec.label === "How the twelve days run");
+      expect(rounds?.kind, e.slug).toBe("columns");
+      if (rounds?.kind !== "columns") continue;
+
+      expect(rounds.items.map((i) => i.code), e.slug).toEqual(["01", "02", "03"]);
+      expect(rounds.intro, e.slug).toMatch(/one submission per round per team, made by the team leader/i);
+
+      const round2 = rounds.items[1];
+      expect(round2?.points.join(" "), e.slug).toMatch(/three major improvements/i);
+      expect(round2?.points.join(" "), e.slug).toMatch(/not cosmetic/i);
+
+      // Twelve calendar days: start plus eleven.
+      const days =
+        (new Date(e.endsAt).getTime() - new Date(e.startsAt).getTime()) / 86_400_000;
+      expect(Math.round(days), e.slug).toBe(11);
+    }
+  });
+
+  it("never publishes the judging intervals", () => {
+    // The gaps between rounds are internal. Entrants are told only that
+    // qualification updates reach the teams that qualify.
+    for (const e of published) {
+      const words = [
+        ...(e.schedule ?? []).map((r) => `${r.when} ${r.what}`),
+        ...(e.sections ?? []).flatMap((sec) =>
+          sec.kind === "list"
+            ? [sec.intro ?? "", ...sec.items]
+            : [sec.intro ?? "", ...sec.items.flatMap((i) => [i.blurb ?? "", ...i.points])],
+        ),
+      ].join(" ");
+      expect(words, e.slug).not.toMatch(/internal judging|judging days?\b/i);
+    }
+  });
+
+  it("asks for no social posts or video demos on a three-round event", () => {
+    const series = published.filter((e) => /12 DAYS, 3 ROUNDS/.test(e.kicker));
+    for (const e of series) {
+      const words = [
+        ...e.deliverables,
+        ...(e.rewards ?? []),
+        ...(e.sections ?? []).flatMap((sec) =>
+          sec.kind === "list" ? sec.items : sec.items.flatMap((i) => i.points),
+        ),
+      ].join(" ");
+      expect(words, e.slug).not.toMatch(/linkedin|instagram|showcase post|demo video|demonstration video/i);
+    }
+  });
+
   it("runs for as long as its kicker says it does", () => {
     /*
       "Runs for" on a detail page is computed from startsAt and endsAt, not
@@ -260,6 +320,20 @@ describe("events seam", () => {
   it("gives locked events an opaque slug derived from position, not title", () => {
     for (const e of getAllEvents()) {
       if (e.locked) expect(e.slug).toMatch(/^locked-\d+$/);
+    }
+  });
+
+  it("does not invite anyone to register for a finished event", () => {
+    /*
+      Marking an event `past` used to change only its sort position, so
+      Protocol//60 kept a live "Register on Unstop" button after it had run —
+      a link that works and takes you somewhere that no longer wants you.
+      The detail page hides the band for a past event; this is the guard on
+      the data side, so a finished event cannot carry a live href at all.
+    */
+    for (const e of published) {
+      if (e.status !== "past") continue;
+      expect(e.registration?.href, `${e.slug} still links to registration`).toBeUndefined();
     }
   });
 
@@ -428,8 +502,14 @@ describe("events seam", () => {
       if (!tracks) continue;
       expect(tracks.intro, e.slug).toBeTruthy();
       expect(tracks.intro, e.slug).toMatch(/choose one track/i);
-      expect(tracks.intro, e.slug).toMatch(/your own\s+problem/i);
       expect(tracks.intro, e.slug).toMatch(/not a problem statement/i);
+      /*
+        The problem is the entrant's to bring. The three-round events say so
+        as "take a problem that already exists there or define your own";
+        WCC Launchpad 30 keeps its own earlier phrasing, "you identify your
+        own problem", because it is deliberately left on its original format.
+      */
+      expect(tracks.intro, e.slug).toMatch(/define your own|identify your own problem/i);
     }
   });
 

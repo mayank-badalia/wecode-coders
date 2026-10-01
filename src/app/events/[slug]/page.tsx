@@ -8,7 +8,7 @@ import { LockGlyph } from "@/components/site/LockGlyph";
 import { EventDetailMotion } from "@/components/site/EventDetailMotion";
 import { EventSections } from "@/components/site/EventSections";
 import { getAdjacentEvent, getAllEvents, getEventBySlug, getSite } from "@/lib/events";
-import { eventDurationHours, formatEventDate, formatEventTime } from "@/lib/format";
+import { formatEventDate, formatEventDuration, formatEventTime } from "@/lib/format";
 import { webpSize } from "@/lib/imageSize";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -132,7 +132,7 @@ export default async function EventPage({ params }: Params) {
   const next = getAdjacentEvent(slug);
   const nextAnnounced = next && !next.locked ? next : undefined;
   const site = getSite();
-  const hours = eventDurationHours(event.startsAt, event.endsAt);
+  const runsFor = formatEventDuration(event.startsAt, event.endsAt);
 
   // Read from the file, not declared beside it — see src/lib/imageSize.ts.
   // Drives --poster-ratio so the stacked hero's box is the picture exactly.
@@ -147,7 +147,7 @@ export default async function EventPage({ params }: Params) {
     { label: "Starts", value: event.startTimeNote ?? formatEventTime(event.startsAt) },
     // A duration measured from a start time that has not been announced is
     // fiction, so it is dropped alongside the time it is derived from.
-    ...(event.startTimeNote ? [] : [{ label: "Runs for", value: `${hours} hours` }]),
+    ...(event.startTimeNote ? [] : [{ label: "Runs for", value: runsFor }]),
     { label: "Joining", value: event.venue.name },
     { label: "Kind", value: event.format.replace("-", " ") },
     { label: "Who it is for", value: event.forWho },
@@ -735,7 +735,7 @@ export default async function EventPage({ params }: Params) {
           is not open rather than rendering a button that goes nowhere, which
           is both a dead link and a worse lie than saying nothing.
         */}
-        {event.registration && (
+        {event.registration && event.status !== "past" && (
           <section
             data-nav-theme="dark"
             style={{
@@ -843,6 +843,55 @@ export default async function EventPage({ params }: Params) {
                   ))}
                 </ul>
               )}
+            </div>
+          </section>
+        )}
+
+        {/*
+          A finished event, where the register band would be.
+
+          Marking an event `past` used to change only its sort position, so a
+          finished one still showed a live "Register on Unstop" button — the
+          worst kind of dead end, because it works and takes you somewhere
+          that no longer wants you.
+        */}
+        {event.status === "past" && (
+          <section
+            data-nav-theme="dark"
+            style={{
+              marginTop: "clamp(3.5rem, 10vh, 6rem)",
+              background: "var(--color-ink)",
+              color: "var(--color-paper)",
+              padding: "clamp(3rem, 8vh, 5rem) clamp(1.25rem, 4vw, 3rem)",
+            }}
+          >
+            <div style={{ maxWidth: "min(1680px, 92vw)", margin: "0 auto" }}>
+              <p style={{ ...monoLabel, margin: 0, opacity: 0.6 }}>[ Finished ]</p>
+              <p
+                style={{
+                  margin: "0.5em 0 0",
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  fontSize: "clamp(2rem, 6.5vw, 5rem)",
+                  lineHeight: 0.95,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                This one has run
+              </p>
+              <p
+                style={{
+                  margin: "1em 0 0",
+                  maxWidth: "52ch",
+                  fontSize: "clamp(0.95rem, 1.2vw, 1.1rem)",
+                  lineHeight: 1.6,
+                  opacity: 0.8,
+                }}
+              >
+                Registration is closed and the event is over. Everything above is
+                what it was. The ones still open are on the events page.
+              </p>
             </div>
           </section>
         )}

@@ -71,3 +71,24 @@ export function eventDurationHours(startsAt: string, endsAt: string): number {
     (new Date(endsAt).getTime() - new Date(startsAt).getTime()) / 3_600_000,
   );
 }
+
+/**
+ * How long an event runs, in the unit a reader would use for it.
+ *
+ * Hours stop being useful somewhere past a couple of days: a twelve-day
+ * hackathon printed "Runs for 288 hours", which is accurate and tells nobody
+ * anything.
+ *
+ * Days are counted inclusively, which is the part worth knowing. These events
+ * are published as "twelve calendar days", running from a start date D to
+ * D + 11 — eleven days of elapsed time across twelve dates. Dividing the
+ * elapsed hours by 24 gives eleven and contradicts every other place the
+ * event is described, so the first day is counted too.
+ */
+export function formatEventDuration(startsAt: string, endsAt: string): string {
+  const hours = eventDurationHours(startsAt, endsAt);
+  if (hours < 48) return `${hours} hours`;
+
+  const days = Math.floor(hours / 24) + 1;
+  return `${days} ${days === 1 ? "day" : "days"}`;
+}

@@ -615,6 +615,7 @@ export function EventsExperience({ events }: { events: PublicEvent[] }) {
             <p className="panel-line" style={{ ...mono, margin: 0, opacity: 0.8 }}>
               {String(focused + 1).padStart(2, "0")} /{" "}
               {String(events.length).padStart(2, "0")} — {event.kicker}
+              {event.status === "past" && " — FINISHED"}
             </p>
           </div>
 
