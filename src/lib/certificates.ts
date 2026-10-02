@@ -154,6 +154,7 @@ import preLaunchpad30 from "@/data/certificates/wcc-launchpad-30-pre-hackathon.j
 import preForge48 from "@/data/certificates/wcc-forge-48-pre-hackathon.json";
 import preTechCircuit from "@/data/certificates/tech-circuit-pre-hackathon.json";
 import preCodeAxis from "@/data/certificates/code-axis-pre-hackathon.json";
+import preInkloomUnnamed from "@/data/certificates/inkloom-pre-hackathon.json";
 
 /*
   Imported statically rather than read from disk so the verify page can be
@@ -180,6 +181,16 @@ const STORES: Record<string, Certificate[]> = {
   "wcc-forge-48-pre-hackathon": preForge48 as Certificate[],
   "tech-circuit-pre-hackathon": preTechCircuit as Certificate[],
   "code-axis-pre-hackathon": preCodeAxis as Certificate[],
+  /*
+    The entrants whose own submission named only "Inkloom Hackathon" — no
+    event in it at all. Their certificates say exactly that, because inventing
+    one of the four would be a claim about their work that nothing supports.
+
+    The `event` slug on these records is inferred from the submission window
+    and is internal bookkeeping only; it is never printed and never shown on
+    the verify page, which reads the award title.
+  */
+  "inkloom-pre-hackathon": preInkloomUnnamed as Certificate[],
 };
 
 export function allCertificates(): Certificate[] {

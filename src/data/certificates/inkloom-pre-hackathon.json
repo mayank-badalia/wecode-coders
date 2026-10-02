@@ -1,0 +1,167 @@
+[
+  {
+    "id": "INK-8ABUT3",
+    "name": "Akash Prakash Shewale",
+    "email": "shewaleakash2506@gmail.com",
+    "event": "wcc-forge-48",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "Team Titans",
+    "teamRole": "member",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "INK-YNZ2DM",
+    "name": "Rushikesh Babasaheb Waghmare",
+    "email": "rushikeshw910@gmail.com",
+    "event": "wcc-forge-48",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "Team Titans",
+    "teamRole": "leader",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "INK-UT2QY2",
+    "name": "Anivaran Dubey",
+    "email": "aniv8007@gmail.com",
+    "event": "wcc-forge-48",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "DEBUGGERS",
+    "teamRole": "leader",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "INK-4E9NUW",
+    "name": "Garvit Sahani Verma",
+    "email": "garvitsv47@gmail.com",
+    "event": "wcc-forge-48",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "IDEAORBIT",
+    "teamRole": "leader",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "INK-WZHXKF",
+    "name": "Harsh Sharma",
+    "email": "workspaceharsh2007@gmail.com",
+    "event": "wcc-forge-48",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "IDEAORBIT",
+    "teamRole": "member",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "INK-7G6ZPN",
+    "name": "Soumen Ghosh",
+    "email": "soumenghoshqwe30@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "CODEWAVE",
+    "teamRole": "member",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "INK-THRG2G",
+    "name": "Subrata Pal",
+    "email": "sp2026708@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "CODEWAVE",
+    "teamRole": "leader",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "INK-T6NSWJ",
+    "name": "Sk Saidul Islam",
+    "email": "sksaidul.contact@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "CODEWAVE",
+    "teamRole": "member",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "INK-HWNEW3",
+    "name": "Aditya N Gandhi",
+    "email": "adityangandhi@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "Dead Pixels",
+    "teamRole": "leader",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "INK-EPYQY7",
+    "name": "Sahil Saraswat",
+    "email": "sahilsaraswat417@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "AVENGERS",
+    "teamRole": "leader",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  },
+  {
+    "id": "INK-PQJE8N",
+    "name": "Purvesh Mistry",
+    "email": "purveshmistry18@gmail.com",
+    "event": "tech-circuit",
+    "role": "participant",
+    "issuedAt": "2026-10-02",
+    "teamName": "Dead Pixels",
+    "teamRole": "member",
+    "award": {
+      "title": "Inkloom Pre-Hackathon",
+      "context": "Sponsored by Inkloom",
+      "detail": "36 hours"
+    }
+  }
+]
