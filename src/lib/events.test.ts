@@ -211,7 +211,18 @@ describe("events seam", () => {
       if (rounds?.kind !== "columns") continue;
 
       expect(rounds.items.map((i) => i.code), e.slug).toEqual(["01", "02", "03"]);
-      expect(rounds.intro, e.slug).toMatch(/one submission per round per team, made by the team leader/i);
+      /*
+        Who submits, asserted by meaning rather than by phrase. The rule
+        flipped — it used to be one entry per team from the leader, and is now
+        one entry per member so each person's role and contribution is on
+        record and can be printed on their certificate. Pinning the old
+        sentence is what made this fail on a deliberate change rather than on
+        a regression, so it now checks that the intro still answers the
+        question at all.
+      */
+      expect(rounds.intro, e.slug).toMatch(/every member[^.]*submits/i);
+      expect(rounds.intro, e.slug).toMatch(/role/i);
+      expect(rounds.intro, e.slug).not.toMatch(/team leader/i);
 
       const round2 = rounds.items[1];
       expect(round2?.points.join(" "), e.slug).toMatch(/three major improvements/i);

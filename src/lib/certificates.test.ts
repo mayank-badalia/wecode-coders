@@ -210,6 +210,24 @@ describe("the issued store", () => {
     }
   });
 
+  it("keeps a contribution short enough to print on one line", () => {
+    /*
+      The contribution is set on the sheet in one line of italic at 0.78em
+      inside a 36em measure, which holds about 75 characters. The first
+      version clipped anything longer with an ellipsis: it fitted, but it cut
+      words in half and hid the work it exists to record. The line wraps now,
+      and length is capped here instead so nothing arrives too long for it.
+    */
+    const LIMIT = 70;
+    for (const c of certs) {
+      if (!c.contribution) continue;
+      expect(
+        c.contribution.length,
+        `${c.id} contribution is ${c.contribution.length} chars: ${c.contribution}`,
+      ).toBeLessThanOrEqual(LIMIT);
+    }
+  });
+
   it("gives an individual event's certificates no team name", () => {
     /*
       Protocol//60 is attempted alone. "with team X" on one of those is a

@@ -128,6 +128,7 @@ export default async function VerifyPage({ params }: Params) {
                 ...(cert.teamRole
                   ? [["On the team as", cert.teamRole === "leader" ? "Team Leader" : "Team Member"]]
                   : []),
+                ...(cert.contribution ? [["Contribution", cert.contribution]] : []),
                 ["Issued", cert.issuedAt],
                 ["Certificate ID", cert.id],
               ].map(([label, value]) => (

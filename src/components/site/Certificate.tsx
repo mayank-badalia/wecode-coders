@@ -164,6 +164,15 @@ export function Certificate({
               {heldOn ? <>held on {heldOn}, </> : null}
               and is recognised as <strong>{ROLE_COPY[cert.role] ?? cert.role}</strong>.
             </p>
+
+            {/*
+              What this holder personally did. Without it a team certificate
+              says the same thing about the member who built the product and
+              the member who watched.
+            */}
+            {cert.contribution && (
+              <p className="cert-contribution">{cert.contribution}</p>
+            )}
           </div>
 
           <footer className="cert-foot">

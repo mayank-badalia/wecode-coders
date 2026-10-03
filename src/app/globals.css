@@ -1125,6 +1125,24 @@ a.detail-cta--signal:focus-visible {
   font-weight: 600;
 }
 
+/*
+  The holder's own contribution, set quieter than the citation.
+
+  It wraps rather than truncating. Clipping it with an ellipsis fitted the
+  sheet but cut words in half — on a certificate that reads as a defect, and
+  it silently hid the very thing the line exists to record. Length is capped
+  in the data instead, by a test, so nothing reaches this rule too long to
+  sit on one line.
+*/
+.cert-contribution {
+  font-size: 0.78em;
+  line-height: 1.5;
+  max-width: 36em;
+  color: var(--color-ink-60);
+  margin: 0.55em 0 0;
+  font-style: italic;
+}
+
 .cert-foot {
   display: flex;
   justify-content: space-between;

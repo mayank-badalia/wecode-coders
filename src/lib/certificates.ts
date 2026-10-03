@@ -35,6 +35,19 @@ export type Certificate = {
   */
   teamRole?: "leader" | "member";
   /*
+    What this holder actually did, in their own words from their submission.
+
+    A team certificate that names only the team is worth the same to every
+    member, including the one who did nothing. From the three-round events
+    onward every member submits their own entry stating the role they held
+    and the part they built, which is what makes this printable — and what
+    makes the certificate worth something to the person holding it.
+
+    Kept short on purpose: it is set as one line on the sheet, and the full
+    text belongs on the verify page.
+  */
+  contribution?: string;
+  /*
     What the certificate actually says the holder did.
 
     Kept on the certificate rather than derived from the event record, because

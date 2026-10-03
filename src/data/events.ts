@@ -169,7 +169,7 @@ function seriesRounds(startsAt: string): EventSection {
   kind: "columns",
   label: "How the three rounds run",
   intro:
-    "Three rounds, each asking for something the last did not. Qualification updates and the instructions for the next stage go directly to the teams that qualify, between rounds. One submission per round per team, made by the team leader — not one per member. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
+    "Three rounds, each asking for something the last did not. Qualification updates and the instructions for the next stage go directly to the teams that qualify, between rounds. Every member of a team submits in every round — one entry each, not one for the team — naming the role they held and the part of the product they personally built. The project is the team's; the record of who did what is yours. That is what lets a certificate state your role and your contribution rather than only the team you were on. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
   items: [
     {
       code: "01",
@@ -317,7 +317,7 @@ const SERIES_RULES: EventSection = {
     "Respect software licences, intellectual property and user privacy.",
     "Projects must not promote illegal, harmful or discriminatory activity.",
     "Everything on each round's submission list has to arrive before that round's deadline.",
-    "One submission per round per team, made by the team leader. Individual members do not submit separately, and a second entry from the same team is not counted.",
+    "Every member submits their own entry in every round, naming their role and what they personally built. Members of a team submit the same project; what differs is the account of your own work. A member who does not submit has no record of their contribution, so nothing is assessed for them and no certificate is issued to them for that round.",
     "Missing a round's deadline ends the event for that team. There is no late window.",
     "The three major improvements named at Round 2 are what Round 3 is measured against — name substantial work, then deliver it.",
     "Judges may ask for repository access or other proof of development at any point.",
@@ -351,7 +351,7 @@ function seriesFaq() {
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
     { q: "Are problem statements provided?", a: "No. You pick one of the three tracks, then either take a problem that already exists in it or define your own. Showing that the problem is real is worth 15 points." },
     { q: "What happens between rounds?", a: "Qualification updates and the instructions for the next stage go directly to the teams that qualify." },
-    { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
+    { q: "Who submits for the team?", a: "Everyone on it. Each member files their own entry in each round, for the same team project, stating the role they held and the part they personally built. Submitting is what puts your contribution on record, so it is also what earns you a certificate — a teammate cannot submit on your behalf." },
     { q: "Do I need a working product in Round 1?", a: "No. Round 1 is one PDF on the official format — the problem, the users, the solution, the workflow, the features, the stack and the plan." },
     { q: "What are the three improvements in Round 2?", a: "At Round 2 you name the three major improvements you will make in Round 3. They have to be substantial work on the product, not cosmetic changes, and Round 3 is measured against delivering them." },
     { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
@@ -988,6 +988,7 @@ export const events: Event[] = [
       { q: "Is it free?", a: "Yes. Registration costs nothing." },
       { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
       { q: "Can beginners enter?", a: "Yes. The tracks are broad enough that a first project and an experienced team can both find something to build." },
+      { q: "Who submits for the team?", a: "Everyone on it. Each member files their own entry in each round, for the same team project, stating the role they held and the part they personally built. Submitting is what puts your contribution on record, so it is also what earns you a certificate — a teammate cannot submit on your behalf." },
       { q: "Does every team member have to register?", a: "Yes, individually — and everyone must use the same team name so the entries can be matched up." },
       { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones, along with any reused code, APIs and datasets, in your submission." },
