@@ -349,7 +349,6 @@ const seriesSections = (startsAt: string): EventSection[] => [
 /** FAQ, identical across the series. */
 function seriesFaq() {
   return [
-    { q: "Is it free?", a: "Yes. Registration costs nothing." },
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
     { q: "Are problem statements provided?", a: "No. You pick one of the three tracks, then either take a problem that already exists in it or define your own. Showing that the problem is real is worth 15 points." },
     { q: "What happens between rounds?", a: "Qualification updates and the instructions for the next stage go directly to the teams that qualify." },
@@ -844,7 +843,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds to turn a problem worth solving into a product that runs. National, online, free to enter, with ₹25,000 in cash and PPO opportunities for the top three teams.",
+      "Three rounds to turn a problem worth solving into a product that runs. National and online, with ₹25,000 in cash and PPO opportunities for the top three teams.",
     description: [
       "WCC Forge 48 asks for one thing: a working product. Not a deck, not a concept, not an idea you would build if you had more time — something a person can open and use by the time the last round closes.",
       "Three rounds to find a problem that genuinely exists, choose the single journey through it that matters most, and build that journey until it runs reliably. Scope is the hard part. Teams here rarely run out of ideas — they run out of decisions.",
@@ -863,7 +862,7 @@ export const events: Event[] = [
     ],
     teamSize: "1 to 4. Every member registers individually under the same team name.",
     eligibility:
-      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is free and open nationally.",
+      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
       "Find a problem worth solving and build the one workflow that solves it, across three rounds.",
     deliverables: [
@@ -987,7 +986,6 @@ export const events: Event[] = [
       ...seriesTrailingSections("2026-10-30T18:00:00+05:30"),
     ],
     faq: [
-      { q: "Is it free?", a: "Yes. Registration costs nothing." },
       { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
       { q: "Can beginners enter?", a: "Yes. The tracks are broad enough that a first project and an experienced team can both find something to build." },
       { q: "Who submits for the team?", a: "Everyone on it. Each member files their own entry in each round, for the same team project, stating the role they held and the part they personally built. Submitting is what puts your contribution on record, so it is also what earns you a certificate — a teammate cannot submit on your behalf." },
@@ -1015,7 +1013,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/p/wcc-forge-48-wecodecoders-1756040",
       label: "Register on Unstop",
-      note: "Free to enter, in teams of one to four. Registration closes 29 October at 23:59 IST, and every member registers individually on Unstop under the same team name.",
+      note: "Open to teams of one to four. Registration closes 29 October at 23:59 IST, and every member registers individually on Unstop under the same team name.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1037,7 +1035,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon where students, developers and designers build functional technology products that address real problems. Three rounds, free to enter, teams of one to four.",
+      "A national online hackathon where students, developers and designers build functional technology products that address real problems. Three rounds, teams of one to four.",
     description: [
       "TechCircuit is a national-level online hackathon for students, developers and designers who want to build something that actually runs.",
       "The aim is not the biggest project in the room. It is the clearest possible proof that your idea works. One reliable, well-made workflow beats a pile of half-finished features almost every time.",
@@ -1055,7 +1053,7 @@ export const events: Event[] = [
     ],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
-      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is free and open nationally.",
+      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
       "Find a problem worth solving, plan it, build it and finish it across three rounds.",
     deliverables: [
@@ -1091,13 +1089,12 @@ export const events: Event[] = [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
-      { label: "Entry", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/techcircuit-hackathon-wecodecoders-1758409",
       label: "Register on Unstop",
-      note: "Free to enter, in teams of one to four. Registration closes 19 October at 23:59 IST.",
+      note: "Open to teams of one to four. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1119,7 +1116,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds to turn an idea into a finished product with modern tooling. National, online, free to enter, with PPO and incubation opportunities for the top three teams.",
+      "Three rounds to turn an idea into a finished product with modern tooling. National and online, with PPO and incubation opportunities for the top three teams.",
     description: [
       "FutureStack is a national-level online hackathon for students, developers and designers who want to turn an idea into something functional.",
       "Modern tooling is encouraged and AI tools are allowed, as long as you disclose the significant ones. What is judged is whether the thing runs and whether it helps somebody.",
@@ -1137,7 +1134,7 @@ export const events: Event[] = [
     ],
     teamSize: "1 to 6. Every participant belongs to one team only.",
     eligibility:
-      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is free and open nationally.",
+      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
       "Take an idea, choose a track, and carry it from a plan to a finished product.",
     deliverables: [
@@ -1173,13 +1170,12 @@ export const events: Event[] = [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–6" },
-      { label: "Entry", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/futurestack-hackathon-wecodecoders-1758558",
       label: "Register on Unstop",
-      note: "Free to enter, in teams of one to six. Registration closes 19 October at 23:59 IST.",
+      note: "Open to teams of one to six. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1201,7 +1197,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Three rounds, three tracks, free to enter.",
+      "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Three rounds, three tracks.",
     description: [
       "CodeAxis is a national-level online hackathon about practical solutions rather than impressive-sounding ones.",
       "A small product with one dependable workflow is a better submission than an ambitious one that cannot be demonstrated.",
@@ -1219,7 +1215,7 @@ export const events: Event[] = [
     ],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
-      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is free and open nationally.",
+      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
       "Build a practical solution to a real problem, and finish it across three rounds.",
     deliverables: [
@@ -1255,13 +1251,12 @@ export const events: Event[] = [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
-      { label: "Entry", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/codeaxis-hackathon-wecodecoders-1758538",
       label: "Register on Unstop",
-      note: "Free to enter, in teams of one to four. Registration closes 19 October at 23:59 IST.",
+      note: "Open to teams of one to four. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1283,7 +1278,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds to turn an original idea into a finished, working product. National, online, free, with paid internship and incubation opportunities for the top three teams.",
+      "Three rounds to turn an original idea into a finished, working product. National and online, with paid internship and incubation opportunities for the top three teams.",
     description: [
       "Codex 48 is a national-level AI and full-stack online hackathon, run across three rounds — one original idea carried from a plan to a product that runs.",
       "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and submissions are checked.",
@@ -1301,7 +1296,7 @@ export const events: Event[] = [
     ],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
-      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is free and open nationally.",
+      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
       "Turn an original idea into a finished product across three rounds.",
     deliverables: [
@@ -1337,13 +1332,12 @@ export const events: Event[] = [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
-      { label: "Entry", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/codex-48-national-level-hackathon-wecodecoders-1761082",
       label: "Register on Unstop",
-      note: "Free to enter, in teams of one to four.",
+      note: "Open to teams of one to four.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1365,7 +1359,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds for students and young builders to develop and present a functional technology product. National, online, free, with paid internship and incubation opportunities for the top three teams.",
+      "Three rounds for students and young builders to develop and present a functional technology product. National and online, with paid internship and incubation opportunities for the top three teams.",
     description: [
       "CodeStar 30 is a national-level AI and full-stack online hackathon, run across three rounds.",
       "The format rewards scope discipline. Choose one of the three tracks, choose a problem inside it, and build the single journey that proves your idea works rather than the five that show what it could become.",
@@ -1383,7 +1377,7 @@ export const events: Event[] = [
     ],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
-      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is free and open nationally.",
+      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
       "Develop and present a functional product across three rounds.",
     deliverables: [
@@ -1419,13 +1413,12 @@ export const events: Event[] = [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
-      { label: "Entry", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/codestar-30-national-level-hackathon-wecodecoders-1760472",
       label: "Register on Unstop",
-      note: "Free to enter, in teams of one to four.",
+      note: "Open to teams of one to four.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1447,7 +1440,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online AI and coding hackathon: three rounds, one finished product. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
+      "A national online AI and coding hackathon: three rounds, one finished product. Teams of one to four, with paid internship and incubation opportunities for the top three teams.",
     description: [
       "CodeVerse India is a national-level online AI and coding hackathon, run across three rounds — one idea carried from a plan to a thing that runs.",
       "Open to undergraduates, postgraduates and students from engineering, management, arts, commerce and the sciences alike. The criteria are the same for everyone.",
@@ -1465,7 +1458,7 @@ export const events: Event[] = [
     ],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
-      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers, AI and no-code builders and first-timers. Registration is free and open nationally.",
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers, AI and no-code builders and first-timers. Registration is open nationally.",
     brief:
       "Build a working product across three rounds, in the track of your choosing.",
     deliverables: [
@@ -1501,13 +1494,12 @@ export const events: Event[] = [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
-      { label: "Entry", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/codeverse-india-national-level-hackathon-wecodecoders-1763003",
       label: "Register on Unstop",
-      note: "Free to enter, in teams of one to four. Registration closes 29 October at 07:30 IST.",
+      note: "Open to teams of one to four. Registration closes 29 October at 07:30 IST.",
     },
     links: [
       {
@@ -1535,7 +1527,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online technology hackathon: three rounds to build a working solution. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
+      "A national online technology hackathon: three rounds to build a working solution. Teams of one to four, with paid internship and incubation opportunities for the top three teams.",
     description: [
       "CodeHack India is a national-level online technology hackathon that asks for one thing: a working solution, planned, built and finished across three rounds.",
       "Submissions are scored on the same eight published criteria as every other event in this series, and those criteria are published here before you start.",
@@ -1553,7 +1545,7 @@ export const events: Event[] = [
     ],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
-      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is free and open nationally.",
+      "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
       "Build a working solution to a problem you chose, across three rounds.",
     deliverables: [
@@ -1586,14 +1578,13 @@ export const events: Event[] = [
     faq: seriesFaq(),
     stats: [
       { label: "Per team", value: "1–4" },
-      { label: "Entry", value: "Free" },
       { label: "Rounds", value: "3" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/p/codehack-india-national-level-hackathon-wecodecoders-1762158",
       label: "Register on Unstop",
-      note: "Free to enter, in teams of one to four.",
+      note: "Open to teams of one to four.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
