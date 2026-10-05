@@ -132,6 +132,21 @@ function Columns({ section }: { section: Extract<EventSection, { kind: "columns"
               </li>
             ))}
           </ul>
+          {item.note && (
+            <p
+              style={{
+                margin: "1.1em 0 0",
+                paddingLeft: "0.9em",
+                borderLeft: "3px solid var(--color-signal)",
+                maxWidth: "44ch",
+                lineHeight: 1.6,
+                fontSize: "clamp(0.82rem, 1vw, 0.92rem)",
+                color: "var(--color-ink)",
+              }}
+            >
+              {item.note}
+            </p>
+          )}
         </div>
       ))}
     </div>

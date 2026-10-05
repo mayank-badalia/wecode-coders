@@ -223,6 +223,8 @@ function seriesRounds(startsAt: string): EventSection {
         "Testing details",
         "A product roadmap and future development plan",
       ],
+      note:
+        "Teams selected for Round 3 pay a participation fee of \u20B9399 per team. It covers the cost of running the event \u2014 infrastructure, the time and effort of organising it, and paying the people who do that work. Registration and Rounds 1 and 2 remain free; the fee applies only once your team is selected for Round 3.",
     },
   ],
   };

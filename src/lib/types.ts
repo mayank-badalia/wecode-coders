@@ -32,6 +32,15 @@ export type EventSection =
         meta?: string;
         blurb?: string;
         points: string[];
+        /**
+         * A closing line after the list, set apart.
+         *
+         * For something that is neither a deliverable nor a date and must not
+         * be missed — the Round 3 participation fee. Putting it in `points`
+         * would file a payment obligation among the things you submit, where
+         * it reads as one more upload and is easy to skim past.
+         */
+        note?: string;
       }[];
     }
   | {
