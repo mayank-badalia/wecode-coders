@@ -1,4 +1,5 @@
 import type { EventSection } from "@/lib/types";
+import { RoundTabs } from "@/components/site/RoundTabs";
 
 /*
   The long-form blocks on an event detail page — tracks, topic areas,
@@ -41,6 +42,8 @@ function Intro({ text }: { text: string }) {
 }
 
 function Columns({ section }: { section: Extract<EventSection, { kind: "columns" }> }) {
+  // The rounds ask to be read one at a time; everything else is a comparison.
+  if (section.variant === "tabs") return <RoundTabs section={section} />;
   return (
     <div
       style={{

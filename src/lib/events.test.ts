@@ -179,9 +179,10 @@ describe("events seam", () => {
     }
   });
 
-  it("puts the no-problem-statement line where it cannot be skimmed", () => {
-    // People arrive expecting a brief. Every three-round event says there is
-    // not one, in its own field, so it renders apart from the body copy.
+  it("puts the problem-statement line where it cannot be skimmed", () => {
+    // People arrive wanting to know what they are building. Every three-round
+    // event answers that in its own field, so it renders apart from the body
+    // copy rather than inside a paragraph someone scrolls past.
     const series = published.filter((e) =>
       e.sections?.some((sec) => sec.label === "How the three rounds run"),
     );
@@ -212,17 +213,16 @@ describe("events seam", () => {
 
       expect(rounds.items.map((i) => i.code), e.slug).toEqual(["01", "02", "03"]);
       /*
-        Who submits, asserted by meaning rather than by phrase. The rule
-        flipped — it used to be one entry per team from the leader, and is now
-        one entry per member so each person's role and contribution is on
-        record and can be printed on their certificate. Pinning the old
-        sentence is what made this fail on a deliberate change rather than on
-        a regression, so it now checks that the intro still answers the
-        question at all.
+        Who submits, and when the brief lands — asserted by meaning, not by
+        phrase. Both have flipped once already (per-member submission, then
+        back to the leader; no problem statement, then one issued an hour
+        before), and each time a test pinned to the old sentence failed on the
+        deliberate change rather than on a regression.
       */
-      expect(rounds.intro, e.slug).toMatch(/every member[^.]*submits/i);
-      expect(rounds.intro, e.slug).toMatch(/role/i);
-      expect(rounds.intro, e.slug).not.toMatch(/team leader/i);
+      expect(rounds.intro, e.slug).toMatch(/team leader/i);
+      expect(rounds.intro, e.slug).toMatch(/one submission per round per team/i);
+      expect(rounds.intro, e.slug).toMatch(/problem statement/i);
+      expect(rounds.intro, e.slug).toMatch(/hour before/i);
 
       const round2 = rounds.items[1];
       expect(round2?.points.join(" "), e.slug).toMatch(/three major improvements/i);
@@ -513,7 +513,18 @@ describe("events seam", () => {
       ),
     ];
 
-    for (const e of published) {
+    /*
+      The series DOES issue a problem statement now, an hour before the start,
+      so promising one there is correct. The guard still matters for every
+      other event: WCC Launchpad 30 runs on tracks and hands out nothing, and
+      that is the case someone breaks by copying series copy across.
+    */
+    const issuesOne = (e: (typeof published)[number]) =>
+      e.sections?.some((sec) => sec.label === "How the three rounds run") ?? false;
+    const guarded = published.filter((e) => !issuesOne(e));
+    expect(guarded.map((e) => e.slug)).toContain("wcc-launchpad-30");
+
+    for (const e of guarded) {
       for (const line of words(e)) {
         for (const sentence of sentences(line)) {
           if (NEGATED.test(sentence)) continue;
@@ -523,6 +534,21 @@ describe("events seam", () => {
           ).not.toMatch(PROMISED);
         }
       }
+    }
+  });
+
+  it("tells the series when the problem statement arrives", () => {
+    // The flip side of the guard above: the eight that do issue one have to
+    // say so, and say when, or entrants turn up expecting to bring their own.
+    const series = published.filter((e) =>
+      e.sections?.some((sec) => sec.label === "How the three rounds run"),
+    );
+    expect(series.length).toBeGreaterThanOrEqual(8);
+    for (const e of series) {
+      expect(e.emphasis, e.slug).toMatch(/problem statement/i);
+      expect(e.emphasis, e.slug).toMatch(/hour before/i);
+      // And no leftover instruction to go and find your own.
+      expect(e.emphasis, e.slug).not.toMatch(/nobody hands you|bring a problem/i);
     }
   });
 
@@ -539,16 +565,13 @@ describe("events seam", () => {
       JSON.stringify((e.judging ?? []).map((j) => [j.name, j.weight]));
     expect(new Set(series.map(shape)).size).toBe(1);
 
-    // Three tracks, the same three, and no others.
+    /*
+      And no tracks. The series used to publish three and ask entrants to
+      choose one; it issues a single problem statement now, so a Tracks block
+      on any of them is leftover copy that contradicts the brief.
+    */
     for (const e of series) {
-      const tracks = e.sections?.find((sec) => sec.label === "Tracks");
-      expect(tracks?.kind, e.slug).toBe("columns");
-      if (tracks?.kind !== "columns") continue;
-      expect(tracks.items.map((i) => i.name)).toEqual([
-        "Agentic AI",
-        "Full-Stack Product Engineering",
-        "Open Innovation",
-      ]);
+      expect(e.sections?.find((sec) => sec.label === "Tracks"), e.slug).toBeUndefined();
     }
   });
 

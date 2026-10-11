@@ -1,7 +1,7 @@
 // REAL. Every record here is an announced event with a real poster.
 //
 // Eight of them run the same twelve-day, three-round format and share their
-// tracks, rounds, judging and rules from the SERIES_ constants below:
+// rounds, judging and rules from the SERIES_ constants below:
 // tech-circuit, future-stack, code-axis, codex-48, codestar-30,
 // codeverse-india, codehack-india and wcc-forge-48. Each runs from its own
 // start date to that date plus eleven days.
@@ -14,8 +14,9 @@
 // was real content. With nine real events they were nearly half the ring, and
 // every second slot a visitor scrolled past said "Not announced yet".
 //
-// We do not issue problem statements. A track is an area to work in, and
-// choosing the problem inside it is the first thing a team is scored on. Copy
+// The series issues one problem statement, released an hour before the start.
+// WCC Launchpad 30 is the exception and still runs on tracks: choosing the
+// problem inside one is the first thing a team is scored on. Copy
 // that implies a brief will be handed out is wrong, and src/lib/events.test.ts
 // fails the build on it.
 //
@@ -47,7 +48,7 @@ import type { Event, EventSection } from "@/lib/types";
 /*
   The October 2026 hackathon series.
 
-  Six events run the same format, so the tracks, the judging, the submission
+  Six events run the same format, so the judging, the submission
   list and the rules are written once here and shared. That is not only to
   save lines: the promise made to entrants is that all six are judged on
   identical criteria, and the only way to keep that true as one of them is
@@ -57,73 +58,6 @@ import type { Event, EventSection } from "@/lib/types";
   the top three teams receive, and the poster.
 */
 
-/**
- * The three tracks, identical across the series.
- *
- * Read the intro carefully before changing it. We do not issue problem
- * statements for these events and never have: a track is a area to work in,
- * and choosing the problem inside it is the first thing a team is judged on
- * ("User insight and problem evidence", 15 points). Copy that implies a
- * problem statement will be handed out is wrong, and it makes the first
- * judging criterion unanswerable.
- */
-const SERIES_TRACKS: EventSection = {
-  kind: "columns",
-  label: "Tracks",
-  intro:
-    "Pick one track. A track is a field to work in, not a brief: we do not set the problem. Within your track, take on a problem that already exists or one you have found yourself, and build something that solves it. Proving that problem is real is the first thing judges score, before anything you have built on top of it. Work that spans more than one track is welcome, as long as the entry names its primary one.",
-  items: [
-    {
-      code: "01",
-      name: "Agentic AI",
-      blurb:
-        "Systems where AI agents reason, plan, use tools and finish useful work with proper human oversight. Judged on how useful the agent is, how well it is orchestrated, how reliably it runs, and how clearly a human stays in control.",
-      points: [
-        "Research and knowledge agents",
-        "Customer-support agents",
-        "Personal productivity assistants",
-        "Multi-agent collaboration",
-        "Business-process automation",
-        "Developer and coding agents",
-        "Responsible autonomous workflows",
-        "Industry-specific copilots",
-      ],
-    },
-    {
-      code: "02",
-      name: "Full-Stack Product Engineering",
-      blurb:
-        "A complete product rather than a demo: a front end someone can use, a back end that holds the state, and the plumbing between them working end to end. Judged on whether the whole journey runs, not on how much of it was started.",
-      points: [
-        "Web and mobile applications",
-        "APIs, services and data models",
-        "Authentication, permissions and accounts",
-        "Payments, bookings and transactional flows",
-        "Dashboards and internal tools",
-        "Real-time and collaborative features",
-        "Integrations with existing platforms",
-        "Deployment, reliability and performance",
-      ],
-    },
-    {
-      code: "03",
-      name: "Open Innovation",
-      blurb:
-        "A real problem, solved with whatever technology fits. The problem should be specific, the user should be clear, and the solution should measurably beat what people do today.",
-      points: [
-        "Accessibility",
-        "Climate and sustainability",
-        "Healthcare operations",
-        "Finance and commerce",
-        "Civic technology",
-        "Community platforms",
-        "Logistics and mobility",
-        "Creator tools",
-        "Safety and trust",
-      ],
-    },
-  ],
-};
 
 /**
  * The three rounds.
@@ -167,9 +101,10 @@ function span(startsAt: string, fromDay: number, toDay: number): string {
 function seriesRounds(startsAt: string): EventSection {
   return {
   kind: "columns",
+  variant: "tabs",
   label: "How the three rounds run",
   intro:
-    "Three rounds, each asking for something the last did not. Qualification updates and the instructions for the next stage go directly to the teams that qualify, between rounds. Every member of a team submits in every round — one entry each, not one for the team — naming the role they held and the part of the product they personally built. The project is the team's; the record of who did what is yours. That is what lets a certificate state your role and your contribution rather than only the team you were on. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
+    "Three rounds, each asking for something the last did not. The problem statement is released by the organisers one hour before the event begins, so every team starts from the same brief at the same moment. Qualification updates and the instructions for the next stage go directly to the teams that qualify, between rounds. One submission per round per team, made by the team leader — not one per member. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
   items: [
     {
       code: "01",
@@ -178,7 +113,7 @@ function seriesRounds(startsAt: string): EventSection {
       blurb:
         "Two days to make the case for what you are going to build. One PDF, on the format we provide: the problem, who has it, how you intend to solve it, what you will build and in what order. This round is the thinking — you are judged on how clear, original, feasible and promising the plan is, and the code comes in the rounds that follow.",
       points: [
-        "The problem statement you chose or defined",
+        "Your reading of the problem statement you were given",
         "Who the users are",
         "Your proposed solution",
         "The product workflow",
@@ -248,13 +183,13 @@ function seriesJudging() {
       name: "User insight and problem evidence",
       weight: "15 points",
       detail:
-        "How well do you understand the person you are building for? Research, observation, interviews or survey data that shows the problem you chose is real.",
+        "How well do you understand the person the problem statement is about? Research, observation, interviews or survey data showing what the problem costs them today.",
     },
     {
       name: "Strength of the core solution",
       weight: "22 points",
       detail:
-        "Does the product solve the problem you named, directly? Is the main workflow focused, useful, and does it produce a clear outcome?",
+        "Does the product answer the problem statement, directly? Is the main workflow focused, useful, and does it produce a clear outcome?",
     },
     {
       name: "Technical depth and reliability",
@@ -319,7 +254,7 @@ const SERIES_RULES: EventSection = {
     "Respect software licences, intellectual property and user privacy.",
     "Projects must not promote illegal, harmful or discriminatory activity.",
     "Everything on each round's submission list has to arrive before that round's deadline.",
-    "Every member submits their own entry in every round, naming their role and what they personally built. Members of a team submit the same project; what differs is the account of your own work. A member who does not submit has no record of their contribution, so nothing is assessed for them and no certificate is issued to them for that round.",
+    "One submission per round per team, made by the team leader. Individual members do not submit separately, and a second entry from the same team is not counted.",
     "Missing a round's deadline ends the event for that team. There is no late window.",
     "The three major improvements named at Round 2 are what Round 3 is measured against — name substantial work, then deliver it.",
     "Judges may ask for repository access or other proof of development at any point.",
@@ -330,10 +265,9 @@ const SERIES_RULES: EventSection = {
 
 /** The three shared blocks, in the order they appear on a detail page. */
 /**
- * Everything after the tracks, for an event that publishes its own.
+ * Everything after the opening sections, for an event that publishes its own.
  *
- * WCC Forge 48 has four tracks of its own rather than the series' three, but
- * it runs the same three rounds and is judged on the same rules — so it takes
+ * It runs the same three rounds and is judged on the same rules — so it takes
  * these two and keeps its own first block.
  */
 const seriesTrailingSections = (startsAt: string): EventSection[] => [
@@ -342,7 +276,6 @@ const seriesTrailingSections = (startsAt: string): EventSection[] => [
 ];
 
 const seriesSections = (startsAt: string): EventSection[] => [
-  SERIES_TRACKS,
   ...seriesTrailingSections(startsAt),
 ];
 
@@ -350,9 +283,9 @@ const seriesSections = (startsAt: string): EventSection[] => [
 function seriesFaq() {
   return [
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
-    { q: "Are problem statements provided?", a: "No. You pick one of the three tracks, then either take a problem that already exists in it or define your own. Showing that the problem is real is worth 15 points." },
+    { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
     { q: "What happens between rounds?", a: "Qualification updates and the instructions for the next stage go directly to the teams that qualify." },
-    { q: "Who submits for the team?", a: "Everyone on it. Each member files their own entry in each round, for the same team project, stating the role they held and the part they personally built. Submitting is what puts your contribution on record, so it is also what earns you a certificate — a teammate cannot submit on your behalf." },
+    { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
     { q: "Do I need a working product in Round 1?", a: "No. Round 1 is one PDF on the official format — the problem, the users, the solution, the workflow, the features, the stack and the plan." },
     { q: "What are the three improvements in Round 2?", a: "At Round 2 you name the three major improvements you will make in Round 3. They have to be substantial work on the product, not cosmetic changes, and Round 3 is measured against delivering them." },
     { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
@@ -360,7 +293,6 @@ function seriesFaq() {
     { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
     { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones in your submission." },
     { q: "Can I use something I built earlier?", a: "No. The product has to be built during the event, and submissions are checked. Disclosed reusable components are fine; a finished project is not." },
-    { q: "Can I change track?", a: "Yes, any time before the final submission. Only one primary track can be selected." },
     { q: "Is deployment compulsory?", a: "From Round 2 you need a link judges can open and use. If you cannot deploy, provide a reliable executable the judges can run." },
     { q: "Are social media posts required?", a: "No. Nothing on LinkedIn, Instagram or anywhere else is part of a submission, and no video demonstration is required." },
     { q: "What certificate do I get?", a: "The one for the furthest stage you reach. A valid Round 1 submission earns a National Participation Certificate, qualifying for Round 2 a National Round 2 Qualifier Certificate, reaching Round 3 a National Finalist Certificate, and winning a National Winner Certificate." },
@@ -843,14 +775,14 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds to turn a problem worth solving into a product that runs. National and online, with ₹25,000 in cash and PPO opportunities for the top three teams.",
+      "Three rounds to turn one problem statement into a product that runs. National and online, with ₹25,000 in cash and PPO opportunities for the top three teams.",
     description: [
       "WCC Forge 48 asks for one thing: a working product. Not a deck, not a concept, not an idea you would build if you had more time — something a person can open and use by the time the last round closes.",
       "Three rounds to find a problem that genuinely exists, choose the single journey through it that matters most, and build that journey until it runs reliably. Scope is the hard part. Teams here rarely run out of ideas — they run out of decisions.",
       "Projects are judged on whether they work and whether they are worth using. A narrow product with one dependable workflow beats a broad one held together with screenshots.",
     ],
     emphasis:
-      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers, AI builders and first-time hackers.",
     tags: [
       "agentic ai",
@@ -864,7 +796,7 @@ export const events: Event[] = [
     eligibility:
       "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
-      "Find a problem worth solving and build the one workflow that solves it, across three rounds.",
+      "Take the problem statement and build the one workflow that solves it, across three rounds.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
@@ -923,72 +855,12 @@ export const events: Event[] = [
       "Your project promoted through We Code Coders and its partner communities",
     ],
     sections: [
-      {
-        kind: "columns",
-        label: "Tracks",
-        intro:
-          "Pick one track. A track is a field to work in, not a brief: we do not set the problem. Within your track, take on a problem that already exists or one you have found yourself, and build something that solves it. Proving that problem is real is the first thing judges score, before anything you have built on top of it. Work that spans more than one track is welcome, as long as the entry names its primary one.",
-        items: [
-          {
-            code: "01",
-            name: "Agentic AI",
-            blurb:
-              "Autonomous agents that reason, plan, use tools and finish multi-step work — with a human still able to see and steer what they do.",
-            points: [
-              "Multi-agent business systems",
-              "Research and knowledge agents",
-              "AI coding and testing agents",
-              "Autonomous education assistants",
-              "Workflow and productivity agents",
-            ],
-          },
-          {
-            code: "02",
-            name: "Digital Twins & Predictive Intelligence",
-            blurb:
-              "A digital representation of a real system, fed by data, used to monitor it, simulate it or predict what it does next.",
-            points: [
-              "Smart campus digital twins",
-              "Supply-chain simulations",
-              "Traffic and mobility prediction",
-              "Energy-consumption monitoring",
-              "Healthcare operations",
-              "Disaster-management systems",
-            ],
-          },
-          {
-            code: "03",
-            name: "Next-Generation HCI",
-            blurb:
-              "New ways for people to talk to software — beyond a form and a button. Judged on whether the interface genuinely suits the task.",
-            points: [
-              "Voice-controlled applications",
-              "Gesture-based systems",
-              "Computer-vision interfaces",
-              "AR and VR experiences",
-              "Multimodal AI applications",
-              "Accessibility-focused interfaces",
-            ],
-          },
-          {
-            code: "04",
-            name: "Open Innovation",
-            blurb:
-              "Any real problem, any industry, any stack. The problem should be specific and the user should be someone you can name.",
-            points: [
-              "Choose your own industry and audience",
-              "Any technology or framework",
-              "Judged on the same criteria as every other track",
-            ],
-          },
-        ],
-      },
       ...seriesTrailingSections("2026-10-30T18:00:00+05:30"),
     ],
     faq: [
       { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
-      { q: "Can beginners enter?", a: "Yes. The tracks are broad enough that a first project and an experienced team can both find something to build." },
-      { q: "Who submits for the team?", a: "Everyone on it. Each member files their own entry in each round, for the same team project, stating the role they held and the part they personally built. Submitting is what puts your contribution on record, so it is also what earns you a certificate — a teammate cannot submit on your behalf." },
+      { q: "Can beginners enter?", a: "Yes. The problem statement is written so that a first project and an experienced team can both find something to build in it." },
+      { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
       { q: "Does every team member have to register?", a: "Yes, individually — and everyone must use the same team name so the entries can be matched up." },
       { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones, along with any reused code, APIs and datasets, in your submission." },
@@ -1021,8 +893,8 @@ export const events: Event[] = [
     posterImage: "/posters/wcc-forge-48-v2.webp",
   },
   {
-    // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
-    // judging and rules are shared with the other five.
+    // LIVE. Part of the October 2026 series — real event, real poster. Judging
+    // and rules are shared with the other five.
     locked: false,
     featured: true,
     slug: "tech-circuit",
@@ -1041,7 +913,7 @@ export const events: Event[] = [
       "The aim is not the biggest project in the room. It is the clearest possible proof that your idea works. One reliable, well-made workflow beats a pile of half-finished features almost every time.",
     ],
     emphasis:
-      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1055,7 +927,7 @@ export const events: Event[] = [
     eligibility:
       "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
-      "Find a problem worth solving, plan it, build it and finish it across three rounds.",
+      "Take the problem statement, plan it, build it and finish it across three rounds.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
@@ -1076,7 +948,7 @@ export const events: Event[] = [
       "Incubation opportunities for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
-      "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
+      "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A National Participation Certificate for every valid Round 1 submission",
       "A National Round 2 Qualifier Certificate for teams that reach Round 2",
       "A National Finalist Certificate for teams that reach Round 3",
@@ -1102,8 +974,8 @@ export const events: Event[] = [
     posterImage: "/posters/tech-circuit-v2.webp",
   },
   {
-    // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
-    // judging and rules are shared with the other five.
+    // LIVE. Part of the October 2026 series — real event, real poster. Judging
+    // and rules are shared with the other five.
     locked: false,
     featured: true,
     slug: "future-stack",
@@ -1122,7 +994,7 @@ export const events: Event[] = [
       "Modern tooling is encouraged and AI tools are allowed, as long as you disclose the significant ones. What is judged is whether the thing runs and whether it helps somebody.",
     ],
     emphasis:
-      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1136,7 +1008,7 @@ export const events: Event[] = [
     eligibility:
       "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
-      "Take an idea, choose a track, and carry it from a plan to a finished product.",
+      "Take the problem statement and carry it from a plan to a finished product.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
@@ -1157,7 +1029,7 @@ export const events: Event[] = [
       "Incubation opportunities for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
-      "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
+      "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A National Participation Certificate for every valid Round 1 submission",
       "A National Round 2 Qualifier Certificate for teams that reach Round 2",
       "A National Finalist Certificate for teams that reach Round 3",
@@ -1183,8 +1055,8 @@ export const events: Event[] = [
     posterImage: "/posters/future-stack-v3.webp",
   },
   {
-    // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
-    // judging and rules are shared with the other five.
+    // LIVE. Part of the October 2026 series — real event, real poster. Judging
+    // and rules are shared with the other five.
     locked: false,
     featured: true,
     slug: "code-axis",
@@ -1197,13 +1069,13 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Three rounds, three tracks.",
+      "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Three rounds, one problem statement.",
     description: [
       "CodeAxis is a national-level online hackathon about practical solutions rather than impressive-sounding ones.",
       "A small product with one dependable workflow is a better submission than an ambitious one that cannot be demonstrated.",
     ],
     emphasis:
-      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1238,7 +1110,7 @@ export const events: Event[] = [
       "Incubation opportunities for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
-      "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
+      "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A National Participation Certificate for every valid Round 1 submission",
       "A National Round 2 Qualifier Certificate for teams that reach Round 2",
       "A National Finalist Certificate for teams that reach Round 3",
@@ -1264,8 +1136,8 @@ export const events: Event[] = [
     posterImage: "/posters/code-axis-v2.webp",
   },
   {
-    // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
-    // judging and rules are shared with the other five.
+    // LIVE. Part of the October 2026 series — real event, real poster. Judging
+    // and rules are shared with the other five.
     locked: false,
     featured: true,
     slug: "codex-48",
@@ -1284,7 +1156,7 @@ export const events: Event[] = [
       "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and submissions are checked.",
     ],
     emphasis:
-      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1319,7 +1191,7 @@ export const events: Event[] = [
       "Incubation and product-development support for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
-      "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
+      "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A National Participation Certificate for every valid Round 1 submission",
       "A National Round 2 Qualifier Certificate for teams that reach Round 2",
       "A National Finalist Certificate for teams that reach Round 3",
@@ -1345,8 +1217,8 @@ export const events: Event[] = [
     posterImage: "/posters/codex-48-v1.webp",
   },
   {
-    // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
-    // judging and rules are shared with the other five.
+    // LIVE. Part of the October 2026 series — real event, real poster. Judging
+    // and rules are shared with the other five.
     locked: false,
     featured: true,
     slug: "codestar-30",
@@ -1362,10 +1234,10 @@ export const events: Event[] = [
       "Three rounds for students and young builders to develop and present a functional technology product. National and online, with paid internship and incubation opportunities for the top three teams.",
     description: [
       "CodeStar 30 is a national-level AI and full-stack online hackathon, run across three rounds.",
-      "The format rewards scope discipline. Choose one of the three tracks, choose a problem inside it, and build the single journey that proves your idea works rather than the five that show what it could become.",
+      "The format rewards scope discipline. Inside the problem statement you are given, build the single journey that proves your idea works rather than the five that show what it could become.",
     ],
     emphasis:
-      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1400,7 +1272,7 @@ export const events: Event[] = [
       "Incubation and product-development support for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
-      "100+ reward recipients across track awards, sponsor challenges, mini-challenges and giveaways",
+      "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A National Participation Certificate for every valid Round 1 submission",
       "A National Round 2 Qualifier Certificate for teams that reach Round 2",
       "A National Finalist Certificate for teams that reach Round 3",
@@ -1426,8 +1298,8 @@ export const events: Event[] = [
     posterImage: "/posters/codestar-30-v1.webp",
   },
   {
-    // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
-    // judging and rules are shared with the other six.
+    // LIVE. Part of the October 2026 series — real event, real poster. Judging
+    // and rules are shared with the other six.
     locked: false,
     featured: true,
     slug: "codeverse-india",
@@ -1446,7 +1318,7 @@ export const events: Event[] = [
       "Open to undergraduates, postgraduates and students from engineering, management, arts, commerce and the sciences alike. The criteria are the same for everyone.",
     ],
     emphasis:
-      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1460,7 +1332,7 @@ export const events: Event[] = [
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers, AI and no-code builders and first-timers. Registration is open nationally.",
     brief:
-      "Build a working product across three rounds, in the track of your choosing.",
+      "Build a working product across three rounds, against the problem statement you are given.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
@@ -1513,8 +1385,8 @@ export const events: Event[] = [
     posterImage: "/posters/codeverse-india-v1.webp",
   },
   {
-    // LIVE. Part of the October 2026 series — real event, real poster. Tracks,
-    // judging and rules are shared with the other five.
+    // LIVE. Part of the October 2026 series — real event, real poster. Judging
+    // and rules are shared with the other five.
     locked: false,
     featured: true,
     slug: "codehack-india",
@@ -1533,7 +1405,7 @@ export const events: Event[] = [
       "Submissions are scored on the same eight published criteria as every other event in this series, and those criteria are published here before you start.",
     ],
     emphasis:
-      "Nobody hands you a problem statement. Pick a track, bring a problem worth solving, and show that it is real — that is the first thing the judges score.",
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
     tags: [
       "agentic ai",
@@ -1547,7 +1419,7 @@ export const events: Event[] = [
     eligibility:
       "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
-      "Build a working solution to a problem you chose, across three rounds.",
+      "Build a working solution to the problem statement you are given, across three rounds.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",

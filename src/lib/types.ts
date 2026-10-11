@@ -16,6 +16,14 @@ export type EventFormat =
 export type EventSection =
   | {
       kind: "columns";
+      /**
+       * "tabs" renders the items one at a time behind a row of buttons.
+       *
+       * Only the rounds use it. Three rounds side by side is three columns of
+       * dense checklist a reader scans past; one at a time is the round they
+       * are actually in.
+       */
+      variant?: "tabs";
       label: string;
       intro?: string;
       items: {
