@@ -1612,7 +1612,9 @@ export const events: Event[] = [
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LQXKCATzVwsCJDHOaeVCjf" },
     ],
-    posterSeed: 9108,
+    // Ink — the poster sits on navy, so the ring glow and hover tints match it.
+    posterSeed: 9112,
+    posterImage: "/posters/codenexus-india-v1.webp",
   },
   {
     /*
@@ -1692,18 +1694,22 @@ export const events: Event[] = [
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Lr1a3omlex7Coc4tAJ8S1C" },
     ],
-    posterSeed: 9109,
+    // Ink. The artwork is violet, which is a burst colour and not a ground;
+    // navy is the nearest ground in the table and the one the poster reads as.
+    posterSeed: 9126,
+    posterImage: "/posters/codetitans-india-v1.webp",
   },
   {
     /*
       LIVE. A quiz, not a hackathon — so no rounds, no problem statement and
       none of the series' shared blocks.
 
-      The Unstop listing gives the quiz day but not the hour (its stage times
-      read 01:10 to 01:11, which is a placeholder, not a sitting). `startsAt`
-      therefore holds a nominal time so the event sorts into the schedule,
-      and `startTimeNote` is what the page prints instead — the type exists
-      for exactly this, so an unannounced hour is never shown as confirmed.
+      The Unstop listing gave the quiz day but not the hour (its stage times
+      read 01:10 to 01:11, which is a placeholder, not a sitting), so this
+      carried a `startTimeNote` until the sitting was confirmed: 10:00 IST.
+      The window length is the one Protocol//60 published, not a figure from
+      the listing — if the paper is shorter, shorten `endsAt` with it, since
+      the page prints the gap as "Runs for N hours".
     */
     locked: false,
     featured: true,
@@ -1713,28 +1719,27 @@ export const events: Event[] = [
     format: "quiz",
     status: "upcoming",
     startsAt: "2026-11-09T10:00:00+05:30",
-    endsAt: "2026-11-09T23:59:00+05:30",
-    startTimeNote: "Time announced in the official group",
+    endsAt: "2026-11-09T12:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
       "A national online quiz on agentic AI, full-stack engineering and emerging technology. One sitting, free to enter, with ₹30,000 shared among the top three.",
     description: [
       "CodeQuest Quiz India 2026 is a national online quiz for people who build. The questions span autonomous systems, the engineering behind a working product, and the technologies arriving around both.",
-      "It runs in one sitting on 9 November. Everyone who completes it properly gets a verifiable certificate, and the rewards go well beyond the top three.",
+      "It runs in one sitting on 9 November, starting at 10:00 IST. Everyone who completes it properly gets a verifiable certificate, and the rewards go well beyond the top three.",
     ],
     forWho: "Students, developers, AI enthusiasts and anyone curious about how modern systems are built.",
     tags: ["agentic ai", "full-stack", "open innovation", "quiz", "online", "national"],
     teamSize: "Individual. Everyone registers and attempts on their own.",
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers and self-taught builders. Registration is open nationally.",
-    brief: "One sitting, three subject areas, and a leaderboard at the end of it.",
+    brief: "One sitting at 10:00, three subject areas, and a leaderboard at the end of it.",
     deliverables: [
       "One timed attempt, submitted before the clock runs out",
     ],
     schedule: [
       { when: "Until Sat 7 Nov, 15:00", what: "Registration open. Join the official channel for the joining link and the final instructions." },
-      { when: "Mon 9 Nov", what: "Quiz day. One attempt; the time is announced in the official group beforehand." },
+      { when: "Mon 9 Nov, 10:00", what: "Quiz day. One attempt, inside the official window." },
       { when: "After", what: "Responses validated, the leaderboard reviewed, results announced and certificates issued." },
     ],
     judging: [
@@ -1808,7 +1813,7 @@ export const events: Event[] = [
     faq: [
       { q: "Is it free?", a: "Yes. Registration costs nothing." },
       { q: "Is this a quiz or a hackathon?", a: "A quiz, in one sitting. There is nothing to build and nothing to submit beforehand." },
-      { q: "When exactly does it start?", a: "On 9 November. The hour is announced in the official group ahead of the day, along with the joining link." },
+      { q: "When exactly does it start?", a: "10:00 IST on 9 November. The joining link goes out in the official group ahead of the day." },
       { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before the quiz." },
       { q: "Will everyone get a certificate?", a: "Everyone who registers, joins through the official link, completes and submits the quiz, follows the rules and passes the integrity checks. Registering alone does not qualify." },
       { q: "When are results announced?", a: "After the responses are validated and the leaderboard is reviewed. Timelines are shared through the official channel." },
@@ -1825,6 +1830,8 @@ export const events: Event[] = [
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Kiibri82NXEDIOmNhd9URn" },
     ],
-    posterSeed: 9110,
+    // Ink — lime and orange are the accents, the ground underneath is navy.
+    posterSeed: 9130,
+    posterImage: "/posters/codequest-quiz-india-v1.webp",
   },
 ];
