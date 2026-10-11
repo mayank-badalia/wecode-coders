@@ -166,60 +166,132 @@ function seriesRounds(startsAt: string): EventSection {
 }
 
 /**
- * Judging, identical across the series and to WCC Launchpad 30.
+ * Judging, one sheet per round.
  *
- * The weights total 100 and are published, so a team can see where the marks
- * are before it decides what to spend the three rounds on.
+ * A single table across all three rounds published a total nobody is ever
+ * scored out of: Round 1 is a PDF with no code behind it, and marking it on
+ * "technical depth and reliability" scores a team on something it was not
+ * asked for yet. Each round now totals 100 on its own, because a team is
+ * ranked against the other teams in the round it is actually in.
  *
- * Nothing here scores the showcase posts. They are still required — a
- * submission without them is incomplete, and the rules say so — but they are
- * a condition of entry rather than a way to earn marks, so every point on the
- * sheet is for the product. The five they used to carry went back to the
- * solution, the engineering and the usability.
+ * The three sheets are deliberately not the same shape. Round 1 is the
+ * thinking, Round 2 is whether it runs, Round 3 is whether it is finished —
+ * and the criteria that decide each are different questions.
  */
 function seriesJudging() {
+  const R1 = "Round 1 — The plan";
+  const R2 = "Round 2 — The build";
+  const R3 = "Round 3 — The finish";
   return [
+    /* Round 1: no code exists yet. Everything here is about the thinking. */
     {
-      name: "User insight and problem evidence",
+      round: R1,
+      name: "Understanding of the problem statement",
+      weight: "25 points",
+      detail:
+        "Have you read what was actually asked? Who holds this problem, what it costs them today, and which part of it you are taking on rather than all of it.",
+    },
+    {
+      round: R1,
+      name: "The proposed solution",
+      weight: "25 points",
+      detail:
+        "Does the solution follow from the problem, or is it a product you wanted to build anyway? Is the main workflow specific enough to picture someone using it?",
+    },
+    {
+      round: R1,
+      name: "Technical plan",
+      weight: "20 points",
+      detail:
+        "Is the stack a choice you can defend rather than a default? Have you named the hard part, and does the architecture account for it?",
+    },
+    {
+      round: R1,
+      name: "Originality of approach",
       weight: "15 points",
       detail:
-        "How well do you understand the person the problem statement is about? Research, observation, interviews or survey data showing what the problem costs them today.",
+        "Every team has the same brief. What is different about your reading of it, or the angle you are taking on it?",
     },
     {
-      name: "Strength of the core solution",
-      weight: "22 points",
+      round: R1,
+      name: "Feasibility and scope",
+      weight: "15 points",
       detail:
-        "Does the product answer the problem statement, directly? Is the main workflow focused, useful, and does it produce a clear outcome?",
+        "Can this team build this in the days that are left? Scope you can finish scores higher here than scope that sounds impressive.",
+    },
+
+    /* Round 2: a judge opens the link and uses it. */
+    {
+      round: R2,
+      name: "The core workflow runs end to end",
+      weight: "30 points",
+      detail:
+        "A judge opens your link and completes the main journey without being talked through it. Rough edges are expected this early; a broken middle is not.",
     },
     {
+      round: R2,
       name: "Technical depth and reliability",
-      weight: "22 points",
+      weight: "25 points",
       detail:
-        "How well have you used what you chose? Does it work consistently? Are the integrations, data flows and AI components put together with thought?",
+        "How well have you used what you chose? Do the integrations, data flows and AI components hold together under ordinary use?",
     },
     {
-      name: "Originality and differentiation",
+      round: R2,
+      name: "Progress against the plan",
+      weight: "20 points",
+      detail:
+        "How much of what Round 1 proposed is real rather than stubbed? Where you changed direction, is the change explained and is it the better call?",
+    },
+    {
+      round: R2,
+      name: "The three improvements you named",
       weight: "15 points",
       detail:
-        "What makes this different from the tools that exist and the ideas that show up at every hackathon? A distinctive insight, interaction or approach.",
+        "Are the three you committed to for Round 3 substantial work on the product, or cosmetic changes chosen because they are easy to deliver?",
     },
     {
-      name: "Real-world usability",
-      weight: "11 points",
-      detail:
-        "Could the intended user work it out without a walkthrough? Is it accessible and practical in the setting it is meant for?",
-    },
-    {
-      name: "Responsible design and trust",
+      round: R2,
+      name: "Usability so far",
       weight: "10 points",
       detail:
-        "Privacy, security, bias, transparency, accessibility and human oversight, where they are relevant. Do users keep control of the decisions that matter?",
+        "Can someone who did not build it find their way through the part that works? Polish is not expected yet; comprehensibility is.",
+    },
+
+    /* Round 3: is it a product. */
+    {
+      round: R3,
+      name: "Completeness of the product",
+      weight: "25 points",
+      detail:
+        "Are the features finished, the open ends closed and the main journeys tested? What is left undone, and did you say so?",
     },
     {
-      name: "Improvement between rounds",
-      weight: "5 points",
+      round: R3,
+      name: "The three improvements delivered",
+      weight: "20 points",
       detail:
-        "How far the product travels: from the Round 1 proposal to the Round 2 build, and from there to the Round 3 finish. Delivering the three major improvements you named at Round 2 is what this measures.",
+        "Measured against exactly what you named at Round 2 — not against what turned out to be easier once you started.",
+    },
+    {
+      round: R3,
+      name: "Reliability under normal use",
+      weight: "20 points",
+      detail:
+        "Does it hold up when a judge uses it without the team steering? Bad input, an empty state and a repeated attempt all count.",
+    },
+    {
+      round: R3,
+      name: "Usability and real-world fit",
+      weight: "20 points",
+      detail:
+        "Could the intended user work it out without a walkthrough? Is it practical in the setting it is meant for?",
+    },
+    {
+      round: R3,
+      name: "Documentation and roadmap",
+      weight: "15 points",
+      detail:
+        "Could someone else run this from the repository? And is the next step a credible plan rather than a wish list?",
     },
   ];
 }
@@ -811,38 +883,7 @@ export const events: Event[] = [
       { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
-    judging: [
-      {
-        name: "Working product and execution",
-        weight: "30%",
-        detail:
-          "Does it actually run? The central workflow has to work end to end, not in a screenshot. Reliability counts for more than surface area.",
-      },
-      {
-        name: "Real-world usefulness and impact",
-        weight: "20%",
-        detail:
-          "Is the problem real, is the user specific, and does the product measurably beat what that person does today?",
-      },
-      {
-        name: "Innovation and originality",
-        weight: "20%",
-        detail:
-          "What makes this different from the tools that already exist and the ideas that turn up at every hackathon? A distinctive insight, interaction or approach.",
-      },
-      {
-        name: "Technical implementation",
-        weight: "20%",
-        detail:
-          "How well is it built? Architecture, data flows, integrations and AI components put together with thought rather than glued together to demo once.",
-      },
-      {
-        name: "Usability and real-world fit",
-        weight: "10%",
-        detail:
-          "Could the intended user work it out without a walkthrough? Is it accessible and practical in the setting it is meant for?",
-      },
-    ],
+    judging: seriesJudging(),
     rewards: [
       "₹25,000 in cash, shared among the top three teams",
       "PPO opportunities for the top three teams",

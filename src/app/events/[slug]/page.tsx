@@ -488,7 +488,30 @@ export default async function EventPage({ params }: Params) {
             {event.judging && event.judging.length > 0 && (
               <section style={{ marginBottom: "clamp(2.5rem, 6vh, 4rem)" }}>
                 <p style={{ ...monoLabel, margin: "0 0 1.4rem" }}>[ Judging ]</p>
-                {event.judging.map((j) => (
+                {/*
+                  Grouped by round when an event scores each round separately.
+                  Order comes from the data rather than from sorting: the
+                  rounds are already in order there, and sorting by name would
+                  put "Round 10" before "Round 2" the day there is one.
+                */}
+                {[...new Set(event.judging.map((j) => j.round))].map((round) => (
+                  <div key={round ?? "all"}>
+                    {round && (
+                      <p
+                        style={{
+                          ...monoLabel,
+                          margin: "0 0 1rem",
+                          color: "var(--color-ink)",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {round} — scored out of 100
+                      </p>
+                    )}
+                    <div style={{ marginBottom: round ? "clamp(2rem, 4vh, 2.8rem)" : 0 }}>
+                {(event.judging ?? [])
+                  .filter((j) => j.round === round)
+                  .map((j) => (
                   <div key={j.name} data-reveal style={{ marginBottom: "1.2em" }}>
                     <p
                       style={{
@@ -506,6 +529,9 @@ export default async function EventPage({ params }: Params) {
                       {j.weight && <span style={monoLabel}>{j.weight}</span>}
                     </p>
                     <p style={{ margin: "0.3em 0 0", lineHeight: 1.6, maxWidth: "52ch" }}>{j.detail}</p>
+                  </div>
+                ))}
+                    </div>
                   </div>
                 ))}
               </section>

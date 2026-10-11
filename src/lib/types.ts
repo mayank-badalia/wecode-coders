@@ -140,6 +140,15 @@ export type Event = {
     detail: string;
     /** Weight as it is published, e.g. "20 points". Omitted when unweighted. */
     weight?: string;
+    /**
+     * The round this criterion is scored in, when the event scores each round
+     * separately rather than once at the end.
+     *
+     * Grouping, not decoration: each round's weights total 100 on their own,
+     * because a team is ranked within the round it is in. One flat table
+     * across three rounds would publish a total nobody is ever scored out of.
+     */
+    round?: string;
   }[];
   /** What people get out of it beyond the work itself. */
   rewards?: string[];

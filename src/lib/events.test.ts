@@ -117,11 +117,56 @@ describe("events seam", () => {
         e.judging.length,
       );
 
-      const total = weighted.reduce(
-        (sum, j) => sum + Number.parseInt(j.weight ?? "0", 10),
-        0,
+      /*
+        Totalled per round, not per event. The series scores each round on its
+        own sheet, so three rounds of 100 is correct and a flat sum of 300 is
+        a number nobody is ever scored out of — which is what this assertion
+        caught the moment the sheets were split.
+
+        Events with no rounds fall into a single unnamed group, so the rule is
+        the same one either way: every sheet a team is ranked on totals 100.
+      */
+      const rounds = new Set(weighted.map((j) => j.round));
+      for (const round of rounds) {
+        const sheet = weighted.filter((j) => j.round === round);
+        const total = sheet.reduce((sum, j) => sum + Number.parseInt(j.weight ?? "0", 10), 0);
+        expect(total, `${e.slug} ${round ?? "(no round)"} totals ${total}`).toBe(100);
+      }
+    }
+  });
+
+  it("scores each round on questions that round actually asks", () => {
+    /*
+      The point of splitting the sheets. Round 1 is a PDF with no code behind
+      it, so marking it on whether the product runs scores a team on something
+      it has not been asked for; Round 3 is the finish, so it has to be marked
+      on what was delivered rather than on what was proposed.
+    */
+    const series = published.filter((e) =>
+      e.sections?.some((sec) => sec.label === "How the three rounds run"),
+    );
+    expect(series.length).toBeGreaterThanOrEqual(8);
+
+    for (const e of series) {
+      const sheet = (round: string) =>
+        (e.judging ?? []).filter((j) => (j.round ?? "").startsWith(round));
+      const text = (round: string) =>
+        sheet(round).map((j) => `${j.name} ${j.detail}`).join(" ");
+
+      for (const r of ["Round 1", "Round 2", "Round 3"]) {
+        expect(sheet(r).length, `${e.slug} has no ${r} sheet`).toBeGreaterThan(0);
+      }
+
+      // Round 1 cannot be scored on a running product; nothing is built yet.
+      expect(text("Round 1"), `${e.slug} marks Round 1 on a running product`).not.toMatch(
+        /runs end to end|reliability under|deployed|uptime/i,
       );
-      expect(total, `${e.slug} totals ${total}`).toBe(100);
+      // And it has to be scored on reading the brief it was given.
+      expect(text("Round 1"), e.slug).toMatch(/problem statement/i);
+      // Round 3 is measured against what was promised at Round 2.
+      expect(text("Round 3"), `${e.slug} does not check the named improvements`).toMatch(
+        /improvements delivered|named at Round 2/i,
+      );
     }
   });
 
