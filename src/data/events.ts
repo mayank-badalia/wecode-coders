@@ -98,7 +98,23 @@ function span(startsAt: string, fromDay: number, toDay: number): string {
  * everything else is identical — the structure stays shared, which is what
  * the promise of "judged the same way" rests on.
  */
-function seriesRounds(startsAt: string): EventSection {
+/**
+ * Day offsets from `startsAt` for the three rounds, as [from, to] pairs.
+ *
+ * Most of the series runs 2 days / 3 days / 3 days with gaps between, which
+ * is the default. CodeNexus and CodeTitans were scheduled on Unstop with
+ * wider windows, so the offsets are a parameter rather than a constant — the
+ * dates printed on a round card have to be the ones a team is actually
+ * working to.
+ */
+type RoundOffsets = readonly (readonly [number, number])[];
+const DEFAULT_ROUNDS: RoundOffsets = [
+  [0, 1],
+  [4, 6],
+  [9, 11],
+];
+
+function seriesRounds(startsAt: string, offsets: RoundOffsets = DEFAULT_ROUNDS): EventSection {
   // Filtered from seriesJudging rather than written out again: one source for
   // the criteria, so a weight cannot be right in the round and wrong in the
   // event's own table.
@@ -113,7 +129,7 @@ function seriesRounds(startsAt: string): EventSection {
   items: [
     {
       code: "01",
-      meta: span(startsAt, 0, 1),
+      meta: span(startsAt, offsets[0]![0], offsets[0]![1]),
       name: "Round 1 — The plan",
       blurb:
         "Two days to make the case for what you are going to build. One PDF, on the format we provide: the problem, who has it, how you intend to solve it, what you will build and in what order. This round is the thinking — you are judged on how clear, original, feasible and promising the plan is, and the code comes in the rounds that follow.",
@@ -134,7 +150,7 @@ function seriesRounds(startsAt: string): EventSection {
     },
     {
       code: "02",
-      meta: span(startsAt, 4, 6),
+      meta: span(startsAt, offsets[1]![0], offsets[1]![1]),
       name: "Round 2 — The build",
       blurb:
         "Three days to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not.",
@@ -151,7 +167,7 @@ function seriesRounds(startsAt: string): EventSection {
     },
     {
       code: "03",
-      meta: span(startsAt, 9, 11),
+      meta: span(startsAt, offsets[2]![0], offsets[2]![1]),
       name: "Round 3 — The finish",
       blurb:
         "Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product.",
@@ -350,14 +366,15 @@ const SERIES_RULES: EventSection = {
  * It runs the same three rounds and is judged on the same rules — so it takes
  * these two and keeps its own first block.
  */
-const seriesTrailingSections = (startsAt: string): EventSection[] => [
-  seriesRounds(startsAt),
-  SERIES_RULES,
-];
+const seriesTrailingSections = (
+  startsAt: string,
+  offsets: RoundOffsets = DEFAULT_ROUNDS,
+): EventSection[] => [seriesRounds(startsAt, offsets), SERIES_RULES];
 
-const seriesSections = (startsAt: string): EventSection[] => [
-  ...seriesTrailingSections(startsAt),
-];
+const seriesSections = (
+  startsAt: string,
+  offsets: RoundOffsets = DEFAULT_ROUNDS,
+): EventSection[] => [...seriesTrailingSections(startsAt, offsets)];
 
 /** FAQ, identical across the series. */
 function seriesFaq() {
@@ -1511,5 +1528,303 @@ export const events: Event[] = [
     // hover tint and the ring's glow are pulled from.
     posterSeed: 9106,
     posterImage: "/posters/codehack-india-v2.webp",
+  },
+  {
+    /*
+      LIVE. November series. Same three-round format as the October events and
+      judged on the same sheets, but its rounds run on wider windows than the
+      others — hence the explicit offsets rather than the default.
+
+      No poster supplied yet, so the generated one stands in; no Unstop link
+      yet either, so registration renders as "not open" rather than as a
+      button that goes nowhere.
+    */
+    locked: false,
+    featured: true,
+    slug: "codenexus-india",
+    title: "CodeNexus India 2026",
+    kicker: "HACKATHON — 3 ROUNDS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-11-02T10:00:00+05:30",
+    endsAt: "2026-11-15T10:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A national online hackathon in three rounds: a plan, a working product, then a finished one. Teams of one to four, with ₹30,000, paid internships and incubation for the top three.",
+    description: [
+      "CodeNexus India 2026 is a national-level online hackathon run across three rounds. Round 1 is the proposal, Round 2 turns it into something that runs, and Round 3 decides whether it is a product.",
+      "Each round is scored on its own published sheet, out of 100, and those sheets are on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "open innovation", "online", "national", "three rounds"],
+    teamSize: "1 to 4. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers and first-timers. Registration is open nationally.",
+    brief:
+      "Build a working solution to the problem statement you are given, across three rounds.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A certificate at the level you reached — participant, Round 2 qualifier, finalist or winner",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Until Mon 2 Nov, 02:00", what: "Registration open. Form a team of one to four and join the official channel." },
+      { when: "Mon 2 Nov — Wed 4 Nov", what: "Round 1. The official PDF format goes out; the proposal and the plan are due." },
+      { when: "Fri 6 Nov — Mon 9 Nov", what: "Round 2. Turn the proposal into a product whose central workflow runs." },
+      { when: "Thu 12 Nov — Sun 15 Nov", what: "Round 3. Finish it — including the three improvements you named." },
+      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: seriesJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development support for the top three teams",
+      "A complimentary .XYZ domain for every participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption Labs credits for every eligible participant",
+      "$100 in Agentverse credits for every eligible participant",
+      "100+ reward recipients across the hackathon",
+      "A National Participation Certificate for every valid Round 1 submission",
+      "A National Round 2 Qualifier Certificate for teams that reach Round 2",
+      "A National Finalist Certificate for teams that reach Round 3",
+      "A National Winner Certificate for the winning teams",
+    ],
+    sections: seriesSections("2026-11-02T10:00:00+05:30", [
+      [0, 2],
+      [4, 7],
+      [10, 13],
+    ]),
+    faq: seriesFaq(),
+    stats: [
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Per team", value: "1–4" },
+      { label: "Rounds", value: "3" },
+    ],
+    sponsors: SERIES_SPONSORS,
+    registration: {
+      note: "Open to teams of one to four. Registration closes 2 November at 02:00 IST. The Unstop link goes here once it is live.",
+    },
+    links: [
+      { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LQXKCATzVwsCJDHOaeVCjf" },
+    ],
+    posterSeed: 9108,
+  },
+  {
+    /*
+      LIVE. November series, a week behind CodeNexus and on the same wider
+      round windows.
+    */
+    locked: false,
+    featured: true,
+    slug: "codetitans-india",
+    title: "CodeTitans India 2026",
+    kicker: "HACKATHON — 3 ROUNDS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-11-06T10:00:00+05:30",
+    endsAt: "2026-11-19T10:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A national online hackathon in three rounds: propose it, build it, finish it. Teams of one to four, with ₹30,000, paid internships and incubation for the top three.",
+    description: [
+      "CodeTitans India 2026 is a national-level online hackathon run across three rounds, from a written proposal to a product someone could use.",
+      "Each round is scored on its own published sheet, out of 100, and those sheets are on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "open innovation", "online", "national", "three rounds"],
+    teamSize: "1 to 4. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers and first-timers. Registration is open nationally.",
+    brief:
+      "Take the problem statement, build the one workflow that solves it, and finish it across three rounds.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A certificate at the level you reached — participant, Round 2 qualifier, finalist or winner",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Until Wed 4 Nov, 20:30", what: "Registration open. Form a team of one to four and join the official channel." },
+      { when: "Fri 6 Nov — Sun 8 Nov", what: "Round 1. The official PDF format goes out; the proposal and the plan are due." },
+      { when: "Tue 10 Nov — Fri 13 Nov", what: "Round 2. Turn the proposal into a product whose central workflow runs." },
+      { when: "Mon 16 Nov — Thu 19 Nov", what: "Round 3. Finish it — including the three improvements you named." },
+      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: seriesJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development support for the top three teams",
+      "A complimentary .XYZ domain for every participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption Labs credits for every eligible participant",
+      "$100 in Agentverse credits for every eligible participant",
+      "100+ reward recipients across the hackathon",
+      "A National Participation Certificate for every valid Round 1 submission",
+      "A National Round 2 Qualifier Certificate for teams that reach Round 2",
+      "A National Finalist Certificate for teams that reach Round 3",
+      "A National Winner Certificate for the winning teams",
+    ],
+    sections: seriesSections("2026-11-06T10:00:00+05:30", [
+      [0, 2],
+      [4, 7],
+      [10, 13],
+    ]),
+    faq: seriesFaq(),
+    stats: [
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Per team", value: "1–4" },
+      { label: "Rounds", value: "3" },
+    ],
+    sponsors: SERIES_SPONSORS,
+    registration: {
+      note: "Open to teams of one to four. Registration closes 4 November at 20:30 IST. The Unstop link goes here once it is live.",
+    },
+    links: [
+      { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Lr1a3omlex7Coc4tAJ8S1C" },
+    ],
+    posterSeed: 9109,
+  },
+  {
+    /*
+      LIVE. A quiz, not a hackathon — so no rounds, no problem statement and
+      none of the series' shared blocks.
+
+      The Unstop listing gives the quiz day but not the hour (its stage times
+      read 01:10 to 01:11, which is a placeholder, not a sitting). `startsAt`
+      therefore holds a nominal time so the event sorts into the schedule,
+      and `startTimeNote` is what the page prints instead — the type exists
+      for exactly this, so an unannounced hour is never shown as confirmed.
+    */
+    locked: false,
+    featured: true,
+    slug: "codequest-quiz-india",
+    title: "CodeQuest Quiz India 2026",
+    kicker: "QUIZ — ONE SITTING",
+    format: "quiz",
+    status: "upcoming",
+    startsAt: "2026-11-09T10:00:00+05:30",
+    endsAt: "2026-11-09T23:59:00+05:30",
+    startTimeNote: "Time announced in the official group",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A national online quiz on agentic AI, full-stack engineering and emerging technology. One sitting, free to enter, with ₹30,000 shared among the top three.",
+    description: [
+      "CodeQuest Quiz India 2026 is a national online quiz for people who build. The questions span autonomous systems, the engineering behind a working product, and the technologies arriving around both.",
+      "It runs in one sitting on 9 November. Everyone who completes it properly gets a verifiable certificate, and the rewards go well beyond the top three.",
+    ],
+    forWho: "Students, developers, AI enthusiasts and anyone curious about how modern systems are built.",
+    tags: ["agentic ai", "full-stack", "open innovation", "quiz", "online", "national"],
+    teamSize: "Individual. Everyone registers and attempts on their own.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers and self-taught builders. Registration is open nationally.",
+    brief: "One sitting, three subject areas, and a leaderboard at the end of it.",
+    deliverables: [
+      "One timed attempt, submitted before the clock runs out",
+    ],
+    schedule: [
+      { when: "Until Sat 7 Nov, 15:00", what: "Registration open. Join the official channel for the joining link and the final instructions." },
+      { when: "Mon 9 Nov", what: "Quiz day. One attempt; the time is announced in the official group beforehand." },
+      { when: "After", what: "Responses validated, the leaderboard reviewed, results announced and certificates issued." },
+    ],
+    judging: [
+      { name: "Total score", detail: "The primary ranking. Everything below is used to separate people who tie." },
+      { name: "Correct answers", detail: "How many you got right across the paper." },
+      { name: "Accuracy", detail: "Right answers against attempted ones, across the whole quiz." },
+      { name: "Completion time", detail: "Used as a tie-breaker, alongside designated tie-breaker questions where needed." },
+    ],
+    rewards: [
+      "₹30,000 in prizes, shared among the top three",
+      "n8n Pro plans for the top three",
+      "A complimentary .XYZ domain for every participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption Labs credits for every eligible participant",
+      "A verifiable digital certificate for everyone who completes it properly",
+      "100+ reward recipients across prizes, challenges and giveaways",
+    ],
+    sections: [
+      {
+        kind: "columns",
+        label: "What the quiz covers",
+        intro:
+          "Three areas, weighted evenly. The recommended reading goes out in the official channel before the quiz.",
+        items: [
+          {
+            code: "01",
+            name: "Agentic AI and autonomous systems",
+            points: [
+              "How agents plan and use tools",
+              "Orchestration and multi-agent work",
+              "Keeping a human in control",
+              "Where autonomy fails in practice",
+            ],
+          },
+          {
+            code: "02",
+            name: "Full-Stack Product Engineering",
+            points: [
+              "Front end, back end and the plumbing between",
+              "APIs, services and data models",
+              "Authentication and permissions",
+              "Shipping something that stays up",
+            ],
+          },
+          {
+            code: "03",
+            name: "Open Innovation and emerging technology",
+            points: [
+              "What is arriving and what it changes",
+              "Choosing the right tool for a problem",
+              "Trade-offs people get wrong",
+              "Reading a system you did not build",
+            ],
+          },
+        ],
+      },
+      {
+        kind: "list",
+        label: "Rules",
+        items: [
+          "One attempt per person. Everyone sits it on their own.",
+          "Duplicate, manipulated or suspicious entries may be disqualified.",
+          "Finish within the official window.",
+          "Report technical problems immediately through the official support channel.",
+          "Organisers may review activity and response patterns to keep the event fair.",
+          "Breaking the rules can cost you your leaderboard position, rewards and certificate.",
+          "The organisers' decision on eligibility, ranking and disqualification is final.",
+        ],
+      },
+    ],
+    faq: [
+      { q: "Is it free?", a: "Yes. Registration costs nothing." },
+      { q: "Is this a quiz or a hackathon?", a: "A quiz, in one sitting. There is nothing to build and nothing to submit beforehand." },
+      { q: "When exactly does it start?", a: "On 9 November. The hour is announced in the official group ahead of the day, along with the joining link." },
+      { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before the quiz." },
+      { q: "Will everyone get a certificate?", a: "Everyone who registers, joins through the official link, completes and submits the quiz, follows the rules and passes the integrity checks. Registering alone does not qualify." },
+      { q: "When are results announced?", a: "After the responses are validated and the leaderboard is reviewed. Timelines are shared through the official channel." },
+    ],
+    stats: [
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Entry fee", value: "₹0" },
+      { label: "Attempts", value: "1" },
+    ],
+    sponsors: SERIES_SPONSORS,
+    registration: {
+      note: "Free to enter, individually. Registration closes 7 November at 15:00 IST. The Unstop link goes here once it is live.",
+    },
+    links: [
+      { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Kiibri82NXEDIOmNhd9URn" },
+    ],
+    posterSeed: 9110,
   },
 ];

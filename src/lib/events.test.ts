@@ -190,36 +190,58 @@ describe("events seam", () => {
     }
   });
 
-  it("dates every round from the event's own start", () => {
+  it("dates every round from the event's own start, in order, inside its window", () => {
     /*
-      The rounds sit on fixed offsets — days 1-2, 5-7 and 10-12 — but the
-      dates differ per event, which is why the block is built from startsAt
-      rather than shared as a constant. This checks the dates printed on the
-      cards are that event's, not another's.
+      The rounds used to sit on one fixed set of offsets, and this test named
+      them. CodeNexus and CodeTitans were scheduled with wider windows, so the
+      offsets are a parameter now and naming them here would fail on a
+      correct schedule.
+
+      What has to hold either way: the dates printed on a round card are that
+      event's, they run in order, and they fall inside the event's own window.
+      A round dated outside it, or Round 3 before Round 2, is the real bug.
     */
     const series = published.filter((e) =>
       e.sections?.some((sec) => sec.label === "How the three rounds run"),
     );
-    const fmt = new Intl.DateTimeFormat("en-GB", {
-      day: "numeric",
-      month: "short",
-      timeZone: "Asia/Kolkata",
-    });
-    const dayAfter = (iso: string, offset: number) => {
-      const d = new Date(iso);
-      d.setDate(d.getDate() + offset);
-      return fmt.format(d);
-    };
+    expect(series.length).toBeGreaterThanOrEqual(8);
+
+    // "2 Nov — 4 Nov" -> the two dates it names, in the event's own year.
+    const parse = (meta: string, year: number) =>
+      meta.split("—").map((part) => {
+        const d = new Date(`${part.trim()} ${year} 12:00:00 GMT+0530`);
+        expect(Number.isNaN(d.getTime()), `unparseable round date: ${part}`).toBe(false);
+        return d.getTime();
+      });
 
     for (const e of series) {
       const rounds = e.sections?.find((sec) => sec.label === "How the three rounds run");
       if (rounds?.kind !== "columns") continue;
 
-      for (const [i, [from, to]] of ([[0, 1], [4, 6], [9, 11]] as const).entries()) {
-        const meta = rounds.items[i]?.meta;
-        expect(meta, `${e.slug} round ${i + 1} has no dates`).toBeTruthy();
-        expect(meta, `${e.slug} round ${i + 1}`).toContain(dayAfter(e.startsAt, from));
-        expect(meta, `${e.slug} round ${i + 1}`).toContain(dayAfter(e.startsAt, to));
+      const start = new Date(e.startsAt);
+      const end = new Date(e.endsAt);
+      const year = Number(
+        new Intl.DateTimeFormat("en-GB", { year: "numeric", timeZone: "Asia/Kolkata" }).format(start),
+      );
+
+      let previous = 0;
+      for (const [i, item] of rounds.items.entries()) {
+        expect(item.meta, `${e.slug} round ${i + 1} has no dates`).toBeTruthy();
+        const days = parse(item.meta!, year);
+
+        for (const day of days) {
+          // Day granularity, so compare against the calendar days at each end.
+          expect(day, `${e.slug} round ${i + 1} starts before the event`).toBeGreaterThanOrEqual(
+            new Date(start).setHours(0, 0, 0, 0),
+          );
+          expect(day, `${e.slug} round ${i + 1} runs past the event`).toBeLessThanOrEqual(
+            new Date(end).setHours(23, 59, 59, 999),
+          );
+        }
+
+        expect(days[0]!, `${e.slug} round ${i + 1} ends before it begins`).toBeLessThanOrEqual(days.at(-1)!);
+        expect(days[0]!, `${e.slug} round ${i + 1} starts before round ${i}`).toBeGreaterThan(previous);
+        previous = days.at(-1)!;
       }
     }
   });
@@ -273,10 +295,16 @@ describe("events seam", () => {
       expect(round2?.points.join(" "), e.slug).toMatch(/three major improvements/i);
       expect(round2?.points.join(" "), e.slug).toMatch(/not cosmetic/i);
 
-      // Twelve calendar days: start plus eleven.
+      /*
+        Long enough to run three rounds with gaps, short enough to still be a
+        hackathon. The October events are twelve days and the November ones
+        fourteen, so this is a range rather than the single number it used to
+        be — that number failed on a correctly scheduled event.
+      */
       const days =
         (new Date(e.endsAt).getTime() - new Date(e.startsAt).getTime()) / 86_400_000;
-      expect(Math.round(days), e.slug).toBe(11);
+      expect(Math.round(days), `${e.slug} runs ${Math.round(days)} days`).toBeGreaterThanOrEqual(10);
+      expect(Math.round(days), `${e.slug} runs ${Math.round(days)} days`).toBeLessThanOrEqual(16);
     }
   });
 
