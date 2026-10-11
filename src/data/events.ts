@@ -99,6 +99,11 @@ function span(startsAt: string, fromDay: number, toDay: number): string {
  * the promise of "judged the same way" rests on.
  */
 function seriesRounds(startsAt: string): EventSection {
+  // Filtered from seriesJudging rather than written out again: one source for
+  // the criteria, so a weight cannot be right in the round and wrong in the
+  // event's own table.
+  const forRound = (n: number) =>
+    seriesJudging().filter((j) => j.round.startsWith(`Round ${n}`)).map(({ name, detail, weight }) => ({ name, detail, weight }));
   return {
   kind: "columns",
   variant: "tabs",
@@ -125,6 +130,7 @@ function seriesRounds(startsAt: string): EventSection {
         "Where the product could go after the event",
         "Team and participant details",
       ],
+      judging: forRound(1),
     },
     {
       code: "02",
@@ -141,6 +147,7 @@ function seriesRounds(startsAt: string): EventSection {
         "An explanation of anything you changed from the original proposal",
         "The three major improvements you will make in Round 3 — substantial work on the product, not cosmetic tweaks, and you are judged on delivering them",
       ],
+      judging: forRound(2),
     },
     {
       code: "03",
@@ -158,6 +165,7 @@ function seriesRounds(startsAt: string): EventSection {
         "Testing details",
         "A product roadmap and future development plan",
       ],
+      judging: forRound(3),
       note:
         "Teams selected for Round 3 pay a participation fee of \u20B9399 per team. It covers the cost of running the event \u2014 infrastructure, the time and effort of organising it, and paying the people who do that work. Registration and Rounds 1 and 2 remain free; the fee applies only once your team is selected for Round 3.",
     },

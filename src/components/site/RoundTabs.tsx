@@ -84,11 +84,41 @@ export function RoundTabs({ section }: { section: Columns }) {
       >
         <h3 className="rounds-panel-name">{item.name}</h3>
         {item.blurb && <p className="rounds-panel-blurb">{item.blurb}</p>}
-        <ul className="rounds-points">
-          {item.points.map((p) => (
-            <li key={p}>{p}</li>
-          ))}
-        </ul>
+
+        {/*
+          What the round asks for and what it is marked on, side by side.
+          Separately they were a checklist here and fifteen criteria in a
+          column much further down the page, and nobody read the second one
+          while looking at the first.
+        */}
+        <div className="rounds-split">
+          <div>
+            <p className="rounds-subhead">What you submit</p>
+            <ul className="rounds-points">
+              {item.points.map((p) => (
+                <li key={p}>{p}</li>
+              ))}
+            </ul>
+          </div>
+
+          {item.judging && item.judging.length > 0 && (
+            <div>
+              <p className="rounds-subhead">How this round is scored — out of 100</p>
+              <ul className="rounds-criteria">
+                {item.judging.map((j) => (
+                  <li key={j.name}>
+                    <p className="rounds-criterion">
+                      <span>{j.name}</span>
+                      {j.weight && <span className="rounds-weight">{j.weight}</span>}
+                    </p>
+                    <p className="rounds-criterion-detail">{j.detail}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
         {item.note && <p className="rounds-note">{item.note}</p>}
       </div>
     </div>

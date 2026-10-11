@@ -129,6 +129,9 @@ export default async function EventPage({ params }: Params) {
   // would be a link to a wall.
   const next = getAdjacentEvent(slug);
   const nextAnnounced = next && !next.locked ? next : undefined;
+
+  // Criteria tied to a round render inside that round's panel, not here.
+  const flatJudging = (event.judging ?? []).filter((j) => !j.round);
   const site = getSite();
   const hours = eventDurationHours(event.startsAt, event.endsAt);
 
@@ -485,33 +488,19 @@ export default async function EventPage({ params }: Params) {
           )}
 
           <div>
-            {event.judging && event.judging.length > 0 && (
+            {/*
+              Only the criteria that are not already attached to a round.
+
+              The series scores per round and shows each sheet inside that
+              round's panel, so repeating all fifteen here was the same
+              content twice — and as one narrow column beside a six-row
+              schedule it left half the row empty. Events that score once at
+              the end (WCC Launchpad 30, Protocol//60) still render here.
+            */}
+            {flatJudging.length > 0 && (
               <section style={{ marginBottom: "clamp(2.5rem, 6vh, 4rem)" }}>
                 <p style={{ ...monoLabel, margin: "0 0 1.4rem" }}>[ Judging ]</p>
-                {/*
-                  Grouped by round when an event scores each round separately.
-                  Order comes from the data rather than from sorting: the
-                  rounds are already in order there, and sorting by name would
-                  put "Round 10" before "Round 2" the day there is one.
-                */}
-                {[...new Set(event.judging.map((j) => j.round))].map((round) => (
-                  <div key={round ?? "all"}>
-                    {round && (
-                      <p
-                        style={{
-                          ...monoLabel,
-                          margin: "0 0 1rem",
-                          color: "var(--color-ink)",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {round} — scored out of 100
-                      </p>
-                    )}
-                    <div style={{ marginBottom: round ? "clamp(2rem, 4vh, 2.8rem)" : 0 }}>
-                {(event.judging ?? [])
-                  .filter((j) => j.round === round)
-                  .map((j) => (
+                {flatJudging.map((j) => (
                   <div key={j.name} data-reveal style={{ marginBottom: "1.2em" }}>
                     <p
                       style={{
@@ -529,9 +518,6 @@ export default async function EventPage({ params }: Params) {
                       {j.weight && <span style={monoLabel}>{j.weight}</span>}
                     </p>
                     <p style={{ margin: "0.3em 0 0", lineHeight: 1.6, maxWidth: "52ch" }}>{j.detail}</p>
-                  </div>
-                ))}
-                    </div>
                   </div>
                 ))}
               </section>

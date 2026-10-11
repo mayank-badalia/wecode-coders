@@ -41,6 +41,15 @@ export type EventSection =
         blurb?: string;
         points: string[];
         /**
+         * How this one item is scored, when scoring is per item.
+         *
+         * Lives on the round rather than only in the event's `judging` table
+         * so that opening a round shows what it asks for and what it is
+         * marked on together. Fifteen criteria in one column underneath the
+         * page was a scroll nobody finished.
+         */
+        judging?: { name: string; detail: string; weight?: string }[];
+        /**
          * A closing line after the list, set apart.
          *
          * For something that is neither a deliverable nor a date and must not
