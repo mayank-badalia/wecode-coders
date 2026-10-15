@@ -1607,7 +1607,9 @@ export const events: Event[] = [
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
-      note: "Open to teams of one to four. Registration closes 2 November at 02:00 IST. The Unstop link goes here once it is live.",
+      href: "https://unstop.com/hackathons/codenexus-india-2026-national-hackathon-wecodecoders-1764747",
+      label: "Register on Unstop",
+      note: "Open to teams of one to four. Registration closes 2 November at 02:00 IST.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LQXKCATzVwsCJDHOaeVCjf" },
@@ -1618,8 +1620,11 @@ export const events: Event[] = [
   },
   {
     /*
-      LIVE. November series, a week behind CodeNexus and on the same wider
-      round windows.
+      LIVE. November series, a few days behind CodeNexus. The round windows
+      are the ones on the Unstop listing, which prints them in New York time:
+      Round 1 is 6 Nov 10:00 to 7 Nov 18:00, Round 2 is 8 Nov to 11 Nov and
+      Round 3 is 14 Nov to 16 Nov, all IST. The listing's own summary line
+      agrees — "6th November 10am - 16th November 10am".
     */
     locked: false,
     featured: true,
@@ -1629,7 +1634,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-11-06T10:00:00+05:30",
-    endsAt: "2026-11-19T10:00:00+05:30",
+    endsAt: "2026-11-16T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1655,9 +1660,9 @@ export const events: Event[] = [
     ],
     schedule: [
       { when: "Until Wed 4 Nov, 20:30", what: "Registration open. Form a team of one to four and join the official channel." },
-      { when: "Fri 6 Nov — Sun 8 Nov", what: "Round 1. The official PDF format goes out; the proposal and the plan are due." },
-      { when: "Tue 10 Nov — Fri 13 Nov", what: "Round 2. Turn the proposal into a product whose central workflow runs." },
-      { when: "Mon 16 Nov — Thu 19 Nov", what: "Round 3. Finish it — including the three improvements you named." },
+      { when: "Fri 6 Nov — Sat 7 Nov", what: "Round 1. The official PDF format goes out; the proposal and the plan are due." },
+      { when: "Sun 8 Nov — Wed 11 Nov", what: "Round 2. Turn the proposal into a product whose central workflow runs." },
+      { when: "Sat 14 Nov — Mon 16 Nov", what: "Round 3. Finish it — including the three improvements you named." },
       { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -1677,9 +1682,9 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
     ],
     sections: seriesSections("2026-11-06T10:00:00+05:30", [
-      [0, 2],
-      [4, 7],
-      [10, 13],
+      [0, 1],
+      [2, 5],
+      [8, 10],
     ]),
     faq: seriesFaq(),
     stats: [
@@ -1689,7 +1694,9 @@ export const events: Event[] = [
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
-      note: "Open to teams of one to four. Registration closes 4 November at 20:30 IST. The Unstop link goes here once it is live.",
+      href: "https://unstop.com/hackathons/codetitans-india-2026-national-hackathon-wecodecoders-1766190",
+      label: "Register on Unstop",
+      note: "Open to teams of one to four. Registration closes 4 November at 20:30 IST.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Lr1a3omlex7Coc4tAJ8S1C" },
