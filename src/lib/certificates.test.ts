@@ -261,6 +261,25 @@ describe("the issued store", () => {
     }
   });
 
+  it("never prints a team name with a bracket left open", () => {
+    /*
+      Four people on one team typed its name four ways, and the spelling that
+      won the count was the one missing its closing parenthesis — "WE Make
+      Things (SOMETIMES" went onto three certificates before anyone read it.
+      A name is picked by how many people used it, and nobody proofreads a
+      team name, so the check belongs here rather than in the issuer.
+    */
+    for (const c of certs) {
+      if (!c.teamName) continue;
+      for (const [open, close] of [["(", ")"], ["[", "]"], ["{", "}"]] as const) {
+        expect(
+          c.teamName.split(open).length,
+          `${c.id} team name: ${c.teamName}`,
+        ).toBe(c.teamName.split(close).length);
+      }
+    }
+  });
+
   it("never prints a role label long enough to be a sentence", () => {
     /*
       The form puts its free-text answer in the same field as its checkboxes,
