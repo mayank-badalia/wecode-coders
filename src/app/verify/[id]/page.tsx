@@ -122,12 +122,25 @@ export default async function VerifyPage({ params }: Params) {
                 ["Awarded for", cert.award?.title ?? cert.event],
                 ...(cert.award?.context ? [["Part of", cert.award.context]] : []),
                 ...(cert.award?.detail ? [["Format", cert.award.detail]] : []),
-                ...(cert.award?.heldOn ? [["Held on", cert.award.heldOn]] : []),
+                ...(cert.award?.heldOn
+                  ? [[
+                      "Held on",
+                      cert.award.heldThrough && cert.award.heldThrough !== cert.award.heldOn
+                        ? `${cert.award.heldOn} to ${cert.award.heldThrough}`
+                        : cert.award.heldOn,
+                    ]]
+                  : []),
                 ["Awarded as", ROLE_COPY[cert.role] ?? cert.role],
                 ...(cert.teamName ? [["Team", cert.teamName]] : []),
                 ...(cert.teamRole
                   ? [["On the team as", cert.teamRole === "leader" ? "Team Leader" : "Team Member"]]
                   : []),
+                ...(cert.roles?.length ? [["Role on the team", cert.roles.join(", ")]] : []),
+                /*
+                  In full, which is the point of the page. The sheet prints
+                  what fits on it; this is the statement that was made, and
+                  the QR on the sheet points here so the two are one record.
+                */
                 ...(cert.contribution ? [["Contribution", cert.contribution]] : []),
                 ["Issued", cert.issuedAt],
                 ["Certificate ID", cert.id],

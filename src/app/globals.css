@@ -931,7 +931,13 @@ a.detail-cta--signal:focus-visible {
 
 .cert-inner {
   position: absolute;
-  inset: 3.3em 4.2em;
+  /*
+    Tighter top and bottom than the sides. The body between the credits and
+    the footer is the only block that can grow, and every record now carries
+    a two-line citation and the holder's own contribution under it — so the
+    space comes out of the sheet margin before it comes out of the type.
+  */
+  inset: 2.7em 4.2em;
   display: flex;
   flex-direction: column;
 }
@@ -1026,7 +1032,7 @@ a.detail-cta--signal:focus-visible {
     at 1.1em of padding it overran the footer rule by 25px. Measured, not
     guessed: see the overlap probe in the commit that introduced team roles.
   */
-  padding: 0.55em 0;
+  padding: 0.25em 0;
   overflow: hidden;
 }
 
@@ -1048,7 +1054,7 @@ a.detail-cta--signal:focus-visible {
   flex-shrink: 0;
   width: 3.6em;
   height: 0.08em;
-  margin: 0.7em 0 1em;
+  margin: 0.3em 0 0.45em;
   background: var(--color-ink);
   opacity: 0.4;
 }
@@ -1058,29 +1064,29 @@ a.detail-cta--signal:focus-visible {
 }
 
 .cert-name {
-  font-size: 3.1em;
+  font-size: 2.8em;
   font-weight: 800;
   line-height: 1.04;
   letter-spacing: -0.025em;
   text-transform: uppercase;
-  margin: 0.14em 0 0.14em;
+  margin: 0.08em 0;
   max-width: 100%;
 }
 
 /* Four- and five-word names are real in this data; they step down, not crop. */
 .cert-name[data-length="long"] {
-  font-size: 2.25em;
+  font-size: 2.1em;
 }
 
 .cert-name[data-length="xlong"] {
-  font-size: 1.8em;
+  font-size: 1.72em;
 }
 
 .cert-lead {
   font-size: 0.86em;
-  line-height: 1.5;
+  line-height: 1.25;
   color: var(--color-ink-60);
-  margin: 0 0 0.45em;
+  margin: 0 0 0.3em;
   max-width: 34em;
 }
 
@@ -1109,15 +1115,15 @@ a.detail-cta--signal:focus-visible {
 
 .cert-event-sub {
   color: var(--color-ink-60);
-  margin-top: 0.75em;
+  margin-top: 0.5em;
 }
 
 .cert-citation {
   font-size: 0.86em;
-  line-height: 1.6;
-  max-width: 34em;
+  line-height: 1.5;
+  max-width: 36em;
   color: var(--color-ink-60);
-  margin: 1em 0 0;
+  margin: 0.65em 0 0;
 }
 
 .cert-citation strong {
@@ -1134,12 +1140,19 @@ a.detail-cta--signal:focus-visible {
   in the data instead, by a test, so nothing reaches this rule too long to
   sit on one line.
 */
+/*
+  The holder's own account of what they built, set as a quieter register
+  than the citation above it — smaller, italic, on a wider measure, so the
+  two read as statement and evidence rather than as one paragraph that
+  changed its mind. The measure and the size are what CONTRIBUTION_LINE_LIMIT
+  is derived from; changing either without re-measuring clips the footer.
+*/
 .cert-contribution {
-  font-size: 0.78em;
-  line-height: 1.5;
-  max-width: 36em;
+  font-size: 0.72em;
+  line-height: 1.38;
+  max-width: 40em;
   color: var(--color-ink-60);
-  margin: 0.55em 0 0;
+  margin: 0.5em 0 0;
   font-style: italic;
 }
 

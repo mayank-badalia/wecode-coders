@@ -106,8 +106,20 @@ const NOT_A_PERSON = /hackathon|competition|event|project|team|repo|user|company
 const iName = findCol("candidate's name", "full name", "name");
 const iEmail = findCol("candidate's email", "email address", "email");
 const iTeam = header.findIndex((h) => clean(h) === "team name");
-// Optional. "leader" or "member" — what the holder's own submission said.
-const iTeamRole = header.findIndex((h) => clean(h) === "team role");
+/*
+  Optional. "leader" or "member" — what the holder's own submission said.
+
+  Two spellings because two sources ask it differently: a prepared sheet has
+  a "Team Role" column, and the Google Form asks it as a question whose
+  answers are the words "Team Leader" and "Team Member".
+*/
+const iTeamRole = header.findIndex(
+  (h) => clean(h) === "team role" || clean(h).startsWith("are you the team leader"),
+);
+// Optional. The craft the holder was on, semicolon-joined by the form.
+const iRoles = header.findIndex((h) => clean(h).startsWith("your role"));
+// Optional. The holder's own account of what they built, stored whole.
+const iContribution = header.findIndex((h) => clean(h).startsWith("what did you personally build"));
 if (iName === -1 || iEmail === -1) {
   console.error(`Could not find name and email columns. Header was:\n  ${header.join("\n  ")}`);
   process.exit(1);
@@ -115,6 +127,9 @@ if (iName === -1 || iEmail === -1) {
 console.log(`name column      ${header[iName]}`);
 console.log(`email column     ${header[iEmail]}`);
 console.log(`team column      ${iTeam === -1 ? "(none)" : header[iTeam]}`);
+console.log(`team role column ${iTeamRole === -1 ? "(none)" : header[iTeamRole]}`);
+console.log(`roles column     ${iRoles === -1 ? "(none)" : header[iRoles]}`);
+console.log(`contribution     ${iContribution === -1 ? "(none)" : header[iContribution]}`);
 
 let award = null;
 if (awardPath) {
@@ -133,6 +148,40 @@ const existing = existsSync(storePath) ? JSON.parse(readFileSync(storePath, "utf
 const byEmail = new Map(existing.map((c) => [String(c.email ?? "").toLowerCase(), c]));
 const usedIds = new Set(existing.map((c) => c.id));
 
+/*
+  One spelling of each team name, shared by everyone on it.
+
+  The form asks for the name in capitals and gets "CODE CRAFTERS", "Code
+  Crafters" and "Code crafters" from three people on the same team. Left
+  alone, teammates hold certificates that name their team differently and
+  the verify page makes them look like three teams. The spelling the most
+  people used wins, ties going to whoever submitted first.
+*/
+/*
+  Spacing is not part of a team's identity either: the same four people
+  submitted "T7 THUNDERSTORM" and "T7THUNDERSTORM", "SHE CODES" and
+  "SHECODES". Letters and digits only, so the key sees the name and not the
+  typing.
+*/
+const teamKey = (name) => name.toUpperCase().replace(/[^A-Z0-9]+/g, "");
+const teamCanonical = new Map();
+if (iTeam !== -1) {
+  const tally = new Map();
+  for (const r of dataRows) {
+    const raw = (r[iTeam] ?? "").replace(/\s+/g, " ").trim();
+    if (!raw) continue;
+    const key = teamKey(raw);
+    if (!tally.has(key)) tally.set(key, new Map());
+    const counts = tally.get(key);
+    counts.set(raw, (counts.get(raw) ?? 0) + 1);
+  }
+  for (const [key, counts] of tally) {
+    teamCanonical.set(key, [...counts].sort((a, b) => b[1] - a[1])[0][0]);
+  }
+  const split = [...tally.values()].filter((c) => c.size > 1).length;
+  if (split) console.log(`team spellings   ${split} team(s) submitted under more than one spelling`);
+}
+
 const issuedAt = new Date().toISOString().slice(0, 10);
 const added = [];
 const skipped = [];
@@ -147,15 +196,38 @@ for (const r of dataRows) {
   do { id = generateCertificateId(prefix); } while (usedIds.has(id));
   usedIds.add(id);
 
-  const team = iTeam === -1 ? "" : (r[iTeam] ?? "").trim();
-  const rawTeamRole = iTeamRole === -1 ? "" : (r[iTeamRole] ?? "").trim().toLowerCase();
+  const rawTeam = iTeam === -1 ? "" : (r[iTeam] ?? "").replace(/\s+/g, " ").trim();
+  const team = rawTeam ? teamCanonical.get(teamKey(rawTeam)) ?? rawTeam : "";
+
+  // "Team Leader" / "Team Member" from the form, "leader" / "member" from a
+  // prepared sheet. Anything else is a column that is not what we think it is.
+  const teamRoleRaw = iTeamRole === -1 ? "" : (r[iTeamRole] ?? "").trim().toLowerCase();
+  const rawTeamRole = teamRoleRaw.replace(/^team\s+/, "");
   if (rawTeamRole && !["leader", "member"].includes(rawTeamRole)) {
-    throw new Error(`unknown team role ${JSON.stringify(rawTeamRole)} for ${email}`);
+    throw new Error(`unknown team role ${JSON.stringify(teamRoleRaw)} for ${email}`);
   }
+
+  /*
+    Roles come back semicolon-joined from the form's checkboxes, and the
+    free-text box lands in the same field — so a "role" can be a paragraph.
+    Anything that is not a short label is dropped here rather than printed:
+    the sentence it is really saying is already in the contribution.
+  */
+  const roles = (iRoles === -1 ? "" : r[iRoles] ?? "")
+    .split(";")
+    .map((x) => x.replace(/\s+/g, " ").trim())
+    .filter((x) => x !== "" && x.length <= 34);
+
+  const contribution = (iContribution === -1 ? "" : r[iContribution] ?? "")
+    .replace(/\s+/g, " ")
+    .trim();
+
   const cert = {
     id, name, email, event: eventSlug, role, issuedAt,
     ...(team ? { teamName: team } : {}),
     ...(rawTeamRole ? { teamRole: rawTeamRole } : {}),
+    ...(roles.length ? { roles } : {}),
+    ...(contribution ? { contribution } : {}),
     ...(award ? { award } : {}),
   };
   if (!isCertificateId(id)) throw new Error(`generated an id that fails validation: ${id}`);

@@ -1,4 +1,8 @@
-import type { Certificate as CertificateRecord } from "@/lib/certificates";
+import {
+  fitContribution,
+  listRoles,
+  type Certificate as CertificateRecord,
+} from "@/lib/certificates";
 
 /*
   The certificate itself, rendered as markup rather than pictured.
@@ -17,10 +21,15 @@ import type { Certificate as CertificateRecord } from "@/lib/certificates";
   belongs to, and what they did. Everything else is set quiet around them.
 */
 
+/*
+  Non-breaking spaces: these close the citation, and "recognised as a /
+  participant." split across the last two lines reads as a typo on a document
+  somebody frames.
+*/
 const ROLE_COPY: Record<string, string> = {
-  participant: "a participant",
-  finalist: "a finalist",
-  winner: "a winner",
+  participant: "a\u00A0participant",
+  finalist: "a\u00A0finalist",
+  winner: "a\u00A0winner",
 };
 
 const TEAM_ROLE_COPY: Record<string, string> = {
@@ -67,13 +76,28 @@ function nameStep(name: string): string {
   register for the line a reader actually reads, and parsing it as UTC would
   print the day before for an evening event in India.
 */
-function heldOnLabel(iso: string): string {
-  return new Date(`${iso}T12:00:00+05:30`).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "Asia/Kolkata",
-  });
+function dayParts(iso: string) {
+  const d = new Date(`${iso}T12:00:00+05:30`);
+  const part = (opts: Intl.DateTimeFormatOptions) =>
+    d.toLocaleDateString("en-GB", { ...opts, timeZone: "Asia/Kolkata" });
+  return { day: part({ day: "numeric" }), month: part({ month: "long" }), year: part({ year: "numeric" }) };
+}
+
+/*
+  One day, or a span written the way a person would say it.
+
+  "4–5 October 2026" rather than "4 October 2026 – 5 October 2026": the parts
+  the two ends share are said once. A hackathon that crosses a month or a
+  year falls back to spelling both ends out, which is also how it is said.
+*/
+function heldOnLabel(from: string, through?: string): string {
+  const a = dayParts(from);
+  const whole = `${a.day} ${a.month} ${a.year}`;
+  if (!through || through === from) return whole;
+  const b = dayParts(through);
+  if (a.year !== b.year) return `${whole} – ${b.day} ${b.month} ${b.year}`;
+  if (a.month !== b.month) return `${a.day} ${a.month} – ${b.day} ${b.month} ${b.year}`;
+  return `${a.day}–${b.day} ${a.month} ${a.year}`;
 }
 
 export function Certificate({
@@ -86,7 +110,9 @@ export function Certificate({
   qr: string;
 }) {
   const award = cert.award;
-  const heldOn = award?.heldOn ? heldOnLabel(award.heldOn) : null;
+  const heldOn = award?.heldOn ? heldOnLabel(award.heldOn, award.heldThrough) : null;
+  const roles = (cert.roles ?? []).filter((r) => r.trim() !== "");
+  const printedContribution = cert.contribution ? fitContribution(cert.contribution) : null;
 
   return (
     <div className="cert-stage">
@@ -161,6 +187,19 @@ export function Certificate({
                   ,{" "}
                 </>
               ) : null}
+              {/*
+                The craft, named before the dates.
+
+                It belongs next to the seat on the team rather than down with
+                the contribution: "team leader, on backend and AI / ML" is one
+                fact about the holder said in one breath, and splitting the two
+                halves across the sheet made the reader assemble it themselves.
+              */}
+              {roles.length > 0 ? (
+                <>
+                  on <strong>{listRoles(roles)}</strong>,{" "}
+                </>
+              ) : null}
               {heldOn ? <>held on {heldOn}, </> : null}
               and is recognised as <strong>{ROLE_COPY[cert.role] ?? cert.role}</strong>.
             </p>
@@ -170,8 +209,8 @@ export function Certificate({
               says the same thing about the member who built the product and
               the member who watched.
             */}
-            {cert.contribution && (
-              <p className="cert-contribution">{cert.contribution}</p>
+            {printedContribution && (
+              <p className="cert-contribution">{printedContribution}</p>
             )}
           </div>
 

@@ -6,6 +6,8 @@ import {
   isCertificateId,
   normaliseName,
   allCertificates,
+  fitContribution,
+  CONTRIBUTION_LINE_LIMIT,
 } from "./certificates";
 import { events } from "@/data/events";
 
@@ -210,21 +212,93 @@ describe("the issued store", () => {
     }
   });
 
-  it("keeps a contribution short enough to print on one line", () => {
+  it("prints a contribution that fits the sheet without cutting a word in half", () => {
     /*
-      The contribution is set on the sheet in one line of italic at 0.78em
-      inside a 36em measure, which holds about 75 characters. The first
-      version clipped anything longer with an ellipsis: it fitted, but it cut
-      words in half and hid the work it exists to record. The line wraps now,
-      and length is capped here instead so nothing arrives too long for it.
+      The record keeps the whole statement — it is the only copy, and /verify
+      shows it in full — so the cap is on what gets printed, not on what gets
+      stored. An earlier version capped the stored value instead and would
+      have thrown away most of every 400-character submission.
+
+      Mid-word cuts are the thing being guarded. The first implementation
+      sliced at the character limit and printed "integrat…" on a document
+      somebody shows an employer.
     */
-    const LIMIT = 70;
     for (const c of certs) {
       if (!c.contribution) continue;
+      const printed = fitContribution(c.contribution);
+      // null is the deliberate "too thin to set" case, checked separately.
+      if (printed === null) continue;
+      expect(printed.length, `${c.id}: ${printed}`).toBeLessThanOrEqual(
+        CONTRIBUTION_LINE_LIMIT + 1,
+      );
+      if (printed.endsWith("…")) {
+        // Whatever precedes the mark has to be a word the holder wrote.
+        const stem = printed.slice(0, -1);
+        const whole = c.contribution.replace(/\s+/g, " ").trim();
+        expect(whole.startsWith(stem), `${c.id}: ${printed}`).toBe(true);
+        // The character the cut landed on must not be part of a word, or the
+        // holder's "integration" has been printed as "integrat".
+        expect(whole[stem.length], `${c.id} cut mid-word: ${printed}`).not.toMatch(/[\p{L}\p{N}]/u);
+      } else {
+        expect(printed).toBe(c.contribution.replace(/\s+/g, " ").trim().slice(0, printed.length));
+      }
+    }
+  });
+
+  it("sets a contribution only when it is a statement, not a tag", () => {
+    /*
+      "AI" and "Research" are real answers to "what did YOU personally build".
+      One italic word under the citation reads as a layout fault, so the sheet
+      leaves it off — the record still carries it, and /verify still shows it.
+    */
+    for (const c of certs) {
+      if (!c.contribution) continue;
+      const printed = fitContribution(c.contribution);
+      const words = c.contribution.replace(/\s+/g, " ").trim().split(" ").length;
+      expect(printed === null, `${c.id}: ${JSON.stringify(c.contribution)}`).toBe(
+        c.contribution.trim().length < 12 || words < 2,
+      );
+    }
+  });
+
+  it("never prints a role label long enough to be a sentence", () => {
+    /*
+      The form puts its free-text answer in the same field as its checkboxes,
+      so "role" can arrive as a 200-character paragraph. Those belong in the
+      contribution; on the citation line they run the sheet off its own page.
+    */
+    for (const c of certs) {
+      for (const r of c.roles ?? []) {
+        expect(r.length, `${c.id} role: ${r}`).toBeLessThanOrEqual(34);
+        expect(r.trim()).toBe(r);
+      }
+    }
+  });
+
+  it("gives everyone on a team the same spelling of its name", () => {
+    /*
+      Three people on CODE CRAFTERS submitted it three ways. Certificates that
+      name the same team differently make it look like three teams, and the
+      verify page has no way to tell a reader otherwise.
+    */
+    const byKey = new Map<string, Map<string, string[]>>();
+    for (const c of certs) {
+      if (!c.teamName) continue;
+      /*
+        Keyed on the award, not the event slug: WCC Launchpad 30 ran a
+        pre-hackathon under the same slug, and a team of the same name in
+        both is two entries, not one record spelled two ways.
+      */
+      const key = `${c.award?.title ?? c.event}|${c.teamName.toUpperCase().replace(/[^A-Z0-9]+/g, "")}`;
+      if (!byKey.has(key)) byKey.set(key, new Map());
+      const spellings = byKey.get(key)!;
+      spellings.set(c.teamName, [...(spellings.get(c.teamName) ?? []), c.id]);
+    }
+    for (const [key, spellings] of byKey) {
       expect(
-        c.contribution.length,
-        `${c.id} contribution is ${c.contribution.length} chars: ${c.contribution}`,
-      ).toBeLessThanOrEqual(LIMIT);
+        spellings.size,
+        `${key} is spelled ${spellings.size} ways: ${[...spellings].map(([s, ids]) => `${s} (${ids.join(", ")})`).join(" / ")}`,
+      ).toBe(1);
     }
   });
 

@@ -35,6 +35,16 @@ export type Certificate = {
   */
   teamRole?: "leader" | "member";
   /*
+    The craft the holder was responsible for, as they declared it.
+
+    Short and structured, which is what lets it sit on the sheet whole: the
+    submission form offers a fixed set (Backend, Frontend, AI / ML, Design /
+    UI-UX, Product / Research, Presentation / Demo) and a free text box, so
+    most records hold one to three of those words. It answers "what were you
+    on the team for", which the contribution below then evidences.
+  */
+  roles?: string[];
+  /*
     What this holder actually did, in their own words from their submission.
 
     A team certificate that names only the team is worth the same to every
@@ -43,8 +53,10 @@ export type Certificate = {
     and the part they built, which is what makes this printable — and what
     makes the certificate worth something to the person holding it.
 
-    Kept short on purpose: it is set as one line on the sheet, and the full
-    text belongs on the verify page.
+    Stored whole. The sheet has room for a few lines and trims what will not
+    fit (see CONTRIBUTION_LINE_LIMIT), but the record keeps every word the
+    holder wrote so /verify shows the full statement the trim came from.
+    Truncating on the way in would destroy the only copy.
   */
   contribution?: string;
   /*
@@ -79,6 +91,14 @@ export type Certificate = {
       like they did the work on a day they did not.
     */
     heldOn?: string;
+    /*
+      The closing day, when the thing ran across more than one.
+
+      A 36-hour hackathon that started on a Saturday and finished on a Sunday
+      is not something that happened "on 4 October". Without this the sheet
+      has to pick one of the two days and silently drop the other.
+    */
+    heldThrough?: string;
   };
 };
 
@@ -113,6 +133,70 @@ export const CERTIFICATE_ID_PATTERN = new RegExp(
 /** Cheap shape check before touching the store — and it rejects path tricks. */
 export const isCertificateId = (value: string) =>
   CERTIFICATE_ID_PATTERN.test(value.trim().toUpperCase());
+
+/* ------------------------------------------------ printing a record */
+
+/*
+  How much of a contribution the sheet can hold.
+
+  It is set at 0.78em inside a 36em measure, which is about 75 characters a
+  line, and there is room for three of them before the footer rule starts
+  moving. Submissions run to 2,380 characters, so something has to give: the
+  record keeps every word (the verify page prints it in full, and the QR on
+  the sheet points there), and only the printed copy is cut.
+*/
+export const CONTRIBUTION_LINE_LIMIT = 150;
+
+/*
+  "Backend, Frontend and AI / ML" — a list, not a dump of the raw field.
+
+  The form returns them semicolon-joined, which on a document reads as
+  machine output. Beyond three the tail is dropped rather than running the
+  citation onto another line: the full set is on the verify page.
+*/
+export function listRoles(roles: string[]): string {
+  const shown = roles.slice(0, 3);
+  if (shown.length === 1) return shown[0]!;
+  return `${shown.slice(0, -1).join(", ")} and ${shown[shown.length - 1]}`;
+}
+
+/*
+  Cut on a boundary a reader recognises, never mid-word.
+
+  A sentence that ends inside the limit is the cleanest cut there is — it
+  reads as the whole statement rather than as something interrupted, so no
+  ellipsis is needed. Failing that it falls back to the last word boundary
+  and marks the cut, because a certificate that silently stops mid-thought
+  is worse than one that says there is more to read.
+*/
+export function fitContribution(text: string): string | null {
+  const clean = text.replace(/\s+/g, " ").trim();
+
+  /*
+    A tag is not a statement. Two people answered "what did YOU personally
+    build" with "AI" and "Research", and one italic word floating under the
+    citation reads as a layout accident rather than as their work. The answer
+    is still on the verify page; it just is not set on the sheet.
+  */
+  if (clean.length < 12 || clean.split(" ").length < 2) return null;
+
+  if (clean.length <= CONTRIBUTION_LINE_LIMIT) return clean;
+
+  const head = clean.slice(0, CONTRIBUTION_LINE_LIMIT + 1);
+
+  // The last sentence that ends inside the limit, if one gets far enough in
+  // to still be worth reading. Half the limit is the floor: "AI." standing
+  // alone where 200 more characters follow is a worse cut than a trimmed one.
+  let sentence = -1;
+  for (let i = 0; i < head.length - 1; i++) {
+    if (".!?".includes(head[i]!) && /\s/.test(head[i + 1]!)) sentence = i;
+  }
+  if (sentence >= CONTRIBUTION_LINE_LIMIT * 0.5) return head.slice(0, sentence + 1);
+
+  const word = head.lastIndexOf(" ");
+  const cut = head.slice(0, word > 0 ? word : CONTRIBUTION_LINE_LIMIT);
+  return `${cut.replace(/[,;:\u2013\u2014-]+$/, "")}…`;
+}
 
 /* ---------------------------------------------------------------- names */
 
@@ -168,6 +252,7 @@ import preForge48 from "@/data/certificates/wcc-forge-48-pre-hackathon.json";
 import preTechCircuit from "@/data/certificates/tech-circuit-pre-hackathon.json";
 import preCodeAxis from "@/data/certificates/code-axis-pre-hackathon.json";
 import preInkloomUnnamed from "@/data/certificates/inkloom-pre-hackathon.json";
+import launchpad30 from "@/data/certificates/wcc-launchpad-30.json";
 
 /*
   Imported statically rather than read from disk so the verify page can be
@@ -186,6 +271,10 @@ import preInkloomUnnamed from "@/data/certificates/inkloom-pre-hackathon.json";
 */
 const STORES: Record<string, Certificate[]> = {
   "protocol-60": quizProtocol60 as Certificate[],
+  // The hackathon itself, not the pre-hackathon below it: every member
+  // submitted their own entry, so these are the first records carrying the
+  // holder's own role and what they personally built.
+  "wcc-launchpad-30": launchpad30 as Certificate[],
   "protocol-60-pre-quiz": quizProtocol60Pre as Certificate[],
   // Four Inkloom-sponsored pre-hackathons, one store each. Same shape as the
   // pre-quiz: the award is not the event it ran under, and a person can hold
