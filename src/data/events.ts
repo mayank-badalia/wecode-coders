@@ -969,7 +969,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
-    endsAt: "2026-10-31T10:00:00+05:30",
+    endsAt: "2026-10-30T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1001,10 +1001,9 @@ export const events: Event[] = [
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
-      { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official channel." },
-      { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
-      { when: "Sat 24 Oct — Mon 26 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
-      { when: "Thu 29 Oct — Sat 31 Oct", what: "Round 3. Three days to finish it — including the three improvements you named." },
+      { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; the idea and the plan are due by 18:00 on the 21st." },
+      { when: "Thu 22 Oct — Sun 25 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
+      { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Finish it — including the three improvements you named." },
       { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -1021,7 +1020,11 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-20T10:00:00+05:30"),
+    sections: seriesSections("2026-10-20T10:00:00+05:30", [
+      [0, 1],
+      [2, 5],
+      [8, 10],
+    ]),
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
@@ -1050,7 +1053,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
-    endsAt: "2026-10-31T10:00:00+05:30",
+    endsAt: "2026-10-30T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1082,10 +1085,9 @@ export const events: Event[] = [
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
-      { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to six and join the official channel." },
-      { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
-      { when: "Sat 24 Oct — Mon 26 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
-      { when: "Thu 29 Oct — Sat 31 Oct", what: "Round 3. Three days to finish it — including the three improvements you named." },
+      { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; the idea and the plan are due by 18:00 on the 21st." },
+      { when: "Thu 22 Oct — Sun 25 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
+      { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Finish it — including the three improvements you named." },
       { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -1102,7 +1104,11 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-20T10:00:00+05:30"),
+    sections: seriesSections("2026-10-20T10:00:00+05:30", [
+      [0, 1],
+      [2, 5],
+      [8, 10],
+    ]),
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
@@ -1131,7 +1137,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
-    endsAt: "2026-10-31T10:00:00+05:30",
+    endsAt: "2026-10-30T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1163,10 +1169,9 @@ export const events: Event[] = [
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
-      { when: "Until Mon 19 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official channel." },
-      { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
-      { when: "Sat 24 Oct — Mon 26 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
-      { when: "Thu 29 Oct — Sat 31 Oct", what: "Round 3. Three days to finish it — including the three improvements you named." },
+      { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; the idea and the plan are due by 18:00 on the 21st." },
+      { when: "Thu 22 Oct — Sun 25 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
+      { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Finish it — including the three improvements you named." },
       { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -1183,7 +1188,11 @@ export const events: Event[] = [
       "A National Winner Certificate for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-20T10:00:00+05:30"),
+    sections: seriesSections("2026-10-20T10:00:00+05:30", [
+      [0, 1],
+      [2, 5],
+      [8, 10],
+    ]),
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
