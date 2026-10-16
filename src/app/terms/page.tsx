@@ -127,10 +127,6 @@ const SECTIONS: Section[] = [
         kind: "p",
         text: "Fraudulent disputes or knowingly false chargebacks may lead to disqualification, exclusion from future events and submission of relevant records to the payment provider or appropriate authority.",
       },
-      {
-        kind: "p",
-        text: "Nothing in these Terms restricts any right that cannot legally be waived.",
-      },
     ],
   },
   {
@@ -160,9 +156,10 @@ const SECTIONS: Section[] = [
         items: [
           "Official numerical rankings will be awarded and announced only for the top three eligible teams unless additional positions are expressly announced.",
           "Teams outside the top three will not receive an official numerical rank.",
-          "We Code Coders may announce finalists, challenge winners or special mentions without assigning them an overall rank.",
           "Individual scores, judging sheets, internal notes, comparative rankings and detailed scoring breakdowns will not be provided.",
           "Participants cannot demand personal feedback, re-evaluation, another presentation opportunity or comparison with another team.",
+          "Participants cannot demand a winning team’s project, code, repository, submission, presentation or demonstration material. It is shared only with that team’s consent, and We Code Coders will not release it on request.",
+          "The personal details of winners are not published or passed on. The announcement carries the team name only, and participant names, contact details, institution, photographs and handles are released only where the team concerned has consented.",
           "Judges may consider the announced criteria together with originality, completion, eligibility, rule compliance and verification of claims.",
           "The judges’ decision is final, except where the organisers identify a clear administrative error, conflict of interest, plagiarism, fraud or rule violation.",
           "Payment does not influence judging and does not create a right to qualify or win.",
@@ -214,6 +211,8 @@ const SECTIONS: Section[] = [
         kind: "clauses",
         items: [
           "We Code Coders may reasonably change schedules, round structures, submission methods, judging arrangements, communication channels or event tools when operationally necessary.",
+          "Where a communication channel, group or event tool is changed, the new link is sent by email to every registered participant at the address given during registration, and joining it is the participant’s own responsibility.",
+          "Missing an announcement because a new channel was not joined, or because the registered email address is wrong or unmonitored, is not a ground for an extension, a re-evaluation or a refund.",
           "Reasonable changes will not automatically create a right to a refund.",
           "Material changes will be announced through an official event channel.",
           "The organisers may extend a deadline, reopen submissions or provide an alternative method when a widespread organiser-controlled platform failure occurs.",
@@ -231,6 +230,8 @@ const SECTIONS: Section[] = [
         kind: "clauses",
         items: [
           "Participants must communicate respectfully with organisers, judges, volunteers, sponsors and other participants.",
+          "A participation fee covers the cost of running the event. It does not buy the organisers, their time or their attention, and it does not entitle anyone to priority treatment, instant replies or special consideration.",
+          "Allow 24 hours for a reply to a genuine query raised through the official support channel. Repeated messages, tagging, calling or escalating inside that window will not produce a faster answer.",
           "Threats, harassment, abusive language, discrimination, spam, impersonation, deliberate disruption or disclosure of another person’s private information may result in removal or disqualification without refund.",
           "Genuine questions and complaints must be submitted through the official support channel.",
           "Messages sent to personal accounts, unrelated groups or unofficial contacts may not be treated as formal complaints.",
