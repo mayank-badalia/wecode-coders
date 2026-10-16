@@ -159,7 +159,7 @@ const SECTIONS: Section[] = [
           "Individual scores, judging sheets, internal notes, comparative rankings and detailed scoring breakdowns will not be provided.",
           "Participants cannot demand personal feedback, re-evaluation, another presentation opportunity or comparison with another team.",
           "Participants cannot demand a winning team’s project, code, repository, submission, presentation or demonstration material. It is shared only with that team’s consent, and We Code Coders will not release it on request.",
-          "The personal details of winners are not published or passed on. The announcement carries the team name only, and participant names, contact details, institution, photographs and handles are released only where the team concerned has consented.",
+          "The personal details of winners are not published or passed on. The announcement carries the team name only.",
           "Judges may consider the announced criteria together with originality, completion, eligibility, rule compliance and verification of claims.",
           "The judges’ decision is final, except where the organisers identify a clear administrative error, conflict of interest, plagiarism, fraud or rule violation.",
           "Payment does not influence judging and does not create a right to qualify or win.",
