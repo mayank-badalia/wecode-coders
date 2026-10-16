@@ -117,7 +117,6 @@ const SECTIONS: Section[] = [
           "We Code Coders cancels the paid event or round without providing an equivalent alternative.",
           "The same payment is demonstrably charged more than once.",
           "A payment is debited but recorded as failed and requires reversal through the payment provider.",
-          "A refund is required by applicable law or a competent authority.",
         ],
       },
       {
