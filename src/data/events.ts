@@ -357,6 +357,9 @@ const SERIES_RULES: EventSection = {
     "Judges may ask for repository access or other proof of development at any point.",
     "Organisers may remove anyone who disrupts the event or breaks community guidelines.",
     "The judges' decision is final.",
+    "Only the top three teams are announced, and only by team name. No other position, rank or placement is published.",
+    "No feedback is given. Scores, judging sheets, comparative rankings and scoring breakdowns are not shared, and re-evaluation cannot be requested.",
+    "No personal details of the winners are published without their consent. The announcement carries the team name only unless the team agrees to more.",
   ],
 };
 
@@ -1854,6 +1857,9 @@ export const events: Event[] = [
           "Organisers may review activity and response patterns to keep the event fair.",
           "Breaking the rules can cost you your leaderboard position, rewards and certificate.",
           "The organisers' decision on eligibility, ranking and disqualification is final.",
+          "Only the top three are announced, by name on the leaderboard. No other position or rank is published.",
+          "No feedback is given. Scores, answer sheets, comparative rankings and scoring breakdowns are not shared, and re-evaluation cannot be requested.",
+          "No personal details of the winners are published without their consent.",
         ],
       },
     ],
