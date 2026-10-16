@@ -135,6 +135,20 @@ export default async function EventPage({ params }: Params) {
   const site = getSite();
   const hours = eventDurationHours(event.startsAt, event.endsAt);
 
+  /*
+    Whether any round on this page charges a participation fee.
+
+    Read off the rounds themselves instead of a field on the record, so an
+    event cannot end up asking for money without linking the terms that money
+    is paid under. The quizzes and the finished events have no paid round and
+    so carry no link.
+  */
+  const hasPaidRound = (event.sections ?? []).some(
+    (section) =>
+      section.kind === "columns" &&
+      section.items.some((item) => item.note?.includes("\u20B9")),
+  );
+
   // The title sponsor is billed on its own line, above and larger than the
   // rest, so it is split off here rather than special-cased by index in JSX.
   const [titleSponsor, ...otherSponsors] = event.sponsors ?? [];
@@ -551,6 +565,53 @@ export default async function EventPage({ params }: Params) {
 
         {event.sections && event.sections.length > 0 && (
           <EventSections sections={event.sections} />
+        )}
+
+        {hasPaidRound && (
+          <section
+            style={{
+              maxWidth: "min(1680px, 92vw)",
+              margin: "0 auto",
+              padding: "clamp(2.5rem, 7vh, 4rem) clamp(1.25rem, 2vw, 2rem) 0",
+            }}
+          >
+            <div
+              data-reveal
+              style={{
+                borderTop: "1px solid var(--color-paper-2)",
+                paddingTop: "clamp(1.4rem, 3vh, 2rem)",
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "baseline",
+                justifyContent: "space-between",
+                gap: "1rem",
+              }}
+            >
+              <p style={{ margin: 0, maxWidth: "56ch", lineHeight: 1.6 }}>
+                This event has a paid round. The participation notice, refund position,
+                certificate policy and conduct rules are the same for every We Code Coders
+                event, and paying the fee means accepting them.
+              </p>
+              <TransitionLink
+                href="/terms"
+                label="Terms"
+                className="back-link"
+                style={{
+                  ...monoLabel,
+                  color: "var(--color-ink)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.6em",
+                  borderBottom: "1px solid currentColor",
+                  paddingBottom: "0.3em",
+                  minHeight: 44,
+                }}
+              >
+                Read the paid participation terms
+                <Arrow style={{ width: 15, height: 15 }} />
+              </TransitionLink>
+            </div>
+          </section>
         )}
 
         {event.faq && event.faq.length > 0 && (
