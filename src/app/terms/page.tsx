@@ -233,6 +233,8 @@ const SECTIONS: Section[] = [
           "A participation fee covers the cost of running the event. It does not buy the organisers, their time or their attention, and it does not entitle anyone to priority treatment, instant replies or special consideration.",
           "Allow 24 hours for a reply to a genuine query raised through the official support channel. Repeated messages, tagging, calling or escalating inside that window will not produce a faster answer.",
           "Threats, harassment, abusive language, discrimination, spam, impersonation, deliberate disruption or disclosure of another person’s private information may result in removal or disqualification without refund.",
+          "Participants must not ask an organiser, judge or volunteer to break a rule, waive a requirement, extend a deadline outside the published process or make an exception in their favour. A question may be asked once; a decision, once given, is not reopened by repeating the request.",
+          "Pressure, force, coercion, intimidation or threats directed at an organiser, judge, volunteer or sponsor disqualify the entire team, not only the individual responsible. Where an organiser, judge or volunteer reports feeling threatened, the team is removed from the event without refund.",
           "Genuine questions and complaints must be submitted through the official support channel.",
           "Messages sent to personal accounts, unrelated groups or unofficial contacts may not be treated as formal complaints.",
           "Participants must not publish knowingly false statements or manipulated evidence concerning the event, organisers, judges or sponsors.",
