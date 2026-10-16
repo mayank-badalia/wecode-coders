@@ -450,7 +450,7 @@ export const events: Event[] = [
     title: "WCC Launchpad 30",
     kicker: "HACKATHON — 30 HOURS",
     format: "hackathon",
-    status: "upcoming",
+    status: "past",
     startsAt: "2026-10-04T10:00:00+05:30",
     endsAt: "2026-10-05T16:00:00+05:30",
     mode: "online",
@@ -644,11 +644,6 @@ export const events: Event[] = [
         logo: "/sponsors/we-code-coders.png",
       },
     ],
-    registration: {
-      href: "https://unstop.com/p/wcc-launchpad-30-wecodecoders-1751873",
-      label: "Register on Unstop",
-      note: "Free to enter, in teams of one to four. Registration and submissions run through Unstop; joining details go out by email and the official event channel.",
-    },
     // The seed no longer composes anything — posterImage wins — but its ground
     // still tints hover states and the ring's glow, so it is chosen to land on
     // "paper", which is what the artwork is printed on.
