@@ -153,7 +153,7 @@ function seriesRounds(startsAt: string, offsets: RoundOffsets = DEFAULT_ROUNDS):
       meta: span(startsAt, offsets[1]![0], offsets[1]![1]),
       name: "Round 2 — The build",
       blurb:
-        "Three days to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not. Only 200 teams reach this round.",
+        "Three days to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not.",
       points: [
         "A link to the functioning project",
         "The source-code repository",
@@ -170,7 +170,7 @@ function seriesRounds(startsAt: string, offsets: RoundOffsets = DEFAULT_ROUNDS):
       meta: span(startsAt, offsets[2]![0], offsets[2]![1]),
       name: "Round 3 — The finish",
       blurb:
-        "Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product. Only 25 teams reach this round.",
+        "Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product.",
       points: [
         "The final working project link",
         "The final source-code repository",
