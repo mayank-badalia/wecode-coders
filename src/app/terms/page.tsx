@@ -154,9 +154,9 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
-          "Results are announced in the official event group. That announcement carries the winning team names together with a link to the project each of them built — for a hackathon, the repository, or the deployed product where the event calls for it. No participant’s personal details, and no further material from a team’s submission, are published or passed on unless that participant or team has given consent.",
-          "Every team that takes part in the final round is ranked. The group announcement carries the top three team names only; each participating team is told its own position in the email that delivers its certificate, and the certificate prints it.",
-          "By entering, a team accepts that if it finishes in the top three its team name and a link to its submitted project may be published with the results.",
+          "Results are announced in the official event group. That announcement carries the winning team names together with a link to the project each of them built. No participant’s personal details, and no further material from a team’s submission, are published or passed on unless that participant or team has given consent.",
+          "Every finalist team that takes part in Round 3 is ranked — not only the top three. The group announcement carries the top three team names only; each Round 3 finalist team is told its own position in the email that delivers its certificate, and the certificate prints it.",
+          "By entering, a team accepts that if it finishes in the top three its team name and a link to its submitted project may be published with the results — the GitHub repository for a hackathon judged on its code, or the live project URL where the event calls for a deployed product.",
           "Individual scores, judging sheets, internal notes, comparative rankings and detailed scoring breakdowns will not be provided, and participants cannot demand personal feedback, re-evaluation, another presentation opportunity or comparison with another team.",
           "Judges may consider the announced criteria together with originality, completion, eligibility, rule compliance and verification of claims.",
           "The judges’ decision is final, except where the organisers identify a clear administrative error, conflict of interest, plagiarism, fraud or rule violation.",
