@@ -390,8 +390,9 @@ const SERIES_CERTIFICATES: EventSection = {
     "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
     "Withdrawal from Round 3 does not cancel a certificate already earned through valid participation in Round 2.",
     "Each participant receives one certificate only. You are not sent a separate certificate for every round you clear — the one you are issued is upgraded to the furthest stage you completed.",
-    "Certificates are distributed within 10 days of the event ending.",
-    "Final-round results are declared one week after the hackathon ends.",
+    "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, which is why those results come back quickly.",
+    "The final round is judged by Inkloom. An outside panel reviewing every finalist takes longer, and it is what picks the strongest winner rather than the fastest one — final results are declared one week after the hackathon ends.",
+    "Certificates are distributed within 10 days of the results being announced, not from the day the event ends.",
   ],
 };
 
@@ -430,7 +431,7 @@ function seriesFaq() {
     { q: "Is deployment compulsory?", a: "From Round 2 you need a link judges can open and use. If you cannot deploy, provide a reliable executable the judges can run." },
     { q: "Are social media posts required?", a: "No. Nothing on LinkedIn, Instagram or anywhere else is part of a submission, and no video demonstration is required." },
     { q: "What certificate do I get?", a: "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you win. Clearing a round upgrades that certificate rather than adding a second one." },
-    { q: "When do certificates and final results arrive?", a: "Final-round results are declared one week after the hackathon ends, and certificates are distributed within 10 days of the event ending." },
+    { q: "Who judges, and when do results and certificates arrive?", a: "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, so those results come back quickly. The final round is judged by Inkloom — an outside panel takes longer but picks the strongest winner, and final results are declared one week after the hackathon ends. Certificates follow within 10 days of the results being announced." },
   ];
 }
 
@@ -966,7 +967,7 @@ export const events: Event[] = [
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones, along with any reused code, APIs and datasets, in your submission." },
       { q: "Can I bring an existing project?", a: "Not as it stands. The main solution has to be built during the event, and an old project resubmitted without significant new work does not qualify." },
       { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable the judges can run." },
-      { q: "When are results announced?", a: "One week after the hackathon ends, once every eligible submission has been judged. Certificates follow within 10 days of the event ending." },
+      { q: "When are results announced?", a: "Rounds 1 and 2 are judged in-house by the organising team, so those results come back quickly. The final round is judged by Inkloom, and final results are declared one week after the hackathon ends, once every eligible submission has been reviewed. Certificates follow within 10 days of the results being announced." },
       { q: "Will everyone get a certificate?", a: "Everyone who makes a valid submission holds one certificate, at the highest round they completed — Round 1 completion, Round 2 completion, national finalist or winner. Registering without submitting does not qualify, and clearing a round upgrades your certificate rather than adding a second one." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
       { q: "Are the PPO opportunities guaranteed?", a: "No. They are subject to the recruiting partner's own eligibility requirements and selection process." },
@@ -1804,7 +1805,7 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "$500 in Adaption Labs credits for every eligible participant",
-      "A verifiable digital certificate for everyone who completes it properly, one per participant, within 10 days of the quiz",
+      "A verifiable digital certificate for everyone who completes it properly, one per participant, within 10 days of the results being announced",
       "100+ reward recipients across prizes, challenges and giveaways",
     ],
     sections: [
@@ -1872,7 +1873,7 @@ export const events: Event[] = [
       { q: "Is this a quiz or a hackathon?", a: "A quiz, in one sitting. There is nothing to build and nothing to submit beforehand." },
       { q: "When exactly does it start?", a: "10:00 IST on 9 November. The joining link goes out in the official group ahead of the day." },
       { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before the quiz." },
-      { q: "Will everyone get a certificate?", a: "Everyone who registers, joins through the official link, completes and submits the quiz, follows the rules and passes the integrity checks. One certificate per participant, distributed within 10 days of the quiz. Registering alone does not qualify." },
+      { q: "Will everyone get a certificate?", a: "Everyone who registers, joins through the official link, completes and submits the quiz, follows the rules and passes the integrity checks. One certificate per participant, distributed within 10 days of the results being announced. Registering alone does not qualify." },
       { q: "When are results announced?", a: "After the responses are validated and the leaderboard is reviewed. Timelines are shared through the official channel." },
     ],
     stats: [
