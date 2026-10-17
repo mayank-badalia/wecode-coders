@@ -132,7 +132,7 @@ function seriesRounds(startsAt: string, offsets: RoundOffsets = DEFAULT_ROUNDS):
       meta: span(startsAt, offsets[0]![0], offsets[0]![1]),
       name: "Round 1 — The plan",
       blurb:
-        "Two days to make the case for what you are going to build. One PDF, on the format we provide: the problem, who has it, how you intend to solve it, what you will build and in what order. This round is the thinking — you are judged on how clear, original, feasible and promising the plan is, and the code comes in the rounds that follow.",
+        "Two days to make the case for what you are going to build. One PDF, on the format we provide: the problem, who has it, how you intend to solve it, what you will build and in what order. This round is the thinking — you are judged on how clear, original, feasible and promising the plan is, and the code comes in the rounds that follow. More than 1,000 teams are in this round and every one of them competes; 500 go through to Round 2.",
       points: [
         "Your reading of the problem statement you were given",
         "Who the users are",
@@ -153,7 +153,7 @@ function seriesRounds(startsAt: string, offsets: RoundOffsets = DEFAULT_ROUNDS):
       meta: span(startsAt, offsets[1]![0], offsets[1]![1]),
       name: "Round 2 — The build",
       blurb:
-        "Three days to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not.",
+        "Three days to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not. 500 teams reach this round, and 100 of them go through to the final.",
       points: [
         "A link to the functioning project",
         "The source-code repository",
@@ -164,13 +164,15 @@ function seriesRounds(startsAt: string, offsets: RoundOffsets = DEFAULT_ROUNDS):
         "The three major improvements you will make in Round 3 — substantial work on the product, not cosmetic tweaks, and you are judged on delivering them",
       ],
       judging: forRound(2),
+      note:
+        "If your team qualifies for Round 3 and decides not to take part, you keep a Round 2 Completion Certificate. Stopping here does not cancel what you earned — it is the only certificate you will be issued, and it is not upgraded later.",
     },
     {
       code: "03",
       meta: span(startsAt, offsets[2]![0], offsets[2]![1]),
       name: "Round 3 — The finish",
       blurb:
-        "Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product.",
+        "Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product. 100 teams reach the final round, and three of them win.",
       points: [
         "The final working project link",
         "The final source-code repository",
@@ -349,7 +351,7 @@ const SERIES_RULES: EventSection = {
     "Plagiarised, copied or misleading submissions are disqualified.",
     "Respect software licences, intellectual property and user privacy.",
     "Projects must not promote illegal, harmful or discriminatory activity.",
-    "Round 2 is limited to 200 teams and Round 3 to 25 teams. Qualification is competitive: clearing a round's requirements does not by itself carry a team into the next one.",
+    "More than 1,000 teams start in Round 1 and all of them compete. Round 2 is limited to 500 teams, Round 3 to 100, and three teams win. Qualification is competitive: clearing a round's requirements does not by itself carry a team into the next one.",
     "Everything on each round's submission list has to arrive before that round's deadline.",
     "One submission per round per team, made by the team leader. Individual members do not submit separately, and a second entry from the same team is not counted.",
     "Missing a round's deadline ends the event for that team. There is no late window.",
@@ -422,7 +424,7 @@ function seriesFaq() {
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
     { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
     { q: "What happens between rounds?", a: "Qualification updates and the instructions for the next stage go directly to the teams that qualify." },
-    { q: "How many teams get through?", a: "Round 2 is limited to 200 teams and Round 3 to 25 teams. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive." },
+    { q: "How many teams get through?", a: "More than 1,000 teams start in Round 1 and every one of them competes. 500 go through to Round 2, 100 to the final round, and three teams win. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive." },
     { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
     { q: "Do I need a working product in Round 1?", a: "No. Round 1 is one PDF on the official format — the problem, the users, the solution, the workflow, the features, the stack and the plan." },
     { q: "What are the three improvements in Round 2?", a: "At Round 2 you name the three major improvements you will make in Round 3. They have to be substantial work on the product, not cosmetic changes, and Round 3 is measured against delivering them." },
@@ -966,7 +968,7 @@ export const events: Event[] = [
       { q: "Can beginners enter?", a: "Yes. The problem statement is written so that a first project and an experienced team can both find something to build in it." },
       { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
       { q: "Does every team member have to register?", a: "Yes, individually — and everyone must use the same team name so the entries can be matched up." },
-      { q: "How many teams get through?", a: "Round 2 is limited to 200 teams and Round 3 to 25 teams. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive." },
+      { q: "How many teams get through?", a: "More than 1,000 teams start in Round 1 and every one of them competes. 500 go through to Round 2, 100 to the final round, and three teams win. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive." },
       { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones, along with any reused code, APIs and datasets, in your submission." },
       { q: "Can I bring an existing project?", a: "Not as it stands. The main solution has to be built during the event, and an old project resubmitted without significant new work does not qualify." },
