@@ -365,6 +365,8 @@ const SERIES_RULES: EventSection = {
     "Participants cannot demand personal feedback, re-evaluation, another presentation opportunity or comparison with another team.",
     "Participants cannot demand a winning team's project, code, repository, submission, presentation or demonstration material. It is shared only with that team's consent, and We Code Coders will not release it on request.",
     "The personal details of winners are not published or passed on. The announcement carries the team name only.",
+    "Results go up in the official group. The winning team names, and nothing else.",
+    "Ranks are not announced anywhere. A rank appears only on a finalist's certificate, and your team is told its rank in the email that carries the certificate.",
   ],
 };
 
@@ -385,6 +387,7 @@ const SERIES_CERTIFICATES: EventSection = {
     "Round 2 Completion Certificate — for a valid Round 2 submission.",
     "National Finalist Certificate — for finalists who make a valid Round 3 submission.",
     "Winner Certificate, naming the rank your team placed — for the winning teams.",
+    "You find out your rank when the certificate arrives. The email that carries it names the rank and the certificate prints it. Nothing about rank goes in the group — the announcement there is the winning team names and nothing more.",
     "Certificates are issued separately for each completed round. Qualification for a subsequent round does not itself create eligibility for that round's certificate.",
     "Participants who complete Round 2 but withdraw from Round 3 will remain eligible only for the Round 2 Completion Certificate.",
     "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
@@ -431,6 +434,7 @@ function seriesFaq() {
     { q: "Is deployment compulsory?", a: "From Round 2 you need a link judges can open and use. If you cannot deploy, provide a reliable executable the judges can run." },
     { q: "Are social media posts required?", a: "No. Nothing on LinkedIn, Instagram or anywhere else is part of a submission, and no video demonstration is required." },
     { q: "What certificate do I get?", a: "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you win. Clearing a round upgrades that certificate rather than adding a second one." },
+    { q: "Where are results announced?", a: "In the official group. It carries the winning team names and nothing else — no ranks, no positions, no personal details. Ranks go only to finalists, in the email that carries the certificate, and on the certificate itself." },
     { q: "Who judges, and when do results and certificates arrive?", a: "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, so those results come back quickly. The final round is judged by Inkloom — an outside panel takes longer but picks the strongest winner, and final results are declared one week after the hackathon ends. Certificates follow within 10 days of the results being announced." },
   ];
 }
@@ -967,6 +971,7 @@ export const events: Event[] = [
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones, along with any reused code, APIs and datasets, in your submission." },
       { q: "Can I bring an existing project?", a: "Not as it stands. The main solution has to be built during the event, and an old project resubmitted without significant new work does not qualify." },
       { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable the judges can run." },
+      { q: "Where are results announced?", a: "In the official group. It carries the winning team names and nothing else — no ranks, no positions, no personal details. Ranks go only to finalists, in the email that carries the certificate, and on the certificate itself." },
       { q: "When are results announced?", a: "Rounds 1 and 2 are judged in-house by the organising team, so those results come back quickly. The final round is judged by Inkloom, and final results are declared one week after the hackathon ends, once every eligible submission has been reviewed. Certificates follow within 10 days of the results being announced." },
       { q: "Will everyone get a certificate?", a: "Everyone who makes a valid submission holds one certificate, at the highest round they completed — Round 1 completion, Round 2 completion, national finalist or winner. Registering without submitting does not qualify, and clearing a round upgrades your certificate rather than adding a second one." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
@@ -1860,11 +1865,13 @@ export const events: Event[] = [
           "Pressuring, forcing, threatening or intimidating an organiser or volunteer removes you from the event. Where an organiser or volunteer reports feeling threatened, the entry is disqualified.",
           "Breaking the rules can cost you your leaderboard position, rewards and certificate.",
           "The organisers' decision on eligibility, ranking and disqualification is final.",
-          "Official rankings will be awarded and announced only for the top three eligible participants unless additional positions are expressly announced.",
+          "Official rankings will be awarded only to the top three eligible participants unless additional positions are expressly announced.",
           "Participants outside the top three will not receive an official rank.",
           "Individual scores, answer sheets, internal notes, comparative rankings and detailed scoring breakdowns will not be provided.",
           "Participants cannot demand personal feedback, re-evaluation, another attempt or comparison with another participant.",
-          "The personal details of winners are not published or passed on. The leaderboard carries the announced name only.",
+          "The personal details of winners are not published or passed on. The announcement carries the winning names only.",
+          "Results go up in the official group. The winning names, and nothing else.",
+          "Ranks are not announced anywhere. Your rank is named in the email that carries your certificate, and printed on the certificate itself.",
         ],
       },
     ],
@@ -1875,6 +1882,7 @@ export const events: Event[] = [
       { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before the quiz." },
       { q: "Will everyone get a certificate?", a: "Everyone who registers, joins through the official link, completes and submits the quiz, follows the rules and passes the integrity checks. One certificate per participant, distributed within 10 days of the results being announced. Registering alone does not qualify." },
       { q: "When are results announced?", a: "After the responses are validated and the leaderboard is reviewed. Timelines are shared through the official channel." },
+      { q: "Where are results announced?", a: "In the official group. It carries the winning names and nothing else — no ranks, no positions, no personal details. Your rank reaches you in the email that carries your certificate, and it is printed on the certificate." },
     ],
     stats: [
       { label: "Prize pool", value: "₹30,000" },
