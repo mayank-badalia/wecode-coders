@@ -332,8 +332,13 @@ function seriesJudging() {
  * They state that the checking happens and stop there. Naming the signals we
  * look at would be a checklist for defeating them, so the rule says we do not
  * discuss the method — and nothing anywhere on this site should.
+ *
+ * One detail varies: what the winners' announcement links to. The series links
+ * the repository; Forge 48 ships a deployed product, so it links that instead.
  */
-const SERIES_RULES: EventSection = {
+const seriesRules = (
+  winnerLink = "the GitHub repository of what each of them built",
+): EventSection => ({
   kind: "list",
   label: "Rules",
   numbered: true,
@@ -361,16 +366,13 @@ const SERIES_RULES: EventSection = {
     "Do not ask an organiser, judge or volunteer to break a rule, waive a requirement or make an exception in your favour. You may ask once; when the answer is no, that is the answer.",
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message. Where an organiser, judge or volunteer reports feeling threatened, the team is removed from the event without refund.",
     "The judges' decision is final.",
-    "Official numerical rankings will be awarded and announced only for the top three eligible teams unless additional positions are expressly announced.",
-    "Teams outside the top three will not receive an official numerical rank.",
-    "Individual scores, judging sheets, internal notes, comparative rankings and detailed scoring breakdowns will not be provided.",
-    "Participants cannot demand personal feedback, re-evaluation, another presentation opportunity or comparison with another team.",
-    "Participants cannot demand a winning team's project, code, repository, submission, presentation or demonstration material. It is shared only with that team's consent, and We Code Coders will not release it on request.",
-    "The personal details of winners are not published or passed on. The announcement carries the team name only.",
-    "Results go up in the official group. The winning team names, and nothing else.",
-    "Ranks are not announced anywhere. A rank appears only on a finalist's certificate, and your team is told its rank in the email that carries the certificate.",
+    "Only the top three teams are ranked, unless further positions are announced. No team outside the top three receives an official rank.",
+    `Results go up in the official group: the three winning team names, and ${winnerLink}. Nothing else goes up, and no participant's personal details are published or passed on.`,
+    "Ranks are not announced anywhere. A winning team is told its rank in the email that carries the certificate, and the certificate prints it.",
+    "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
+    "Beyond the project link published with the results, a winning team's code, submission or presentation material is not released to anyone who asks for it. It is shared only with that team's own consent.",
   ],
-};
+});
 
 /**
  * Certificates, identical across the series.
@@ -389,7 +391,7 @@ const SERIES_CERTIFICATES: EventSection = {
     "Round 2 Completion Certificate — for a valid Round 2 submission.",
     "National Finalist Certificate — for finalists who make a valid Round 3 submission.",
     "Winner Certificate, naming the rank your team placed — for the winning teams.",
-    "You find out your rank when the certificate arrives. The email that carries it names the rank and the certificate prints it. Nothing about rank goes in the group — the announcement there is the winning team names and nothing more.",
+    "You find out your rank when the certificate arrives. The email that carries it names the rank and the certificate prints it. Nothing about rank goes in the group — the announcement there is the winning team names and a link to what they built, nothing more.",
     "Certificates are issued separately for each completed round. Qualification for a subsequent round does not itself create eligibility for that round's certificate.",
     "Participants who complete Round 2 but withdraw from Round 3 will remain eligible only for the Round 2 Completion Certificate.",
     "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
@@ -411,7 +413,8 @@ const SERIES_CERTIFICATES: EventSection = {
 const seriesTrailingSections = (
   startsAt: string,
   offsets: RoundOffsets = DEFAULT_ROUNDS,
-): EventSection[] => [seriesRounds(startsAt, offsets), SERIES_RULES, SERIES_CERTIFICATES];
+  winnerLink?: string,
+): EventSection[] => [seriesRounds(startsAt, offsets), seriesRules(winnerLink), SERIES_CERTIFICATES];
 
 const seriesSections = (
   startsAt: string,
@@ -436,7 +439,7 @@ function seriesFaq() {
     { q: "Is deployment compulsory?", a: "From Round 2 you need a link judges can open and use. If you cannot deploy, provide a reliable executable the judges can run." },
     { q: "Are social media posts required?", a: "No. Nothing on LinkedIn, Instagram or anywhere else is part of a submission, and no video demonstration is required." },
     { q: "What certificate do I get?", a: "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you win. Clearing a round upgrades that certificate rather than adding a second one." },
-    { q: "Where are results announced?", a: "In the official group. It carries the winning team names and nothing else — no ranks, no positions, no personal details. Ranks go only to finalists, in the email that carries the certificate, and on the certificate itself." },
+    { q: "Where are results announced?", a: "In the official group: the three winning team names and the GitHub repository of what each of them built. Nothing else — no ranks, no positions, no personal details. A winning team is told its rank in the email that carries the certificate, and the certificate prints it." },
     { q: "Who judges, and when do results and certificates arrive?", a: "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, so those results come back quickly. The final round is judged by Inkloom — an outside panel takes longer but picks the strongest winner, and final results are declared one week after the hackathon ends. Certificates follow within 10 days of the results being announced." },
   ];
 }
@@ -955,13 +958,13 @@ export const events: Event[] = [
       "100+ reward recipients across the hackathon, giveaways and mini-challenges",
       "Special awards for exceptional projects",
       "Lovable Premium, AI tools and a .XYZ domain",
-      "T-shirts, stickers, pens and merchandise",
-      "Workshops, technical resources and community access",
-      "Winner, national finalist and round completion certificates",
-      "Your project promoted through We Code Coders and its partner communities",
     ],
     sections: [
-      ...seriesTrailingSections("2026-10-30T18:00:00+05:30"),
+      ...seriesTrailingSections(
+        "2026-10-30T18:00:00+05:30",
+        DEFAULT_ROUNDS,
+        "the live URL of what each of them built",
+      ),
     ],
     faq: [
       { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
@@ -973,7 +976,7 @@ export const events: Event[] = [
       { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones, along with any reused code, APIs and datasets, in your submission." },
       { q: "Can I bring an existing project?", a: "Not as it stands. The main solution has to be built during the event, and an old project resubmitted without significant new work does not qualify." },
       { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable the judges can run." },
-      { q: "Where are results announced?", a: "In the official group. It carries the winning team names and nothing else — no ranks, no positions, no personal details. Ranks go only to finalists, in the email that carries the certificate, and on the certificate itself." },
+      { q: "Where are results announced?", a: "In the official group: the three winning team names and the live URL of what each of them built. Nothing else — no ranks, no positions, no personal details. A winning team is told its rank in the email that carries the certificate, and the certificate prints it." },
       { q: "When are results announced?", a: "Rounds 1 and 2 are judged in-house by the organising team, so those results come back quickly. The final round is judged by Inkloom, and final results are declared one week after the hackathon ends, once every eligible submission has been reviewed. Certificates follow within 10 days of the results being announced." },
       { q: "Will everyone get a certificate?", a: "Everyone who makes a valid submission holds one certificate, at the highest round they completed — Round 1 completion, Round 2 completion, national finalist or winner. Registering without submitting does not qualify, and clearing a round upgrades your certificate rather than adding a second one." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
@@ -1867,13 +1870,10 @@ export const events: Event[] = [
           "Pressuring, forcing, threatening or intimidating an organiser or volunteer removes you from the event. Where an organiser or volunteer reports feeling threatened, the entry is disqualified.",
           "Breaking the rules can cost you your leaderboard position, rewards and certificate.",
           "The organisers' decision on eligibility, ranking and disqualification is final.",
-          "Official rankings will be awarded only to the top three eligible participants unless additional positions are expressly announced.",
-          "Participants outside the top three will not receive an official rank.",
-          "Individual scores, answer sheets, internal notes, comparative rankings and detailed scoring breakdowns will not be provided.",
-          "Participants cannot demand personal feedback, re-evaluation, another attempt or comparison with another participant.",
-          "The personal details of winners are not published or passed on. The announcement carries the winning names only.",
-          "Results go up in the official group. The winning names, and nothing else.",
+          "Only the top three are ranked, unless further positions are announced. Nobody outside the top three receives an official rank.",
+          "Results go up in the official group: the three winning names, and nothing else. No participant's personal details are published or passed on.",
           "Ranks are not announced anywhere. Your rank is named in the email that carries your certificate, and printed on the certificate itself.",
+          "Scores, answer sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second attempt.",
         ],
       },
     ],
