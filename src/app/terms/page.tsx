@@ -154,12 +154,10 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
-          "Official numerical rankings will be awarded only to the top three eligible teams unless additional positions are expressly announced. No team outside the top three will receive an official rank.",
-          "Ranks are not published. Where a rank is awarded it appears only on the winning team’s certificate, and the team is told its rank in the email that delivers that certificate.",
-          "Results are announced in the official event group. That announcement carries the winning team names and a link to the project each of them built — for a hackathon, the repository, or the deployed product where the event calls for it — and nothing else. No participant’s personal details are published or passed on.",
+          "Results are announced in the official event group. That announcement carries the winning team names together with a link to the project each of them built — for a hackathon, the repository, or the deployed product where the event calls for it. No participant’s personal details, and no further material from a team’s submission, are published or passed on unless that participant or team has given consent.",
+          "Official numerical rankings will be awarded only to the top three eligible teams unless additional positions are expressly announced. The ranks themselves are kept off the group announcement: each winning team is told its rank in the email that delivers its certificate, and the certificate prints it.",
           "By entering, a team accepts that if it finishes in the top three its team name and a link to its submitted project may be published with the results.",
           "Individual scores, judging sheets, internal notes, comparative rankings and detailed scoring breakdowns will not be provided, and participants cannot demand personal feedback, re-evaluation, another presentation opportunity or comparison with another team.",
-          "Beyond the project link published with the results, a winning team’s code, submission, presentation or demonstration material is not released. It is shared only with that team’s consent, and We Code Coders will not release it on request.",
           "Judges may consider the announced criteria together with originality, completion, eligibility, rule compliance and verification of claims.",
           "The judges’ decision is final, except where the organisers identify a clear administrative error, conflict of interest, plagiarism, fraud or rule violation.",
           "Payment does not influence judging and does not create a right to qualify or win.",
