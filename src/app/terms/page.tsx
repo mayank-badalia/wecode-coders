@@ -155,7 +155,7 @@ const SECTIONS: Section[] = [
         kind: "clauses",
         items: [
           "Results are announced in the official event group. That announcement carries the winning team names together with a link to the project each of them built — for a hackathon, the repository, or the deployed product where the event calls for it. No participant’s personal details, and no further material from a team’s submission, are published or passed on unless that participant or team has given consent.",
-          "Official numerical rankings will be awarded only to the top three eligible teams unless additional positions are expressly announced. The ranks themselves are kept off the group announcement: each winning team is told its rank in the email that delivers its certificate, and the certificate prints it.",
+          "Every team that takes part in the final round is ranked. The group announcement carries the top three team names only; each participating team is told its own position in the email that delivers its certificate, and the certificate prints it.",
           "By entering, a team accepts that if it finishes in the top three its team name and a link to its submitted project may be published with the results.",
           "Individual scores, judging sheets, internal notes, comparative rankings and detailed scoring breakdowns will not be provided, and participants cannot demand personal feedback, re-evaluation, another presentation opportunity or comparison with another team.",
           "Judges may consider the announced criteria together with originality, completion, eligibility, rule compliance and verification of claims.",
