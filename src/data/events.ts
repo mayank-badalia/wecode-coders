@@ -64,8 +64,8 @@ import type { Event, EventSection } from "@/lib/types";
  *
  * Deliberately silent about what happens in the gaps between rounds. The
  * judging intervals are internal; what an entrant needs to know is that
- * qualification updates reach the teams that qualify, and that is all this
- * says.
+ * the Round 1 and Round 2 result is emailed to every team either way,
+ * selected or not, and that is all this says.
  */
 /**
  * The dates a round covers, from the event's own start.
@@ -125,7 +125,7 @@ function seriesRounds(startsAt: string, offsets: RoundOffsets = DEFAULT_ROUNDS):
   variant: "tabs",
   label: "How the three rounds run",
   intro:
-    "Three rounds, each asking for something the last did not. The problem statement is released by the organisers one hour before the event begins, so every team starts from the same brief at the same moment. Qualification updates and the instructions for the next stage go directly to the teams that qualify, between rounds. One submission per round per team, made by the team leader — not one per member. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
+    "Three rounds, each asking for something the last did not. The problem statement is released by the organisers one hour before the event begins, so every team starts from the same brief at the same moment. Round 1 and Round 2 results are sent to every team by email, whether or not the team has been selected — you hear from us either way — and the teams that go through receive the instructions for the next stage in the same email. One submission per round per team, made by the team leader — not one per member. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
   items: [
     {
       code: "01",
@@ -395,7 +395,7 @@ const SERIES_CERTIFICATES: EventSection = {
     "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
     "Withdrawal from Round 3 does not cancel a certificate already earned through valid participation in Round 2.",
     "Each participant receives one certificate only. You are not sent a separate certificate for every round you clear — the one you are issued is upgraded to the furthest stage you completed.",
-    "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, which is why those results come back quickly.",
+    "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, which is why those results come back quickly. Every team that submitted is emailed its result for those rounds, selected or not.",
     "The final round is judged by Inkloom. An outside panel reviewing every finalist takes longer, and it is what picks the strongest winner rather than the fastest one — final results are declared one week after the hackathon ends.",
     "Certificates are distributed within 10 days of the results being announced, not from the day the event ends.",
   ],
@@ -424,7 +424,7 @@ function seriesFaq() {
   return [
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
     { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
-    { q: "What happens between rounds?", a: "Qualification updates and the instructions for the next stage go directly to the teams that qualify." },
+    { q: "What happens between rounds?", a: "Every team that submitted is emailed its result, selected or not — you do not have to guess, and you do not have to wait for a group post. The teams that go through get the instructions for the next stage in the same email." },
     { q: "How many teams get through?", a: "More than 1,000 teams start in Round 1 and every one of them competes. 500 go through to Round 2, 100 to the final round, and three teams win. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive." },
     { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
     { q: "Do I need a working product in Round 1?", a: "No. Round 1 is one PDF on the official format — the problem, the users, the solution, the workflow, the features, the stack and the plan." },
@@ -438,7 +438,7 @@ function seriesFaq() {
     { q: "Are social media posts required?", a: "No. Nothing on LinkedIn, Instagram or anywhere else is part of a submission, and no video demonstration is required." },
     { q: "What certificate do I get?", a: "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate naming where your team placed for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you win. Clearing a round upgrades that certificate rather than adding a second one." },
     { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the GitHub repository of what each of them built. Positions are not posted there. Every team that takes part in the final round is ranked, and we tell each one where it placed in the email that delivers its certificate — the certificate prints it too. Nobody's personal details are shared without their consent." },
-    { q: "Who judges, and when do results and certificates arrive?", a: "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, so those results come back quickly. The final round is judged by Inkloom — an outside panel takes longer but picks the strongest winner, and final results are declared one week after the hackathon ends. Certificates follow within 10 days of the results being announced." },
+    { q: "Who judges, and when do results and certificates arrive?", a: "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, so those results come back quickly — and every team that submitted is emailed its Round 1 and Round 2 result, whether or not it has been selected. The final round is judged by Inkloom — an outside panel takes longer but picks the strongest winner, and final results are declared one week after the hackathon ends. Certificates follow within 10 days of the results being announced." },
   ];
 }
 
@@ -946,7 +946,7 @@ export const events: Event[] = [
       { when: "Fri 30 Oct — Sat 31 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
       { when: "Tue 3 Nov — Thu 5 Nov", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
       { when: "Sun 8 Nov — Tue 10 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
-      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -975,7 +975,7 @@ export const events: Event[] = [
       { q: "Can I bring an existing project?", a: "Not as it stands. The main solution has to be built during the event, and an old project resubmitted without significant new work does not qualify." },
       { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable the judges can run." },
       { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the live URL of what each of them built. Positions are not posted there. Every team that takes part in the final round is ranked, and we tell each one where it placed in the email that delivers its certificate — the certificate prints it too. Nobody's personal details are shared without their consent." },
-      { q: "When are results announced?", a: "Rounds 1 and 2 are judged in-house by the organising team, so those results come back quickly. The final round is judged by Inkloom, and final results are declared one week after the hackathon ends, once every eligible submission has been reviewed. Certificates follow within 10 days of the results being announced." },
+      { q: "When are results announced?", a: "Rounds 1 and 2 are judged in-house by the organising team, so those results come back quickly, and every team that submitted is emailed its result for those rounds, selected or not. The final round is judged by Inkloom, and final results are declared one week after the hackathon ends, once every eligible submission has been reviewed. Certificates follow within 10 days of the results being announced." },
       { q: "Will everyone get a certificate?", a: "Everyone who makes a valid submission holds one certificate, at the highest round they completed — Round 1 completion, Round 2 completion, national finalist or winner. Registering without submitting does not qualify, and clearing a round upgrades your certificate rather than adding a second one." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
       { q: "Are the PPO opportunities guaranteed?", a: "No. They are subject to the recruiting partner's own eligibility requirements and selection process." },
@@ -1047,7 +1047,7 @@ export const events: Event[] = [
       { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; the idea and the plan are due by 18:00 on the 21st." },
       { when: "Thu 22 Oct — Sun 25 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
       { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Finish it — including the three improvements you named." },
-      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -1131,7 +1131,7 @@ export const events: Event[] = [
       { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; the idea and the plan are due by 18:00 on the 21st." },
       { when: "Thu 22 Oct — Sun 25 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
       { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Finish it — including the three improvements you named." },
-      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -1215,7 +1215,7 @@ export const events: Event[] = [
       { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; the idea and the plan are due by 18:00 on the 21st." },
       { when: "Thu 22 Oct — Sun 25 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
       { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Finish it — including the three improvements you named." },
-      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -1300,7 +1300,7 @@ export const events: Event[] = [
       { when: "Sat 24 Oct — Sun 25 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
       { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
       { when: "Mon 2 Nov — Wed 4 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
-      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -1381,7 +1381,7 @@ export const events: Event[] = [
       { when: "Sun 25 Oct — Mon 26 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
       { when: "Thu 29 Oct — Sat 31 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
       { when: "Tue 3 Nov — Thu 5 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
-      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -1462,7 +1462,7 @@ export const events: Event[] = [
       { when: "Fri 30 Oct — Sat 31 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
       { when: "Tue 3 Nov — Thu 5 Nov", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
       { when: "Sun 8 Nov — Tue 10 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
-      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -1549,7 +1549,7 @@ export const events: Event[] = [
       { when: "Wed 28 Oct — Thu 29 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
       { when: "Sun 1 Nov — Tue 3 Nov", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
       { when: "Fri 6 Nov — Sun 8 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
-      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -1628,7 +1628,7 @@ export const events: Event[] = [
       { when: "Mon 2 Nov — Wed 4 Nov", what: "Round 1. The official PDF format goes out; the proposal and the plan are due." },
       { when: "Fri 6 Nov — Mon 9 Nov", what: "Round 2. Turn the proposal into a product whose central workflow runs." },
       { when: "Thu 12 Nov — Sun 15 Nov", what: "Round 3. Finish it — including the three improvements you named." },
-      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -1715,7 +1715,7 @@ export const events: Event[] = [
       { when: "Fri 6 Nov — Sat 7 Nov", what: "Round 1. The official PDF format goes out; the proposal and the plan are due." },
       { when: "Sun 8 Nov — Wed 11 Nov", what: "Round 2. Turn the proposal into a product whose central workflow runs." },
       { when: "Sat 14 Nov — Mon 16 Nov", what: "Round 3. Finish it — including the three improvements you named." },
-      { when: "Between rounds", what: "Qualification updates and the instructions for the next stage go to the teams that qualify." },
+      { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),

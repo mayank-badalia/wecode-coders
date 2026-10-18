@@ -154,6 +154,7 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
+          "Round 1 and Round 2 outcomes are sent by email to every team that made a valid submission for that round, whether or not the team has been selected for the next round, at the address given at registration. Teams that qualify receive the instructions for the next round in the same email.",
           "Results are announced in the official event group. That announcement carries the winning team names together with a link to the project each of them built. No participant’s personal details, and no further material from a team’s submission, are published or passed on unless that participant or team has given consent.",
           "Every finalist team that takes part in Round 3 is ranked — not only the top three. The group announcement carries the top three team names only; each Round 3 finalist team is told its own position in the email that delivers its certificate, and the certificate prints it.",
           "By entering, a team accepts that if it finishes in the top three its team name and a link to its submitted project may be published with the results — the GitHub repository for a hackathon judged on its code, or the live project URL where the event calls for a deployed product.",
