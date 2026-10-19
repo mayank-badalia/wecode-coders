@@ -926,7 +926,6 @@ export const events: Event[] = [
       "agentic ai",
       "digital twins",
       "human-computer interaction",
-      "open innovation",
       "online",
       "product building",
     ],
@@ -1027,7 +1026,6 @@ export const events: Event[] = [
     tags: [
       "agentic ai",
       "full-stack",
-      "open innovation",
       "online",
       "national",
       "three rounds",
@@ -1111,7 +1109,6 @@ export const events: Event[] = [
     tags: [
       "agentic ai",
       "full-stack",
-      "open innovation",
       "online",
       "national",
       "three rounds",
@@ -1195,7 +1192,6 @@ export const events: Event[] = [
     tags: [
       "agentic ai",
       "full-stack",
-      "open innovation",
       "online",
       "national",
       "three rounds",
@@ -1279,7 +1275,6 @@ export const events: Event[] = [
     tags: [
       "agentic ai",
       "full-stack",
-      "open innovation",
       "online",
       "national",
       "three rounds",
@@ -1360,7 +1355,6 @@ export const events: Event[] = [
     tags: [
       "agentic ai",
       "full-stack",
-      "open innovation",
       "online",
       "national",
       "three rounds",
@@ -1441,7 +1435,6 @@ export const events: Event[] = [
     tags: [
       "agentic ai",
       "full-stack",
-      "open innovation",
       "online",
       "national",
       "three rounds",
@@ -1528,7 +1521,6 @@ export const events: Event[] = [
     tags: [
       "agentic ai",
       "full-stack",
-      "open innovation",
       "online",
       "national",
       "three rounds",
@@ -1611,7 +1603,7 @@ export const events: Event[] = [
     emphasis:
       "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
-    tags: ["agentic ai", "full-stack", "open innovation", "online", "national", "three rounds"],
+    tags: ["agentic ai", "full-stack", "online", "national", "three rounds"],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers and first-timers. Registration is open nationally.",
@@ -1698,7 +1690,7 @@ export const events: Event[] = [
     emphasis:
       "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
-    tags: ["agentic ai", "full-stack", "open innovation", "online", "national", "three rounds"],
+    tags: ["agentic ai", "full-stack", "online", "national", "three rounds"],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers and first-timers. Registration is open nationally.",
@@ -1788,7 +1780,7 @@ export const events: Event[] = [
       "It runs in one sitting on 9 November, starting at 10:00 IST. Everyone who completes it properly gets a verifiable certificate, and the rewards go well beyond the top three.",
     ],
     forWho: "Students, developers, AI enthusiasts and anyone curious about how modern systems are built.",
-    tags: ["agentic ai", "full-stack", "open innovation", "quiz", "online", "national"],
+    tags: ["agentic ai", "full-stack", "quiz", "online", "national"],
     teamSize: "Individual. Everyone registers and attempts on their own.",
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers and self-taught builders. Registration is open nationally.",
@@ -1845,7 +1837,7 @@ export const events: Event[] = [
           },
           {
             code: "03",
-            name: "Open Innovation and emerging technology",
+            name: "Emerging technology",
             points: [
               "What is arriving and what it changes",
               "Choosing the right tool for a problem",
