@@ -1339,8 +1339,8 @@ export const events: Event[] = [
     kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
-    startsAt: "2026-10-25T10:00:00+05:30",
-    endsAt: "2026-11-05T10:00:00+05:30",
+    startsAt: "2026-10-24T10:00:00+05:30",
+    endsAt: "2026-11-04T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1372,9 +1372,9 @@ export const events: Event[] = [
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
-      { when: "Sun 25 Oct — Mon 26 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
-      { when: "Thu 29 Oct — Sat 31 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
-      { when: "Tue 3 Nov — Thu 5 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
+      { when: "Sat 24 Oct — Sun 25 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
+      { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
+      { when: "Mon 2 Nov — Wed 4 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -1391,7 +1391,7 @@ export const events: Event[] = [
       "A Winner Certificate naming the rank, for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-25T10:00:00+05:30"),
+    sections: seriesSections("2026-10-24T10:00:00+05:30"),
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
