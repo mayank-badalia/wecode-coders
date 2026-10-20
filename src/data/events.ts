@@ -917,7 +917,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-30T18:00:00+05:30",
-    endsAt: "2026-11-10T18:00:00+05:30",
+    endsAt: "2026-11-08T18:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -951,8 +951,8 @@ export const events: Event[] = [
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Fri 30 Oct — Sat 31 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
-      { when: "Tue 3 Nov — Thu 5 Nov", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
-      { when: "Sun 8 Nov — Tue 10 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
+      { when: "Sun 1 Nov — Tue 3 Nov", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
+      { when: "Fri 6 Nov — Sun 8 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -967,7 +967,7 @@ export const events: Event[] = [
     sections: [
       ...seriesTrailingSections(
         "2026-10-30T18:00:00+05:30",
-        DEFAULT_ROUNDS,
+        COMPACT_ROUNDS,
         "the live URL of what each of them built",
       ),
     ],
