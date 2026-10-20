@@ -297,13 +297,14 @@ describe("events seam", () => {
 
       /*
         Long enough to run three rounds with gaps, short enough to still be a
-        hackathon. The October events are twelve days and the November ones
-        fourteen, so this is a range rather than the single number it used to
+        hackathon. The span varies by schedule: nine days on the compact grid,
+        where Round 2 opens the morning after Round 1 closes, up to a fortnight
+        on the widest. Hence a range rather than the single number it used to
         be — that number failed on a correctly scheduled event.
       */
       const days =
         (new Date(e.endsAt).getTime() - new Date(e.startsAt).getTime()) / 86_400_000;
-      expect(Math.round(days), `${e.slug} runs ${Math.round(days)} days`).toBeGreaterThanOrEqual(10);
+      expect(Math.round(days), `${e.slug} runs ${Math.round(days)} days`).toBeGreaterThanOrEqual(9);
       expect(Math.round(days), `${e.slug} runs ${Math.round(days)} days`).toBeLessThanOrEqual(16);
     }
   });
