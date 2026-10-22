@@ -173,12 +173,12 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
-          "Certificates are issued separately for completed rounds and are subject to all eligibility requirements.",
-          "Participants who made a valid Round 2 submission may receive a Round 2 Completion Certificate even if they later withdraw from Round 3.",
+          "Which certificates an event issues is listed in the certificates block on that event’s own page, and that list governs.",
+          "Several events issue a certificate only for the final round. Where the event page states this, Rounds 1 and 2 are qualifying rounds and carry no certificate of any kind, including for participation, and a team that is not selected for Round 3 is not issued one.",
+          "Where an event does issue round-completion certificates, a participant who made a valid Round 2 submission may receive the Round 2 Completion Certificate even if they later withdraw from Round 3, and that withdrawal does not cancel it.",
           "Qualification for Round 3 alone does not create eligibility for a Final Round or Finalist Completion Certificate.",
           "A Round 3 or Finalist Completion Certificate requires successful registration, payment and a valid final-round submission.",
           "A team that pays but withdraws or fails to submit will not receive a Round 3 Completion Certificate.",
-          "Withdrawal from Round 3 does not cancel a Round 2 certificate already earned through valid participation.",
           "Winner certificates will be issued only to the officially announced winning teams.",
           "Certificates may be withheld for invalid submissions, false information, plagiarism, misconduct, disqualification or failure to complete mandatory requirements.",
         ],

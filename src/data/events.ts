@@ -122,7 +122,11 @@ const COMPACT_ROUNDS: RoundOffsets = [
   [7, 9],
 ];
 
-function seriesRounds(startsAt: string, offsets: RoundOffsets = DEFAULT_ROUNDS): EventSection {
+function seriesRounds(
+  startsAt: string,
+  offsets: RoundOffsets = DEFAULT_ROUNDS,
+  scheme: CertificateScheme = "rounds",
+): EventSection {
   // Filtered from seriesJudging rather than written out again: one source for
   // the criteria, so a weight cannot be right in the round and wrong in the
   // event's own table.
@@ -173,7 +177,9 @@ function seriesRounds(startsAt: string, offsets: RoundOffsets = DEFAULT_ROUNDS):
       ],
       judging: forRound(2),
       note:
-        "If your team qualifies for Round 3 and decides not to take part, you keep a Round 2 Completion Certificate. Stopping here does not cancel what you earned — it is the only certificate you will be issued, and it is not upgraded later.",
+        scheme === "finalists"
+          ? "Rounds 1 and 2 are qualifying rounds and carry no certificate, including for taking part. If your team qualifies for Round 3 and decides not to take part, nothing is issued — the certificate is earned in the final round."
+          : "If your team qualifies for Round 3 and decides not to take part, you keep a Round 2 Completion Certificate. Stopping here does not cancel what you earned — it is the only certificate you will be issued, and it is not upgraded later.",
     },
     {
       code: "03",
@@ -381,33 +387,61 @@ const seriesRules = (
 });
 
 /**
- * Certificates, identical across the series.
+ * Which certificates an event issues.
  *
- * Its own block rather than four more lines in `rewards`, because what this
- * states is a rule — one certificate per participant, at the highest level
- * reached — and a rule filed among the prizes reads as a prize.
+ * "rounds" issues one certificate at the highest stage a participant reached,
+ * from Round 1 upwards. "finalists" issues one only for the final round:
+ * Rounds 1 and 2 qualify a team to go further and earn nothing in themselves.
+ *
+ * It is a per-event decision because the two schemes promise different things
+ * to the same 1,000 teams, and the promise has to be the one that event made.
  */
-const SERIES_CERTIFICATES: EventSection = {
+type CertificateScheme = "rounds" | "finalists";
+
+/**
+ * Certificates for the series.
+ *
+ * Its own block rather than more lines in `rewards`, because what this states
+ * is a rule — who is issued a certificate and who is not — and a rule filed
+ * among the prizes reads as a prize.
+ *
+ * The last three items are the same under either scheme: who judges, how fast,
+ * and when the certificate arrives.
+ */
+const seriesCertificates = (scheme: CertificateScheme = "rounds"): EventSection => ({
   kind: "list",
   label: "Certificates",
   intro:
-    "Four levels, and you hold one of them: the highest you reach. Clearing a round upgrades the certificate you will be issued rather than adding another one beside it.",
+    scheme === "finalists"
+      ? "One certificate, earned in the final round. Rounds 1 and 2 are qualifying rounds: clearing them carries your team forward, and nothing is issued for them."
+      : "Four levels, and you hold one of them: the highest you reach. Clearing a round upgrades the certificate you will be issued rather than adding another one beside it.",
   items: [
-    "Round 1 Completion Certificate — for a valid Round 1 submission.",
-    "Round 2 Completion Certificate — for a valid Round 2 submission.",
-    "National Finalist Certificate, naming where your team placed — for finalists who make a valid Round 3 submission.",
-    "Winner Certificate, naming the rank your team placed — for the winning teams.",
-    "If you took part in the final round, you find out where your team placed when the certificate arrives: the email that delivers it names your position, and the certificate prints it. The group announcement carries the top three team names and a link to what they built.",
-    "Certificates are issued separately for each completed round. Qualification for a subsequent round does not itself create eligibility for that round's certificate.",
-    "Participants who complete Round 2 but withdraw from Round 3 will remain eligible only for the Round 2 Completion Certificate.",
-    "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
-    "Withdrawal from Round 3 does not cancel a certificate already earned through valid participation in Round 2.",
-    "Each participant receives one certificate only. You are not sent a separate certificate for every round you clear — the one you are issued is upgraded to the furthest stage you completed.",
+    ...(scheme === "finalists"
+      ? [
+          "National Finalist Certificate, naming where your team placed — for finalists who make a valid Round 3 submission.",
+          "Winner Certificate, naming the rank your team placed — for the winning teams.",
+          "No certificate is issued for Round 1 or Round 2, including for taking part. A team that is not selected for the final round, or that is selected and does not take part, is not issued one.",
+          "If you took part in the final round, you find out where your team placed when the certificate arrives: the email that delivers it names your position, and the certificate prints it. The group announcement carries the top three team names and a link to what they built.",
+          "A certificate requires successful registration, payment where applicable, and a valid Round 3 submission. Qualifying for the final round does not by itself earn one.",
+          "Each participant receives one certificate only.",
+        ]
+      : [
+          "Round 1 Completion Certificate — for a valid Round 1 submission.",
+          "Round 2 Completion Certificate — for a valid Round 2 submission.",
+          "National Finalist Certificate, naming where your team placed — for finalists who make a valid Round 3 submission.",
+          "Winner Certificate, naming the rank your team placed — for the winning teams.",
+          "If you took part in the final round, you find out where your team placed when the certificate arrives: the email that delivers it names your position, and the certificate prints it. The group announcement carries the top three team names and a link to what they built.",
+          "Certificates are issued separately for each completed round. Qualification for a subsequent round does not itself create eligibility for that round's certificate.",
+          "Participants who complete Round 2 but withdraw from Round 3 will remain eligible only for the Round 2 Completion Certificate.",
+          "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
+          "Withdrawal from Round 3 does not cancel a certificate already earned through valid participation in Round 2.",
+          "Each participant receives one certificate only. You are not sent a separate certificate for every round you clear — the one you are issued is upgraded to the furthest stage you completed.",
+        ]),
     "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, which is why those results come back quickly. Every team that submitted is emailed its result for those rounds, selected or not.",
     "The final round is judged by Inkloom. An outside panel reviewing every finalist takes longer, and it is what picks the strongest winner rather than the fastest one — final results are declared one week after the hackathon ends.",
     "Certificates are distributed within 10 days of the results being announced, not from the day the event ends.",
   ],
-};
+});
 
 /** The three shared blocks, in the order they appear on a detail page. */
 /**
@@ -420,15 +454,21 @@ const seriesTrailingSections = (
   startsAt: string,
   offsets: RoundOffsets = DEFAULT_ROUNDS,
   winnerLink?: string,
-): EventSection[] => [seriesRounds(startsAt, offsets), seriesRules(winnerLink), SERIES_CERTIFICATES];
+  scheme: CertificateScheme = "rounds",
+): EventSection[] => [
+  seriesRounds(startsAt, offsets, scheme),
+  seriesRules(winnerLink),
+  seriesCertificates(scheme),
+];
 
 const seriesSections = (
   startsAt: string,
   offsets: RoundOffsets = DEFAULT_ROUNDS,
-): EventSection[] => [...seriesTrailingSections(startsAt, offsets)];
+  scheme: CertificateScheme = "rounds",
+): EventSection[] => [...seriesTrailingSections(startsAt, offsets, undefined, scheme)];
 
-/** FAQ, identical across the series. */
-function seriesFaq() {
+/** FAQ for the series. Only the certificate answer differs by scheme. */
+function seriesFaq(scheme: CertificateScheme = "rounds") {
   return [
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
     { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
@@ -444,7 +484,13 @@ function seriesFaq() {
     { q: "Can I use something I built earlier?", a: "No. The product has to be built during the event, and submissions are checked. Disclosed reusable components are fine; a finished project is not." },
     { q: "Is deployment compulsory?", a: "From Round 2 you need a link judges can open and use. If you cannot deploy, provide a reliable executable the judges can run." },
     { q: "Are social media posts required?", a: "No. Nothing on LinkedIn, Instagram or anywhere else is part of a submission, and no video demonstration is required." },
-    { q: "What certificate do I get?", a: "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate naming where your team placed for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you win. Clearing a round upgrades that certificate rather than adding a second one." },
+    {
+      q: "What certificate do I get?",
+      a:
+        scheme === "finalists"
+          ? "Only the final round earns one: a National Finalist Certificate naming where your team placed for a valid Round 3 submission, or a Winner Certificate naming your rank if you win. Rounds 1 and 2 are qualifying rounds — they carry no certificate, not even for taking part."
+          : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate naming where your team placed for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you win. Clearing a round upgrades that certificate rather than adding a second one.",
+    },
     { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the GitHub repository of what each of them built. Positions are not posted there. Every team that takes part in the final round is ranked, and we tell each one where it placed in the email that delivers its certificate — the certificate prints it too. Nobody's personal details are shared without their consent." },
     { q: "Who judges, and when do results and certificates arrive?", a: "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, so those results come back quickly — and every team that submitted is emailed its Round 1 and Round 2 result, whether or not it has been selected. The final round is judged by Inkloom — an outside panel takes longer but picks the strongest winner, and final results are declared one week after the hackathon ends. Certificates follow within 10 days of the results being announced." },
   ];
@@ -945,7 +991,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist or winner, with where your team placed",
+      "A National Finalist or Winner certificate naming where your team placed, if you reach the final round — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -969,6 +1015,7 @@ export const events: Event[] = [
         "2026-10-30T18:00:00+05:30",
         COMPACT_ROUNDS,
         "the live URL of what each of them built",
+        "finalists",
       ),
     ],
     faq: [
@@ -983,7 +1030,7 @@ export const events: Event[] = [
       { q: "Is deployment compulsory?", a: "Strongly recommended. If you cannot deploy, provide a reliable executable the judges can run." },
       { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the live URL of what each of them built. Positions are not posted there. Every team that takes part in the final round is ranked, and we tell each one where it placed in the email that delivers its certificate — the certificate prints it too. Nobody's personal details are shared without their consent." },
       { q: "When are results announced?", a: "Rounds 1 and 2 are judged in-house by the organising team, so those results come back quickly, and every team that submitted is emailed its result for those rounds, selected or not. The final round is judged by Inkloom, and final results are declared one week after the hackathon ends, once every eligible submission has been reviewed. Certificates follow within 10 days of the results being announced." },
-      { q: "Will everyone get a certificate?", a: "Everyone who makes a valid submission holds one certificate, at the highest round they completed — Round 1 completion, Round 2 completion, national finalist or winner. Registering without submitting does not qualify, and clearing a round upgrades your certificate rather than adding a second one." },
+      { q: "Will everyone get a certificate?", a: "No. The certificate is earned in the final round: a National Finalist Certificate naming where your team placed for a valid Round 3 submission, and a Winner Certificate naming the rank for the winning teams. Rounds 1 and 2 carry a team forward and nothing more — no certificate is issued for them, including for taking part." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
       { q: "Are the PPO opportunities guaranteed?", a: "No. They are subject to the recruiting partner's own eligibility requirements and selection process." },
     ],
@@ -1295,7 +1342,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist or winner, with where your team placed",
+      "A National Finalist or Winner certificate naming where your team placed, if you reach the final round — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1313,14 +1360,12 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
-      "A Round 1 Completion Certificate for every valid Round 1 submission",
-      "A Round 2 Completion Certificate for every valid Round 2 submission",
       "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS),
-    faq: seriesFaq(),
+    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, "finalists"),
+    faq: seriesFaq("finalists"),
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
@@ -1375,7 +1420,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist or winner, with where your team placed",
+      "A National Finalist or Winner certificate naming where your team placed, if you reach the final round — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1393,14 +1438,12 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
-      "A Round 1 Completion Certificate for every valid Round 1 submission",
-      "A Round 2 Completion Certificate for every valid Round 2 submission",
       "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS),
-    faq: seriesFaq(),
+    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, "finalists"),
+    faq: seriesFaq("finalists"),
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
@@ -1455,7 +1498,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist or winner, with where your team placed",
+      "A National Finalist or Winner certificate naming where your team placed, if you reach the final round — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1473,14 +1516,12 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A Round 1 Completion Certificate for every valid Round 1 submission",
-      "A Round 2 Completion Certificate for every valid Round 2 submission",
       "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-30T09:00:00+05:30", COMPACT_ROUNDS),
-    faq: seriesFaq(),
+    sections: seriesSections("2026-10-30T09:00:00+05:30", COMPACT_ROUNDS, "finalists"),
+    faq: seriesFaq("finalists"),
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
@@ -1541,7 +1582,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist or winner, with where your team placed",
+      "A National Finalist or Winner certificate naming where your team placed, if you reach the final round — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1558,14 +1599,12 @@ export const events: Event[] = [
       "Incubation and product-development support for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
-      "A Round 1 Completion Certificate for every valid Round 1 submission",
-      "A Round 2 Completion Certificate for every valid Round 2 submission",
       "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-28T10:00:00+05:30", COMPACT_ROUNDS),
-    faq: seriesFaq(),
+    sections: seriesSections("2026-10-28T10:00:00+05:30", COMPACT_ROUNDS, "finalists"),
+    faq: seriesFaq("finalists"),
     stats: [
       { label: "Per team", value: "1–4" },
       { label: "Rounds", value: "3" },
@@ -1620,7 +1659,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist or winner, with where your team placed",
+      "A National Finalist or Winner certificate naming where your team placed, if you reach the final round — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1641,13 +1680,11 @@ export const events: Event[] = [
       "$500 in Adaption Labs credits for every eligible participant",
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A Round 1 Completion Certificate for every valid Round 1 submission",
-      "A Round 2 Completion Certificate for every valid Round 2 submission",
       "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the winning teams",
     ],
-    sections: seriesSections("2026-11-02T10:00:00+05:30", COMPACT_ROUNDS),
-    faq: seriesFaq(),
+    sections: seriesSections("2026-11-02T10:00:00+05:30", COMPACT_ROUNDS, "finalists"),
+    faq: seriesFaq("finalists"),
     stats: [
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
@@ -1703,7 +1740,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist or winner, with where your team placed",
+      "A National Finalist or Winner certificate naming where your team placed, if you reach the final round — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1724,13 +1761,11 @@ export const events: Event[] = [
       "$500 in Adaption Labs credits for every eligible participant",
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A Round 1 Completion Certificate for every valid Round 1 submission",
-      "A Round 2 Completion Certificate for every valid Round 2 submission",
       "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the winning teams",
     ],
-    sections: seriesSections("2026-11-06T10:00:00+05:30", COMPACT_ROUNDS),
-    faq: seriesFaq(),
+    sections: seriesSections("2026-11-06T10:00:00+05:30", COMPACT_ROUNDS, "finalists"),
+    faq: seriesFaq("finalists"),
     stats: [
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
