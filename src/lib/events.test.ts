@@ -591,6 +591,31 @@ describe("events seam", () => {
     }
   });
 
+  it("prints the entry fee on every event that does not charge one", () => {
+    /*
+      Free was true for months and said only in the rules, the certificates
+      block and the FAQ — three places a reader reaches by scrolling. The
+      question arrives before any of them, so it belongs in the stats strip at
+      the top of the page, and this is what keeps it there.
+
+      Scoped to the live events that take no fee: the three-round five charge
+      for Round 3 and are excluded, and a finished event is not recruiting.
+    */
+    const free = published.filter(
+      (e) => e.status !== "past" && !threeRound.includes(e),
+    );
+    expect(free.length).toBeGreaterThanOrEqual(10);
+
+    for (const e of free) {
+      const fee = e.stats?.find((st) => st.label === "Entry fee");
+      expect(fee?.value, `${e.slug} does not print its entry fee`).toBe("Free");
+      // And the line under the register button opens with it.
+      expect(e.registration?.note ?? "", `${e.slug}'s note does not lead with it`).toMatch(
+        /^Free to enter/,
+      );
+    }
+  });
+
   it("never publishes the judging intervals", () => {
     // The gaps between rounds are internal. Entrants are told only that
     // qualification updates reach the teams that qualify.

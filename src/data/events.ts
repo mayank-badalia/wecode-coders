@@ -1274,7 +1274,7 @@ export const events: Event[] = [
     stats: [
       { label: "Winners", value: "60" },
       { label: "Rewards each", value: "3" },
-      { label: "Entry fee", value: "₹0" },
+      { label: "Entry fee", value: "Free" },
       { label: "Quiz length", value: "15 min" },
     ],
     sponsors: [
@@ -1354,6 +1354,7 @@ export const events: Event[] = [
       { label: "Cash prize", value: "₹25,000" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
+      { label: "Entry fee", value: "Free" },
     ],
     sponsors: [
       { name: "Inkloom", role: "Title sponsor", logo: "/sponsors/inkloom.png" },
@@ -1363,7 +1364,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/p/wcc-forge-48-wecodecoders-1756040",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Registration closes 29 October at 23:59 IST. Every member registers individually on Unstop under the same team name, and files their own submission.",
+      note: "Free to enter, for teams of one to four. Registration closes 29 October at 23:59 IST. Every member registers individually on Unstop under the same team name, and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1847,12 +1848,13 @@ export const events: Event[] = [
       { label: "Hours to build", value: "48" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
+      { label: "Entry fee", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/codeverse-india-national-level-hackathon-wecodecoders-1763003",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Registration closes 29 October at 07:30 IST. Every member registers individually and files their own submission.",
+      note: "Free to enter, for teams of one to four. Registration closes 29 October at 07:30 IST. Every member registers individually and files their own submission.",
     },
     links: [
       {
@@ -1929,12 +1931,13 @@ export const events: Event[] = [
     stats: [
       { label: "Per team", value: "1–4" },
       { label: "Hours to build", value: "48" },
+      { label: "Entry fee", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/p/codehack-india-national-level-hackathon-wecodecoders-1762158",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Every member registers individually and files their own submission.",
+      note: "Free to enter, for teams of one to four. Every member registers individually and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -2006,12 +2009,13 @@ export const events: Event[] = [
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
       { label: "Hours to build", value: "48" },
+      { label: "Entry fee", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/codenexus-india-2026-national-hackathon-wecodecoders-1764747",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Registration closes 2 November at 02:00 IST. Every member registers individually and files their own submission.",
+      note: "Free to enter, for teams of one to four. Registration closes 2 November at 02:00 IST. Every member registers individually and files their own submission.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LQXKCATzVwsCJDHOaeVCjf" },
@@ -2086,12 +2090,13 @@ export const events: Event[] = [
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
       { label: "Hours to build", value: "48" },
+      { label: "Entry fee", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/codetitans-india-2026-national-hackathon-wecodecoders-1766190",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Registration closes 4 November at 20:30 IST. Every member registers individually and files their own submission.",
+      note: "Free to enter, for teams of one to four. Registration closes 4 November at 20:30 IST. Every member registers individually and files their own submission.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Lr1a3omlex7Coc4tAJ8S1C" },
@@ -2171,10 +2176,11 @@ export const events: Event[] = [
       { label: "Prize pool", value: "₹30,000" },
       { label: "Hours to build", value: "48" },
       { label: "Per team", value: "1–4" },
+      { label: "Entry fee", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
-      note: "Open to teams of one to four, free to enter. Registration closes 26 October at 23:59 IST. Every member registers individually and files their own submission. The Unstop link goes here once we have it.",
+      note: "Free to enter, for teams of one to four. Registration closes 26 October at 23:59 IST. Every member registers individually and files their own submission. The Unstop link goes here once we have it.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/FSZw2YHzBfoIJJty4L2j1Q" },
@@ -2315,6 +2321,7 @@ export const events: Event[] = [
       { label: "Typical time", value: "15 min" },
       { label: "Window", value: "8 hours" },
       { label: "Prize pool", value: "₹30,000" },
+      { label: "Entry fee", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
@@ -2400,10 +2407,11 @@ export const events: Event[] = [
       { label: "Prize pool", value: "₹30,000" },
       { label: "Hours to build", value: "36" },
       { label: "Per team", value: "1–4" },
+      { label: "Entry fee", value: "Free" },
     ],
     sponsors: HWP_SPONSORS,
     registration: {
-      note: "Open to teams of one to four, free to enter. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+      note: "Free to enter, for teams of one to four. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Dh7bUhHKdpG7UGZ4fr85Ka" },
@@ -2470,10 +2478,11 @@ export const events: Event[] = [
       { label: "Prize pool", value: "₹30,000" },
       { label: "Hours to build", value: "36" },
       { label: "Per team", value: "1–4" },
+      { label: "Entry fee", value: "Free" },
     ],
     sponsors: HWP_SPONSORS,
     registration: {
-      note: "Open to teams of one to four, free to enter. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+      note: "Free to enter, for teams of one to four. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LLeWA6XWTjR5kMKxLeUvR9" },
@@ -2540,10 +2549,11 @@ export const events: Event[] = [
       { label: "Prize pool", value: "₹30,000" },
       { label: "Hours to build", value: "36" },
       { label: "Per team", value: "1–4" },
+      { label: "Entry fee", value: "Free" },
     ],
     sponsors: HWP_SPONSORS,
     registration: {
-      note: "Open to teams of one to four, free to enter. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+      note: "Free to enter, for teams of one to four. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/IdQJEKGLGSrB5FGpdCAcVQ" },
