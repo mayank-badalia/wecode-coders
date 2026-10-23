@@ -417,6 +417,47 @@ describe("events seam", () => {
     }
   });
 
+  it("promises a position to the top three and to nobody else", () => {
+    /*
+      The announcement is three team names and a link to what each of them
+      built. Nothing else is placed: no ranking list, no leaderboard position
+      by email, and no certificate below winner carrying a placing.
+
+      Worth a guard because the copy was wrong in one direction for months —
+      it promised every finalist its own position, by email and printed on the
+      certificate, which the certificate template has never printed. A promise
+      the renderer cannot keep is the one to catch here.
+    */
+    for (const e of published) {
+      // Protocol//60 ran and its certificates are issued; its top-60
+      // leaderboard is a record of what happened, not a promise to anyone.
+      if (e.status === "past") continue;
+
+      const words = [
+        e.summary,
+        e.brief,
+        ...e.description,
+        ...e.deliverables,
+        ...(e.rewards ?? []),
+        ...(e.faq ?? []).flatMap((f) => `${f.q} ${f.a}`),
+        ...(e.schedule ?? []).map((r) => r.what),
+        ...(e.sections ?? []).flatMap((sec) =>
+          sec.kind === "list"
+            ? [sec.intro ?? "", ...sec.items]
+            : [sec.intro ?? "", ...sec.items.flatMap((i) => [i.blurb ?? "", i.note ?? "", ...i.points])],
+        ),
+      ].join(" ");
+
+      expect(words, `${e.slug} promises a placing to a non-winner`).not.toMatch(
+        /where (your|the|it) team placed|where it placed|your own position comes to you|names your position|the certificate prints it/i,
+      );
+      // And the thing that replaced it has to actually be said somewhere.
+      expect(words, `${e.slug} never says only the top three are placed`).toMatch(
+        /only the top three are placed/i,
+      );
+    }
+  });
+
   it("never publishes the judging intervals", () => {
     // The gaps between rounds are internal. Entrants are told only that
     // qualification updates reach the teams that qualify.

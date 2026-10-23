@@ -386,7 +386,7 @@ const seriesRules = (
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message. Where an organiser, judge or volunteer reports feeling threatened, the team is removed from the event without refund.",
     "The judges' decision is final.",
     `Results go up in the official group: the three winning team names, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
-    "Every team that takes part in the final round is ranked. The group announcement names the top three, and your own position comes to you rather than to the group — written in the email that delivers your certificate, and printed on the certificate itself.",
+    "Only the top three are placed. The three winning teams are named with a link to what each of them built, and their certificates print the rank; no other team is given a position, no ranking list is published, and no certificate below winner carries a placing.",
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
   ],
 });
@@ -423,19 +423,19 @@ const seriesCertificates = (scheme: CertificateScheme = "rounds"): EventSection 
   items: [
     ...(scheme === "finalists"
       ? [
-          "National Finalist Certificate, naming where your team placed — for finalists who make a valid Round 3 submission.",
-          "Winner Certificate, naming the rank your team placed — for the winning teams.",
+          "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round; it does not print a position.",
+          "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
           "No certificate is issued for Round 1 or Round 2, including for taking part. A team that is not selected for the final round, or that is selected and does not take part, is not issued one.",
-          "If you took part in the final round, you find out where your team placed when the certificate arrives: the email that delivers it names your position, and the certificate prints it. The group announcement carries the top three team names and a link to what they built.",
+          "Only the top three are placed. The group announcement carries those three team names and a link to what they built, and their certificates print the rank — first, second or third. No other team is told a position, and none is printed on its certificate.",
           "A certificate requires successful registration, payment where applicable, and a valid Round 3 submission. Qualifying for the final round does not by itself earn one.",
           "Each participant receives one certificate only.",
         ]
       : [
           "Round 1 Completion Certificate — for a valid Round 1 submission.",
           "Round 2 Completion Certificate — for a valid Round 2 submission.",
-          "National Finalist Certificate, naming where your team placed — for finalists who make a valid Round 3 submission.",
-          "Winner Certificate, naming the rank your team placed — for the winning teams.",
-          "If you took part in the final round, you find out where your team placed when the certificate arrives: the email that delivers it names your position, and the certificate prints it. The group announcement carries the top three team names and a link to what they built.",
+          "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round; it does not print a position.",
+          "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
+          "Only the top three are placed. The group announcement carries those three team names and a link to what they built, and their certificates print the rank — first, second or third. No other team is told a position, and none is printed on its certificate.",
           "Certificates are issued separately for each completed round. Qualification for a subsequent round does not itself create eligibility for that round's certificate.",
           "Participants who complete Round 2 but withdraw from Round 3 will remain eligible only for the Round 2 Completion Certificate.",
           "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
@@ -493,11 +493,11 @@ function seriesFaq(scheme: CertificateScheme = "rounds") {
       q: "What certificate do I get?",
       a:
         scheme === "finalists"
-          ? "Only the final round earns one: a National Finalist Certificate naming where your team placed for a valid Round 3 submission, or a Winner Certificate naming your rank if you win. Rounds 1 and 2 are qualifying rounds — they carry no certificate, not even for taking part."
-          : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate naming where your team placed for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you win. Clearing a round upgrades that certificate rather than adding a second one.",
+          ? "Only the final round earns one: a National Finalist Certificate for a valid Round 3 submission, or a Winner Certificate naming your rank if you finish in the top three. A finalist certificate does not print a position — only the three winners are placed. Rounds 1 and 2 are qualifying rounds, and they carry no certificate, not even for taking part."
+          : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Only the three winners are placed; no other certificate carries a position. Clearing a round upgrades that certificate rather than adding a second one.",
     },
-    { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the GitHub repository of what each of them built. Positions are not posted there. Every team that takes part in the final round is ranked, and we tell each one where it placed in the email that delivers its certificate — the certificate prints it too. Nobody's personal details are shared without their consent." },
-    { q: "Who judges, and when do results and certificates arrive?", a: "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, so those results come back quickly — and every team that submitted is emailed its Round 1 and Round 2 result, whether or not it has been selected. The final round is judged by Inkloom — an outside panel takes longer but picks the strongest winner, and final results are declared one week after the hackathon ends. Certificates follow within 10 days of the results being announced." },
+    { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the GitHub repository of what each of them built. That is the whole announcement. Only those three are placed — no ranking list goes up, no other team is given a position, and no certificate below winner prints one. Nobody's personal details are shared without their consent." },
+    { q: "Who judges, and when do results and certificates arrive?", a: "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, so those results come back quickly — and every team that submitted is emailed its Round 1 and Round 2 result, selected or not, without a score or a position. The final round is judged by Inkloom — an outside panel takes longer but picks the strongest winner, and final results are declared one week after the hackathon ends. Certificates follow within 10 days of the results being announced." },
   ];
 }
 
@@ -627,7 +627,7 @@ const sprintRules = (
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message.",
     "The judges' decision is final.",
     `Results go up in the official group: the three winning team names, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
-    "Every team that makes a valid submission is ranked. The group announcement names the top three, and your own position comes to you rather than to the group — written in the email that delivers your certificate, and printed on the certificate itself.",
+    "Only the top three are placed. The three winning teams are named with a link to what each of them built, and their certificates print the rank; no other team is given a position, no ranking list is published, and no certificate below winner carries a placing.",
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
   ],
 });
@@ -648,10 +648,10 @@ const sprintCertificates = (): EventSection => ({
     "One certificate, and everyone who builds gets one. Every participant whose team makes a valid submission inside the forty-eight hours is issued a certificate — you do not have to place, and there is nothing to pay for it.",
   items: [
     "A Certificate of Participation, for every member of a team that makes a valid submission inside the window.",
-    "A Winner Certificate naming the rank, for the winning teams.",
+    "A Winner Certificate naming the rank — first, second or third — for the three winning teams.",
     "Registering is not taking part. A team that registers and does not submit, or whose submission is not valid, is not issued a certificate.",
     "Each participant receives one certificate only: a winning team's members are issued the Winner Certificate rather than both.",
-    "You find out where your team placed when the certificate arrives: the email that delivers it names your position, and the certificate prints it. The group announcement carries the top three team names and a link to what they built.",
+    "Only the top three are placed. The group announcement carries those three team names and a link to what they built, and their certificates print the rank — first, second or third. No other team is told a position, and none is printed on its certificate.",
     "Submissions are judged by Inkloom, as every event in this series is, and final results are declared one week after the hackathon ends.",
     "Certificates are distributed within 10 days of the results being announced, not from the day the event ends.",
   ],
@@ -681,7 +681,7 @@ function sprintFaq(
     { q: "Can I use something I built earlier?", a: "No. The product has to be built during the window, and submissions are checked. Disclosed reusable components are fine; a finished project is not." },
     { q: "Is deployment compulsory?", a: "You need a link judges can open and use. If you cannot deploy, provide a reliable executable the judges can run." },
     { q: "Are social media posts required?", a: "No. Nothing on LinkedIn, Instagram or anywhere else is part of a submission, and no video demonstration is required." },
-    { q: "Where are results announced?", a: `In the official group: the three winning team names, along with ${winnerLink}. Positions are not posted there. Every team that makes a valid submission is ranked, and we tell each one where it placed in the email that delivers its certificate — the certificate prints it too. Nobody's personal details are shared without their consent.` },
+    { q: "Where are results announced?", a: `In the official group: the three winning team names, along with ${winnerLink}. That is the whole announcement. Only those three are placed — no ranking list goes up, no other team is given a position, and a Certificate of Participation does not print one. Nobody's personal details are shared without their consent.` },
     { q: "When do results and certificates arrive?", a: "Submissions are judged by Inkloom, and final results are declared one week after the hackathon ends, once every eligible submission has been reviewed. Certificates follow within 10 days of the results being announced." },
   ];
 }
@@ -1265,7 +1265,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist or winner, with where your team placed",
+      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1284,8 +1284,8 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
-      "A Winner Certificate naming the rank, for the winning teams",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: seriesSections("2026-10-20T10:00:00+05:30", [
@@ -1348,7 +1348,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist or winner, with where your team placed",
+      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1367,8 +1367,8 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
-      "A Winner Certificate naming the rank, for the winning teams",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: seriesSections("2026-10-20T10:00:00+05:30", [
@@ -1431,7 +1431,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist or winner, with where your team placed",
+      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1450,8 +1450,8 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
-      "A Winner Certificate naming the rank, for the winning teams",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: seriesSections("2026-10-20T10:00:00+05:30", [
@@ -1514,7 +1514,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "A National Finalist or Winner certificate naming where your team placed, if you reach the final round — Rounds 1 and 2 carry none",
+      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1532,8 +1532,8 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
-      "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
-      "A Winner Certificate naming the rank, for the winning teams",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, "finalists"),
@@ -1592,7 +1592,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "A National Finalist or Winner certificate naming where your team placed, if you reach the final round — Rounds 1 and 2 carry none",
+      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1610,8 +1610,8 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
-      "A National Finalist Certificate naming where the team placed, for finalists with a valid Round 3 submission",
-      "A Winner Certificate naming the rank, for the winning teams",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, "finalists"),
@@ -1689,7 +1689,7 @@ export const events: Event[] = [
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across the hackathon",
       "A certificate for every participant whose team submits inside the 48 hours",
-      "A Winner Certificate naming the rank, for the winning teams",
+      "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: sprintSections(),
@@ -1772,7 +1772,7 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "A certificate for every participant whose team submits inside the 48 hours",
-      "A Winner Certificate naming the rank, for the winning teams",
+      "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: sprintSections(),
@@ -1849,7 +1849,7 @@ export const events: Event[] = [
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
       "A certificate for every participant whose team submits inside the 48 hours",
-      "A Winner Certificate naming the rank, for the winning teams",
+      "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: sprintSections(),
     faq: sprintFaq(),
@@ -1929,7 +1929,7 @@ export const events: Event[] = [
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
       "A certificate for every participant whose team submits inside the 48 hours",
-      "A Winner Certificate naming the rank, for the winning teams",
+      "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: sprintSections(),
     faq: sprintFaq(),
@@ -2063,7 +2063,7 @@ export const events: Event[] = [
           "Breaking the rules can cost you your leaderboard position, rewards and certificate.",
           "The organisers' decision on eligibility, ranking and disqualification is final.",
           "Results go up in the official group: the three winning names. No participant's personal details are shared or passed on unless we have their consent.",
-          "Everyone who completes the quiz has a position on the leaderboard. The group announcement names the top three, and your own position comes to you rather than to the group — named in the email that delivers your certificate, and printed on the certificate itself.",
+          "Only the top three are placed. The group announcement names those three, and their certificates print the rank. No other participant is given a leaderboard position, by email or on a certificate.",
           "Scores, answer sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second attempt.",
         ],
       },
