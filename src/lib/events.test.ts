@@ -27,20 +27,23 @@ const published = getAllEvents().filter((e) => !e.locked);
  * formats issue a brief an hour before the start, which is the opposite of
  * WCC Launchpad 30 — it runs on tracks and hands out nothing.
  */
-const BRIEFED_LABELS = ["How the three rounds run", "How the 48 hours run"];
+const ROUNDS_LABEL = "How the three rounds run";
+/** "How the 48 hours run", "How the 36 hours run" — the window is a parameter. */
+const WINDOW_LABEL = /^How the (\d+) hours run$/;
+const windowBlock = (e: (typeof published)[number]) =>
+  e.sections?.find((sec) => WINDOW_LABEL.test(sec.label));
+
 const briefed = published.filter(
-  (e) => e.sections?.some((sec) => BRIEFED_LABELS.includes(sec.label)) ?? false,
+  (e) => e.sections?.some((sec) => sec.label === ROUNDS_LABEL) || Boolean(windowBlock(e)),
 );
 
 /** The five that still run three rounds. */
 const threeRound = published.filter((e) =>
-  e.sections?.some((sec) => sec.label === "How the three rounds run"),
+  e.sections?.some((sec) => sec.label === ROUNDS_LABEL),
 );
 
-/** The five that run a single 48-hour build. */
-const sprints = published.filter((e) =>
-  e.sections?.some((sec) => sec.label === "How the 48 hours run"),
-);
+/** The ones that run a single window, of whatever length. */
+const sprints = published.filter((e) => Boolean(windowBlock(e)));
 
 describe("events seam", () => {
   it("returns every event", () => {
@@ -346,29 +349,37 @@ describe("events seam", () => {
     }
   });
 
-  it("runs every 48-hour build as one free window, with a certificate for everyone who submits", () => {
+  it("runs every single-window build as one free window, with a certificate for everyone who submits", () => {
     /*
-      Five hackathons moved off the three-round format. Three promises changed
-      at once — one window instead of three rounds, no fee at any stage, and a
-      certificate for every participant whose team submits — and any one of
-      them is easy to half-undo while editing a single record. This pins the
-      set and all three.
+      Nine hackathons run one window rather than three rounds. Three promises
+      changed at once — one window, no fee at any stage, and a certificate for
+      every participant who files an entry — and any one of them is easy to
+      half-undo while editing a single record. This pins the set and all three.
     */
     expect(sprints.map((e) => e.slug).sort()).toEqual([
+      "code-conqueror-india",
+      "codefrontier",
       "codehack-india",
       "codenexus-india",
+      "codepunethinkers",
+      "codersinpune",
       "codetitans-india",
       "codeverse-india",
       "wcc-forge-48",
     ]);
 
     for (const e of sprints) {
-      // Exactly forty-eight hours, and the kicker says so. (The kicker test
-      // above checks the arithmetic; this checks the label is the 48 one.)
-      expect(e.kicker, e.slug).toMatch(/48 HOURS/);
+      /*
+        Three numbers have to agree: the timestamps, the kicker and the block
+        label. The window became a parameter when the HackWithPune events
+        arrived at thirty-six hours, and a page that says 36 in its heading
+        while running 48 on the clock is the failure that creates.
+      */
       const hours =
         (new Date(e.endsAt).getTime() - new Date(e.startsAt).getTime()) / 3_600_000;
-      expect(hours, e.slug).toBe(48);
+      expect([36, 48], `${e.slug} runs ${hours}h`).toContain(hours);
+      expect(windowBlock(e)?.label, e.slug).toBe(`How the ${hours} hours run`);
+      expect(e.kicker, e.slug).toMatch(new RegExp(`\\b${hours} HOURS\\b`));
 
       // No rounds: no tabs block, and nothing left on the sheet that scores a
       // team per round.
@@ -465,7 +476,7 @@ describe("events seam", () => {
       ].join(" ");
 
       expect(words, `${e.slug} promises a placing to a non-winner`).not.toMatch(
-        /where (your|the|it) team placed|where it placed|your own position comes to you|names your position|the certificate prints it/i,
+        /where (your|the|it) team placed|where it placed|your own position comes to you|names your position|the certificate prints it|yours reaches you|and it is printed on the certificate/i,
       );
       // And the thing that replaced it has to actually be said somewhere.
       expect(words, `${e.slug} never says only the top three are placed`).toMatch(

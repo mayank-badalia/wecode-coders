@@ -592,8 +592,51 @@ function seriesFaq(terms: SeriesTerms = {}) {
   "sprint" is the single 48-hour window, as against the series' three rounds.
 */
 
+/**
+ * How long the window is.
+ *
+ * Most of these run forty-eight hours; the three HackWithPune events run
+ * thirty-six. The copy spells the number out mid-sentence while the block
+ * label and the kicker print the digits, so the window carries both forms
+ * rather than being formatted at every mention.
+ */
+type SprintWindow = { hours: number; words: string };
+const H48: SprintWindow = { hours: 48, words: "forty-eight hours" };
+const H36: SprintWindow = { hours: 36, words: "thirty-six hours" };
+
 /** The block label, which is also what the test suite keys this format on. */
-const SPRINT_LABEL = "How the 48 hours run";
+const sprintLabel = (w: SprintWindow) => `How the ${w.hours} hours run`;
+
+/**
+ * The organiser's own promise about results and certificates.
+ *
+ * Everything else about a single-window build is identical across the events
+ * that run one; this is not. We Code Coders has Inkloom judge, declares
+ * results a week after the event and sends certificates within ten days of
+ * that announcement. HackWithPune publishes fifteen days from the end of the
+ * event and names no judge, so nothing here may claim one for them.
+ */
+type SprintDelivery = {
+  /** The closing lines of the certificates block. */
+  certificates: string[];
+  /** The FAQ answer to when results and certificates arrive. */
+  faq: string;
+};
+
+const WCC_DELIVERY: SprintDelivery = {
+  certificates: [
+    "Submissions are judged by Inkloom, as every event in this series is, and final results are declared one week after the hackathon ends.",
+    "Certificates are distributed within 10 days of the results being announced, not from the day the event ends.",
+  ],
+  faq: "Submissions are judged by Inkloom, and final results are declared one week after the hackathon ends, once every eligible submission has been reviewed. Certificates follow within 10 days of the results being announced.",
+};
+
+const HWP_DELIVERY: SprintDelivery = {
+  certificates: [
+    "Prizes and certificates are released within 15 days of the event ending, which is the window HackWithPune publishes for this hackathon.",
+  ],
+  faq: "HackWithPune releases the prizes and the certificates within 15 days of the event ending, and announces the results in the official group before that.",
+};
 
 /**
  * Judging: one sheet, out of 100.
@@ -645,12 +688,12 @@ function sprintJudging() {
   ];
 }
 
-/** What the 48 hours ask for, and what arrives at the end of them. */
-const sprintBuild = (): EventSection => ({
+/** What the window asks for, and what arrives at the end of it. */
+const sprintBuild = (w: SprintWindow): EventSection => ({
   kind: "list",
-  label: SPRINT_LABEL,
+  label: sprintLabel(w),
   intro:
-    `One problem statement, forty-eight hours, and an entry from every person who built. The problem statement is released by the organisers an hour before the clock starts, so every team begins from the same brief at the same moment. There are no qualifying rounds and nothing to clear first. Every participant submits: the project is filed once per member rather than once per team, and each person names the role they held on it — ${ROLE_SET} — and writes in their own words the part they built. Those two answers are what your certificate prints, so a member who files nothing has nothing recorded and is not issued one. Taking part is free from start to finish. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.`,
+    `One problem statement, ${w.words}, and an entry from every person who built. The problem statement is released by the organisers an hour before the clock starts, so every team begins from the same brief at the same moment. There are no qualifying rounds and nothing to clear first. Every participant submits: the project is filed once per member rather than once per team, and each person names the role they held on it — ${ROLE_SET} — and writes in their own words the part they built. Those two answers are what your certificate prints, so a member who files nothing has nothing recorded and is not issued one. Taking part is free from start to finish. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.`,
   items: [
     "A link to the working project, which a judge must be able to open and use without being talked through it",
     "The source-code repository, with whatever access judges need to read it",
@@ -674,13 +717,14 @@ const sprintBuild = (): EventSection => ({
  * for defeating them.
  */
 const sprintRules = (
+  w: SprintWindow,
   winnerLink = "the GitHub repository of what each of them built",
 ): EventSection => ({
   kind: "list",
   label: "Rules",
   numbered: true,
   items: [
-    "The product must be built inside the official hackathon window — the forty-eight hours this event runs for. Work that existed before the clock started does not count.",
+    `The product must be built inside the official hackathon window — the ${w.words} this event runs for. Work that existed before the clock started does not count.`,
     "We verify this. Submissions are checked, judges may ask a team to evidence that the work was done inside the window, and we do not discuss how those checks are run.",
     "A project found to have been built before the event does not win, however good it is. There is no partial credit for this and no appeal.",
     "You may research, plan and discuss ideas before the event. Thinking is not building.",
@@ -696,7 +740,7 @@ const sprintRules = (
     "Projects must not promote illegal, harmful or discriminatory activity.",
     "One submission per participant, not one per team. Every member files their own entry for the same project, names the role they held on it and states the part they built; a second entry from the same person is not counted.",
     "A participant who files no entry of their own is not recorded as having taken part, and is not issued a certificate, even where the team's project was submitted by somebody else.",
-    "Everything on the submission list has to arrive before the forty-eight hours are up. There is no late window.",
+    `Everything on the submission list has to arrive before the ${w.words} are up. There is no late window.`,
     "Judges may ask for repository access or other proof of development at any point.",
     "Organisers may remove anyone who disrupts the event or breaks community guidelines.",
     "Do not ask an organiser, judge or volunteer to break a rule, waive a requirement or make an exception in your favour. You may ask once; when the answer is no, that is the answer.",
@@ -717,11 +761,14 @@ const sprintRules = (
  * rule — who is issued a certificate and who is not — and a rule filed among
  * the prizes reads as a prize.
  */
-const sprintCertificates = (): EventSection => ({
+const sprintCertificates = (
+  w: SprintWindow,
+  delivery: SprintDelivery = WCC_DELIVERY,
+): EventSection => ({
   kind: "list",
   label: "Certificates",
   intro:
-    "One certificate, and everyone who builds gets one. Every participant who files a valid entry of their own inside the forty-eight hours is issued a certificate — you do not have to place, and there is nothing to pay for it.",
+    `One certificate, and everyone who builds gets one. Every participant who files a valid entry of their own inside the ${w.words} is issued a certificate — you do not have to place, and there is nothing to pay for it.`,
   items: [
     "A Certificate of Participation, for every member who files a valid entry of their own inside the window.",
     "A Winner Certificate naming the rank — first, second or third — for the three winning teams.",
@@ -729,28 +776,33 @@ const sprintCertificates = (): EventSection => ({
     "Your certificate names the role you declared and the part you built, in the words you submitted them in. That is why every member files their own entry rather than one per team.",
     "Each participant receives one certificate only: a winning team's members are issued the Winner Certificate rather than both.",
     "Only the top three are placed. The group announcement carries those three team names and a link to what they built, and their certificates print the rank — first, second or third. No other team is told a position, and none is printed on its certificate.",
-    "Submissions are judged by Inkloom, as every event in this series is, and final results are declared one week after the hackathon ends.",
-    "Certificates are distributed within 10 days of the results being announced, not from the day the event ends.",
+    ...delivery.certificates,
   ],
 });
 
 /** The three blocks, in the order they appear on a detail page. */
-const sprintSections = (winnerLink?: string): EventSection[] => [
-  sprintBuild(),
-  sprintRules(winnerLink),
-  sprintCertificates(),
+const sprintSections = (
+  w: SprintWindow,
+  winnerLink?: string,
+  delivery: SprintDelivery = WCC_DELIVERY,
+): EventSection[] => [
+  sprintBuild(w),
+  sprintRules(w, winnerLink),
+  sprintCertificates(w, delivery),
 ];
 
-/** FAQ for the 48-hour build. */
+/** FAQ for a single-window build. */
 function sprintFaq(
+  w: SprintWindow,
   winnerLink = "the GitHub repository of what each of them built",
+  delivery: SprintDelivery = WCC_DELIVERY,
 ) {
   return [
-    { q: "How does it run?", a: "One window, forty-eight hours long. The problem statement lands an hour before it opens, you build, and you submit once before it closes. There are no qualifying rounds." },
+    { q: "How does it run?", a: `One window, ${w.words} long. The problem statement lands an hour before it opens, you build, and you submit once before it closes. There are no qualifying rounds.` },
     { q: "Is it free?", a: "Yes. Registration is free, taking part is free, and there is no participation fee at any stage — not to be judged, and not to be certified." },
     { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
     { q: "Who submits for the team?", a: `Everybody, separately. Each member files their own entry for the same project before the window closes, names the role they held — ${ROLE_SET} — and says what they built. Nobody submits on anyone else's behalf, and a member who files no entry is not recorded as having taken part and is not issued a certificate.` },
-    { q: "Will everyone get a certificate?", a: "Everyone who builds and files their own entry, yes. Every member who makes a valid submission inside the forty-eight hours is issued a Certificate of Participation, and the winning teams are issued a Winner Certificate naming their rank instead. Registering without submitting does not earn one, and neither does leaving the submission to a teammate." },
+    { q: "Will everyone get a certificate?", a: `Everyone who builds and files their own entry, yes. Every member who makes a valid submission inside the ${w.words} is issued a Certificate of Participation, and the winning teams are issued a Winner Certificate naming their rank instead. Registering without submitting does not earn one, and neither does leaving the submission to a teammate.` },
     { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
     { q: "Can beginners enter?", a: "Yes. The event is built for first-timers and experienced builders alike, judged on the same criteria." },
     { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
@@ -759,7 +811,7 @@ function sprintFaq(
     { q: "Is deployment compulsory?", a: "You need a link judges can open and use. If you cannot deploy, provide a reliable executable the judges can run." },
     { q: "Are social media posts required?", a: "No. Nothing on LinkedIn, Instagram or anywhere else is part of a submission, and no video demonstration is required." },
     { q: "Where are results announced?", a: `In the official group: the three winning team names, along with ${winnerLink}. That is the whole announcement. Only those three are placed — no ranking list goes up, no other team is given a position, and a Certificate of Participation does not print one. Nobody's personal details are shared without their consent.` },
-    { q: "When do results and certificates arrive?", a: "Submissions are judged by Inkloom, and final results are declared one week after the hackathon ends, once every eligible submission has been reviewed. Certificates follow within 10 days of the results being announced." },
+    { q: "When do results and certificates arrive?", a: delivery.faq },
   ];
 }
 
@@ -773,6 +825,20 @@ const SERIES_SPONSORS = [
     role: "Organised by",
     logo: "/sponsors/we-code-coders.png",
   },
+];
+
+/**
+ * Billing for the HackWithPune events.
+ *
+ * The organiser line is theirs. No We Code Coders role is claimed on them:
+ * carrying a listing is not a partnership, and billing one that has not been
+ * agreed would be a claim about a relationship rather than a credit. The
+ * credit providers the listings name — Inkloom, Adaption and .XYZ — are in
+ * each event's rewards, where those listings put them.
+ */
+const HWP_SPONSORS = [
+  { name: "HackWithPune", role: "Organised by" },
+  { name: "Unstop", role: "Official event partner", logo: "/sponsors/unstop.png" },
 ];
 
 export const events: Event[] = [
@@ -1276,9 +1342,9 @@ export const events: Event[] = [
       "Special awards for exceptional projects",
       "Lovable Premium, AI tools and a .XYZ domain",
     ],
-    sections: sprintSections("the live URL of what each of them built"),
+    sections: sprintSections(H48, "the live URL of what each of them built"),
     faq: [
-      ...sprintFaq("the live URL of what each of them built"),
+      ...sprintFaq(H48, "the live URL of what each of them built"),
       { q: "Does every team member have to register?", a: "Yes, individually — and everyone must use the same team name so the entries can be matched up." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
       { q: "Are the PPO opportunities guaranteed?", a: "No. They are subject to the recruiting partner's own eligibility requirements and selection process." },
@@ -1775,8 +1841,8 @@ export const events: Event[] = [
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: sprintSections(),
-    faq: sprintFaq(),
+    sections: sprintSections(H48),
+    faq: sprintFaq(H48),
     stats: [
       { label: "Hours to build", value: "48" },
       { label: "Reward recipients", value: "100+" },
@@ -1858,8 +1924,8 @@ export const events: Event[] = [
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: sprintSections(),
-    faq: sprintFaq(),
+    sections: sprintSections(H48),
+    faq: sprintFaq(H48),
     stats: [
       { label: "Per team", value: "1–4" },
       { label: "Hours to build", value: "48" },
@@ -1934,8 +2000,8 @@ export const events: Event[] = [
       "A certificate for every participant who files their own submission inside the 48 hours",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: sprintSections(),
-    faq: sprintFaq(),
+    sections: sprintSections(H48),
+    faq: sprintFaq(H48),
     stats: [
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
@@ -2014,8 +2080,8 @@ export const events: Event[] = [
       "A certificate for every participant who files their own submission inside the 48 hours",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: sprintSections(),
-    faq: sprintFaq(),
+    sections: sprintSections(H48),
+    faq: sprintFaq(H48),
     stats: [
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
@@ -2037,6 +2103,87 @@ export const events: Event[] = [
   },
   {
     /*
+      LIVE. Announced on Unstop as a three-round event and cut to one 48-hour
+      window, like the five before it: one problem statement, one entry per
+      participant, nothing to pay, and a certificate for everyone who files
+      one. The start is the one on the listing — 28 October at 10:00 — so the
+      window closes on the 30th.
+
+      No poster artwork yet, so the generated one stands in, and no Unstop URL
+      in hand: registration renders as "not open" rather than as a button that
+      goes nowhere. The listing also prints three tracks; this event issues a
+      problem statement instead, as the rest of the series does.
+    */
+    locked: false,
+    featured: true,
+    slug: "code-conqueror-india",
+    title: "Code Conqueror India 2026",
+    kicker: "HACKATHON — 48 HOURS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-10-28T10:00:00+05:30",
+    endsAt: "2026-10-30T10:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A national online hackathon in one forty-eight-hour window: one problem statement, one working product. Free to enter, teams of one to four, with ₹30,000, paid internships and incubation for the top three.",
+    description: [
+      "Code Conqueror India 2026 is a national-level online hackathon run in a single forty-eight-hour window. The problem statement lands an hour before the clock starts, and what you submit at the end of it is what is judged.",
+      "Submissions are scored on one published sheet, out of 100, and it is on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "online", "national", "48 hours"],
+    teamSize: "1 to 4. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers, AI and no-code builders and first-timers. Registration is open nationally.",
+    brief:
+      "Build a working solution to the problem statement you are given, in forty-eight hours.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the problem as you read it, what you built, and where it would go next",
+      "A certificate for every member who files their own submission inside the 48 hours",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Until Mon 26 Oct, 23:59", what: "Registration open. Form a team of one to four and join the official group." },
+      { when: "Wed 28 Oct, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Wed 28 Oct, 10:00", what: "The forty-eight hours open. Build the one workflow that solves it." },
+      { when: "Fri 30 Oct, 10:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: sprintJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development support for the top three teams",
+      "A complimentary .XYZ domain for every participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption Labs credits for every eligible participant",
+      "100+ reward recipients across the hackathon",
+      "A certificate for every participant who files their own submission inside the 48 hours",
+      "A Winner Certificate naming the rank, for the three winning teams",
+    ],
+    sections: sprintSections(H48),
+    faq: sprintFaq(H48),
+    stats: [
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Hours to build", value: "48" },
+      { label: "Per team", value: "1–4" },
+    ],
+    sponsors: SERIES_SPONSORS,
+    registration: {
+      note: "Open to teams of one to four, free to enter. Registration closes 26 October at 23:59 IST. Every member registers individually and files their own submission. The Unstop link goes here once we have it.",
+    },
+    links: [
+      { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/FSZw2YHzBfoIJJty4L2j1Q" },
+    ],
+    // Paper. No artwork supplied, so the generated poster is what shows.
+    posterSeed: 9109,
+  },
+  {
+    /*
       LIVE. A quiz, not a hackathon — so no rounds, no problem statement and
       none of the series' shared blocks.
 
@@ -2054,15 +2201,15 @@ export const events: Event[] = [
     kicker: "QUIZ — ONE SITTING",
     format: "quiz",
     status: "upcoming",
-    startsAt: "2026-11-09T10:00:00+05:30",
-    endsAt: "2026-11-09T12:00:00+05:30",
+    startsAt: "2026-11-03T10:00:00+05:30",
+    endsAt: "2026-11-03T12:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
       "A national online quiz on agentic AI, full-stack engineering and emerging technology. One sitting, free to enter, with ₹30,000 shared among the top three.",
     description: [
       "CodeQuest Quiz India 2026 is a national online quiz for people who build. The questions span autonomous systems, the engineering behind a working product, and the technologies arriving around both.",
-      "It runs in one sitting on 9 November, starting at 10:00 IST. Everyone who completes it properly gets a verifiable certificate, and the rewards go well beyond the top three.",
+      "It runs in one sitting on 3 November, starting at 10:00 IST. Everyone who completes it properly gets a verifiable certificate, and the rewards go well beyond the top three.",
     ],
     forWho: "Students, developers, AI enthusiasts and anyone curious about how modern systems are built.",
     tags: ["agentic ai", "full-stack", "quiz", "online", "national"],
@@ -2074,8 +2221,8 @@ export const events: Event[] = [
       "One timed attempt, submitted before the clock runs out",
     ],
     schedule: [
-      { when: "Until Sat 7 Nov, 15:00", what: "Registration open. Join the official channel for the joining link and the final instructions." },
-      { when: "Mon 9 Nov, 10:00", what: "Quiz day. One attempt, inside the official window." },
+      { when: "Before the quiz", what: "Registration open. Join the official channel for the joining link, the deadline and the final instructions." },
+      { when: "Tue 3 Nov, 10:00", what: "Quiz day. One attempt, inside the official window." },
       { when: "After", what: "Responses validated, the leaderboard reviewed, results announced and certificates issued." },
     ],
     judging: [
@@ -2154,11 +2301,11 @@ export const events: Event[] = [
     faq: [
       { q: "Is it free?", a: "Yes. Registration costs nothing." },
       { q: "Is this a quiz or a hackathon?", a: "A quiz, in one sitting. There is nothing to build and nothing to submit beforehand." },
-      { q: "When exactly does it start?", a: "10:00 IST on 9 November. The joining link goes out in the official group ahead of the day." },
+      { q: "When exactly does it start?", a: "10:00 IST on 3 November. The joining link goes out in the official group ahead of the day." },
       { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before the quiz." },
       { q: "Will everyone get a certificate?", a: "Everyone who registers, joins through the official link, completes and submits the quiz, follows the rules and passes the integrity checks. One certificate per participant, distributed within 10 days of the results being announced. Registering alone does not qualify." },
       { q: "When are results announced?", a: "After the responses are validated and the leaderboard is reviewed. Timelines are shared through the official channel." },
-      { q: "Where are results announced?", a: "In the official group: the three winning names. Positions are not posted there — yours reaches you in the email that delivers your certificate, and it is printed on the certificate. Nobody's personal details are shared without their consent." },
+      { q: "Where are results announced?", a: "In the official group: the three winning names, and nothing further. Only those three are placed — no leaderboard goes up, no other participant is given a position, and no certificate below winner prints one. Nobody's personal details are shared without their consent." },
     ],
     stats: [
       { label: "Prize pool", value: "₹30,000" },
@@ -2167,7 +2314,7 @@ export const events: Event[] = [
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
-      note: "Free to enter, individually. Registration closes 7 November at 15:00 IST. The Unstop link goes here once it is live.",
+      note: "Free to enter, individually. Registration closes before the sitting; the deadline goes out in the official channel, and the Unstop link goes here once it is live.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Kiibri82NXEDIOmNhd9URn" },
@@ -2175,5 +2322,229 @@ export const events: Event[] = [
     // Ink — lime and orange are the accents, the ground underneath is navy.
     posterSeed: 9130,
     posterImage: "/posters/codequest-quiz-india-v1.webp",
+  },
+  /*
+    The HackWithPune hackathons.
+
+    Three events by another organiser, carried here. They run the same single
+    window as the We Code Coders builds — one problem statement an hour before
+    the clock, an entry from every participant with the role they held, free
+    throughout, a certificate for everyone who files one — but over thirty-six
+    hours rather than forty-eight, which is the length their own listings run,
+    and with HackWithPune's promise on when prizes and certificates arrive.
+
+    All three were announced on Unstop for other dates and moved to 3 and 4
+    November. Their registration deadlines are still tied to the old dates and
+    have to be reset on Unstop, so none is printed here, and no Unstop URL is
+    in hand for any of them. Their listings also print three tracks; these
+    pages issue a problem statement instead.
+  */
+  {
+    locked: false,
+    slug: "codepunethinkers",
+    title: "CodePuneThinkers Hackathon",
+    kicker: "HACKATHON — 36 HOURS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-11-03T10:00:00+05:30",
+    endsAt: "2026-11-04T22:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A HackWithPune hackathon: thirty-six hours, one problem statement, one working product. Free to enter, teams of one to four, with ₹30,000, paid internships and incubation for the top three.",
+    description: [
+      "CodePuneThinkers is an online hackathon run by HackWithPune in a single thirty-six-hour window. The problem statement lands an hour before the clock starts, and what you submit at the end of it is what is judged.",
+      "Submissions are scored on one published sheet, out of 100, and it is on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "online", "36 hours"],
+    teamSize: "1 to 4. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences. Registration is open online.",
+    brief:
+      "Build a working solution to the problem statement you are given, in thirty-six hours.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the problem as you read it, what you built, and where it would go next",
+      "A certificate for every member who files their own submission inside the 36 hours",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official group." },
+      { when: "Tue 3 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Tue 3 Nov, 10:00", what: "The thirty-six hours open. Build the one workflow that solves it." },
+      { when: "Wed 4 Nov, 22:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: sprintJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development support for the top three teams",
+      "Letters of recommendation for the top three teams",
+      "A complimentary .XYZ domain for every eligible participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption credits for every eligible participant",
+      "A certificate for every participant who files their own submission inside the 36 hours",
+      "A Winner Certificate naming the rank, for the three winning teams",
+    ],
+    sections: sprintSections(H36, undefined, HWP_DELIVERY),
+    faq: sprintFaq(H36, undefined, HWP_DELIVERY),
+    stats: [
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Hours to build", value: "36" },
+      { label: "Per team", value: "1–4" },
+    ],
+    sponsors: HWP_SPONSORS,
+    registration: {
+      note: "Open to teams of one to four, free to enter. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+    },
+    links: [
+      { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Dh7bUhHKdpG7UGZ4fr85Ka" },
+    ],
+    // Ink. No artwork supplied, so the generated poster is what shows.
+    posterSeed: 9205,
+  },
+  {
+    locked: false,
+    slug: "codersinpune",
+    title: "CodersInPune Hackathon",
+    kicker: "HACKATHON — 36 HOURS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-11-03T10:00:00+05:30",
+    endsAt: "2026-11-04T22:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A HackWithPune hackathon: thirty-six hours from one problem statement to a product that runs. Free to enter, teams of one to four, with ₹30,000, paid internships and incubation for the top three.",
+    description: [
+      "CodersInPune is an online hackathon run by HackWithPune in a single thirty-six-hour window, from a problem statement to something a person can open and use.",
+      "Submissions are scored on one published sheet, out of 100, and it is on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "online", "36 hours"],
+    teamSize: "1 to 4. Every participant belongs to one team only.",
+    eligibility:
+      "Open online to students, developers, designers, AI and no-code builders and first-timers, in teams of one to four.",
+    brief:
+      "Build a working solution to the problem statement you are given, in thirty-six hours.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the problem as you read it, what you built, and where it would go next",
+      "A certificate for every member who files their own submission inside the 36 hours",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official group." },
+      { when: "Tue 3 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Tue 3 Nov, 10:00", what: "The thirty-six hours open. Build the one workflow that solves it." },
+      { when: "Wed 4 Nov, 22:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: sprintJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development support for the top three teams",
+      "Letters of recommendation for the top three teams",
+      "A complimentary .XYZ domain for every eligible participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption credits for every eligible participant",
+      "Expert-led workshops",
+      "100+ reward recipients across the hackathon",
+      "A certificate for every participant who files their own submission inside the 36 hours",
+      "A Winner Certificate naming the rank, for the three winning teams",
+    ],
+    sections: sprintSections(H36, undefined, HWP_DELIVERY),
+    faq: sprintFaq(H36, undefined, HWP_DELIVERY),
+    stats: [
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Hours to build", value: "36" },
+      { label: "Per team", value: "1–4" },
+    ],
+    sponsors: HWP_SPONSORS,
+    registration: {
+      note: "Open to teams of one to four, free to enter. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+    },
+    links: [
+      { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LLeWA6XWTjR5kMKxLeUvR9" },
+    ],
+    // Ink. No artwork supplied, so the generated poster is what shows.
+    posterSeed: 9206,
+  },
+  {
+    locked: false,
+    slug: "codefrontier",
+    title: "CodeFrontier Hackathon",
+    kicker: "HACKATHON — 36 HOURS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-11-03T10:00:00+05:30",
+    endsAt: "2026-11-04T22:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A HackWithPune hackathon: thirty-six hours, one problem statement, one finished product. Free to enter, teams of one to four, with ₹30,000, paid internships and incubation for the top three.",
+    description: [
+      "CodeFrontier is an online hackathon run by HackWithPune in a single thirty-six-hour window. One problem statement, one submission from each member who built, and a product at the end of it.",
+      "Submissions are scored on one published sheet, out of 100, and it is on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "online", "36 hours"],
+    teamSize: "1 to 4. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce, the sciences, law and medicine. Registration is open online.",
+    brief:
+      "Build a working solution to the problem statement you are given, in thirty-six hours.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the problem as you read it, what you built, and where it would go next",
+      "A certificate for every member who files their own submission inside the 36 hours",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official group." },
+      { when: "Tue 3 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Tue 3 Nov, 10:00", what: "The thirty-six hours open. Build the one workflow that solves it." },
+      { when: "Wed 4 Nov, 22:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: sprintJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development support for the top three teams",
+      "Letters of recommendation for the top three teams",
+      "A complimentary .XYZ domain for every eligible participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption credits for every eligible participant",
+      "Expert-led workshops",
+      "100+ reward recipients across the hackathon",
+      "A certificate for every participant who files their own submission inside the 36 hours",
+      "A Winner Certificate naming the rank, for the three winning teams",
+    ],
+    sections: sprintSections(H36, undefined, HWP_DELIVERY),
+    faq: sprintFaq(H36, undefined, HWP_DELIVERY),
+    stats: [
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Hours to build", value: "36" },
+      { label: "Per team", value: "1–4" },
+    ],
+    sponsors: HWP_SPONSORS,
+    registration: {
+      note: "Open to teams of one to four, free to enter. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+    },
+    links: [
+      { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/IdQJEKGLGSrB5FGpdCAcVQ" },
+    ],
+    // Paper. No artwork supplied, so the generated poster is what shows.
+    posterSeed: 9208,
   },
 ];
