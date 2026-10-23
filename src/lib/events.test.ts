@@ -307,8 +307,24 @@ describe("events seam", () => {
         before), and each time a test pinned to the old sentence failed on the
         deliberate change rather than on a regression.
       */
-      expect(rounds.intro, e.slug).toMatch(/team leader/i);
-      expect(rounds.intro, e.slug).toMatch(/one submission per round per team/i);
+      /*
+        Who submits: stated one way or the other, and never both. Three events
+        take one entry per team from the leader; Codex 48 and CodeStar 30 take
+        one from every member. Asserted by meaning rather than by phrase, for
+        the reason above — this sentence has now flipped twice.
+      */
+      const leaderModel = /one submission per round per team, made by the team leader/i.test(
+        rounds.intro ?? "",
+      );
+      const individualModel = /every participant submits/i.test(rounds.intro ?? "");
+      expect(
+        [leaderModel, individualModel],
+        `${e.slug} does not say who submits`,
+      ).toContain(true);
+      expect(
+        leaderModel && individualModel,
+        `${e.slug} says both the leader and every member submit`,
+      ).toBe(false);
       expect(rounds.intro, e.slug).toMatch(/problem statement/i);
       expect(rounds.intro, e.slug).toMatch(/hour before/i);
 
@@ -412,7 +428,7 @@ describe("events seam", () => {
       if (certs?.kind !== "list") continue;
       const promise = `${certs.intro ?? ""} ${certs.items.join(" ")}`;
       expect(promise, `${e.slug} does not promise everyone a certificate`).toMatch(
-        /every (member|participant)[^.]*valid submission/i,
+        /every (member|participant)[^.]*valid (submission|entry)/i,
       );
     }
   });
@@ -456,6 +472,60 @@ describe("events seam", () => {
         /only the top three are placed/i,
       );
     }
+  });
+
+  it("takes an entry from every participant, with their role, outside the first three", () => {
+    /*
+      TechCircuit, FutureStack and CodeAxis still take one entry per team from
+      the team leader. Every other live hackathon takes one from each member,
+      naming the role they held and the part they built.
+
+      That is not paperwork for its own sake: those two fields are what the
+      certificate prints, and they can only come from the holder (see `roles`
+      and `contribution` in src/lib/certificates.ts). A team entry leaves the
+      member who did nothing holding the same document as the member who built
+      it, which is the failure this guards.
+    */
+    const leaderOnly = ["tech-circuit", "future-stack", "code-axis"];
+    let checked = 0;
+
+    for (const e of published) {
+      if (e.status === "past" || e.format !== "hackathon") continue;
+      checked += 1;
+
+      const words = [
+        ...(e.faq ?? []).flatMap((f) => `${f.q} ${f.a}`),
+        ...(e.sections ?? []).flatMap((sec) =>
+          sec.kind === "list"
+            ? [sec.intro ?? "", ...sec.items]
+            : [sec.intro ?? "", ...sec.items.flatMap((i) => [i.blurb ?? "", i.note ?? "", ...i.points])],
+        ),
+      ].join(" ");
+
+      if (leaderOnly.includes(e.slug)) {
+        expect(words, `${e.slug} should still submit through the team leader`).toMatch(
+          /made by the team leader/i,
+        );
+        expect(words, `${e.slug} should not ask every member to submit`).not.toMatch(
+          /every participant submits/i,
+        );
+        continue;
+      }
+
+      expect(words, `${e.slug} does not ask every participant to submit`).toMatch(
+        /every participant submits|one submission per participant/i,
+      );
+      expect(words, `${e.slug} does not ask for the role each member held`).toMatch(
+        /the role (you|they) held/i,
+      );
+      // And it has to say what happens to the member who leaves it to a
+      // teammate, which is the question this change creates.
+      expect(words, `${e.slug} does not say a member with no entry is not certified`).toMatch(
+        /files no entry[^.]*not issued a certificate|not recorded as having taken part/i,
+      );
+    }
+
+    expect(checked, "no hackathons were checked").toBeGreaterThanOrEqual(10);
   });
 
   it("never publishes the judging intervals", () => {

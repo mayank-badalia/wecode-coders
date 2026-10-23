@@ -146,6 +146,7 @@ const SECTIONS: Section[] = [
         items: [
           "Every team must follow the official problem statement, the round or window instructions and the submission requirements for the event it entered.",
           "All required forms, files, repositories, links and demonstrations must be submitted before the announced deadline.",
+          "Where an event takes a submission from every participant, as stated on that event’s own page, each member must file their own entry for the team’s project, naming the role they held and the part they built. A member who files no entry is not recorded as having taken part in that round or window, even where the project was submitted by somebody else.",
           "Inaccessible links, missing permissions, corrupted files, incomplete forms and late submissions may be rejected.",
           "Participants are responsible for keeping proof of payment and submission.",
           "Submitted work must be original and must comply with the announced rules concerning prior work, AI tools, open-source components and third-party resources.",
@@ -183,6 +184,7 @@ const SECTIONS: Section[] = [
         kind: "clauses",
         items: [
           "Which certificates an event issues is listed in the certificates block on that event’s own page, and that list governs.",
+          "Where an event takes a submission from every participant, a certificate is issued against that participant’s own valid entry. The role and the contribution printed on a certificate are the ones its holder declared in that entry, and a participant who filed none is not issued one.",
           "The 48-hour builds issue a certificate to every participant whose team makes a valid submission inside the window. Placing is not required and there is nothing to pay for it; registering without submitting, or making a submission that is not valid, earns none.",
           "Several events issue a certificate only for the final round. Where the event page states this, Rounds 1 and 2 are qualifying rounds and carry no certificate of any kind, including for participation, and a team that is not selected for Round 3 is not issued one.",
           "Where an event does issue round-completion certificates, a participant who made a valid Round 2 submission may receive the Round 2 Completion Certificate even if they later withdraw from Round 3, and that withdrawal does not cancel it.",

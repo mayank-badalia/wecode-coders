@@ -130,19 +130,34 @@ const COMPACT_ROUNDS: RoundOffsets = [
 function seriesRounds(
   startsAt: string,
   offsets: RoundOffsets = DEFAULT_ROUNDS,
-  scheme: CertificateScheme = "rounds",
+  terms: SeriesTerms = {},
 ): EventSection {
   // Filtered from seriesJudging rather than written out again: one source for
   // the criteria, so a weight cannot be right in the round and wrong in the
   // event's own table.
   const forRound = (n: number) =>
     seriesJudging().filter((j) => j.round.startsWith(`Round ${n}`)).map(({ name, detail, weight }) => ({ name, detail, weight }));
+
+  /* Who submits, said in the intro where nobody can miss it. */
+  const whoSubmits =
+    terms.submission === "individual"
+      ? `Every participant submits. The project is filed once per member rather than once per team: each person makes their own entry for the round, names the role they held on it — ${ROLE_SET} — and writes in their own words the part they built. Those two answers are what your certificate prints, so a member who files nothing has nothing recorded and is not issued one.`
+      : "One submission per round per team, made by the team leader — not one per member.";
+
+  /* And the two fields that only the member themselves can answer. */
+  const ownRole =
+    terms.submission === "individual"
+      ? [
+          "Your own role on the project, and the part you built, in your own words — these are the two lines your certificate prints",
+        ]
+      : [];
+
   return {
   kind: "columns",
   variant: "tabs",
   label: "How the three rounds run",
   intro:
-    "Three rounds, each asking for something the last did not. The problem statement is released by the organisers one hour before the event begins, so every team starts from the same brief at the same moment. Round 1 and Round 2 results are sent to every team by email, whether or not the team has been selected — you hear from us either way — and the teams that go through receive the instructions for the next stage in the same email. One submission per round per team, made by the team leader — not one per member. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
+    `Three rounds, each asking for something the last did not. The problem statement is released by the organisers one hour before the event begins, so every team starts from the same brief at the same moment. Round 1 and Round 2 results are sent to every team by email, whether or not the team has been selected — you hear from us either way — and the teams that go through receive the instructions for the next stage in the same email. ${whoSubmits} No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.`,
   items: [
     {
       code: "01",
@@ -162,6 +177,7 @@ function seriesRounds(
         "The impact you expect it to have",
         "Where the product could go after the event",
         "Team and participant details",
+        ...ownRole,
       ],
       judging: forRound(1),
     },
@@ -179,10 +195,11 @@ function seriesRounds(
         "Technology and implementation details",
         "An explanation of anything you changed from the original proposal",
         "The three major improvements you will make in Round 3 — substantial work on the product, not cosmetic tweaks, and you are judged on delivering them",
+        ...ownRole,
       ],
       judging: forRound(2),
       note:
-        scheme === "finalists"
+        terms.certificates === "finalists"
           ? "Rounds 1 and 2 are qualifying rounds and carry no certificate, including for taking part. If your team qualifies for Round 3 and decides not to take part, nothing is issued — the certificate is earned in the final round."
           : "If your team qualifies for Round 3 and decides not to take part, you keep a Round 2 Completion Certificate. Stopping here does not cancel what you earned — it is the only certificate you will be issued, and it is not upgraded later.",
     },
@@ -201,6 +218,7 @@ function seriesRounds(
         "The improvements you completed after Round 2, including the three you named",
         "Testing details",
         "A product roadmap and future development plan",
+        ...ownRole,
       ],
       judging: forRound(3),
       note:
@@ -357,6 +375,7 @@ function seriesJudging() {
  */
 const seriesRules = (
   winnerLink = "the GitHub repository of what each of them built",
+  terms: SeriesTerms = {},
 ): EventSection => ({
   kind: "list",
   label: "Rules",
@@ -377,7 +396,14 @@ const seriesRules = (
     "Projects must not promote illegal, harmful or discriminatory activity.",
     "More than 1,000 teams start in Round 1 and all of them compete. Round 2 is limited to 300 teams, Round 3 to 100, and three teams win. Qualification is competitive: clearing a round's requirements does not by itself carry a team into the next one.",
     "Everything on each round's submission list has to arrive before that round's deadline.",
-    "One submission per round per team, made by the team leader. Individual members do not submit separately, and a second entry from the same team is not counted.",
+    ...(terms.submission === "individual"
+      ? [
+          "One submission per participant per round, not one per team. Every member files their own entry for the same project, names the role they held on it and states the part they built; a second entry from the same person is not counted.",
+          "A participant who files no entry of their own is not recorded as having taken part in that round, and is not issued a certificate for it, even where the team's project was submitted by somebody else.",
+        ]
+      : [
+          "One submission per round per team, made by the team leader. Individual members do not submit separately, and a second entry from the same team is not counted.",
+        ]),
     "Missing a round's deadline ends the event for that team. There is no late window.",
     "The three major improvements named at Round 2 are what Round 3 is measured against — name substantial work, then deliver it.",
     "Judges may ask for repository access or other proof of development at any point.",
@@ -404,6 +430,47 @@ const seriesRules = (
 type CertificateScheme = "rounds" | "finalists";
 
 /**
+ * Who files a submission.
+ *
+ * "leader" is one entry per team, sent by the team leader. "individual" is one
+ * entry per participant: the same team project, filed by each member with the
+ * role they held and the part they built.
+ *
+ * The second is not red tape. A team certificate that names only the team is
+ * worth the same to every member, including the one who did nothing — so the
+ * certificate prints the role and the contribution its holder declared, and
+ * those two fields have to come from the holder. See `roles` and
+ * `contribution` in src/lib/certificates.ts, which have expected them since
+ * the three-round events began.
+ */
+type SubmissionMode = "leader" | "individual";
+
+/**
+ * The roles the submission form offers.
+ *
+ * One copy, because three blocks name them and the certificate prints them.
+ * The same list is documented beside the `roles` field in
+ * src/lib/certificates.ts, which is what receives them.
+ */
+const ROLE_SET =
+  "Backend, Frontend, AI / ML, Design / UI-UX, Product / Research or Presentation / Demo";
+
+/**
+ * The two promises that differ between events in the series.
+ *
+ * An object rather than two more positional arguments: "finalists" and
+ * "individual" are both bare strings, and a call site reading
+ * seriesSections(date, offsets, "finalists", "individual") is one transposition
+ * away from promising the wrong thing on the wrong page.
+ */
+type SeriesTerms = {
+  /** Which certificates the event issues. Defaults to "rounds". */
+  certificates?: CertificateScheme;
+  /** Who submits. Defaults to "leader". */
+  submission?: SubmissionMode;
+};
+
+/**
  * Certificates for the series.
  *
  * Its own block rather than more lines in `rewards`, because what this states
@@ -413,15 +480,20 @@ type CertificateScheme = "rounds" | "finalists";
  * The last three items are the same under either scheme: who judges, how fast,
  * and when the certificate arrives.
  */
-const seriesCertificates = (scheme: CertificateScheme = "rounds"): EventSection => ({
+const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
   kind: "list",
   label: "Certificates",
   intro:
-    scheme === "finalists"
+    terms.certificates === "finalists"
       ? "One certificate, earned in the final round. Rounds 1 and 2 are qualifying rounds: clearing them carries your team forward, and nothing is issued for them."
       : "Four levels, and you hold one of them: the highest you reach. Clearing a round upgrades the certificate you will be issued rather than adding another one beside it.",
   items: [
-    ...(scheme === "finalists"
+    ...(terms.submission === "individual"
+      ? [
+          "Your certificate names the role you declared and the part you built, in the words you submitted them in. That is why every member files their own entry rather than one per team, and why a member with no entry of their own is not issued a certificate.",
+        ]
+      : []),
+    ...(terms.certificates === "finalists"
       ? [
           "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round; it does not print a position.",
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
@@ -459,27 +531,29 @@ const seriesTrailingSections = (
   startsAt: string,
   offsets: RoundOffsets = DEFAULT_ROUNDS,
   winnerLink?: string,
-  scheme: CertificateScheme = "rounds",
+  terms: SeriesTerms = {},
 ): EventSection[] => [
-  seriesRounds(startsAt, offsets, scheme),
-  seriesRules(winnerLink),
-  seriesCertificates(scheme),
+  seriesRounds(startsAt, offsets, terms),
+  seriesRules(winnerLink, terms),
+  seriesCertificates(terms),
 ];
 
 const seriesSections = (
   startsAt: string,
   offsets: RoundOffsets = DEFAULT_ROUNDS,
-  scheme: CertificateScheme = "rounds",
-): EventSection[] => [...seriesTrailingSections(startsAt, offsets, undefined, scheme)];
+  terms: SeriesTerms = {},
+): EventSection[] => [...seriesTrailingSections(startsAt, offsets, undefined, terms)];
 
-/** FAQ for the series. Only the certificate answer differs by scheme. */
-function seriesFaq(scheme: CertificateScheme = "rounds") {
+/** FAQ for the series. The certificate and submission answers differ by terms. */
+function seriesFaq(terms: SeriesTerms = {}) {
   return [
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
     { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
     { q: "What happens between rounds?", a: "Every team that submitted is emailed its result, selected or not — you do not have to guess, and you do not have to wait for a group post. The teams that go through get the instructions for the next stage in the same email." },
     { q: "How many teams get through?", a: "More than 1,000 teams start in Round 1 and every one of them competes. 300 go through to Round 2, 100 to the final round, and three teams win. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive." },
-    { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
+    terms.submission === "individual"
+      ? { q: "Who submits for the team?", a: `Everybody, separately. Each member files their own entry for the same project every round, names the role they held — ${ROLE_SET} — and says what they built. Nobody submits on anyone else's behalf, and a member who files no entry is not recorded as having taken part and is not issued a certificate.` }
+      : { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
     { q: "Do I need a working product in Round 1?", a: "No. Round 1 is one PDF on the official format — the problem, the users, the solution, the workflow, the features, the stack and the plan." },
     { q: "What are the three improvements in Round 2?", a: "At Round 2 you name the three major improvements you will make in Round 3. They have to be substantial work on the product, not cosmetic changes, and Round 3 is measured against delivering them." },
     { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
@@ -492,7 +566,7 @@ function seriesFaq(scheme: CertificateScheme = "rounds") {
     {
       q: "What certificate do I get?",
       a:
-        scheme === "finalists"
+        terms.certificates === "finalists"
           ? "Only the final round earns one: a National Finalist Certificate for a valid Round 3 submission, or a Winner Certificate naming your rank if you finish in the top three. A finalist certificate does not print a position — only the three winners are placed. Rounds 1 and 2 are qualifying rounds, and they carry no certificate, not even for taking part."
           : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Only the three winners are placed; no other certificate carries a position. Clearing a round upgrades that certificate rather than adding a second one.",
     },
@@ -576,7 +650,7 @@ const sprintBuild = (): EventSection => ({
   kind: "list",
   label: SPRINT_LABEL,
   intro:
-    "One problem statement, forty-eight hours, one submission. The problem statement is released by the organisers an hour before the clock starts, so every team begins from the same brief at the same moment. There are no qualifying rounds and nothing to clear first — you build for the whole window and submit once, through the team leader, not once per member. Taking part is free from start to finish. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.",
+    `One problem statement, forty-eight hours, and an entry from every person who built. The problem statement is released by the organisers an hour before the clock starts, so every team begins from the same brief at the same moment. There are no qualifying rounds and nothing to clear first. Every participant submits: the project is filed once per member rather than once per team, and each person names the role they held on it — ${ROLE_SET} — and writes in their own words the part they built. Those two answers are what your certificate prints, so a member who files nothing has nothing recorded and is not issued one. Taking part is free from start to finish. No promotional posts, no social links and no video demonstrations are required; only the documents and project links listed here.`,
   items: [
     "A link to the working project, which a judge must be able to open and use without being talked through it",
     "The source-code repository, with whatever access judges need to read it",
@@ -586,6 +660,7 @@ const sprintBuild = (): EventSection => ({
     "Testing notes for the main journeys",
     "Where the product would go next, if you carried on with it",
     "Team and participant details",
+    "Your own role on the project, and the part you built, in your own words — these are the two lines your certificate prints",
   ],
 });
 
@@ -619,7 +694,8 @@ const sprintRules = (
     "Plagiarised, copied or misleading submissions are disqualified.",
     "Respect software licences, intellectual property and user privacy.",
     "Projects must not promote illegal, harmful or discriminatory activity.",
-    "One submission per team, made by the team leader. Individual members do not submit separately, and a second entry from the same team is not counted.",
+    "One submission per participant, not one per team. Every member files their own entry for the same project, names the role they held on it and states the part they built; a second entry from the same person is not counted.",
+    "A participant who files no entry of their own is not recorded as having taken part, and is not issued a certificate, even where the team's project was submitted by somebody else.",
     "Everything on the submission list has to arrive before the forty-eight hours are up. There is no late window.",
     "Judges may ask for repository access or other proof of development at any point.",
     "Organisers may remove anyone who disrupts the event or breaks community guidelines.",
@@ -645,11 +721,12 @@ const sprintCertificates = (): EventSection => ({
   kind: "list",
   label: "Certificates",
   intro:
-    "One certificate, and everyone who builds gets one. Every participant whose team makes a valid submission inside the forty-eight hours is issued a certificate — you do not have to place, and there is nothing to pay for it.",
+    "One certificate, and everyone who builds gets one. Every participant who files a valid entry of their own inside the forty-eight hours is issued a certificate — you do not have to place, and there is nothing to pay for it.",
   items: [
-    "A Certificate of Participation, for every member of a team that makes a valid submission inside the window.",
+    "A Certificate of Participation, for every member who files a valid entry of their own inside the window.",
     "A Winner Certificate naming the rank — first, second or third — for the three winning teams.",
-    "Registering is not taking part. A team that registers and does not submit, or whose submission is not valid, is not issued a certificate.",
+    "Registering is not taking part. A participant who files no entry of their own, or whose entry is not valid, is not issued a certificate — including where the rest of the team submitted.",
+    "Your certificate names the role you declared and the part you built, in the words you submitted them in. That is why every member files their own entry rather than one per team.",
     "Each participant receives one certificate only: a winning team's members are issued the Winner Certificate rather than both.",
     "Only the top three are placed. The group announcement carries those three team names and a link to what they built, and their certificates print the rank — first, second or third. No other team is told a position, and none is printed on its certificate.",
     "Submissions are judged by Inkloom, as every event in this series is, and final results are declared one week after the hackathon ends.",
@@ -672,8 +749,8 @@ function sprintFaq(
     { q: "How does it run?", a: "One window, forty-eight hours long. The problem statement lands an hour before it opens, you build, and you submit once before it closes. There are no qualifying rounds." },
     { q: "Is it free?", a: "Yes. Registration is free, taking part is free, and there is no participation fee at any stage — not to be judged, and not to be certified." },
     { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
-    { q: "Who submits for the team?", a: "The team leader, once, before the window closes. Members do not submit separately, and a second entry from the same team is not counted." },
-    { q: "Will everyone get a certificate?", a: "Everyone who builds, yes. Every member of a team that makes a valid submission inside the forty-eight hours is issued a Certificate of Participation, and the winning teams are issued a Winner Certificate naming their rank instead. Registering and not submitting does not earn one." },
+    { q: "Who submits for the team?", a: `Everybody, separately. Each member files their own entry for the same project before the window closes, names the role they held — ${ROLE_SET} — and says what they built. Nobody submits on anyone else's behalf, and a member who files no entry is not recorded as having taken part and is not issued a certificate.` },
+    { q: "Will everyone get a certificate?", a: "Everyone who builds and files their own entry, yes. Every member who makes a valid submission inside the forty-eight hours is issued a Certificate of Participation, and the winning teams are issued a Winner Certificate naming their rank instead. Registering without submitting does not earn one, and neither does leaving the submission to a teammate." },
     { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
     { q: "Can beginners enter?", a: "Yes. The event is built for first-timers and experienced builders alike, judged on the same criteria." },
     { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
@@ -1181,7 +1258,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member of a team that submits inside the 48 hours",
+      "A certificate for every member who files their own submission inside the 48 hours",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1220,7 +1297,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/p/wcc-forge-48-wecodecoders-1756040",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Registration closes 29 October at 23:59 IST, and every member registers individually on Unstop under the same team name.",
+      note: "Open to teams of one to four. Registration closes 29 October at 23:59 IST. Every member registers individually on Unstop under the same team name, and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1536,8 +1613,11 @@ export const events: Event[] = [
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, "finalists"),
-    faq: seriesFaq("finalists"),
+    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, {
+      certificates: "finalists",
+      submission: "individual",
+    }),
+    faq: seriesFaq({ certificates: "finalists", submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
@@ -1547,7 +1627,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codex-48-national-level-hackathon-wecodecoders-1761082",
       label: "Register on Unstop",
-      note: "Open to teams of one to four.",
+      note: "Open to teams of one to four. Every member registers individually and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1614,8 +1694,11 @@ export const events: Event[] = [
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, "finalists"),
-    faq: seriesFaq("finalists"),
+    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, {
+      certificates: "finalists",
+      submission: "individual",
+    }),
+    faq: seriesFaq({ certificates: "finalists", submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Reward recipients", value: "100+" },
@@ -1625,7 +1708,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codestar-30-national-level-hackathon-wecodecoders-1760472",
       label: "Register on Unstop",
-      note: "Open to teams of one to four.",
+      note: "Open to teams of one to four. Every member registers individually and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1671,7 +1754,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member of a team that submits inside the 48 hours",
+      "A certificate for every member who files their own submission inside the 48 hours",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1688,7 +1771,7 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A certificate for every participant whose team submits inside the 48 hours",
+      "A certificate for every participant who files their own submission inside the 48 hours",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1703,7 +1786,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codeverse-india-national-level-hackathon-wecodecoders-1763003",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Registration closes 29 October at 07:30 IST.",
+      note: "Open to teams of one to four. Registration closes 29 October at 07:30 IST. Every member registers individually and files their own submission.",
     },
     links: [
       {
@@ -1755,7 +1838,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member of a team that submits inside the 48 hours",
+      "A certificate for every member who files their own submission inside the 48 hours",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1771,7 +1854,7 @@ export const events: Event[] = [
       "Incubation and product-development support for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
-      "A certificate for every participant whose team submits inside the 48 hours",
+      "A certificate for every participant who files their own submission inside the 48 hours",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1785,7 +1868,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/p/codehack-india-national-level-hackathon-wecodecoders-1762158",
       label: "Register on Unstop",
-      note: "Open to teams of one to four.",
+      note: "Open to teams of one to four. Every member registers individually and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1828,7 +1911,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member of a team that submits inside the 48 hours",
+      "A certificate for every member who files their own submission inside the 48 hours",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1848,7 +1931,7 @@ export const events: Event[] = [
       "$500 in Adaption Labs credits for every eligible participant",
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A certificate for every participant whose team submits inside the 48 hours",
+      "A certificate for every participant who files their own submission inside the 48 hours",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: sprintSections(),
@@ -1862,7 +1945,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codenexus-india-2026-national-hackathon-wecodecoders-1764747",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Registration closes 2 November at 02:00 IST.",
+      note: "Open to teams of one to four. Registration closes 2 November at 02:00 IST. Every member registers individually and files their own submission.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LQXKCATzVwsCJDHOaeVCjf" },
@@ -1908,7 +1991,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member of a team that submits inside the 48 hours",
+      "A certificate for every member who files their own submission inside the 48 hours",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1928,7 +2011,7 @@ export const events: Event[] = [
       "$500 in Adaption Labs credits for every eligible participant",
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A certificate for every participant whose team submits inside the 48 hours",
+      "A certificate for every participant who files their own submission inside the 48 hours",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: sprintSections(),
@@ -1942,7 +2025,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codetitans-india-2026-national-hackathon-wecodecoders-1766190",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Registration closes 4 November at 20:30 IST.",
+      note: "Open to teams of one to four. Registration closes 4 November at 20:30 IST. Every member registers individually and files their own submission.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Lr1a3omlex7Coc4tAJ8S1C" },
