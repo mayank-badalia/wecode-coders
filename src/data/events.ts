@@ -1295,8 +1295,8 @@ export const events: Event[] = [
     kicker: "HACKATHON — 48 HOURS",
     format: "hackathon",
     status: "upcoming",
-    startsAt: "2026-10-30T18:00:00+05:30",
-    endsAt: "2026-11-01T18:00:00+05:30",
+    startsAt: "2026-10-30T10:00:00+05:30",
+    endsAt: "2026-11-01T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1329,9 +1329,9 @@ export const events: Event[] = [
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
-      { when: "Fri 30 Oct, 17:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Fri 30 Oct, 18:00", what: "The forty-eight hours open. Build the one workflow that solves it." },
-      { when: "Sun 1 Nov, 18:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Fri 30 Oct, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Fri 30 Oct, 10:00", what: "The forty-eight hours open. Build the one workflow that solves it." },
+      { when: "Sun 1 Nov, 10:00", what: "Submissions close. Everything on the list is in, or it is not." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: sprintJudging(),
@@ -1792,8 +1792,8 @@ export const events: Event[] = [
     kicker: "HACKATHON — 48 HOURS",
     format: "hackathon",
     status: "upcoming",
-    startsAt: "2026-10-30T09:00:00+05:30",
-    endsAt: "2026-11-01T09:00:00+05:30",
+    startsAt: "2026-10-30T10:00:00+05:30",
+    endsAt: "2026-11-01T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1825,9 +1825,9 @@ export const events: Event[] = [
     ],
     schedule: [
       { when: "Until Thu 29 Oct, 07:30", what: "Registration open. Form a team of one to four and join the official group." },
-      { when: "Fri 30 Oct, 08:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Fri 30 Oct, 09:00", what: "The forty-eight hours open. Build the one workflow that solves it." },
-      { when: "Sun 1 Nov, 09:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Fri 30 Oct, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Fri 30 Oct, 10:00", what: "The forty-eight hours open. Build the one workflow that solves it." },
+      { when: "Sun 1 Nov, 10:00", what: "Submissions close. Everything on the list is in, or it is not." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: sprintJudging(),
@@ -2187,42 +2187,44 @@ export const events: Event[] = [
       LIVE. A quiz, not a hackathon — so no rounds, no problem statement and
       none of the series' shared blocks.
 
-      The Unstop listing gave the quiz day but not the hour (its stage times
-      read 01:10 to 01:11, which is a placeholder, not a sitting), so this
-      carried a `startTimeNote` until the sitting was confirmed: 10:00 IST.
-      The window length is the one Protocol//60 published, not a figure from
-      the listing — if the paper is shorter, shorten `endsAt` with it, since
-      the page prints the gap as "Runs for N hours".
+      It is not a sitting at a fixed minute any more: the paper opens at 10:00
+      IST and closes at 18:00, and a participant sits it once at whatever
+      point inside those eight hours suits them. The paper itself is fifteen
+      questions and takes about fifteen minutes, which is the number the copy
+      leads with — "Runs for 8 hours" on the spec list is the window, and
+      every other mention has to make the difference obvious or a reader will
+      block out an afternoon for a quarter of an hour's work.
     */
     locked: false,
     featured: true,
     slug: "codequest-quiz-india",
     title: "CodeQuest Quiz India 2026",
-    kicker: "QUIZ — ONE SITTING",
+    kicker: "QUIZ — 15 QUESTIONS",
     format: "quiz",
     status: "upcoming",
     startsAt: "2026-11-03T10:00:00+05:30",
-    endsAt: "2026-11-03T12:00:00+05:30",
+    endsAt: "2026-11-03T18:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online quiz on agentic AI, full-stack engineering and emerging technology. One sitting, free to enter, with ₹30,000 shared among the top three.",
+      "A national online quiz on agentic AI, full-stack engineering and emerging technology. Fifteen questions, about fifteen minutes, sat once inside an eight-hour window. Free to enter, with ₹30,000 shared among the top three.",
     description: [
       "CodeQuest Quiz India 2026 is a national online quiz for people who build. The questions span autonomous systems, the engineering behind a working product, and the technologies arriving around both.",
-      "It runs in one sitting on 3 November, starting at 10:00 IST. Everyone who completes it properly gets a verifiable certificate, and the rewards go well beyond the top three.",
+      "The paper opens at 10:00 IST on 3 November and closes at 18:00. It is fifteen questions and takes about fifteen minutes, so the eight hours are there to let you choose when to sit down rather than to be spent on it. Everyone who completes it properly gets a verifiable certificate, and the rewards go well beyond the top three.",
     ],
     forWho: "Students, developers, AI enthusiasts and anyone curious about how modern systems are built.",
     tags: ["agentic ai", "full-stack", "quiz", "online", "national"],
     teamSize: "Individual. Everyone registers and attempts on their own.",
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers and self-taught builders. Registration is open nationally.",
-    brief: "One sitting at 10:00, three subject areas, and a leaderboard at the end of it.",
+    brief: "Fifteen questions across three subject areas, sat once inside an eight-hour window.",
     deliverables: [
-      "One timed attempt, submitted before the clock runs out",
+      "One attempt at fifteen questions, submitted before the window closes",
     ],
     schedule: [
       { when: "Before the quiz", what: "Registration open. Join the official channel for the joining link, the deadline and the final instructions." },
-      { when: "Tue 3 Nov, 10:00", what: "Quiz day. One attempt, inside the official window." },
+      { when: "Tue 3 Nov, 10:00", what: "The paper opens. Fifteen questions, about fifteen minutes; sit it whenever suits you before it closes." },
+      { when: "Tue 3 Nov, 18:00", what: "The paper closes. An attempt not submitted by then does not count." },
       { when: "After", what: "Responses validated, the leaderboard reviewed, results announced and certificates issued." },
     ],
     judging: [
@@ -2245,7 +2247,7 @@ export const events: Event[] = [
         kind: "columns",
         label: "What the quiz covers",
         intro:
-          "Three areas, weighted evenly. The recommended reading goes out in the official channel before the quiz.",
+          "Fifteen questions across three areas, weighted evenly. The recommended reading goes out in the official channel before the quiz.",
         items: [
           {
             code: "01",
@@ -2285,7 +2287,7 @@ export const events: Event[] = [
         items: [
           "One attempt per person. Everyone sits it on their own.",
           "Duplicate, manipulated or suspicious entries may be disqualified.",
-          "Finish within the official window.",
+          "Begin and finish inside the eight-hour window, 10:00 to 18:00 IST. The paper takes about fifteen minutes; the window is wide so you can choose your moment, not so you can take all day over it.",
           "Report technical problems immediately through the official support channel.",
           "Organisers may review activity and response patterns to keep the event fair.",
           "Do not ask an organiser or volunteer to break a rule, waive a requirement or make an exception in your favour. You may ask once; when the answer is no, that is the answer.",
@@ -2301,16 +2303,18 @@ export const events: Event[] = [
     faq: [
       { q: "Is it free?", a: "Yes. Registration costs nothing." },
       { q: "Is this a quiz or a hackathon?", a: "A quiz, in one sitting. There is nothing to build and nothing to submit beforehand." },
-      { q: "When exactly does it start?", a: "10:00 IST on 3 November. The joining link goes out in the official group ahead of the day." },
+      { q: "When exactly does it start?", a: "The paper opens at 10:00 IST on 3 November and closes at 18:00. One attempt, at any point in between. The joining link goes out in the official group ahead of the day." },
+      { q: "How long does it take?", a: "Fifteen questions, about fifteen minutes on average. The eight-hour window is there so you can pick your moment — it is not eight hours of quiz." },
       { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before the quiz." },
       { q: "Will everyone get a certificate?", a: "Everyone who registers, joins through the official link, completes and submits the quiz, follows the rules and passes the integrity checks. One certificate per participant, distributed within 10 days of the results being announced. Registering alone does not qualify." },
       { q: "When are results announced?", a: "After the responses are validated and the leaderboard is reviewed. Timelines are shared through the official channel." },
       { q: "Where are results announced?", a: "In the official group: the three winning names, and nothing further. Only those three are placed — no leaderboard goes up, no other participant is given a position, and no certificate below winner prints one. Nobody's personal details are shared without their consent." },
     ],
     stats: [
+      { label: "Questions", value: "15" },
+      { label: "Typical time", value: "15 min" },
+      { label: "Window", value: "8 hours" },
       { label: "Prize pool", value: "₹30,000" },
-      { label: "Entry fee", value: "₹0" },
-      { label: "Attempts", value: "1" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {

@@ -539,6 +539,58 @@ describe("events seam", () => {
     expect(checked, "no hackathons were checked").toBeGreaterThanOrEqual(10);
   });
 
+  it("opens every single-window build at 10:00 IST", () => {
+    /*
+      One start time across the format, so a team entering two of them is not
+      working to two different clocks. Forge 48 opened at 18:00 and CodeVerse
+      at 09:00, which also made their windows close in the evening — the end
+      is derived from the start, so this pins both ends with one assertion.
+    */
+    expect(sprints.length).toBeGreaterThanOrEqual(9);
+    const clock = new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Kolkata",
+    });
+
+    for (const e of sprints) {
+      expect(clock.format(new Date(e.startsAt)), `${e.slug} does not open at 10:00`).toBe(
+        "10:00",
+      );
+    }
+  });
+
+  it("asks a single-window build for no money at all", () => {
+    /*
+      The fee belongs to Round 3 of a three-round event and nowhere else.
+      These events are free throughout, and the guard is on the whole page
+      rather than on the round note the detail page reads, because a fee named
+      in a reward line or an FAQ answer is just as much a charge.
+    */
+    for (const e of sprints) {
+      const words = [
+        e.summary,
+        e.brief,
+        ...e.description,
+        ...e.deliverables,
+        ...(e.rewards ?? []),
+        ...(e.faq ?? []).flatMap((f) => `${f.q} ${f.a}`),
+        ...(e.schedule ?? []).map((r) => r.what),
+        e.registration?.note ?? "",
+        ...(e.sections ?? []).flatMap((sec) =>
+          sec.kind === "list"
+            ? [sec.intro ?? "", ...sec.items]
+            : [sec.intro ?? "", ...sec.items.flatMap((i) => [i.blurb ?? "", i.note ?? "", ...i.points])],
+        ),
+      ].join(" ");
+
+      expect(words, `${e.slug} charges a fee`).not.toMatch(
+        /participation fee of|fee of \u20B9|\u20B9\s?\d+ per team|pay a participation fee/i,
+      );
+    }
+  });
+
   it("never publishes the judging intervals", () => {
     // The gaps between rounds are internal. Entrants are told only that
     // qualification updates reach the teams that qualify.
