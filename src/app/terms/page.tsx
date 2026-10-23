@@ -3,21 +3,25 @@ import { TransitionLink } from "@/components/motion/TransitionLink";
 import { Arrow } from "@/components/site/Arrow";
 
 export const metadata: Metadata = {
-  title: "Paid event participation — terms — We Code Coders",
+  title: "Event participation — terms — We Code Coders",
   description:
-    "The notice, rules and terms that apply to any paid We Code Coders event or paid round: eligibility, the non-refundable fee, submissions, rankings, certificates, rewards and conduct.",
+    "The notice, rules and terms that apply to every We Code Coders event, free or paid: eligibility, payment where there is one, submissions, rankings, certificates, rewards and conduct.",
 };
 
 /*
   One terms page for every event.
 
-  It is deliberately not six copies in `src/data/events.ts`. The promise made
-  to a team paying for Round 3 of CodeAxis has to be the same promise made to
-  a team paying for Round 3 of CodeTitans, and the only way that stays true
-  while one of them is edited is for there to be a single copy to edit.
+  It is deliberately not thirteen copies in `src/data/events.ts`. The promise
+  made to a team paying for Round 3 of CodeAxis has to be the same promise
+  made to a team paying for Round 3 of CodeStar 30, and the only way that
+  stays true while one of them is edited is for there to be a single copy to
+  edit.
 
-  Every event that charges for a round links here from its Round 3 block, and
-  the footer carries it on every route.
+  Not every event charges. The five 48-hour builds are free from start to
+  finish, so sections 01 and 02 do not apply to them and the intro says so
+  rather than leaving a reader to work out which clauses are theirs. Every
+  event links here from its own page, and the footer carries it on every
+  route.
 
   Typography follows the hiring page rather than the event pages: this is a
   document that gets read start to finish, not a page that gets browsed, so
@@ -59,11 +63,15 @@ type Section = { code: string; title: string; blocks: Block[] };
 const INTRO: Block[] = [
   {
     kind: "p",
-    text: "These Terms apply to the paid event or paid round described on this page. The displayed event name, participation fee, eligibility requirements, format, schedule, deadlines, rewards and submission instructions form part of these Terms.",
+    text: "These Terms apply to every We Code Coders event. The event name, participation fee where there is one, eligibility requirements, format, schedule, deadlines, rewards and submission instructions published on that event’s own page form part of these Terms.",
   },
   {
     kind: "p",
-    text: "By completing the payment, the team leader confirms that they and every listed team member have read, understood and accepted these Terms.",
+    text: "Many of our events are free. Where an event charges nothing — including the 48-hour build hackathons, which charge no fee at any stage, for entry, judging or a certificate — sections 01 and 02 below do not apply to it and everything that follows them does. Where a fee is charged, it is stated on the event’s own page before anyone pays.",
+  },
+  {
+    kind: "p",
+    text: "By entering, the team leader confirms that they and every listed team member have read, understood and accepted these Terms. Where there is a fee, completing the payment confirms it again.",
   },
 ];
 
@@ -136,7 +144,7 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
-          "Every team must follow the official problem statement, round instructions and submission requirements.",
+          "Every team must follow the official problem statement, the round or window instructions and the submission requirements for the event it entered.",
           "All required forms, files, repositories, links and demonstrations must be submitted before the announced deadline.",
           "Inaccessible links, missing permissions, corrupted files, incomplete forms and late submissions may be rejected.",
           "Participants are responsible for keeping proof of payment and submission.",
@@ -154,9 +162,10 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
-          "Round 1 and Round 2 outcomes are sent by email to every team that made a valid submission for that round, whether or not the team has been selected for the next round, at the address given at registration. Teams that qualify receive the instructions for the next round in the same email.",
+          "Where an event runs qualifying rounds, Round 1 and Round 2 outcomes are sent by email to every team that made a valid submission for that round, whether or not the team has been selected for the next round, at the address given at registration. Teams that qualify receive the instructions for the next round in the same email.",
+          "Where an event runs as a single window — the 48-hour builds — there are no qualifying rounds and nothing to clear beforehand. The one submission made inside the window is what is judged, and its outcome is the final outcome.",
           "Results are announced in the official event group. That announcement carries the winning team names together with a link to the project each of them built. No participant’s personal details, and no further material from a team’s submission, are published or passed on unless that participant or team has given consent.",
-          "Every finalist team that takes part in Round 3 is ranked — not only the top three. The group announcement carries the top three team names only; each Round 3 finalist team is told its own position in the email that delivers its certificate, and the certificate prints it.",
+          "Every team that takes part in the decisive round — Round 3 of a three-round event, or the single window of a 48-hour build — is ranked, not only the top three. The group announcement carries the top three team names only; each ranked team is told its own position in the email that delivers its certificate, and the certificate prints it.",
           "By entering, a team accepts that if it finishes in the top three its team name and a link to its submitted project may be published with the results — the GitHub repository for a hackathon judged on its code, or the live project URL where the event calls for a deployed product.",
           "Individual scores, judging sheets, internal notes, comparative rankings and detailed scoring breakdowns will not be provided, and participants cannot demand personal feedback, re-evaluation, another presentation opportunity or comparison with another team.",
           "Judges may consider the announced criteria together with originality, completion, eligibility, rule compliance and verification of claims.",
@@ -174,6 +183,7 @@ const SECTIONS: Section[] = [
         kind: "clauses",
         items: [
           "Which certificates an event issues is listed in the certificates block on that event’s own page, and that list governs.",
+          "The 48-hour builds issue a certificate to every participant whose team makes a valid submission inside the window. Placing is not required and there is nothing to pay for it; registering without submitting, or making a submission that is not valid, earns none.",
           "Several events issue a certificate only for the final round. Where the event page states this, Rounds 1 and 2 are qualifying rounds and carry no certificate of any kind, including for participation, and a team that is not selected for Round 3 is not issued one.",
           "Where an event does issue round-completion certificates, a participant who made a valid Round 2 submission may receive the Round 2 Completion Certificate even if they later withdraw from Round 3, and that withdrawal does not cancel it.",
           "Qualification for Round 3 alone does not create eligibility for a Final Round or Finalist Completion Certificate.",
@@ -229,7 +239,7 @@ const SECTIONS: Section[] = [
         kind: "clauses",
         items: [
           "Participants must communicate respectfully with organisers, judges, volunteers, sponsors and other participants.",
-          "A participation fee covers the cost of running the event. It does not buy the organisers, their time or their attention, and it does not entitle anyone to priority treatment, instant replies or special consideration.",
+          "Where there is a participation fee, it covers the cost of running the event. It does not buy the organisers, their time or their attention, and it does not entitle anyone to priority treatment, instant replies or special consideration.",
           "Allow 24 hours for a reply to a genuine query raised through the official support channel. Repeated messages, tagging, calling or escalating inside that window will not produce a faster answer.",
           "Threats, harassment, abusive language, discrimination, spam, impersonation, deliberate disruption or disclosure of another person’s private information may result in removal or disqualification without refund.",
           "Participants must not ask an organiser, judge or volunteer to break a rule, waive a requirement, extend a deadline outside the published process or make an exception in their favour. A question may be asked once; a decision, once given, is not reopened by repeating the request.",
@@ -271,7 +281,7 @@ const SECTIONS: Section[] = [
 
 const ACCEPTANCE: string[] = [
   "All submitted information is accurate.",
-  "The payment is being made for the stated team.",
+  "The entry, and any payment made for it, is for the stated team.",
   "Every team member has been informed of these Terms.",
   "The team leader is authorised to act as the primary representative of the team.",
   "The team accepts the refund, certificate, judging, conduct and submission policies stated above.",
@@ -384,14 +394,14 @@ export default function TermsPage() {
             maxWidth: "20ch",
           }}
         >
-          Paid event{" "}
+          Event{" "}
           <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--color-signal)" }}>
             participation
           </span>
         </h1>
         <p style={{ ...TYPE.lead, margin: "1.4rem 0 0", maxWidth: "52ch" }}>
           Participation notice, rules and terms. They are the same for every We Code Coders
-          event, and they apply to any paid event or paid round.
+          event, free or paid — the fee sections apply only where an event charges one.
         </p>
 
         <div

@@ -18,6 +18,30 @@ import {
 /** Everything the seam is allowed to publish. */
 const published = getAllEvents().filter((e) => !e.locked);
 
+/**
+ * The events that are handed a problem statement: the three-round series and
+ * the 48-hour builds.
+ *
+ * Keyed on the block each format publishes rather than on a list of slugs, so
+ * an event joining either format is covered without editing this file. Both
+ * formats issue a brief an hour before the start, which is the opposite of
+ * WCC Launchpad 30 — it runs on tracks and hands out nothing.
+ */
+const BRIEFED_LABELS = ["How the three rounds run", "How the 48 hours run"];
+const briefed = published.filter(
+  (e) => e.sections?.some((sec) => BRIEFED_LABELS.includes(sec.label)) ?? false,
+);
+
+/** The five that still run three rounds. */
+const threeRound = published.filter((e) =>
+  e.sections?.some((sec) => sec.label === "How the three rounds run"),
+);
+
+/** The five that run a single 48-hour build. */
+const sprints = published.filter((e) =>
+  e.sections?.some((sec) => sec.label === "How the 48 hours run"),
+);
+
 describe("events seam", () => {
   it("returns every event", () => {
     expect(getAllEvents().length).toBeGreaterThanOrEqual(5);
@@ -145,7 +169,7 @@ describe("events seam", () => {
     const series = published.filter((e) =>
       e.sections?.some((sec) => sec.label === "How the three rounds run"),
     );
-    expect(series.length).toBeGreaterThanOrEqual(8);
+    expect(series.length).toBeGreaterThanOrEqual(5);
 
     for (const e of series) {
       const sheet = (round: string) =>
@@ -204,7 +228,7 @@ describe("events seam", () => {
     const series = published.filter((e) =>
       e.sections?.some((sec) => sec.label === "How the three rounds run"),
     );
-    expect(series.length).toBeGreaterThanOrEqual(8);
+    expect(series.length).toBeGreaterThanOrEqual(5);
 
     // "2 Nov — 4 Nov" -> the two dates it names, in the event's own year.
     const parse = (meta: string, year: number) =>
@@ -247,14 +271,11 @@ describe("events seam", () => {
   });
 
   it("puts the problem-statement line where it cannot be skimmed", () => {
-    // People arrive wanting to know what they are building. Every three-round
+    // People arrive wanting to know what they are building. Every briefed
     // event answers that in its own field, so it renders apart from the body
     // copy rather than inside a paragraph someone scrolls past.
-    const series = published.filter((e) =>
-      e.sections?.some((sec) => sec.label === "How the three rounds run"),
-    );
-    expect(series.length).toBeGreaterThanOrEqual(8);
-    for (const e of series) {
+    expect(briefed.length).toBeGreaterThanOrEqual(10);
+    for (const e of briefed) {
       expect(e.emphasis, e.slug).toBeTruthy();
       expect(e.emphasis, e.slug).toMatch(/problem statement/i);
     }
@@ -271,7 +292,7 @@ describe("events seam", () => {
     const series = published.filter((e) =>
       e.sections?.some((sec) => sec.label === "How the three rounds run"),
     );
-    expect(series.length).toBeGreaterThanOrEqual(8);
+    expect(series.length).toBeGreaterThanOrEqual(5);
 
     for (const e of series) {
       const rounds = e.sections?.find((sec) => sec.label === "How the three rounds run");
@@ -306,6 +327,93 @@ describe("events seam", () => {
         (new Date(e.endsAt).getTime() - new Date(e.startsAt).getTime()) / 86_400_000;
       expect(Math.round(days), `${e.slug} runs ${Math.round(days)} days`).toBeGreaterThanOrEqual(9);
       expect(Math.round(days), `${e.slug} runs ${Math.round(days)} days`).toBeLessThanOrEqual(16);
+    }
+  });
+
+  it("runs every 48-hour build as one free window, with a certificate for everyone who submits", () => {
+    /*
+      Five hackathons moved off the three-round format. Three promises changed
+      at once — one window instead of three rounds, no fee at any stage, and a
+      certificate for every participant whose team submits — and any one of
+      them is easy to half-undo while editing a single record. This pins the
+      set and all three.
+    */
+    expect(sprints.map((e) => e.slug).sort()).toEqual([
+      "codehack-india",
+      "codenexus-india",
+      "codetitans-india",
+      "codeverse-india",
+      "wcc-forge-48",
+    ]);
+
+    for (const e of sprints) {
+      // Exactly forty-eight hours, and the kicker says so. (The kicker test
+      // above checks the arithmetic; this checks the label is the 48 one.)
+      expect(e.kicker, e.slug).toMatch(/48 HOURS/);
+      const hours =
+        (new Date(e.endsAt).getTime() - new Date(e.startsAt).getTime()) / 3_600_000;
+      expect(hours, e.slug).toBe(48);
+
+      // No rounds: no tabs block, and nothing left on the sheet that scores a
+      // team per round.
+      expect(
+        e.sections?.some((sec) => sec.kind === "columns" && sec.variant === "tabs"),
+        `${e.slug} still publishes round tabs`,
+      ).toBeFalsy();
+      for (const j of e.judging ?? []) expect(j.round, e.slug).toBeUndefined();
+
+      const words = [
+        e.summary,
+        e.brief,
+        ...e.description,
+        ...e.deliverables,
+        ...(e.rewards ?? []),
+        ...(e.faq ?? []).flatMap((f) => `${f.q} ${f.a}`),
+        ...(e.schedule ?? []).map((r) => `${r.when} ${r.what}`),
+        ...(e.sections ?? []).flatMap((sec) =>
+          sec.kind === "list"
+            ? [sec.intro ?? "", ...sec.items]
+            : [sec.intro ?? "", ...sec.items.flatMap((i) => [i.blurb ?? "", i.note ?? "", ...i.points])],
+        ),
+      ].join(" ");
+
+      /*
+        Nothing may survive that sends a team looking for a round that is not
+        there, or waiting on a result between rounds that do not exist. Only
+        the phrases that assert a round: "no qualifying rounds" is the copy
+        doing its job, so the word alone is not the test.
+      */
+      expect(words, `${e.slug} still mentions a later round`).not.toMatch(
+        /Round [123]\b|three rounds|between rounds|next round/i,
+      );
+
+      /*
+        Free, and said plainly. A fee note is also what the detail page reads
+        to decide whether to print "this event has a paid round", so a stray
+        rupee sign in a round note would re-advertise a fee that is gone.
+      */
+      for (const sec of e.sections ?? []) {
+        if (sec.kind !== "columns") continue;
+        for (const item of sec.items) {
+          expect(item.note ?? "", `${e.slug} still carries a fee note`).not.toContain("\u20B9");
+        }
+      }
+      expect(words, `${e.slug} never says it is free`).toMatch(
+        /free to enter|free from start to finish|no participation fee|registration is free/i,
+      );
+
+      /*
+        The certificate promise, in the block a reader goes to for it. Asserted
+        on meaning rather than phrasing: it has to say that submitting inside
+        the window is what earns one.
+      */
+      const certs = e.sections?.find((sec) => sec.label === "Certificates");
+      expect(certs?.kind, e.slug).toBe("list");
+      if (certs?.kind !== "list") continue;
+      const promise = `${certs.intro ?? ""} ${certs.items.join(" ")}`;
+      expect(promise, `${e.slug} does not promise everyone a certificate`).toMatch(
+        /every (member|participant)[^.]*valid submission/i,
+      );
     }
   });
 
@@ -588,14 +696,13 @@ describe("events seam", () => {
     ];
 
     /*
-      The series DOES issue a problem statement now, an hour before the start,
-      so promising one there is correct. The guard still matters for every
-      other event: WCC Launchpad 30 runs on tracks and hands out nothing, and
-      that is the case someone breaks by copying series copy across.
+      The three-round series and the 48-hour builds DO issue a problem
+      statement, an hour before the start, so promising one there is correct.
+      The guard still matters for every other event: WCC Launchpad 30 runs on
+      tracks and hands out nothing, and that is the case someone breaks by
+      copying series copy across.
     */
-    const issuesOne = (e: (typeof published)[number]) =>
-      e.sections?.some((sec) => sec.label === "How the three rounds run") ?? false;
-    const guarded = published.filter((e) => !issuesOne(e));
+    const guarded = published.filter((e) => !briefed.includes(e));
     expect(guarded.map((e) => e.slug)).toContain("wcc-launchpad-30");
 
     for (const e of guarded) {
@@ -611,14 +718,11 @@ describe("events seam", () => {
     }
   });
 
-  it("tells the series when the problem statement arrives", () => {
-    // The flip side of the guard above: the eight that do issue one have to
-    // say so, and say when, or entrants turn up expecting to bring their own.
-    const series = published.filter((e) =>
-      e.sections?.some((sec) => sec.label === "How the three rounds run"),
-    );
-    expect(series.length).toBeGreaterThanOrEqual(8);
-    for (const e of series) {
+  it("tells every briefed event when the problem statement arrives", () => {
+    // The flip side of the guard above: the ten that do issue one have to say
+    // so, and say when, or entrants turn up expecting to bring their own.
+    expect(briefed.length).toBeGreaterThanOrEqual(10);
+    for (const e of briefed) {
       expect(e.emphasis, e.slug).toMatch(/problem statement/i);
       expect(e.emphasis, e.slug).toMatch(/hour before/i);
       // And no leftover instruction to go and find your own.
@@ -631,9 +735,9 @@ describe("events seam", () => {
     entrants who pick between two events on the same weekend. Shared constants
     make that true today; this keeps it true after someone edits one record.
   */
-  it("judges the October series on identical criteria", () => {
-    const series = published.filter((e) => e.posterSeed >= 9101 && e.posterSeed <= 9106);
-    expect(series).toHaveLength(6);
+  it("judges the three-round series on identical criteria", () => {
+    const series = threeRound;
+    expect(series).toHaveLength(5);
 
     const shape = (e: (typeof series)[number]) =>
       JSON.stringify((e.judging ?? []).map((j) => [j.name, j.weight]));
@@ -711,9 +815,11 @@ describe("events seam", () => {
     }
   });
 
-  it("tells the series it must build inside the hackathon window", () => {
-    const series = published.filter((e) => e.posterSeed >= 9101 && e.posterSeed <= 9106);
-    for (const e of series) {
+  it("tells every hackathon it must build inside the hackathon window", () => {
+    // Both formats say it in the same words: the three-round events about
+    // their rounds, the 48-hour builds about their one window.
+    expect(briefed.length).toBeGreaterThanOrEqual(10);
+    for (const e of briefed) {
       const rules = e.sections?.find((sec) => sec.label === "Rules");
       expect(rules?.kind, e.slug).toBe("list");
       if (rules?.kind !== "list") continue;

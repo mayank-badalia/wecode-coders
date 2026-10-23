@@ -178,10 +178,11 @@ export default async function EventPage({ params }: Params) {
       fiction, so it is dropped alongside the time it is derived from. And on
       a multi-day event it was restating the date range directly above it —
       "30 Oct — 10 Nov 2026" followed by "Runs for 12 days" is the same fact
-      twice. Under two days the hour count is the thing a reader wants and
-      the dates do not give them.
+      twice. Two days or under, the hour count is the thing a reader wants and
+      the dates do not give them: "30 Oct — 1 Nov 2026" does not say that the
+      clock runs for forty-eight hours to the minute.
     */
-    ...(event.startTimeNote || hours >= 48
+    ...(event.startTimeNote || hours > 48
       ? []
       : [{ label: "Runs for", value: `${hours} hours` }]),
     { label: "Joining", value: event.venue.name },
