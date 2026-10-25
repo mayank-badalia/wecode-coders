@@ -284,6 +284,62 @@ describe("events seam", () => {
     }
   });
 
+  it("promises the same round-wise certificate on every three-round event", () => {
+    /*
+      Codex 48 and CodeStar 30 used to issue nothing for Rounds 1 and 2: they
+      were qualifying rounds, and the certificate was earned in the final one.
+      The other three upgraded a certificate at every round cleared. Both are
+      defensible; running them side by side in one series is not, because a
+      registrant comparing two of our pages was told two different things
+      about the same document.
+
+      So all five now issue one certificate at the highest round completed.
+      This pins the promise in the block a reader goes to for it, and pins the
+      absence of the one it replaced — nothing in these events may say a
+      round carries no certificate.
+    */
+    const series = published.filter((e) =>
+      e.sections?.some((sec) => sec.label === "How the three rounds run"),
+    );
+    expect(series.length).toBeGreaterThanOrEqual(5);
+
+    for (const e of series) {
+      const certs = e.sections?.find((sec) => sec.label === "Certificates");
+      expect(certs?.kind, `${e.slug} has no certificates block`).toBe("list");
+      if (certs?.kind !== "list") continue;
+
+      expect(certs.intro, `${e.slug} does not promise the upgrade`).toMatch(
+        /the highest you reach/i,
+      );
+      const items = certs.items.join(" ");
+      expect(items, `${e.slug} does not issue a Round 1 certificate`).toMatch(
+        /Round 1 Completion Certificate/,
+      );
+      expect(items, `${e.slug} does not issue a Round 2 certificate`).toMatch(
+        /Round 2 Completion Certificate/,
+      );
+      expect(items, `${e.slug} does not say the certificate is upgraded`).toMatch(
+        /upgraded to the furthest stage/i,
+      );
+
+      // And nowhere on the page — rounds, rewards, deliverables or FAQ —
+      // may a round still be sold as carrying nothing.
+      const words = [
+        ...e.deliverables,
+        ...(e.rewards ?? []),
+        ...(e.faq ?? []).map((f) => `${f.q} ${f.a}`),
+        ...(e.sections ?? []).flatMap((sec) =>
+          sec.kind === "list"
+            ? [sec.intro ?? "", ...sec.items]
+            : [sec.intro ?? "", ...sec.items.flatMap((i) => [i.note ?? "", i.blurb ?? ""])],
+        ),
+      ].join(" ");
+      expect(words, `${e.slug} still says a round carries no certificate`).not.toMatch(
+        /carry no certificate|carries none|qualifying rounds and carry/i,
+      );
+    }
+  });
+
   it("asks every three-round event for the same three rounds", () => {
     /*
       The twelve-day events promise entrants an identical structure, so the
@@ -687,7 +743,7 @@ describe("events seam", () => {
       "Prize pool: \u20B930,000" was being read as thirty thousand rupees in
       hand. The pool is a stated total value and can be paid as cash, as
       credits, or as a mix of them, so the words beside the number have to say
-      which it could be \u2014 and nothing on those pages may call it cash,
+      which it could be — and nothing on those pages may call it cash,
       since the two events that really do promise cash say "cash prize".
     */
     const pooled = published.filter((e) => e.stats?.some((st) => st.label === "Prize pool"));

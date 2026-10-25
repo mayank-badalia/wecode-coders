@@ -38,6 +38,19 @@ describe("terms page", () => {
     expect(source).not.toMatch(/five 48-hour/);
   });
 
+  it("states one certificate rule for every three-round event", () => {
+    /*
+      Section 05 described two schemes, because two events issued nothing for
+      Rounds 1 and 2 while three upgraded a certificate at each round. All five
+      now do the second, so the page states that and not the choice — a
+      clause describing a scheme no event runs reads to a registrant as a
+      warning that theirs might be the one.
+    */
+    expect(source).toMatch(/A three-round event issues one certificate, at the highest round/);
+    expect(source).toMatch(/upgrades that certificate rather than adding a second one/);
+    expect(source).not.toMatch(/certificate only for the final round/);
+  });
+
   it("says what a prize pool is made of", () => {
     /*
       A number against a currency symbol reads as cash everywhere else, so

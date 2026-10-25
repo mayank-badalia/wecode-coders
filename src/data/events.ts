@@ -2,7 +2,9 @@
 //
 // Five of them run the same three-round format and share their rounds,
 // judging and rules from the SERIES_ constants below: tech-circuit,
-// future-stack, code-axis, codex-48 and codestar-30.
+// future-stack, code-axis, codex-48 and codestar-30. All five issue one
+// certificate, at the highest round a participant completed: clearing a round
+// upgrades it rather than adding a second one beside it.
 //
 // Nine more run a single window and share the sprint_ helpers instead:
 // wcc-forge-48, codeverse-india, codehack-india, codenexus-india,
@@ -451,6 +453,14 @@ const seriesRules = (
  *
  * It is a per-event decision because the two schemes promise different things
  * to the same 1,000 teams, and the promise has to be the one that event made.
+ *
+ * No event selects "finalists" today. Codex 48 and CodeStar 30 were the two
+ * that did, and they were moved onto the round-wise scheme the other three
+ * already used, so a registrant comparing two of our events is not told two
+ * different things about the same certificate. The branch is kept because the
+ * choice is still a real one for an event that announces it that way — but
+ * an event taking it is promising less than every event beside it, and the
+ * copy in section 05 of src/app/terms/page.tsx has to come back with it.
  */
 type CertificateScheme = "rounds" | "finalists";
 
@@ -1690,7 +1700,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
+      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1708,15 +1718,16 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
+      "A Round 1 Completion Certificate for every valid Round 1 submission",
+      "A Round 2 Completion Certificate for every valid Round 2 submission",
       "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, {
-      certificates: "finalists",
       submission: "individual",
     }),
-    faq: seriesFaq({ certificates: "finalists", submission: "individual" }),
+    faq: seriesFaq({ submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
@@ -1773,7 +1784,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
+      "One certificate at the highest level you reached — Round 1 completion, Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1791,15 +1802,16 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
+      "A Round 1 Completion Certificate for every valid Round 1 submission",
+      "A Round 2 Completion Certificate for every valid Round 2 submission",
       "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
     sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, {
-      certificates: "finalists",
       submission: "individual",
     }),
-    faq: seriesFaq({ certificates: "finalists", submission: "individual" }),
+    faq: seriesFaq({ submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
