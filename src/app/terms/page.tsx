@@ -211,6 +211,8 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
+          "A prize pool is a stated total value, not a promise of cash. A pool may be awarded as cash, as AI or platform credits, or as other non-cash rewards, and it may consist of any one of those or of a combination of them — nothing requires a pool to be part cash and part credits, and nothing requires it to include cash at all.",
+          "Where an event page states a cash prize, that amount is cash. Where it states a prize pool, or an amount “in prizes”, what the pool is made up of is announced on that event’s own page or with its results, and that announcement governs.",
           "Rewards are subject to eligibility verification, sponsor approval and compliance with all event rules.",
           "Internships, interviews, incubation, credits, subscriptions, merchandise and similar benefits are governed by the conditions announced for the event.",
           "Non-cash rewards cannot ordinarily be exchanged for money.",

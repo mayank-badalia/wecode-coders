@@ -681,6 +681,29 @@ describe("events seam", () => {
     }
   });
 
+  it("does not sell a prize pool as cash", () => {
+    /*
+      A number against a currency symbol reads as cash everywhere else, so
+      "Prize pool: \u20B930,000" was being read as thirty thousand rupees in
+      hand. The pool is a stated total value and can be paid as cash, as
+      credits, or as a mix of them, so the words beside the number have to say
+      which it could be \u2014 and nothing on those pages may call it cash,
+      since the two events that really do promise cash say "cash prize".
+    */
+    const pooled = published.filter((e) => e.stats?.some((st) => st.label === "Prize pool"));
+    expect(pooled.length).toBeGreaterThanOrEqual(7);
+
+    for (const e of pooled) {
+      expect(
+        (e.rewards ?? []).join(" "),
+        `${e.slug} does not say what its pool is made of`,
+      ).toMatch(/as cash, as AI or platform credits, or as a combination/);
+
+      const words = [e.summary, e.brief, ...e.description, ...(e.rewards ?? [])].join(" ");
+      expect(words, `${e.slug} calls its pool cash`).not.toMatch(/in cash/);
+    }
+  });
+
   it("never publishes the judging intervals", () => {
     // The gaps between rounds are internal. Entrants are told only that
     // qualification updates reach the teams that qualify.

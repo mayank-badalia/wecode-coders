@@ -38,6 +38,18 @@ describe("terms page", () => {
     expect(source).not.toMatch(/five 48-hour/);
   });
 
+  it("says what a prize pool is made of", () => {
+    /*
+      A number against a currency symbol reads as cash everywhere else, so
+      "Prize pool: ₹30,000" was being read as thirty thousand rupees in hand.
+      A pool can be cash, credits, or a mix, and section 06 has to say so
+      without implying it is always both.
+    */
+    expect(source).toMatch(/A prize pool is a stated total value, not a promise of cash/);
+    expect(source).toMatch(/AI or platform credits/);
+    expect(source).toMatch(/nothing requires a pool to be part cash and part credits/);
+  });
+
   it("does not ask a free entrant to accept by paying", () => {
     // The acceptance block read "by clicking the payment or registration
     // button and completing payment", which is not a thing a single-round
