@@ -616,6 +616,71 @@ describe("events seam", () => {
     }
   });
 
+  it("names the Round 3 fee in every place a reader decides from", () => {
+    /*
+      The mirror of the two tests above, and the reason they were not enough.
+      A free event said so in the stats strip, under the register button, in
+      its rules and in its FAQ; a three-round event said nothing anywhere
+      except one collapsed round panel, which is the one place a reader
+      deciding whether to enter does not look.
+
+      Three rounds and one fee go together, so this pins the two numbers in
+      the strip, the fee and what is free under the button, an answer to the
+      question in the FAQ, and the amount on the round that charges it — plus
+      that the page never quotes a second, different figure anywhere, since a
+      page carrying two fees is worse than one carrying none.
+    */
+    expect(threeRound.length).toBe(5);
+
+    for (const e of threeRound) {
+      expect(
+        e.stats?.find((st) => st.label.startsWith("Round 3 fee"))?.value,
+        `${e.slug} does not print the fee`,
+      ).toBe("\u20B9399");
+      expect(
+        e.stats?.find((st) => st.label === "Rounds 1\u20132")?.value,
+        `${e.slug} does not say the first two rounds are free`,
+      ).toBe("Free");
+
+      const note = e.registration?.note ?? "";
+      expect(note, `${e.slug}'s note hides the fee`).toMatch(/\u20B9399 per team/);
+      expect(note, `${e.slug}'s note hides what is free`).toMatch(/Rounds 1 and 2 are free/);
+
+      const cost = (e.faq ?? []).find((f) => /cost|fee|free/i.test(f.q));
+      expect(cost?.a ?? "", `${e.slug} answers no question about cost`).toMatch(/\u20B9399/);
+
+      const words = [
+        e.summary,
+        ...(e.faq ?? []).flatMap((f) => `${f.q} ${f.a}`),
+        e.registration?.note ?? "",
+        ...(e.sections ?? []).flatMap((sec) =>
+          sec.kind === "list"
+            ? [sec.intro ?? "", ...sec.items]
+            : [sec.intro ?? "", ...sec.items.flatMap((i) => [i.blurb ?? "", i.note ?? "", ...i.points])],
+        ),
+      ].join(" ");
+
+      // Every amount this page attaches to the word "fee", or to "per team",
+      // has to be the same amount.
+      const quoted = [
+        ...words.matchAll(/fee of \u20B9\s?([\d,]+)/g),
+        ...words.matchAll(/\u20B9\s?([\d,]+) per[- ]team/g),
+      ].map((m) => m[1]);
+      expect(quoted.length, `${e.slug} barely names the fee`).toBeGreaterThanOrEqual(4);
+      expect(new Set(quoted), `${e.slug} quotes more than one fee`).toEqual(new Set(["399"]));
+
+      // The detail page reads the amount off the paid round's note, so the
+      // sentence beside the terms link only appears while that note has it.
+      const roundNotes = (e.sections ?? []).flatMap((sec) =>
+        sec.kind === "columns" ? sec.items.map((i) => i.note ?? "") : [],
+      );
+      expect(
+        roundNotes.filter((n) => n.includes("\u20B9399")).length,
+        `${e.slug} does not carry the fee on the round that charges it`,
+      ).toBe(1);
+    }
+  });
+
   it("never publishes the judging intervals", () => {
     // The gaps between rounds are internal. Entrants are told only that
     // qualification updates reach the teams that qualify.

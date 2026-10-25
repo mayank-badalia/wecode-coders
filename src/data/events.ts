@@ -4,12 +4,22 @@
 // judging and rules from the SERIES_ constants below: tech-circuit,
 // future-stack, code-axis, codex-48 and codestar-30.
 //
-// Five more run a single 48-hour build and share the sprint_ helpers instead:
-// wcc-forge-48, codeverse-india, codehack-india, codenexus-india and
-// codetitans-india. One problem statement, 48 hours, one submission, nothing
-// to pay, and a certificate for every participant whose team submits. They
-// are the same hackathons; what changed is the shape, not the promise behind
-// it.
+// Nine more run a single window and share the sprint_ helpers instead:
+// wcc-forge-48, codeverse-india, codehack-india, codenexus-india,
+// codetitans-india and code-conqueror-india over forty-eight hours;
+// codepunethinkers, codersinpune and codefrontier over thirty-six. One
+// problem statement, one window, one submission, and a certificate for every
+// participant who files an entry. codequest-quiz-india is a quiz sat inside
+// an eight-hour window. They are the same hackathons; what changed is the
+// shape, not the promise behind it.
+//
+// What any of this costs, in one place. A three-round event charges
+// ROUND_3_FEE per team, once, and only from a team selected for Round 3 —
+// registering and Rounds 1 and 2 are free. Every single-round event is free
+// from start to finish. There is no third case, and nothing else on this site
+// asks anyone for money. Both halves of that rule are printed on each event's
+// own page, written out in src/app/terms/page.tsx, and pinned by
+// src/lib/events.test.ts.
 //
 // wcc-launchpad-30 is deliberately left on its original thirty-hour,
 // single-submission format. protocol-60 is finished and marked `past`.
@@ -63,6 +73,20 @@ import type { Event, EventSection } from "@/lib/types";
   the top three teams receive, and the poster.
 */
 
+
+/**
+ * The one fee anything on this site charges, written once.
+ *
+ * ₹399 per team, due once, and only from a team selected for Round 3 of a
+ * three-round event. Registering and Rounds 1 and 2 are free, and every
+ * single-round event is free throughout.
+ *
+ * A constant because the amount now appears in a round note, a rule, an FAQ
+ * answer, the stats strip and the line under the register button. Those five
+ * have to agree: a reader who finds two different numbers on one page
+ * believes the lower one, and is right to.
+ */
+const ROUND_3_FEE = "\u20B9399";
 
 /**
  * The three rounds.
@@ -222,7 +246,7 @@ function seriesRounds(
       ],
       judging: forRound(3),
       note:
-        "Teams selected for Round 3 pay a participation fee of \u20B9399 per team. It covers the cost of running the event \u2014 infrastructure, the time and effort of organising it, and paying the people who do that work. Registration and Rounds 1 and 2 remain free; the fee applies only once your team is selected for Round 3. Paying it means accepting the paid event participation terms, which are linked under this block and are the same for every event.",
+        `Teams selected for Round 3 pay a participation fee of ${ROUND_3_FEE} per team \u2014 one payment for the whole team, not one each. It covers the cost of running the event: infrastructure, the time and effort of organising it, and paying the people who do that work. Registering and Rounds 1 and 2 are free, and this is the only payment anywhere in this event. It falls due only once your team is selected for Round 3, so a team that is not selected pays nothing at all. Paying it means accepting the event participation terms, which are linked under this block and are the same for every event.`,
     },
   ],
   };
@@ -389,6 +413,7 @@ const seriesRules = (
     "Templates or code you wrote earlier must be clearly disclosed in the submission.",
     "Only work done during the event counts towards judging.",
     "AI, no-code and low-code tools are allowed, and the significant ones must be disclosed.",
+    `Registering is free and so are Rounds 1 and 2. The only money this event asks for is the Round 3 participation fee of ${ROUND_3_FEE} per team, charged once and only to teams selected for that round \u2014 not to be judged, and not to be certified. Nobody from We Code Coders will ask you for any other payment, at any other stage, through any other channel.`,
     "Every participant belongs to one team only.",
     "The project must be the team's own work.",
     "Plagiarised, copied or misleading submissions are disqualified.",
@@ -548,6 +573,7 @@ const seriesSections = (
 function seriesFaq(terms: SeriesTerms = {}) {
   return [
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
+    { q: "What does it cost?", a: `Registering is free, and so are Rounds 1 and 2. Only teams selected for Round 3 pay a participation fee of ${ROUND_3_FEE} per team \u2014 one payment for the whole team, not one each \u2014 and that is the only payment anywhere in the event: nothing to be judged, and nothing to be certified. A team that is not selected for Round 3 pays nothing at all.` },
     { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
     { q: "What happens between rounds?", a: "Every team that submitted is emailed its result, selected or not — you do not have to guess, and you do not have to wait for a group post. The teams that go through get the instructions for the next stage in the same email." },
     { q: "How many teams get through?", a: "More than 1,000 teams start in Round 1 and every one of them competes. 300 go through to Round 2, 100 to the final round, and three teams win. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive." },
@@ -1386,7 +1412,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon where students, developers and designers build functional technology products that address real problems. Three rounds, teams of one to four.",
+      "A national online hackathon where students, developers and designers build functional technology products that address real problems. Three rounds, teams of one to four. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
       "TechCircuit is a national-level online hackathon for students, developers and designers who want to build something that actually runs.",
       "The aim is not the biggest project in the room. It is the clearest possible proof that your idea works. One reliable, well-made workflow beats a pile of half-finished features almost every time.",
@@ -1440,6 +1466,8 @@ export const events: Event[] = [
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1447,7 +1475,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/techcircuit-hackathon-wecodecoders-1758409",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Registration closes 19 October at 23:59 IST.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1469,7 +1497,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds to turn an idea into a finished product with modern tooling. National and online, with PPO and incubation opportunities for the top three teams.",
+      "Three rounds to turn an idea into a finished product with modern tooling. National and online, with PPO and incubation opportunities for the top three teams. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
       "FutureStack is a national-level online hackathon for students, developers and designers who want to turn an idea into something functional.",
       "Modern tooling is encouraged and AI tools are allowed, as long as you disclose the significant ones. What is judged is whether the thing runs and whether it helps somebody.",
@@ -1523,6 +1551,8 @@ export const events: Event[] = [
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–6" },
     ],
@@ -1530,7 +1560,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/futurestack-hackathon-wecodecoders-1758558",
       label: "Register on Unstop",
-      note: "Open to teams of one to six. Registration closes 19 October at 23:59 IST.",
+      note: "Teams of one to six. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1552,7 +1582,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Three rounds, one problem statement.",
+      "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Three rounds, one problem statement. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
       "CodeAxis is a national-level online hackathon about practical solutions rather than impressive-sounding ones.",
       "A small product with one dependable workflow is a better submission than an ambitious one that cannot be demonstrated.",
@@ -1606,6 +1636,8 @@ export const events: Event[] = [
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1613,7 +1645,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codeaxis-hackathon-wecodecoders-1758538",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Registration closes 19 October at 23:59 IST.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1635,7 +1667,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds to turn an original idea into a finished, working product. National and online, with paid internship and incubation opportunities for the top three teams.",
+      "Three rounds to turn an original idea into a finished, working product. National and online, with paid internship and incubation opportunities for the top three teams. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
       "Codex 48 is a national-level AI and full-stack online hackathon, run across three rounds — one original idea carried from a plan to a product that runs.",
       "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and submissions are checked.",
@@ -1687,6 +1719,8 @@ export const events: Event[] = [
     faq: seriesFaq({ certificates: "finalists", submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1694,7 +1728,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codex-48-national-level-hackathon-wecodecoders-1761082",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Every member registers individually and files their own submission.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Every member registers individually and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1716,7 +1750,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds for students and young builders to develop and present a functional technology product. National and online, with paid internship and incubation opportunities for the top three teams.",
+      "Three rounds for students and young builders to develop and present a functional technology product. National and online, with paid internship and incubation opportunities for the top three teams. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
       "CodeStar 30 is a national-level AI and full-stack online hackathon, run across three rounds.",
       "The format rewards scope discipline. Inside the problem statement you are given, build the single journey that proves your idea works rather than the five that show what it could become.",
@@ -1768,6 +1802,8 @@ export const events: Event[] = [
     faq: seriesFaq({ certificates: "finalists", submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1775,7 +1811,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codestar-30-national-level-hackathon-wecodecoders-1760472",
       label: "Register on Unstop",
-      note: "Open to teams of one to four. Every member registers individually and files their own submission.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Every member registers individually and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -2292,6 +2328,7 @@ export const events: Event[] = [
         label: "Rules",
         items: [
           "One attempt per person. Everyone sits it on their own.",
+          "Entering is free. There is no fee at any stage of this quiz, nothing to pay to be marked or certified, and nobody from We Code Coders will ask you for money.",
           "Duplicate, manipulated or suspicious entries may be disqualified.",
           "Begin and finish inside the eight-hour window, 10:00 to 18:00 IST. The paper takes about fifteen minutes; the window is wide so you can choose your moment, not so you can take all day over it.",
           "Report technical problems immediately through the official support channel.",

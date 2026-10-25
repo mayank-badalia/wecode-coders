@@ -136,18 +136,23 @@ export default async function EventPage({ params }: Params) {
   const hours = eventDurationHours(event.startsAt, event.endsAt);
 
   /*
-    Whether any round on this page charges a participation fee.
+    The round that charges a participation fee, if any round does.
 
     Read off the rounds themselves instead of a field on the record, so an
     event cannot end up asking for money without linking the terms that money
     is paid under. The quizzes and the finished events have no paid round and
     so carry no link.
+
+    The amount comes out of that round's own note rather than being written
+    again here: the terms block below states the fee in words, and a number
+    typed into a component is a second source that goes stale on the day the
+    fee changes.
   */
-  const hasPaidRound = (event.sections ?? []).some(
-    (section) =>
-      section.kind === "columns" &&
-      section.items.some((item) => item.note?.includes("\u20B9")),
-  );
+  const paidRound = (event.sections ?? [])
+    .flatMap((section) => (section.kind === "columns" ? section.items : []))
+    .find((item) => item.note?.includes("\u20B9"));
+  const hasPaidRound = Boolean(paidRound);
+  const roundFee = paidRound?.note?.match(/\u20B9\s?[\d,]+/)?.[0];
 
   /*
     Whether this event runs the three rounds, which decides how acceptance is
@@ -942,8 +947,10 @@ export default async function EventPage({ params }: Params) {
             <p style={{ margin: "1rem 0 0", maxWidth: "62ch", lineHeight: 1.6 }}>
               {termsCopy}
               {hasPaidRound
-                ? " This event has a paid round, and paying that fee is a further acceptance of the same terms."
-                : ""}
+                ? ` This event has one paid round: Round 3, at ${roundFee ?? "the fee stated with that round"} per team, charged once and only to teams selected for it. Registering and Rounds 1 and 2 are free, and paying that fee is a further acceptance of the same terms.`
+                : event.status === "past"
+                  ? ""
+                  : " This event is free from start to finish: one round, with nothing to pay to enter, to be judged or to be certified."}
             </p>
             <p style={{ margin: "1.3rem 0 0" }}>
               <TransitionLink
