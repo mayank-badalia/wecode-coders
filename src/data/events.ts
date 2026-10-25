@@ -2487,11 +2487,17 @@ export const events: Event[] = [
     asking you for money outside the stated fee names HackWithPune rather than
     us.
 
-    All three were announced on Unstop for other dates and now run 3 to 14
-    November. Their registration deadlines are still tied to the old dates and
-    have to be reset on Unstop, so none is printed here, and no Unstop URL is
-    in hand for any of them. Their listings also print three tracks; these
-    pages issue a problem statement instead.
+    Each runs from the date it was announced on — CodePuneThinkers from 7
+    November, CodersInPune and CodeFrontier from 5 November — so the three
+    rounds are built from that start and finish eleven days later. They were
+    briefly all moved onto 3 November while they were still single windows;
+    the announced dates are the ones their entrants hold, and these are them.
+
+    Their registration deadlines are still tied to the old dates and have to
+    be reset on Unstop, so none is printed here, and no Unstop URL is in hand
+    for any of them — which also means there is nowhere yet to collect the
+    Round 3 fee these pages now state. Their listings also print three tracks;
+    these pages issue a problem statement instead.
   */
   {
     locked: false,
@@ -2500,8 +2506,8 @@ export const events: Event[] = [
     kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
-    startsAt: "2026-11-03T10:00:00+05:30",
-    endsAt: "2026-11-14T10:00:00+05:30",
+    startsAt: "2026-11-07T10:00:00+05:30",
+    endsAt: "2026-11-18T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -2527,10 +2533,10 @@ export const events: Event[] = [
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official group." },
-      { when: "Tue 3 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Tue 3 Nov — Wed 4 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 4th, and the result is emailed the same day." },
-      { when: "Thu 5 Nov — Sun 8 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
-      { when: "Wed 11 Nov — Sat 14 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
+      { when: "Sat 7 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Sat 7 Nov — Sun 8 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 8th, and the result is emailed the same day." },
+      { when: "Mon 9 Nov — Thu 12 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Sun 15 Nov — Wed 18 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -2546,7 +2552,7 @@ export const events: Event[] = [
       "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: seriesSections("2026-11-03T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+    sections: seriesSections("2026-11-07T10:00:00+05:30", LONG_BUILD_ROUNDS, {
       certificates: "finalists",
       submission: "individual",
       organiser: HWP,
@@ -2580,8 +2586,8 @@ export const events: Event[] = [
     kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
-    startsAt: "2026-11-03T10:00:00+05:30",
-    endsAt: "2026-11-14T10:00:00+05:30",
+    startsAt: "2026-11-05T10:00:00+05:30",
+    endsAt: "2026-11-16T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -2607,10 +2613,10 @@ export const events: Event[] = [
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official group." },
-      { when: "Tue 3 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Tue 3 Nov — Wed 4 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 4th, and the result is emailed the same day." },
-      { when: "Thu 5 Nov — Sun 8 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
-      { when: "Wed 11 Nov — Sat 14 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
+      { when: "Thu 5 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Thu 5 Nov — Fri 6 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 6th, and the result is emailed the same day." },
+      { when: "Sat 7 Nov — Tue 10 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Fri 13 Nov — Mon 16 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -2627,7 +2633,7 @@ export const events: Event[] = [
       "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: seriesSections("2026-11-03T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+    sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
       certificates: "finalists",
       submission: "individual",
       organiser: HWP,
@@ -2661,8 +2667,8 @@ export const events: Event[] = [
     kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
-    startsAt: "2026-11-03T10:00:00+05:30",
-    endsAt: "2026-11-14T10:00:00+05:30",
+    startsAt: "2026-11-05T10:00:00+05:30",
+    endsAt: "2026-11-16T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -2688,10 +2694,10 @@ export const events: Event[] = [
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official group." },
-      { when: "Tue 3 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Tue 3 Nov — Wed 4 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 4th, and the result is emailed the same day." },
-      { when: "Thu 5 Nov — Sun 8 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
-      { when: "Wed 11 Nov — Sat 14 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
+      { when: "Thu 5 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Thu 5 Nov — Fri 6 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 6th, and the result is emailed the same day." },
+      { when: "Sat 7 Nov — Tue 10 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Fri 13 Nov — Mon 16 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
     judging: seriesJudging(),
@@ -2708,7 +2714,7 @@ export const events: Event[] = [
       "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: seriesSections("2026-11-03T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+    sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
       certificates: "finalists",
       submission: "individual",
       organiser: HWP,
