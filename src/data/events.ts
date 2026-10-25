@@ -1,19 +1,24 @@
 // REAL. Every record here is an announced event with a real poster.
 //
-// Five of them run the same three-round format and share their rounds,
-// judging and rules from the SERIES_ constants below: tech-circuit,
-// future-stack, code-axis, codex-48 and codestar-30. All five issue one
-// certificate, at the highest round a participant completed: clearing a round
-// upgrades it rather than adding a second one beside it.
+// Eleven of them run the same three-round format and share their rounds,
+// judging and rules from the SERIES_ constants below, in two groups that
+// differ only in what they certify.
 //
-// Nine more run a single window and share the sprint_ helpers instead:
-// wcc-forge-48, codeverse-india, codehack-india, codenexus-india,
-// codetitans-india and code-conqueror-india over forty-eight hours;
-// codepunethinkers, codersinpune and codefrontier over thirty-six. One
-// problem statement, one window, one submission, and a certificate for every
-// participant who files an entry. codequest-quiz-india is a quiz sat inside
-// an eight-hour window. They are the same hackathons; what changed is the
-// shape, not the promise behind it.
+// Five were announced as three rounds and issue one certificate at the
+// highest round a participant completed, upgraded as each round is cleared:
+// tech-circuit, future-stack, code-axis, codex-48 and codestar-30.
+//
+// Six were announced as a single window, were given three rounds afterwards,
+// and certify the final round only: wcc-forge-48, codenexus-india,
+// codetitans-india, and HackWithPune's codepunethinkers, codersinpune and
+// codefrontier. They run LONG_BUILD_ROUNDS, where each build round keeps a
+// full seventy-two hours, because build time is what they advertised.
+//
+// Three still run one window of forty-eight hours and share the sprint_
+// helpers instead: codeverse-india, codehack-india and code-conqueror-india.
+// One problem statement, one window, one submission, and a certificate for
+// every participant who files an entry. codequest-quiz-india is a quiz sat
+// inside an eight-hour window.
 //
 // What any of this costs, in one place. A three-round event charges
 // ROUND_3_FEE per team, once, and only from a team selected for Round 3 —
@@ -65,14 +70,15 @@ import type { Event, EventSection } from "@/lib/types";
 /*
   The October 2026 hackathon series.
 
-  Six events run the same format, so the judging, the submission
-  list and the rules are written once here and shared. That is not only to
-  save lines: the promise made to entrants is that all six are judged on
-  identical criteria, and the only way to keep that true as one of them is
-  edited is for there to be a single copy to edit.
+  Eleven events run the same format, so the judging, the submission list and
+  the rules are written once here and shared. That is not only to save lines:
+  the promise made to entrants is that all eleven are judged on identical
+  criteria, and the only way to keep that true as one of them is edited is for
+  there to be a single copy to edit.
 
-  What differs per event lives on the record itself — dates, duration, what
-  the top three teams receive, and the poster.
+  What differs per event lives on the record itself — dates, the round grid,
+  which certificates it issues, who runs it, what the top three teams receive,
+  and the poster.
 */
 
 
@@ -151,6 +157,26 @@ const COMPACT_ROUNDS: RoundOffsets = [
   [0, 1],
   [2, 4],
   [7, 9],
+];
+
+/**
+ * Both build rounds run a full seventy-two hours.
+ *
+ * Round 1 opens with the event and closes at 18:00 the next day; its result
+ * goes out the same day, and Round 2 opens at 10:00 the morning after that
+ * and runs three days. Round 2's result also goes out the day it closes, two
+ * clear days follow, and Round 3 then runs its own three days. Eleven days
+ * end to end.
+ *
+ * The events on this grid were single windows of thirty-six or forty-eight
+ * hours until they were given three rounds, which is why their build rounds
+ * are longer than the series': what they advertised was build time, and
+ * cutting a round to two days would have taken some of it away.
+ */
+const LONG_BUILD_ROUNDS: RoundOffsets = [
+  [0, 1],
+  [2, 5],
+  [8, 11],
 ];
 
 function seriesRounds(
@@ -396,8 +422,10 @@ function seriesJudging() {
  * look at would be a checklist for defeating them, so the rule says we do not
  * discuss the method — and nothing anywhere on this site should.
  *
- * One detail varies: what the winners' announcement links to. The series links
- * the repository; Forge 48 ships a deployed product, so it links that instead.
+ * One detail can vary: what the winners' announcement links to. Every
+ * three-round event links the repository, Forge 48 included — its final
+ * round asks for one. The parameter stays for a single-window event that
+ * ships only a deployed product.
  */
 const seriesRules = (
   winnerLink = "the GitHub repository of what each of them built",
@@ -415,7 +443,7 @@ const seriesRules = (
     "Templates or code you wrote earlier must be clearly disclosed in the submission.",
     "Only work done during the event counts towards judging.",
     "AI, no-code and low-code tools are allowed, and the significant ones must be disclosed.",
-    `Registering is free and so are Rounds 1 and 2. The only money this event asks for is the Round 3 participation fee of ${ROUND_3_FEE} per team, charged once and only to teams selected for that round \u2014 not to be judged, and not to be certified. Nobody from We Code Coders will ask you for any other payment, at any other stage, through any other channel.`,
+    `Registering is free and so are Rounds 1 and 2. The only money this event asks for is the Round 3 participation fee of ${ROUND_3_FEE} per team, charged once and only to teams selected for that round \u2014 not to be judged, and not to be certified. Nobody from ${(terms.organiser ?? WCC).name} will ask you for any other payment, at any other stage, through any other channel.`,
     "Every participant belongs to one team only.",
     "The project must be the team's own work.",
     "Plagiarised, copied or misleading submissions are disqualified.",
@@ -454,13 +482,13 @@ const seriesRules = (
  * It is a per-event decision because the two schemes promise different things
  * to the same 1,000 teams, and the promise has to be the one that event made.
  *
- * No event selects "finalists" today. Codex 48 and CodeStar 30 were the two
- * that did, and they were moved onto the round-wise scheme the other three
- * already used, so a registrant comparing two of our events is not told two
- * different things about the same certificate. The branch is kept because the
- * choice is still a real one for an event that announces it that way — but
- * an event taking it is promising less than every event beside it, and the
- * copy in section 05 of src/app/terms/page.tsx has to come back with it.
+ * The split is by shape, not by brand. The five events announced as three
+ * rounds from the start — tech-circuit, future-stack, code-axis, codex-48
+ * and codestar-30 — upgrade a certificate at every round cleared. The six
+ * that were announced as a single window and later given three rounds certify
+ * the final round only: their entrants were promised one certificate for one
+ * submission, and issuing three where one was advertised would be a different
+ * event again.
  */
 type CertificateScheme = "rounds" | "finalists";
 
@@ -503,6 +531,15 @@ type SeriesTerms = {
   certificates?: CertificateScheme;
   /** Who submits. Defaults to "leader". */
   submission?: SubmissionMode;
+  /*
+    Who is running it. Defaults to us.
+
+    Three of these events are HackWithPune's. They run the same rounds and the
+    same criteria, but not on our judge or our delivery window, and a rule
+    promising that nobody from We Code Coders will ask them for money is no
+    promise at all on somebody else's event.
+  */
+  organiser?: Organiser;
 };
 
 /**
@@ -549,9 +586,7 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
           "Withdrawal from Round 3 does not cancel a certificate already earned through valid participation in Round 2.",
           "Each participant receives one certificate only. You are not sent a separate certificate for every round you clear — the one you are issued is upgraded to the furthest stage you completed.",
         ]),
-    "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, which is why those results come back quickly. Every team that submitted is emailed its result for those rounds, selected or not.",
-    "The final round is judged by Inkloom. An outside panel reviewing every finalist takes longer, and it is what picks the strongest winner rather than the fastest one — final results are declared one week after the hackathon ends.",
-    "Certificates are distributed within 10 days of the results being announced, not from the day the event ends.",
+    ...(terms.organiser ?? WCC).roundsCertificates,
   ],
 });
 
@@ -607,21 +642,21 @@ function seriesFaq(terms: SeriesTerms = {}) {
           : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Only the three winners are placed; no other certificate carries a position. Clearing a round upgrades that certificate rather than adding a second one.",
     },
     { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the GitHub repository of what each of them built. That is the whole announcement. Only those three are placed — no ranking list goes up, no other team is given a position, and no certificate below winner prints one. Nobody's personal details are shared without their consent." },
-    { q: "Who judges, and when do results and certificates arrive?", a: "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, so those results come back quickly — and every team that submitted is emailed its Round 1 and Round 2 result, selected or not, without a score or a position. The final round is judged by Inkloom — an outside panel takes longer but picks the strongest winner, and final results are declared one week after the hackathon ends. Certificates follow within 10 days of the results being announced." },
+    { q: "Who judges, and when do results and certificates arrive?", a: (terms.organiser ?? WCC).roundsFaq },
   ];
 }
 
 /*
   The 48-hour build.
 
-  Five of the hackathons do not run rounds at all: the problem statement lands
-  an hour before the clock starts, teams build for forty-eight hours, and one
-  submission from the team leader is what gets judged. There is nothing to
-  clear first and nothing to pay at any stage.
+  Three of the hackathons do not run rounds at all: the problem statement
+  lands an hour before the clock starts, teams build for forty-eight hours,
+  and an entry from every participant who built is what gets judged. There is
+  nothing to clear first and nothing to pay at any stage.
 
-  Written once here for the same reason the three-round series is — the five
-  make an identical promise, and the only way that stays true while one record
-  is edited is for there to be a single copy to edit. What differs per event
+  Written once here for the same reason the three-round series is — the
+  three make an identical promise, and the only way that stays true while one
+  record is edited is for there to be a single copy to edit. What differs per event
   stays on the record: the dates, the rewards, the poster, and where the
   winners' announcement points.
 
@@ -631,47 +666,74 @@ function seriesFaq(terms: SeriesTerms = {}) {
 /**
  * How long the window is.
  *
- * Most of these run forty-eight hours; the three HackWithPune events run
- * thirty-six. The copy spells the number out mid-sentence while the block
- * label and the kicker print the digits, so the window carries both forms
- * rather than being formatted at every mention.
+ * The three that still run one window run forty-eight hours. It stays a
+ * parameter because the HackWithPune events ran thirty-six before they were
+ * given rounds, and the next single-window event need not be forty-eight
+ * either. The copy spells the number out mid-sentence while the block label
+ * and the kicker print the digits, so the window carries both forms rather
+ * than being formatted at every mention.
  */
 type SprintWindow = { hours: number; words: string };
 const H48: SprintWindow = { hours: 48, words: "forty-eight hours" };
-const H36: SprintWindow = { hours: 36, words: "thirty-six hours" };
 
 /** The block label, which is also what the test suite keys this format on. */
 const sprintLabel = (w: SprintWindow) => `How the ${w.hours} hours run`;
 
 /**
- * The organiser's own promise about results and certificates.
+ * Who runs an event, and what they have promised about results.
  *
- * Everything else about a single-window build is identical across the events
- * that run one; this is not. We Code Coders has Inkloom judge, declares
+ * Everything else about a format is identical across the events that run it;
+ * this is not. We Code Coders has Inkloom judge the final round, declares
  * results a week after the event and sends certificates within ten days of
  * that announcement. HackWithPune publishes fifteen days from the end of the
  * event and names no judge, so nothing here may claim one for them.
+ *
+ * Both shapes live on one record because the same organiser runs both
+ * formats: `certificates` and `faq` are the single-window wording,
+ * `roundsCertificates` and `roundsFaq` the three-round wording. `name` is
+ * there for the rule that says nobody will ask you for money outside the one
+ * stated fee — printing our name on a HackWithPune page would tell a
+ * reader to disregard the people actually running their event.
  */
-type SprintDelivery = {
-  /** The closing lines of the certificates block. */
+type Organiser = {
+  /** As it should read inside a rule. */
+  name: string;
+  /** Closing lines of a single-window event's certificates block. */
   certificates: string[];
-  /** The FAQ answer to when results and certificates arrive. */
+  /** The single-window answer to when results and certificates arrive. */
   faq: string;
+  /** Closing lines of a three-round event's certificates block. */
+  roundsCertificates: string[];
+  /** The three-round answer to when results and certificates arrive. */
+  roundsFaq: string;
 };
 
-const WCC_DELIVERY: SprintDelivery = {
+const WCC: Organiser = {
+  name: "We Code Coders",
   certificates: [
     "Submissions are judged by Inkloom, as every event in this series is, and final results are declared one week after the hackathon ends.",
     "Certificates are distributed within 10 days of the results being announced, not from the day the event ends.",
   ],
   faq: "Submissions are judged by Inkloom, and final results are declared one week after the hackathon ends, once every eligible submission has been reviewed. Certificates follow within 10 days of the results being announced.",
+  roundsCertificates: [
+    "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, which is why those results come back quickly. Every team that submitted is emailed its result for those rounds, selected or not.",
+    "The final round is judged by Inkloom. An outside panel reviewing every finalist takes longer, and it is what picks the strongest winner rather than the fastest one — final results are declared one week after the hackathon ends.",
+    "Certificates are distributed within 10 days of the results being announced, not from the day the event ends.",
+  ],
+  roundsFaq: "Rounds 1 and 2 are judged in-house by the We Code Coders organising team, so those results come back quickly — and every team that submitted is emailed its Round 1 and Round 2 result, selected or not, without a score or a position. The final round is judged by Inkloom — an outside panel takes longer but picks the strongest winner, and final results are declared one week after the hackathon ends. Certificates follow within 10 days of the results being announced.",
 };
 
-const HWP_DELIVERY: SprintDelivery = {
+const HWP: Organiser = {
+  name: "HackWithPune",
   certificates: [
     "Prizes and certificates are released within 15 days of the event ending, which is the window HackWithPune publishes for this hackathon.",
   ],
   faq: "HackWithPune releases the prizes and the certificates within 15 days of the event ending, and announces the results in the official group before that.",
+  roundsCertificates: [
+    "Every team that submitted is emailed its Round 1 and Round 2 result, selected or not, without a score or a position.",
+    "Prizes and certificates are released within 15 days of the event ending, which is the window HackWithPune publishes for this hackathon. No judge is named for this event, and nothing here claims one.",
+  ],
+  roundsFaq: "Every team that submitted is emailed its Round 1 and Round 2 result, selected or not, without a score or a position. HackWithPune releases the prizes and the certificates within 15 days of the event ending, and announces the results in the official group before that.",
 };
 
 /**
@@ -799,7 +861,7 @@ const sprintRules = (
  */
 const sprintCertificates = (
   w: SprintWindow,
-  delivery: SprintDelivery = WCC_DELIVERY,
+  organiser: Organiser = WCC,
 ): EventSection => ({
   kind: "list",
   label: "Certificates",
@@ -812,7 +874,7 @@ const sprintCertificates = (
     "Your certificate names the role you declared and the part you built, in the words you submitted them in. That is why every member files their own entry rather than one per team.",
     "Each participant receives one certificate only: a winning team's members are issued the Winner Certificate rather than both.",
     "Only the top three are placed. The group announcement carries those three team names and a link to what they built, and their certificates print the rank — first, second or third. No other team is told a position, and none is printed on its certificate.",
-    ...delivery.certificates,
+    ...organiser.certificates,
   ],
 });
 
@@ -820,18 +882,18 @@ const sprintCertificates = (
 const sprintSections = (
   w: SprintWindow,
   winnerLink?: string,
-  delivery: SprintDelivery = WCC_DELIVERY,
+  organiser: Organiser = WCC,
 ): EventSection[] => [
   sprintBuild(w),
   sprintRules(w, winnerLink),
-  sprintCertificates(w, delivery),
+  sprintCertificates(w, organiser),
 ];
 
 /** FAQ for a single-window build. */
 function sprintFaq(
   w: SprintWindow,
   winnerLink = "the GitHub repository of what each of them built",
-  delivery: SprintDelivery = WCC_DELIVERY,
+  organiser: Organiser = WCC,
 ) {
   return [
     { q: "How does it run?", a: `One window, ${w.words} long. The problem statement lands an hour before it opens, you build, and you submit once before it closes. There are no qualifying rounds.` },
@@ -847,7 +909,7 @@ function sprintFaq(
     { q: "Is deployment compulsory?", a: "You need a link judges can open and use. If you cannot deploy, provide a reliable executable the judges can run." },
     { q: "Are social media posts required?", a: "No. Nothing on LinkedIn, Instagram or anywhere else is part of a submission, and no video demonstration is required." },
     { q: "Where are results announced?", a: `In the official group: the three winning team names, along with ${winnerLink}. That is the whole announcement. Only those three are placed — no ranking list goes up, no other team is given a position, and a Certificate of Participation does not print one. Nobody's personal details are shared without their consent.` },
-    { q: "When do results and certificates arrive?", a: delivery.faq },
+    { q: "When do results and certificates arrive?", a: organiser.faq },
   ];
 }
 
@@ -1328,19 +1390,19 @@ export const events: Event[] = [
     locked: false,
     slug: "wcc-forge-48",
     title: "WCC Forge 48",
-    kicker: "HACKATHON — 48 HOURS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-30T10:00:00+05:30",
-    endsAt: "2026-11-01T10:00:00+05:30",
+    endsAt: "2026-11-10T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Forty-eight hours to turn one problem statement into a product that runs. National, online and free to enter, with ₹25,000 in cash and PPO opportunities for the top three teams.",
+      "Three rounds to turn one problem statement into a product that runs. National and online, with ₹25,000 in cash and PPO opportunities for the top three teams. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
-      "WCC Forge 48 asks for one thing: a working product. Not a deck, not a concept, not an idea you would build if you had more time — something a person can open and use by the time the forty-eight hours are up.",
-      "One window, one problem statement, and one submission at the end of it. Read the brief, choose the single journey through it that matters most, and build that journey until it runs reliably. Scope is the hard part. Teams here rarely run out of ideas — they run out of decisions.",
-      "Projects are judged on whether they work and whether they are worth using. A narrow product with one dependable workflow beats a broad one held together with screenshots.",
+      "WCC Forge 48 asks for one thing: a working product. Not a deck, not a concept, not an idea you would build if you had more time — something a person can open and use.",
+      "Three rounds get you there. One problem statement, released an hour before the clock starts; the plan in Round 1, a product whose central workflow runs in Round 2, and a finished one in Round 3. Each of the two build rounds is seventy-two hours.",
+      "Scope is the hard part. Teams here rarely run out of ideas — they run out of decisions. Projects are judged on whether they work and whether they are worth using: a narrow product with one dependable workflow beats a broad one held together with screenshots.",
     ],
     emphasis:
       "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
@@ -1350,47 +1412,53 @@ export const events: Event[] = [
       "digital twins",
       "human-computer interaction",
       "online",
-      "product building",
+      "three rounds",
     ],
     teamSize: "1 to 4. Every member registers individually under the same team name.",
     eligibility:
       "School and college students, developers, designers, AI and no-code builders, first-timers and early-stage teams. Registration is open nationally.",
     brief:
-      "Take the problem statement and build the one workflow that solves it, in forty-eight hours.",
+      "Take the problem statement and build the one workflow that solves it, across three rounds.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
-      "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member who files their own submission inside the 48 hours",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Fri 30 Oct, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Fri 30 Oct, 10:00", what: "The forty-eight hours open. Build the one workflow that solves it." },
-      { when: "Sun 1 Nov, 10:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Fri 30 Oct — Sat 31 Oct", what: "Round 1. The idea and the plan are due by 18:00 on the 31st, and the result is emailed the same day." },
+      { when: "Sun 1 Nov — Wed 4 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Sat 7 Nov — Tue 10 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
-    judging: sprintJudging(),
+    judging: seriesJudging(),
     rewards: [
       "₹25,000 in cash, shared among the top three teams",
       "PPO opportunities for the top three teams",
       "100+ reward recipients across the hackathon, giveaways and mini-challenges",
       "Special awards for exceptional projects",
       "Lovable Premium, AI tools and a .XYZ domain",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: sprintSections(H48, "the live URL of what each of them built"),
+    sections: seriesSections("2026-10-30T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+      certificates: "finalists",
+      submission: "individual",
+    }),
     faq: [
-      ...sprintFaq(H48, "the live URL of what each of them built"),
+      ...seriesFaq({ certificates: "finalists", submission: "individual" }),
       { q: "Does every team member have to register?", a: "Yes, individually — and everyone must use the same team name so the entries can be matched up." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
       { q: "Are the PPO opportunities guaranteed?", a: "No. They are subject to the recruiting partner's own eligibility requirements and selection process." },
     ],
     stats: [
-      { label: "Hours to build", value: "48" },
+      { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Cash prize", value: "₹25,000" },
-      { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
-      { label: "Entry fee", value: "Free" },
     ],
     sponsors: [
       { name: "Inkloom", role: "Title sponsor", logo: "/sponsors/inkloom.png" },
@@ -1400,7 +1468,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/p/wcc-forge-48-wecodecoders-1756040",
       label: "Register on Unstop",
-      note: "Free to enter, for teams of one to four. Registration closes 29 October at 23:59 IST. Every member registers individually on Unstop under the same team name, and files their own submission.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 29 October at 23:59 IST. Every member registers individually on Unstop under the same team name, and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1409,7 +1477,7 @@ export const events: Event[] = [
   },
   {
     // LIVE. Part of the October 2026 series — real event, real poster. Judging
-    // and rules are shared with the other four.
+    // and rules are shared with the rest of the series.
     locked: false,
     featured: true,
     slug: "tech-circuit",
@@ -1494,7 +1562,7 @@ export const events: Event[] = [
   },
   {
     // LIVE. Part of the October 2026 series — real event, real poster. Judging
-    // and rules are shared with the other four.
+    // and rules are shared with the rest of the series.
     locked: false,
     featured: true,
     slug: "future-stack",
@@ -1579,7 +1647,7 @@ export const events: Event[] = [
   },
   {
     // LIVE. Part of the October 2026 series — real event, real poster. Judging
-    // and rules are shared with the other four.
+    // and rules are shared with the rest of the series.
     locked: false,
     featured: true,
     slug: "code-axis",
@@ -1664,7 +1732,7 @@ export const events: Event[] = [
   },
   {
     // LIVE. Part of the October 2026 series — real event, real poster. Judging
-    // and rules are shared with the other four.
+    // and rules are shared with the rest of the series.
     locked: false,
     featured: true,
     slug: "codex-48",
@@ -1748,7 +1816,7 @@ export const events: Event[] = [
   },
   {
     // LIVE. Part of the October 2026 series — real event, real poster. Judging
-    // and rules are shared with the other four.
+    // and rules are shared with the rest of the series.
     locked: false,
     featured: true,
     slug: "codestar-30",
@@ -1831,9 +1899,9 @@ export const events: Event[] = [
     posterImage: "/posters/codestar-30-v1.webp",
   },
   {
-    // LIVE. One of the five 48-hour builds — real event, real poster. The
-    // submission list, rules, certificates and judging are shared with the
-    // other four.
+    // LIVE. One of the three events still on a single 48-hour window — real
+    // event, real poster. The submission list, rules, certificates and
+    // judging are shared with the other two.
     locked: false,
     featured: true,
     slug: "codeverse-india",
@@ -1916,9 +1984,9 @@ export const events: Event[] = [
     posterImage: "/posters/codeverse-india-v1.webp",
   },
   {
-    // LIVE. One of the five 48-hour builds — real event, real poster. The
-    // submission list, rules, certificates and judging are shared with the
-    // other four.
+    // LIVE. One of the three events still on a single 48-hour window — real
+    // event, real poster. The submission list, rules, certificates and
+    // judging are shared with the other two.
     locked: false,
     featured: true,
     slug: "codehack-india",
@@ -1994,51 +2062,56 @@ export const events: Event[] = [
   },
   {
     /*
-      LIVE. November series, and one of the five 48-hour builds: one problem
-      statement, one window, one submission, no fee, and a certificate for
-      every participant whose team submits. The submission list, rules,
-      certificates and judging are shared with the other four.
+      LIVE. November series. Announced as one 48-hour window and given three
+      rounds afterwards, on the seventy-two-hour grid: the rounds, rules,
+      judging and certificates are the series' own, and the certificate is
+      the final round's only.
+
+      The Unstop listing is the stale half. It prints one 48-hour window
+      closing 4 Nov and has to be corrected to the three rounds on this page,
+      ending 13 Nov, with the Round 3 fee.
     */
     locked: false,
     featured: true,
     slug: "codenexus-india",
     title: "CodeNexus India 2026",
-    kicker: "HACKATHON — 48 HOURS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-11-02T10:00:00+05:30",
-    endsAt: "2026-11-04T10:00:00+05:30",
+    endsAt: "2026-11-13T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon in a single forty-eight-hour window: one problem statement, one working product. Free to enter, teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three.",
+      "A national online hackathon across three rounds: one problem statement, a plan, then a working product. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
-      "CodeNexus India 2026 is a national-level online hackathon run in one forty-eight-hour window. The problem statement lands an hour before the clock starts, and what you submit at the end of it is what decides whether you built a product.",
-      "Submissions are scored on one published sheet, out of 100, and it is on this page before you start.",
+      "CodeNexus India 2026 is a national-level online hackathon run across three rounds. The problem statement lands an hour before Round 1 opens, and what you submit in the final round is what decides whether you built a product.",
+      "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
     ],
     emphasis:
       "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
-    tags: ["agentic ai", "full-stack", "online", "national", "48 hours"],
+    tags: ["agentic ai", "full-stack", "online", "national", "three rounds"],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers and first-timers. Registration is open nationally.",
     brief:
-      "Build a working solution to the problem statement you are given, in forty-eight hours.",
+      "Carry the problem statement you are given from a plan to a working product, across three rounds.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
-      "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member who files their own submission inside the 48 hours",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Until Mon 2 Nov, 02:00", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Mon 2 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Mon 2 Nov, 10:00", what: "The forty-eight hours open. Build the one workflow that solves it." },
-      { when: "Wed 4 Nov, 10:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Mon 2 Nov — Tue 3 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 3rd, and the result is emailed the same day." },
+      { when: "Wed 4 Nov — Sat 7 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Tue 10 Nov — Fri 13 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
-    judging: sprintJudging(),
+    judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
       "Paid internship opportunities for the top three teams",
@@ -2048,22 +2121,26 @@ export const events: Event[] = [
       "$500 in Adaption Labs credits for every eligible participant",
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A certificate for every participant who files their own submission inside the 48 hours",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: sprintSections(H48),
-    faq: sprintFaq(H48),
+    sections: seriesSections("2026-11-02T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+      certificates: "finalists",
+      submission: "individual",
+    }),
+    faq: seriesFaq({ certificates: "finalists", submission: "individual" }),
     stats: [
+      { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
-      { label: "Hours to build", value: "48" },
-      { label: "Entry fee", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/codenexus-india-2026-national-hackathon-wecodecoders-1764747",
       label: "Register on Unstop",
-      note: "Free to enter, for teams of one to four. Registration closes 2 November at 02:00 IST. Every member registers individually and files their own submission.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 2 November at 02:00 IST. Every member registers individually and files their own submission.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LQXKCATzVwsCJDHOaeVCjf" },
@@ -2074,52 +2151,55 @@ export const events: Event[] = [
   },
   {
     /*
-      LIVE. November series, a few days behind CodeNexus, and one of the five
-      48-hour builds: one problem statement, one window, one submission, no
-      fee, and a certificate for every participant whose team submits. The
-      Unstop listing still prints the old three-round windows and has to be
-      corrected to 6 Nov 10:00 — 8 Nov 10:00 IST.
+      LIVE. November series, a few days behind CodeNexus and run the same
+      way: three rounds on the seventy-two-hour grid, the series' rules and
+      judging, and a certificate for the final round only.
+
+      The Unstop listing has been wrong in both directions. It printed three
+      rounds while this page ran one window; it now has to be corrected to
+      the three rounds on this page — 6 Nov to 17 Nov, with the Round 3 fee.
     */
     locked: false,
     featured: true,
     slug: "codetitans-india",
     title: "CodeTitans India 2026",
-    kicker: "HACKATHON — 48 HOURS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-11-06T10:00:00+05:30",
-    endsAt: "2026-11-08T10:00:00+05:30",
+    endsAt: "2026-11-17T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon in one forty-eight-hour window: read the brief, build it, ship it. Free to enter, teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three.",
+      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
-      "CodeTitans India 2026 is a national-level online hackathon run in a single forty-eight-hour window, from a problem statement to a product someone could use.",
-      "Submissions are scored on one published sheet, out of 100, and it is on this page before you start.",
+      "CodeTitans India 2026 is a national-level online hackathon run across three rounds, from a problem statement to a product someone could use.",
+      "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
     ],
     emphasis:
       "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
-    tags: ["agentic ai", "full-stack", "online", "national", "48 hours"],
+    tags: ["agentic ai", "full-stack", "online", "national", "three rounds"],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers, designers and first-timers. Registration is open nationally.",
     brief:
-      "Take the problem statement, build the one workflow that solves it, and finish it inside forty-eight hours.",
+      "Take the problem statement, plan it, build the one workflow that solves it, and finish it across three rounds.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
-      "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member who files their own submission inside the 48 hours",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Until Wed 4 Nov, 20:30", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Fri 6 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Fri 6 Nov, 10:00", what: "The forty-eight hours open. Build the one workflow that solves it." },
-      { when: "Sun 8 Nov, 10:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Fri 6 Nov — Sat 7 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 7th, and the result is emailed the same day." },
+      { when: "Sun 8 Nov — Wed 11 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Sat 14 Nov — Tue 17 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
-    judging: sprintJudging(),
+    judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
       "Paid internship opportunities for the top three teams",
@@ -2129,22 +2209,26 @@ export const events: Event[] = [
       "$500 in Adaption Labs credits for every eligible participant",
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A certificate for every participant who files their own submission inside the 48 hours",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: sprintSections(H48),
-    faq: sprintFaq(H48),
+    sections: seriesSections("2026-11-06T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+      certificates: "finalists",
+      submission: "individual",
+    }),
+    faq: seriesFaq({ certificates: "finalists", submission: "individual" }),
     stats: [
+      { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
-      { label: "Hours to build", value: "48" },
-      { label: "Entry fee", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
       href: "https://unstop.com/hackathons/codetitans-india-2026-national-hackathon-wecodecoders-1766190",
       label: "Register on Unstop",
-      note: "Free to enter, for teams of one to four. Registration closes 4 November at 20:30 IST. Every member registers individually and files their own submission.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 4 November at 20:30 IST. Every member registers individually and files their own submission.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Lr1a3omlex7Coc4tAJ8S1C" },
@@ -2157,10 +2241,14 @@ export const events: Event[] = [
   {
     /*
       LIVE. Announced on Unstop as a three-round event and cut to one 48-hour
-      window, like the five before it: one problem statement, one entry per
-      participant, nothing to pay, and a certificate for everyone who files
-      one. The start is the one on the listing — 28 October at 10:00 — so the
-      window closes on the 30th.
+      window: one problem statement, one entry per participant, nothing to
+      pay, and a certificate for everyone who files one. The start is the one
+      on the listing — 28 October at 10:00 — so the window closes on the
+      30th.
+
+      It is one of the three left on a single window. Six of its neighbours
+      were given three rounds back; this one was not, and its window opens in
+      two days, which is too late to change the shape on anybody.
 
       No poster artwork yet, so the generated one stands in, and no Unstop URL
       in hand: registration renders as "not open" rather than as a button that
@@ -2386,14 +2474,20 @@ export const events: Event[] = [
   /*
     The HackWithPune hackathons.
 
-    Three events by another organiser, carried here. They run the same single
-    window as the We Code Coders builds — one problem statement an hour before
-    the clock, an entry from every participant with the role they held, free
-    throughout, a certificate for everyone who files one — but over thirty-six
-    hours rather than forty-eight, which is the length their own listings run,
-    and with HackWithPune's promise on when prizes and certificates arrive.
+    Three events by another organiser, carried here. They run the same three
+    rounds as the We Code Coders builds, on the same seventy-two-hour grid,
+    judged on the same criteria and charging the same Round 3 fee — one
+    problem statement an hour before the clock, and an entry from every
+    participant with the role they held.
 
-    All three were announced on Unstop for other dates and moved to 3 and 4
+    Two things stay theirs, and are carried by `organiser: HWP`: a certificate
+    for the final round only, and HackWithPune's own promise on when prizes
+    and certificates arrive, fifteen days from the end of the event. They name
+    no judge, so nothing here claims one for them, and the rule about nobody
+    asking you for money outside the stated fee names HackWithPune rather than
+    us.
+
+    All three were announced on Unstop for other dates and now run 3 to 14
     November. Their registration deadlines are still tied to the old dates and
     have to be reset on Unstop, so none is printed here, and no Unstop URL is
     in hand for any of them. Their listings also print three tracks; these
@@ -2403,42 +2497,43 @@ export const events: Event[] = [
     locked: false,
     slug: "codepunethinkers",
     title: "CodePuneThinkers Hackathon",
-    kicker: "HACKATHON — 36 HOURS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-11-03T10:00:00+05:30",
-    endsAt: "2026-11-04T22:00:00+05:30",
+    endsAt: "2026-11-14T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon: thirty-six hours, one problem statement, one working product. Free to enter, teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three.",
+      "A HackWithPune hackathon across three rounds: one problem statement, a plan, then a working product. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
-      "CodePuneThinkers is an online hackathon run by HackWithPune in a single thirty-six-hour window. The problem statement lands an hour before the clock starts, and what you submit at the end of it is what is judged.",
-      "Submissions are scored on one published sheet, out of 100, and it is on this page before you start.",
+      "CodePuneThinkers is an online hackathon run by HackWithPune across three rounds. The problem statement lands an hour before Round 1 opens, and what you submit in the final round is what is judged.",
+      "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
     ],
     emphasis:
       "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
-    tags: ["agentic ai", "full-stack", "online", "36 hours"],
+    tags: ["agentic ai", "full-stack", "online", "three rounds"],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences. Registration is open online.",
     brief:
-      "Build a working solution to the problem statement you are given, in thirty-six hours.",
+      "Carry the problem statement you are given from a plan to a product that runs, across three rounds.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
-      "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member who files their own submission inside the 36 hours",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official group." },
       { when: "Tue 3 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Tue 3 Nov, 10:00", what: "The thirty-six hours open. Build the one workflow that solves it." },
-      { when: "Wed 4 Nov, 22:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Tue 3 Nov — Wed 4 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 4th, and the result is emailed the same day." },
+      { when: "Thu 5 Nov — Sun 8 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Wed 11 Nov — Sat 14 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
-    judging: sprintJudging(),
+    judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
       "Paid internship opportunities for the top three teams",
@@ -2447,20 +2542,30 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every eligible participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "$500 in Adaption credits for every eligible participant",
-      "A certificate for every participant who files their own submission inside the 36 hours",
+      "100+ reward recipients across the hackathon",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: sprintSections(H36, undefined, HWP_DELIVERY),
-    faq: sprintFaq(H36, undefined, HWP_DELIVERY),
+    sections: seriesSections("2026-11-03T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+      certificates: "finalists",
+      submission: "individual",
+      organiser: HWP,
+    }),
+    faq: seriesFaq({
+      certificates: "finalists",
+      submission: "individual",
+      organiser: HWP,
+    }),
     stats: [
+      { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Prize pool", value: "₹30,000" },
-      { label: "Hours to build", value: "36" },
       { label: "Per team", value: "1–4" },
-      { label: "Entry fee", value: "Free" },
     ],
     sponsors: HWP_SPONSORS,
     registration: {
-      note: "Free to enter, for teams of one to four. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Dh7bUhHKdpG7UGZ4fr85Ka" },
@@ -2472,42 +2577,43 @@ export const events: Event[] = [
     locked: false,
     slug: "codersinpune",
     title: "CodersInPune Hackathon",
-    kicker: "HACKATHON — 36 HOURS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-11-03T10:00:00+05:30",
-    endsAt: "2026-11-04T22:00:00+05:30",
+    endsAt: "2026-11-14T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon: thirty-six hours from one problem statement to a product that runs. Free to enter, teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three.",
+      "A HackWithPune hackathon across three rounds, from one problem statement to a product that runs. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
-      "CodersInPune is an online hackathon run by HackWithPune in a single thirty-six-hour window, from a problem statement to something a person can open and use.",
-      "Submissions are scored on one published sheet, out of 100, and it is on this page before you start.",
+      "CodersInPune is an online hackathon run by HackWithPune across three rounds, from a problem statement to something a person can open and use.",
+      "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
     ],
     emphasis:
       "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
-    tags: ["agentic ai", "full-stack", "online", "36 hours"],
+    tags: ["agentic ai", "full-stack", "online", "three rounds"],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
       "Open online to students, developers, designers, AI and no-code builders and first-timers, in teams of one to four.",
     brief:
-      "Build a working solution to the problem statement you are given, in thirty-six hours.",
+      "Carry the problem statement you are given from a plan to a product that runs, across three rounds.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
-      "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member who files their own submission inside the 36 hours",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official group." },
       { when: "Tue 3 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Tue 3 Nov, 10:00", what: "The thirty-six hours open. Build the one workflow that solves it." },
-      { when: "Wed 4 Nov, 22:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Tue 3 Nov — Wed 4 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 4th, and the result is emailed the same day." },
+      { when: "Thu 5 Nov — Sun 8 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Wed 11 Nov — Sat 14 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
-    judging: sprintJudging(),
+    judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
       "Paid internship opportunities for the top three teams",
@@ -2518,20 +2624,29 @@ export const events: Event[] = [
       "$500 in Adaption credits for every eligible participant",
       "Expert-led workshops",
       "100+ reward recipients across the hackathon",
-      "A certificate for every participant who files their own submission inside the 36 hours",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: sprintSections(H36, undefined, HWP_DELIVERY),
-    faq: sprintFaq(H36, undefined, HWP_DELIVERY),
+    sections: seriesSections("2026-11-03T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+      certificates: "finalists",
+      submission: "individual",
+      organiser: HWP,
+    }),
+    faq: seriesFaq({
+      certificates: "finalists",
+      submission: "individual",
+      organiser: HWP,
+    }),
     stats: [
+      { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Prize pool", value: "₹30,000" },
-      { label: "Hours to build", value: "36" },
       { label: "Per team", value: "1–4" },
-      { label: "Entry fee", value: "Free" },
     ],
     sponsors: HWP_SPONSORS,
     registration: {
-      note: "Free to enter, for teams of one to four. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LLeWA6XWTjR5kMKxLeUvR9" },
@@ -2543,42 +2658,43 @@ export const events: Event[] = [
     locked: false,
     slug: "codefrontier",
     title: "CodeFrontier Hackathon",
-    kicker: "HACKATHON — 36 HOURS",
+    kicker: "HACKATHON — 3 ROUNDS",
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-11-03T10:00:00+05:30",
-    endsAt: "2026-11-04T22:00:00+05:30",
+    endsAt: "2026-11-14T10:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon: thirty-six hours, one problem statement, one finished product. Free to enter, teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three.",
+      "A HackWithPune hackathon across three rounds: one problem statement, one finished product. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a ₹399 per-team fee only at Round 3.",
     description: [
-      "CodeFrontier is an online hackathon run by HackWithPune in a single thirty-six-hour window. One problem statement, one submission from each member who built, and a product at the end of it.",
-      "Submissions are scored on one published sheet, out of 100, and it is on this page before you start.",
+      "CodeFrontier is an online hackathon run by HackWithPune across three rounds. One problem statement, an entry from every member who built, and a product at the end of it.",
+      "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
     ],
     emphasis:
       "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
     forWho: "Students, developers, designers and first-time builders.",
-    tags: ["agentic ai", "full-stack", "online", "36 hours"],
+    tags: ["agentic ai", "full-stack", "online", "three rounds"],
     teamSize: "1 to 4. Every participant belongs to one team only.",
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce, the sciences, law and medicine. Registration is open online.",
     brief:
-      "Build a working solution to the problem statement you are given, in thirty-six hours.",
+      "Carry the problem statement you are given from a plan to a product that runs, across three rounds.",
     deliverables: [
       "A product that runs, and a repository anyone can open",
-      "The thinking written down: the problem as you read it, what you built, and where it would go next",
-      "A certificate for every member who files their own submission inside the 36 hours",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official group." },
       { when: "Tue 3 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
-      { when: "Tue 3 Nov, 10:00", what: "The thirty-six hours open. Build the one workflow that solves it." },
-      { when: "Wed 4 Nov, 22:00", what: "Submissions close. Everything on the list is in, or it is not." },
+      { when: "Tue 3 Nov — Wed 4 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 4th, and the result is emailed the same day." },
+      { when: "Thu 5 Nov — Sun 8 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Wed 11 Nov — Sat 14 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
-    judging: sprintJudging(),
+    judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
       "Paid internship opportunities for the top three teams",
@@ -2589,20 +2705,29 @@ export const events: Event[] = [
       "$500 in Adaption credits for every eligible participant",
       "Expert-led workshops",
       "100+ reward recipients across the hackathon",
-      "A certificate for every participant who files their own submission inside the 36 hours",
+      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: sprintSections(H36, undefined, HWP_DELIVERY),
-    faq: sprintFaq(H36, undefined, HWP_DELIVERY),
+    sections: seriesSections("2026-11-03T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+      certificates: "finalists",
+      submission: "individual",
+      organiser: HWP,
+    }),
+    faq: seriesFaq({
+      certificates: "finalists",
+      submission: "individual",
+      organiser: HWP,
+    }),
     stats: [
+      { label: "Rounds", value: "3" },
+      { label: "Rounds 1–2", value: "Free" },
+      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Prize pool", value: "₹30,000" },
-      { label: "Hours to build", value: "36" },
       { label: "Per team", value: "1–4" },
-      { label: "Entry fee", value: "Free" },
     ],
     sponsors: HWP_SPONSORS,
     registration: {
-      note: "Free to enter, for teams of one to four. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/IdQJEKGLGSrB5FGpdCAcVQ" },

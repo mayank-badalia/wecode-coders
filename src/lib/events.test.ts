@@ -37,7 +37,7 @@ const briefed = published.filter(
   (e) => e.sections?.some((sec) => sec.label === ROUNDS_LABEL) || Boolean(windowBlock(e)),
 );
 
-/** The five that still run three rounds. */
+/** The eleven that run three rounds. */
 const threeRound = published.filter((e) =>
   e.sections?.some((sec) => sec.label === ROUNDS_LABEL),
 );
@@ -284,58 +284,121 @@ describe("events seam", () => {
     }
   });
 
-  it("promises the same round-wise certificate on every three-round event", () => {
+  it("gives every three-round event one certificate scheme, and only one", () => {
     /*
-      Codex 48 and CodeStar 30 used to issue nothing for Rounds 1 and 2: they
-      were qualifying rounds, and the certificate was earned in the final one.
-      The other three upgraded a certificate at every round cleared. Both are
-      defensible; running them side by side in one series is not, because a
-      registrant comparing two of our pages was told two different things
-      about the same document.
+      The eleven do not all certify the same thing, and that is deliberate.
+      The five announced as three rounds upgrade a certificate at every round
+      cleared. The six announced as a single window, and given three rounds
+      afterwards, certify the final round only: their entrants were promised
+      one certificate for one submission, and issuing three where one was
+      advertised would be a different event again.
 
-      So all five now issue one certificate at the highest round completed.
-      This pins the promise in the block a reader goes to for it, and pins the
-      absence of the one it replaced — nothing in these events may say a
-      round carries no certificate.
+      What must never happen is a page that carries both promises, or
+      neither — a reader deciding whether Round 1 is worth their weekend
+      gets one answer or no page at all. So this pins the two sets and
+      asserts every page is exclusive, in the block a reader goes to for it
+      and in the lists that answer it before they get there.
     */
-    const series = published.filter((e) =>
-      e.sections?.some((sec) => sec.label === "How the three rounds run"),
+    const upgraded = ["code-axis", "codestar-30", "codex-48", "future-stack", "tech-circuit"];
+    const finalRoundOnly = [
+      "codefrontier",
+      "codenexus-india",
+      "codepunethinkers",
+      "codersinpune",
+      "codetitans-india",
+      "wcc-forge-48",
+    ];
+    expect(threeRound.map((e) => e.slug).sort()).toEqual(
+      [...upgraded, ...finalRoundOnly].sort(),
     );
-    expect(series.length).toBeGreaterThanOrEqual(5);
 
-    for (const e of series) {
+    for (const e of threeRound) {
       const certs = e.sections?.find((sec) => sec.label === "Certificates");
       expect(certs?.kind, `${e.slug} has no certificates block`).toBe("list");
       if (certs?.kind !== "list") continue;
 
-      expect(certs.intro, `${e.slug} does not promise the upgrade`).toMatch(
-        /the highest you reach/i,
-      );
-      const items = certs.items.join(" ");
-      expect(items, `${e.slug} does not issue a Round 1 certificate`).toMatch(
-        /Round 1 Completion Certificate/,
-      );
-      expect(items, `${e.slug} does not issue a Round 2 certificate`).toMatch(
-        /Round 2 Completion Certificate/,
-      );
-      expect(items, `${e.slug} does not say the certificate is upgraded`).toMatch(
-        /upgraded to the furthest stage/i,
-      );
+      const promise = `${certs.intro ?? ""} ${certs.items.join(" ")}`;
+      const upgrades = /the highest you reach/i.test(promise);
+      const finalOnly = /one certificate, earned in the final round/i.test(promise);
+      expect([upgrades, finalOnly], `${e.slug} states no certificate scheme`).toContain(true);
+      expect(upgrades && finalOnly, `${e.slug} states both schemes`).toBe(false);
 
-      // And nowhere on the page — rounds, rewards, deliverables or FAQ —
-      // may a round still be sold as carrying nothing.
+      /* Everything a reader meets before the block itself has to agree. */
       const words = [
         ...e.deliverables,
         ...(e.rewards ?? []),
         ...(e.faq ?? []).map((f) => `${f.q} ${f.a}`),
-        ...(e.sections ?? []).flatMap((sec) =>
-          sec.kind === "list"
-            ? [sec.intro ?? "", ...sec.items]
-            : [sec.intro ?? "", ...sec.items.flatMap((i) => [i.note ?? "", i.blurb ?? ""])],
-        ),
+        promise,
       ].join(" ");
-      expect(words, `${e.slug} still says a round carries no certificate`).not.toMatch(
-        /carry no certificate|carries none|qualifying rounds and carry/i,
+
+      if (upgraded.includes(e.slug)) {
+        expect(upgrades, `${e.slug} should upgrade a certificate per round`).toBe(true);
+        expect(words, `${e.slug} does not issue a Round 1 certificate`).toMatch(
+          /Round 1 Completion Certificate/,
+        );
+        expect(words, `${e.slug} does not say the certificate is upgraded`).toMatch(
+          /upgraded to the furthest stage/i,
+        );
+        expect(words, `${e.slug} says a round carries no certificate`).not.toMatch(
+          /carry no certificate|carry none/i,
+        );
+      } else {
+        expect(finalOnly, `${e.slug} should certify the final round only`).toBe(true);
+        expect(words, `${e.slug} does not say the early rounds carry none`).toMatch(
+          /carry no certificate|carry none/i,
+        );
+        expect(words, `${e.slug} still promises a round-completion certificate`).not.toMatch(
+          /Round [12] Completion Certificate/,
+        );
+      }
+    }
+  });
+
+  it("keeps seventy-two hours in each build round of a converted event", () => {
+    /*
+      These six ran a single window of 36 or 48 hours until they were given
+      three rounds. The grid they moved onto keeps the build time rather than
+      halving it: Round 1 from the start to 18:00 the next day, its result
+      that day; Round 2 at 10:00 the morning after for seventy-two hours, its
+      result the day it closes; two clear days; Round 3 for seventy-two hours.
+      Eleven days end to end.
+
+      Asserted on the schedule a team reads rather than on the offsets
+      constant, because the constant being right is not the promise — the
+      dates and times printed on the page are.
+    */
+    const converted = [
+      "wcc-forge-48",
+      "codenexus-india",
+      "codetitans-india",
+      "codepunethinkers",
+      "codersinpune",
+      "codefrontier",
+    ];
+
+    for (const slug of converted) {
+      const e = published.find((x) => x.slug === slug);
+      expect(e, `${slug} is not published`).toBeTruthy();
+      if (!e) continue;
+
+      const days = (new Date(e.endsAt).getTime() - new Date(e.startsAt).getTime()) / 86_400_000;
+      expect(days, `${slug} runs ${days} days`).toBe(11);
+      expect(e.kicker, slug).toMatch(/3 ROUNDS/);
+
+      const schedule = (e.schedule ?? []).map((r) => `${r.when} ${r.what}`).join(" ");
+      expect(
+        schedule.match(/seventy-two hours/gi)?.length,
+        `${slug} does not run two seventy-two-hour rounds`,
+      ).toBe(2);
+      expect(schedule, `${slug} does not close Round 1 at 18:00`).toMatch(/due by 18:00/);
+      expect(schedule, `${slug} does not promise the Round 1 result that day`).toMatch(
+        /result is emailed the same day/,
+      );
+      expect(schedule, `${slug} does not promise the Round 2 result on the day it closes`).toMatch(
+        /emailed the day it closes/,
+      );
+      expect(schedule, `${slug} does not leave two clear days before the final`).toMatch(
+        /Two clear days/,
       );
     }
   });
@@ -407,21 +470,20 @@ describe("events seam", () => {
 
   it("runs every single-window build as one free window, with a certificate for everyone who submits", () => {
     /*
-      Nine hackathons run one window rather than three rounds. Three promises
-      changed at once — one window, no fee at any stage, and a certificate for
-      every participant who files an entry — and any one of them is easy to
-      half-undo while editing a single record. This pins the set and all three.
+      Three hackathons run one window rather than three rounds. There were
+      nine: six were given three rounds and a Round 3 fee, and the three left
+      are the ones whose windows open too soon to change the shape on anybody.
+
+      Three promises hold for those three — one window, no fee at any stage,
+      and a certificate for every participant who files an entry — and any
+      one of them is easy to half-undo while editing a single record. This
+      pins the set and all three. The set matters most: a converted event that
+      kept its window block would be advertising both shapes at once.
     */
     expect(sprints.map((e) => e.slug).sort()).toEqual([
       "code-conqueror-india",
-      "codefrontier",
       "codehack-india",
-      "codenexus-india",
-      "codepunethinkers",
-      "codersinpune",
-      "codetitans-india",
       "codeverse-india",
-      "wcc-forge-48",
     ]);
 
     for (const e of sprints) {
@@ -602,7 +664,7 @@ describe("events seam", () => {
       at 09:00, which also made their windows close in the evening — the end
       is derived from the start, so this pins both ends with one assertion.
     */
-    expect(sprints.length).toBeGreaterThanOrEqual(9);
+    expect(sprints.length).toBeGreaterThanOrEqual(3);
     const clock = new Intl.DateTimeFormat("en-GB", {
       hour: "2-digit",
       minute: "2-digit",
@@ -654,13 +716,14 @@ describe("events seam", () => {
       question arrives before any of them, so it belongs in the stats strip at
       the top of the page, and this is what keeps it there.
 
-      Scoped to the live events that take no fee: the three-round five charge
-      for Round 3 and are excluded, and a finished event is not recruiting.
+      Scoped to the live events that take no fee: the eleven three-round
+      events charge for Round 3 and are excluded, and a finished event is not
+      recruiting. That leaves the three single-window builds and the quiz.
     */
     const free = published.filter(
       (e) => e.status !== "past" && !threeRound.includes(e),
     );
-    expect(free.length).toBeGreaterThanOrEqual(10);
+    expect(free.length).toBeGreaterThanOrEqual(4);
 
     for (const e of free) {
       const fee = e.stats?.find((st) => st.label === "Entry fee");
@@ -686,7 +749,7 @@ describe("events seam", () => {
       that the page never quotes a second, different figure anywhere, since a
       page carrying two fees is worse than one carrying none.
     */
-    expect(threeRound.length).toBe(5);
+    expect(threeRound.length).toBe(11);
 
     for (const e of threeRound) {
       expect(
@@ -1080,7 +1143,7 @@ describe("events seam", () => {
   */
   it("judges the three-round series on identical criteria", () => {
     const series = threeRound;
-    expect(series).toHaveLength(5);
+    expect(series).toHaveLength(11);
 
     const shape = (e: (typeof series)[number]) =>
       JSON.stringify((e.judging ?? []).map((j) => [j.name, j.weight]));

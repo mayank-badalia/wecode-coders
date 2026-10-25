@@ -38,17 +38,23 @@ describe("terms page", () => {
     expect(source).not.toMatch(/five 48-hour/);
   });
 
-  it("states one certificate rule for every three-round event", () => {
+  it("states both certificate schemes, and sends the reader to the event page", () => {
     /*
-      Section 05 described two schemes, because two events issued nothing for
-      Rounds 1 and 2 while three upgraded a certificate at each round. All five
-      now do the second, so the page states that and not the choice — a
-      clause describing a scheme no event runs reads to a registrant as a
-      warning that theirs might be the one.
+      This clause has now been wrong in both directions. It described only the
+      finalists-only scheme while three events upgraded a certificate at each
+      round; then it described only the round-wise one, on the morning six
+      single-window events were given three rounds and kept the single
+      certificate they had advertised.
+
+      Both are real, so the page states both and says where to find out which
+      applies — that line is what a participant is pointed at in a dispute,
+      and it cannot name one scheme as though it were the only one.
     */
-    expect(source).toMatch(/A three-round event issues one certificate, at the highest round/);
+    expect(source).toMatch(/issues certificates in one of two ways/);
+    expect(source).toMatch(/stated in the certificates block on its own page/);
     expect(source).toMatch(/upgrades that certificate rather than adding a second one/);
-    expect(source).not.toMatch(/certificate only for the final round/);
+    expect(source).toMatch(/The second certifies the final round only/);
+    expect(source).toMatch(/carry no certificate of any kind/);
   });
 
   it("says what a prize pool is made of", () => {
