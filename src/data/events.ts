@@ -160,10 +160,14 @@ function span(startsAt: string, fromDay: number, toDay: number): string {
  * Most events run 2 days / 3 days / 3 days. What differs is the gap, and on
  * the compact shape the length of the build as well: the default leaves two
  * clear days before each of the later rounds, while the compact shape opens
- * Round 2 the morning after Round 1 closes, runs it for two days rather than
- * three, and keeps the longer break only before the final. The offsets are a
- * parameter rather than a constant because the dates printed on a round card
- * have to be the ones a team is actually working to.
+ * Round 2 the morning after Round 1 closes, runs it 10:00 to 10:00 for
+ * forty-eight hours, and keeps the longer break only before the final.
+ *
+ * These are dates, not durations. A round that opens at 10:00 and closes at
+ * 10:00 touches one more date than it has days, which is why how long a
+ * round runs is said in words on the round itself and never counted off the
+ * pair. The offsets are a parameter rather than a constant because the dates
+ * printed on a round card have to be the ones a team is actually working to.
  */
 type RoundOffsets = readonly (readonly [number, number])[];
 const DEFAULT_ROUNDS: RoundOffsets = [
@@ -173,16 +177,17 @@ const DEFAULT_ROUNDS: RoundOffsets = [
 ];
 
 /**
- * Round 2 opens the day after Round 1 closes, and runs two days.
+ * Round 2 opens the day after Round 1 closes and runs forty-eight hours.
  *
- * Codex 48 and CodeStar 30 are the two events on this shape. Round 2 was
- * three days until it was cut to two mid-event; Round 3 kept its three days
- * and its dates, so what the cut actually moved is the deadline, and the
- * break before the final is a day longer than it was.
+ * Codex 48 and CodeStar 30 are the two events on this shape. Their Round 2
+ * runs 10:00 on the first of its dates to 10:00 on the last, which is two
+ * days of clock across three dates — so the offsets span the 26th to the
+ * 28th while the copy says forty-eight hours. It was described as three days
+ * until mid-event; the dates never moved, the length they were read as did.
  */
 const COMPACT_ROUNDS: RoundOffsets = [
   [0, 1],
-  [2, 3],
+  [2, 4],
   [7, 9],
 ];
 
@@ -559,14 +564,16 @@ type SeriesTerms = {
   /*
     How long Round 2 is, in the words its own blurb opens with.
 
-    Three days everywhere but Codex 48 and CodeStar 30, whose build round was
-    cut to two. A phrase rather than a number because the blurb opens the
-    sentence with it — and because it cannot be counted off the offsets: a
-    seventy-two-hour round on LONG_BUILD_ROUNDS spans four dates and is three
-    days long, so counting dates would print "Four days" on six pages whose
-    rules say seventy-two hours.
+    Three days everywhere but Codex 48 and CodeStar 30, where it is
+    forty-eight hours: 10:00 on the first of its dates to 10:00 on the last.
+
+    A phrase rather than a number because the blurb opens the sentence with
+    it, and because it cannot be counted off the offsets. Those are dates: a
+    forty-eight-hour round running 10:00 to 10:00 spans three of them, and a
+    seventy-two-hour round on LONG_BUILD_ROUNDS spans four. Counting dates
+    would add a day to every round on this site.
   */
-  round2Length?: "Two days" | "Three days";
+  round2Length?: "Forty-eight hours" | "Three days";
   /** Who submits. Defaults to "leader". */
   submission?: SubmissionMode;
   /*
@@ -1876,7 +1883,7 @@ export const events: Event[] = [
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Sat 24 Oct — Sun 25 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
-      { when: "Mon 26 Oct — Tue 27 Oct", what: "Round 2. Two days to turn the proposal into a product whose central workflow runs." },
+      { when: "Mon 26 Oct, 10:00 — Wed 28 Oct, 10:00", what: "Round 2. Forty-eight hours to turn the proposal into a product whose central workflow runs. The clock runs 10:00 to 10:00, so the three dates are two days." },
       { when: "Sat 31 Oct — Mon 2 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
@@ -1896,7 +1903,7 @@ export const events: Event[] = [
     ],
     sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, {
       submission: "individual",
-      round2Length: "Two days",
+      round2Length: "Forty-eight hours",
     }),
     faq: seriesFaq({ submission: "individual" }),
     stats: [
@@ -1960,7 +1967,7 @@ export const events: Event[] = [
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Sat 24 Oct — Sun 25 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
-      { when: "Mon 26 Oct — Tue 27 Oct", what: "Round 2. Two days to turn the proposal into a product whose central workflow runs." },
+      { when: "Mon 26 Oct, 10:00 — Wed 28 Oct, 10:00", what: "Round 2. Forty-eight hours to turn the proposal into a product whose central workflow runs. The clock runs 10:00 to 10:00, so the three dates are two days." },
       { when: "Sat 31 Oct — Mon 2 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
@@ -1980,7 +1987,7 @@ export const events: Event[] = [
     ],
     sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, {
       submission: "individual",
-      round2Length: "Two days",
+      round2Length: "Forty-eight hours",
     }),
     faq: seriesFaq({ submission: "individual" }),
     stats: [
