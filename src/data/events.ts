@@ -157,12 +157,13 @@ function span(startsAt: string, fromDay: number, toDay: number): string {
 /**
  * Day offsets from `startsAt` for the three rounds, as [from, to] pairs.
  *
- * Every event runs 2 days / 3 days / 3 days. What differs is the gap: the
- * default leaves two clear days before each of the later rounds, while the
- * compact shape opens Round 2 the morning after Round 1 closes and keeps the
- * longer break only before the final. The offsets are a parameter rather than
- * a constant because the dates printed on a round card have to be the ones a
- * team is actually working to.
+ * Most events run 2 days / 3 days / 3 days. What differs is the gap, and on
+ * the compact shape the length of the build as well: the default leaves two
+ * clear days before each of the later rounds, while the compact shape opens
+ * Round 2 the morning after Round 1 closes, runs it for two days rather than
+ * three, and keeps the longer break only before the final. The offsets are a
+ * parameter rather than a constant because the dates printed on a round card
+ * have to be the ones a team is actually working to.
  */
 type RoundOffsets = readonly (readonly [number, number])[];
 const DEFAULT_ROUNDS: RoundOffsets = [
@@ -171,10 +172,17 @@ const DEFAULT_ROUNDS: RoundOffsets = [
   [9, 11],
 ];
 
-/** Round 2 opens the day after Round 1 closes. */
+/**
+ * Round 2 opens the day after Round 1 closes, and runs two days.
+ *
+ * Codex 48 and CodeStar 30 are the two events on this shape. Round 2 was
+ * three days until it was cut to two mid-event; Round 3 kept its three days
+ * and its dates, so what the cut actually moved is the deadline, and the
+ * break before the final is a day longer than it was.
+ */
 const COMPACT_ROUNDS: RoundOffsets = [
   [0, 1],
-  [2, 4],
+  [2, 3],
   [7, 9],
 ];
 
@@ -257,7 +265,7 @@ function seriesRounds(
       meta: span(startsAt, offsets[1]![0], offsets[1]![1]),
       name: "Round 2 — The build",
       blurb:
-        "Three days to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not. 300 teams reach this round, and 100 of them go through to the final.",
+        `${terms.round2Length ?? "Three days"} to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not. 300 teams reach this round, and 100 of them go through to the final.`,
       points: [
         "A link to the functioning project",
         "The source-code repository",
@@ -548,6 +556,17 @@ const ROLE_SET =
 type SeriesTerms = {
   /** Which certificates the event issues. Defaults to "rounds". */
   certificates?: CertificateScheme;
+  /*
+    How long Round 2 is, in the words its own blurb opens with.
+
+    Three days everywhere but Codex 48 and CodeStar 30, whose build round was
+    cut to two. A phrase rather than a number because the blurb opens the
+    sentence with it — and because it cannot be counted off the offsets: a
+    seventy-two-hour round on LONG_BUILD_ROUNDS spans four dates and is three
+    days long, so counting dates would print "Four days" on six pages whose
+    rules say seventy-two hours.
+  */
+  round2Length?: "Two days" | "Three days";
   /** Who submits. Defaults to "leader". */
   submission?: SubmissionMode;
   /*
@@ -1857,7 +1876,7 @@ export const events: Event[] = [
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Sat 24 Oct — Sun 25 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
-      { when: "Mon 26 Oct — Wed 28 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
+      { when: "Mon 26 Oct — Tue 27 Oct", what: "Round 2. Two days to turn the proposal into a product whose central workflow runs." },
       { when: "Sat 31 Oct — Mon 2 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
@@ -1877,6 +1896,7 @@ export const events: Event[] = [
     ],
     sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, {
       submission: "individual",
+      round2Length: "Two days",
     }),
     faq: seriesFaq({ submission: "individual" }),
     stats: [
@@ -1940,7 +1960,7 @@ export const events: Event[] = [
     schedule: [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Sat 24 Oct — Sun 25 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
-      { when: "Mon 26 Oct — Wed 28 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
+      { when: "Mon 26 Oct — Tue 27 Oct", what: "Round 2. Two days to turn the proposal into a product whose central workflow runs." },
       { when: "Sat 31 Oct — Mon 2 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
@@ -1960,6 +1980,7 @@ export const events: Event[] = [
     ],
     sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, {
       submission: "individual",
+      round2Length: "Two days",
     }),
     faq: seriesFaq({ submission: "individual" }),
     stats: [
