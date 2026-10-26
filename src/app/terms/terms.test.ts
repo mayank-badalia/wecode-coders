@@ -57,6 +57,20 @@ describe("terms page", () => {
     expect(source).toMatch(/carry no certificate of any kind/);
   });
 
+  it("states what the quiz charges, which is not what a hackathon charges", () => {
+    /*
+      The quiz was free and single-round for months, and is now three rounds
+      with a fee of its own. That fee is ₹299 and it is per participant, not
+      per team — the quiz is sat alone and there is no team to divide it
+      across — so a page stating only ₹399 per team is wrong about it twice.
+    */
+    expect(source).toMatch(/₹299 per participant/);
+    expect(source).toMatch(/sat individually/);
+    // And it is no longer an example of a single-round event.
+    expect(source).not.toMatch(/the quiz’s sitting/);
+    expect(source).not.toMatch(/the quiz’s eight/);
+  });
+
   it("says what a prize pool is made of", () => {
     /*
       A number against a currency symbol reads as cash everywhere else, so

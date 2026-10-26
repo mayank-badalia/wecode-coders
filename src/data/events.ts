@@ -17,16 +17,21 @@
 // Three still run one window of forty-eight hours and share the sprint_
 // helpers instead: codeverse-india, codehack-india and code-conqueror-india.
 // One problem statement, one window, one submission, and a certificate for
-// every participant who files an entry. codequest-quiz-india is a quiz sat
-// inside an eight-hour window.
+// every participant who files an entry.
 //
-// What any of this costs, in one place. A three-round event charges
+// codequest-quiz-india is the quiz, and it runs three rounds of its own now:
+// three papers of fifteen questions, each sat once inside an eight-hour
+// window, on the grid in quizRounds. It is the one three-round event sat
+// individually, so its fee is charged per participant and not per team.
+//
+// What any of this costs, in one place. A three-round hackathon charges
 // ROUND_3_FEE per team, once, and only from a team selected for Round 3 —
-// registering and Rounds 1 and 2 are free. Every single-round event is free
-// from start to finish. There is no third case, and nothing else on this site
-// asks anyone for money. Both halves of that rule are printed on each event's
-// own page, written out in src/app/terms/page.tsx, and pinned by
-// src/lib/events.test.ts.
+// registering and Rounds 1 and 2 are free. The quiz charges
+// QUIZ_ROUND_3_FEE per participant, on the same terms, at its own Round 3.
+// Every single-round event is free from start to finish. There is no fourth
+// case, and nothing else on this site asks anyone for money. Every part of
+// that rule is printed on each event's own page, written out in
+// src/app/terms/page.tsx, and pinned by src/lib/events.test.ts.
 //
 // wcc-launchpad-30 is deliberately left on its original thirty-hour,
 // single-submission format. protocol-60 is finished and marked `past`.
@@ -83,11 +88,11 @@ import type { Event, EventSection } from "@/lib/types";
 
 
 /**
- * The one fee anything on this site charges, written once.
+ * What a three-round hackathon charges, written once.
  *
- * ₹399 per team, due once, and only from a team selected for Round 3 of a
- * three-round event. Registering and Rounds 1 and 2 are free, and every
- * single-round event is free throughout.
+ * ₹399 per team, due once, and only from a team selected for Round 3.
+ * Registering and Rounds 1 and 2 are free, and every single-round event is
+ * free throughout.
  *
  * A constant because the amount now appears in a round note, a rule, an FAQ
  * answer, the stats strip and the line under the register button. Those five
@@ -95,6 +100,20 @@ import type { Event, EventSection } from "@/lib/types";
  * believes the lower one, and is right to.
  */
 const ROUND_3_FEE = "\u20B9399";
+
+/**
+ * What the quiz's final round charges, written once.
+ *
+ * ₹299, and per participant rather than per team. The quiz is sat on your
+ * own — there is no team to divide a payment across, and a fee written "per
+ * team" on a page that says "attempt it on your own" is a question nobody
+ * should have to ask us.
+ *
+ * A second constant rather than one shared number because these are two
+ * different promises to two different sets of people, and the test suite
+ * pins each amount to the pages that charge it.
+ */
+const QUIZ_ROUND_3_FEE = "\u20B9299";
 
 /**
  * The three rounds.
@@ -428,7 +447,7 @@ function seriesJudging() {
  * ships only a deployed product.
  */
 const seriesRules = (
-  winnerLink = "the GitHub repository of what each of them built",
+  winnerLink = "the GitHub repository or the project URL of what each of them built, whichever the team is comfortable sharing",
   terms: SeriesTerms = {},
 ): EventSection => ({
   kind: "list",
@@ -467,7 +486,7 @@ const seriesRules = (
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message. Where an organiser, judge or volunteer reports feeling threatened, the team is removed from the event without refund.",
     "The judges' decision is final.",
     `Results go up in the official group: the three winning team names, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
-    "Only the top three are placed. The three winning teams are named with a link to what each of them built, and their certificates print the rank; no other team is given a position, no ranking list is published, and no certificate below winner carries a placing.",
+    "Every finalist is placed, and every finalist is told its own position — privately, and printed on its certificate. You learn where your team finished at the certificate distribution. What goes up in the official group is the top three only: those three team names, their ranks, and a link to what each of them built. No full ranking list is published, and no team’s position is given to anyone but that team.",
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
   ],
 });
@@ -567,19 +586,19 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
       : []),
     ...(terms.certificates === "finalists"
       ? [
-          "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round; it does not print a position.",
+          "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round and prints where your team placed among the finalists.",
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
           "No certificate is issued for Round 1 or Round 2, including for taking part. A team that is not selected for the final round, or that is selected and does not take part, is not issued one.",
-          "Only the top three are placed. The group announcement carries those three team names and a link to what they built, and their certificates print the rank — first, second or third. No other team is told a position, and none is printed on its certificate.",
+          "Every finalist is placed and every finalist is told where it finished — at the certificate distribution, and printed on the certificate. Only the top three are announced: the group post carries those three team names, their ranks, and a link to what they built. No full ranking list is published, and nobody is told a position other than its own.",
           "A certificate requires successful registration, payment where applicable, and a valid Round 3 submission. Qualifying for the final round does not by itself earn one.",
           "Each participant receives one certificate only.",
         ]
       : [
           "Round 1 Completion Certificate — for a valid Round 1 submission.",
           "Round 2 Completion Certificate — for a valid Round 2 submission.",
-          "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round; it does not print a position.",
+          "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round and prints where your team placed among the finalists.",
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
-          "Only the top three are placed. The group announcement carries those three team names and a link to what they built, and their certificates print the rank — first, second or third. No other team is told a position, and none is printed on its certificate.",
+          "Every finalist is placed and every finalist is told where it finished — at the certificate distribution, and printed on the certificate. Only the top three are announced: the group post carries those three team names, their ranks, and a link to what they built. No full ranking list is published, and nobody is told a position other than its own.",
           "Certificates are issued separately for each completed round. Qualification for a subsequent round does not itself create eligibility for that round's certificate.",
           "Participants who complete Round 2 but withdraw from Round 3 will remain eligible only for the Round 2 Completion Certificate.",
           "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
@@ -638,10 +657,10 @@ function seriesFaq(terms: SeriesTerms = {}) {
       q: "What certificate do I get?",
       a:
         terms.certificates === "finalists"
-          ? "Only the final round earns one: a National Finalist Certificate for a valid Round 3 submission, or a Winner Certificate naming your rank if you finish in the top three. A finalist certificate does not print a position — only the three winners are placed. Rounds 1 and 2 are qualifying rounds, and they carry no certificate, not even for taking part."
-          : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Only the three winners are placed; no other certificate carries a position. Clearing a round upgrades that certificate rather than adding a second one.",
+          ? "Only the final round earns one: a National Finalist Certificate for a valid Round 3 submission, or a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed: your certificate prints where your team finished, and you are told at the certificate distribution. Only the top three are announced publicly. Rounds 1 and 2 are qualifying rounds, and they carry no certificate, not even for taking part."
+          : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed and the certificate prints it, told to you at the certificate distribution; only the top three are announced publicly. Clearing a round upgrades that certificate rather than adding a second one.",
     },
-    { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the GitHub repository of what each of them built. That is the whole announcement. Only those three are placed — no ranking list goes up, no other team is given a position, and no certificate below winner prints one. Nobody's personal details are shared without their consent." },
+    { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the GitHub repository or the project URL of what each of them built, whichever the team is comfortable sharing. That is the whole public announcement, and it carries their ranks. Every other finalist is told its own position privately, at the certificate distribution and printed on its certificate — no full ranking list goes up, and no team is told anybody’s position but its own. Nobody's personal details are shared without their consent." },
     { q: "Who judges, and when do results and certificates arrive?", a: (terms.organiser ?? WCC).roundsFaq },
   ];
 }
@@ -911,6 +930,74 @@ function sprintFaq(
     { q: "Where are results announced?", a: `In the official group: the three winning team names, along with ${winnerLink}. That is the whole announcement. Only those three are placed — no ranking list goes up, no other team is given a position, and a Certificate of Participation does not print one. Nobody's personal details are shared without their consent.` },
     { q: "When do results and certificates arrive?", a: organiser.faq },
   ];
+}
+
+/**
+ * The quiz's three rounds, dated for one event.
+ *
+ * The same shape as the hackathons' — a qualifier, a cut, then a final whose
+ * entrants pay — on a grid that fits a paper rather than a build. Each round
+ * is one day: the paper opens at 10:00 IST and closes at 18:00, and the
+ * attempt itself is fifteen questions and about fifteen minutes. Round 1's
+ * result is emailed the evening it closes, Round 2 follows the next morning
+ * and its result goes out the same evening again, then two clear days pass
+ * and the final is sat on the fifth day.
+ *
+ * Eight hours is the window and not the length of the paper, and every round
+ * has to say which: a reader who takes "8 hours" for the duration blocks out
+ * a day for a quarter of an hour's work.
+ */
+function quizRounds(startsAt: string): EventSection {
+  const day = (offset: number) => span(startsAt, offset, offset);
+  return {
+    kind: "columns",
+    variant: "tabs",
+    label: "How the three quiz rounds run",
+    intro:
+      "Three rounds, each one paper of fifteen questions sat inside an eight-hour window, 10:00 to 18:00 IST. One attempt per round, on your own: there is nothing to build and nothing to hand in beforehand. The Round 1 and Round 2 results are emailed to everyone who sat the paper, selected or not — you hear from us either way — and the people who go through get the joining link for the next round in the same email. Places in Rounds 2 and 3 are limited and given on score, so clearing a round does not by itself carry you into the next one.",
+    items: [
+      {
+        code: "01",
+        meta: day(0),
+        name: "Round 1 — The qualifier",
+        blurb:
+          "The open paper: everyone who registered sits this one. Fifteen questions across the three subject areas, about fifteen minutes of work, at whatever point inside the eight hours suits you. The highest scorers go through to Round 2, and everyone who sat it is emailed the result the same evening.",
+        points: [
+          "One attempt, opened from the official joining link",
+          "Fifteen questions, weighted evenly across the three areas",
+          "Submitted before the window closes at 18:00 IST",
+        ],
+      },
+      {
+        code: "02",
+        meta: day(1),
+        name: "Round 2 — The cut",
+        blurb:
+          "A harder paper, the morning after Round 1. The same shape — fifteen questions, about fifteen minutes, one attempt inside an eight-hour window — with the questions going further into the same three areas rather than wider. The highest scorers go through to the final, and the result is emailed the same evening again.",
+        points: [
+          "One attempt, from the link in your Round 1 result email",
+          "Fifteen questions, deeper in the same three areas",
+          "Submitted before the window closes at 18:00 IST",
+        ],
+        note:
+          "Nothing is paid to sit this round and nothing is paid to be marked on it. If you reach Round 3 and decide not to sit it, you keep the Round 2 Completion Certificate you earned — it is the only certificate you will be issued, and it is not upgraded later.",
+      },
+      {
+        code: "03",
+        meta: day(4),
+        name: "Round 3 — The final",
+        blurb:
+          "The final paper, two clear days after Round 2. Fifteen questions again, inside the same eight-hour window, and the three winners come out of this round alone — the earlier rounds decide who sits it, not where anybody finishes. Scores are not carried forward.",
+        points: [
+          "One attempt, from the link in your Round 2 result email",
+          "Fifteen questions, the final paper",
+          "Submitted before the window closes at 18:00 IST",
+        ],
+        note:
+          `Finalists pay a participation fee of ${QUIZ_ROUND_3_FEE} per participant — the quiz is sat on your own, so it is one payment for you and there is no team to share it with. It covers the cost of running the event: the platform, the time and effort of organising it, and paying the people who do that work. Registering and Rounds 1 and 2 are free, and this is the only payment anywhere in this event. It falls due only once you are selected for Round 3, so somebody who is not selected pays nothing at all. Paying it means accepting the event participation terms, which are linked under this block and are the same for every event.`,
+      },
+    ],
+  };
 }
 
 /** Billing for the series. Identical on every poster in it. */
@@ -1440,7 +1527,7 @@ export const events: Event[] = [
       "100+ reward recipients across the hackathon, giveaways and mini-challenges",
       "Special awards for exceptional projects",
       "Lovable Premium, AI tools and a .XYZ domain",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-10-30T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -1456,7 +1543,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Cash prize", value: "₹25,000" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1532,7 +1618,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1545,7 +1631,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1617,7 +1702,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1630,7 +1715,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–6" },
     ],
@@ -1702,7 +1786,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1715,7 +1799,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1788,7 +1871,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1799,7 +1882,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1872,7 +1954,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1883,7 +1965,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2121,7 +2202,7 @@ export const events: Event[] = [
       "$500 in Adaption Labs credits for every eligible participant",
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-02T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2132,7 +2213,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2209,7 +2289,7 @@ export const events: Event[] = [
       "$500 in Adaption Labs credits for every eligible participant",
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-06T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2220,7 +2300,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2326,53 +2405,71 @@ export const events: Event[] = [
   },
   {
     /*
-      LIVE. A quiz, not a hackathon — so no rounds, no problem statement and
-      none of the series' shared blocks.
+      LIVE. A quiz, and now a three-round one.
 
-      It is not a sitting at a fixed minute any more: the paper opens at 10:00
-      IST and closes at 18:00, and a participant sits it once at whatever
-      point inside those eight hours suits them. The paper itself is fifteen
-      questions and takes about fifteen minutes, which is the number the copy
-      leads with — "Runs for 8 hours" on the spec list is the window, and
-      every other mention has to make the difference obvious or a reader will
-      block out an afternoon for a quarter of an hour's work.
+      It was a single sitting inside an eight-hour window. It runs three
+      papers instead: Round 1 on 2 November, Round 2 the morning after, then
+      two clear days and the final on 6 November. Each round keeps the shape
+      the single sitting had — fifteen questions, about fifteen minutes, one
+      attempt at any point between 10:00 and 18:00 IST — because that is the
+      part entrants were sold, and three rounds of it is more quiz rather
+      than a longer one.
+
+      Two numbers on this page are easy to misread and both cost somebody
+      something. Eight hours is the window and not the length of the paper,
+      so every mention of it says which or a reader blocks out an afternoon
+      for a quarter of an hour's work. And the fee is per participant: this
+      is the only three-round event sat alone, so ₹299 is what one person
+      pays for themselves, not a team's share of anything.
+
+      It takes the hackathons' three-round terms and not their blocks: a
+      qualifier, a cut, a paid final, results emailed to everyone who sat a
+      round either way, and one certificate at the highest round reached. The
+      rounds, rules, certificates and FAQ are written out here rather than
+      shared, because every line of the series' copy is about building a
+      product and submitting a repository.
     */
     locked: false,
     featured: true,
     slug: "codequest-quiz-india",
     title: "CodeQuest Quiz India 2026",
-    kicker: "QUIZ — 15 QUESTIONS",
+    kicker: "QUIZ — 3 ROUNDS",
     format: "quiz",
     status: "upcoming",
-    startsAt: "2026-11-03T10:00:00+05:30",
-    endsAt: "2026-11-03T18:00:00+05:30",
+    startsAt: "2026-11-02T10:00:00+05:30",
+    endsAt: "2026-11-06T18:00:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online quiz on agentic AI, full-stack engineering and emerging technology. Fifteen questions, about fifteen minutes, sat once inside an eight-hour window. Free to enter, with ₹30,000 in prizes shared among the top three.",
+      "A national online quiz on agentic AI, full-stack engineering and emerging technology, in three rounds. Each round is fifteen questions, about fifteen minutes, sat once inside an eight-hour window. Registering and Rounds 1 and 2 are free, only finalists pay ₹299 to sit the last one, and ₹30,000 in prizes is shared among the top three.",
     description: [
       "CodeQuest Quiz India 2026 is a national online quiz for people who build. The questions span autonomous systems, the engineering behind a working product, and the technologies arriving around both.",
-      "The paper opens at 10:00 IST on 3 November and closes at 18:00. It is fifteen questions and takes about fifteen minutes, so the eight hours are there to let you choose when to sit down rather than to be spent on it. Everyone who completes it properly gets a verifiable certificate, and the rewards go well beyond the top three.",
+      "It runs as three rounds rather than one sitting. Each round is a single paper of fifteen questions, open from 10:00 to 18:00 IST on its day and taking about fifteen minutes — the eight hours are there to let you choose when to sit down, not to be spent on it. Round 1 is on 2 November, Round 2 the morning after, and the final on 6 November. Everyone who sat a round is emailed that round's result the same evening, selected or not.",
+      "Registering is free and so are Rounds 1 and 2. Only the people selected for the final round pay anything — ₹299 each, once — and the certificate you are issued is for the highest round you complete, upgraded as you clear each one.",
     ],
     forWho: "Students, developers, AI enthusiasts and anyone curious about how modern systems are built.",
     tags: ["agentic ai", "full-stack", "quiz", "online", "national"],
     teamSize: "Individual. Everyone registers and attempts on their own.",
     eligibility:
       "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences, alongside developers and self-taught builders. Registration is open nationally.",
-    brief: "Fifteen questions across three subject areas, sat once inside an eight-hour window.",
+    brief:
+      "Three rounds, each fifteen questions across three subject areas, sat once inside that round's eight-hour window.",
     deliverables: [
-      "One attempt at fifteen questions, submitted before the window closes",
+      "One attempt at each round's fifteen questions, submitted before that round's window closes",
     ],
     schedule: [
-      { when: "Before the quiz", what: "Registration open. Join the official channel for the joining link, the deadline and the final instructions." },
-      { when: "Tue 3 Nov, 10:00", what: "The paper opens. Fifteen questions, about fifteen minutes; sit it whenever suits you before it closes." },
-      { when: "Tue 3 Nov, 18:00", what: "The paper closes. An attempt not submitted by then does not count." },
+      { when: "Before 2 Nov", what: "Registration open. Join the official channel for the Round 1 joining link, the deadline and the final instructions." },
+      { when: "Mon 2 Nov, 10:00", what: "Round 1 opens. Fifteen questions, about fifteen minutes; sit it whenever suits you. The window closes at 18:00 and an attempt not submitted by then does not count." },
+      { when: "Mon 2 Nov, evening", what: "The Round 1 result is emailed the same day to everyone who sat it, selected or not. The people who go through get the Round 2 link in it." },
+      { when: "Tue 3 Nov, 10:00", what: "Round 2 opens, the morning after Round 1. The same shape, with harder questions, and the window again closes at 18:00." },
+      { when: "Tue 3 Nov, evening", what: "The Round 2 result is emailed the same day, again to everyone who sat it. Two clear days follow, 4 and 5 November." },
+      { when: "Fri 6 Nov, 10:00", what: "Round 3, the final paper, open until 18:00. Finalists pay the ₹299 participation fee before sitting it, and the three winners come out of this round." },
       { when: "After", what: "Responses validated, the leaderboard reviewed, results announced and certificates issued." },
     ],
     judging: [
-      { name: "Total score", detail: "The primary ranking. Everything below is used to separate people who tie." },
+      { name: "Total score", detail: "The primary ranking, taken inside the round you are in — nothing is carried forward from an earlier one. Everything below is used to separate people who tie." },
       { name: "Correct answers", detail: "How many you got right across the paper." },
-      { name: "Accuracy", detail: "Right answers against attempted ones, across the whole quiz." },
+      { name: "Accuracy", detail: "Right answers against attempted ones, across the whole paper." },
       { name: "Completion time", detail: "Used as a tie-breaker, alongside designated tie-breaker questions where needed." },
     ],
     rewards: [
@@ -2381,15 +2478,16 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "$500 in Adaption Labs credits for every eligible participant",
-      "A verifiable digital certificate for everyone who completes it properly, one per participant, within 10 days of the results being announced",
+      "One verifiable digital certificate per participant, for the highest round you complete, within 10 days of the results being announced",
       "100+ reward recipients across prizes, challenges and giveaways",
     ],
     sections: [
+      quizRounds("2026-11-02T10:00:00+05:30"),
       {
         kind: "columns",
         label: "What the quiz covers",
         intro:
-          "Fifteen questions across three areas, weighted evenly. The recommended reading goes out in the official channel before the quiz.",
+          "Fifteen questions a round across three areas, weighted evenly. Round 2 and Round 3 go further into the same three rather than adding a fourth. The recommended reading goes out in the official channel before Round 1.",
         items: [
           {
             code: "01",
@@ -2426,43 +2524,71 @@ export const events: Event[] = [
       {
         kind: "list",
         label: "Rules",
+        numbered: true,
         items: [
-          "One attempt per person. Everyone sits it on their own.",
-          "Entering is free. There is no fee at any stage of this quiz, nothing to pay to be marked or certified, and nobody from We Code Coders will ask you for money.",
+          "Three rounds, each sat on your own. One attempt per round, opened from the official link you are sent for it.",
+          `Registering is free and so are Rounds 1 and 2. The only money this event asks for is the Round 3 participation fee of ${QUIZ_ROUND_3_FEE} per participant, charged once and only to the people selected for that round — not to be marked, and not to be certified. Nobody from We Code Coders will ask you for any other payment, at any other stage, through any other channel.`,
+          "Begin and finish inside that round's eight-hour window, 10:00 to 18:00 IST. The paper takes about fifteen minutes; the window is wide so you can choose your moment, not so you can take all day over it.",
+          "An attempt not submitted before the window closes does not count. There is no late window.",
+          "Everyone who sat a round is emailed that round's result, selected or not. The people who go through get the next round's joining link in the same email.",
+          "Places in Rounds 2 and 3 are limited and given on score. Clearing a round does not by itself carry you into the next one, and the number of places is published with each round's result.",
+          "Each round is ranked on its own. Scores are not carried forward between rounds, and the three winners come out of Round 3 alone.",
           "Duplicate, manipulated or suspicious entries may be disqualified.",
-          "Begin and finish inside the eight-hour window, 10:00 to 18:00 IST. The paper takes about fifteen minutes; the window is wide so you can choose your moment, not so you can take all day over it.",
           "Report technical problems immediately through the official support channel.",
           "Organisers may review activity and response patterns to keep the event fair.",
           "Do not ask an organiser or volunteer to break a rule, waive a requirement or make an exception in your favour. You may ask once; when the answer is no, that is the answer.",
-          "Pressuring, forcing, threatening or intimidating an organiser or volunteer removes you from the event. Where an organiser or volunteer reports feeling threatened, the entry is disqualified.",
+          "Pressuring, forcing, threatening or intimidating an organiser or volunteer removes you from the event, and where the Round 3 fee has been paid it is not refunded. Where an organiser or volunteer reports feeling threatened, the entry is disqualified.",
           "Breaking the rules can cost you your leaderboard position, rewards and certificate.",
           "The organisers' decision on eligibility, ranking and disqualification is final.",
           "Results go up in the official group: the three winning names. No participant's personal details are shared or passed on unless we have their consent.",
           "Only the top three are placed. The group announcement names those three, and their certificates print the rank. No other participant is given a leaderboard position, by email or on a certificate.",
-          "Scores, answer sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second attempt.",
+          "Scores, answer sheets, internal notes and comparative breakdowns are not shared, and there is no re-evaluation and no second attempt.",
+        ],
+      },
+      {
+        kind: "list",
+        label: "Certificates",
+        intro:
+          "Four levels, and you hold one of them: the highest round you complete. Clearing a round upgrades the certificate you will be issued rather than adding another one beside it.",
+        items: [
+          "Round 1 Completion Certificate — for a valid Round 1 attempt, submitted inside the window.",
+          "Round 2 Completion Certificate — for a valid Round 2 attempt.",
+          "Finalist Certificate — for a valid Round 3 attempt. It records that you reached the final round.",
+          "Winner Certificate, naming the rank — first, second or third — for the three winners.",
+          "Only the top three are placed. No other certificate prints a position, and no participant outside those three is given one anywhere else either.",
+          "A certificate needs successful registration, joining through the official link, a submitted attempt and passing the integrity checks. Registering alone does not qualify, and neither does opening the paper without submitting it.",
+          "Each participant receives one certificate only. You are not sent a separate one for every round you clear — the one you are issued is upgraded to the furthest round you completed.",
+          "Somebody who completes Round 2 and does not sit Round 3 keeps the Round 2 Completion Certificate. Withdrawing from the final round does not cancel what was already earned.",
+          "A Finalist or Winner Certificate needs the Round 3 participation fee to have been paid, alongside a valid attempt in that round.",
+          "Certificates are distributed within 10 days of the results being announced, not from the day the final round ends.",
         ],
       },
     ],
     faq: [
-      { q: "Is it free?", a: "Yes. Registration costs nothing." },
-      { q: "Is this a quiz or a hackathon?", a: "A quiz, in one sitting. There is nothing to build and nothing to submit beforehand." },
-      { q: "When exactly does it start?", a: "The paper opens at 10:00 IST on 3 November and closes at 18:00. One attempt, at any point in between. The joining link goes out in the official group ahead of the day." },
-      { q: "How long does it take?", a: "Fifteen questions, about fifteen minutes on average. The eight-hour window is there so you can pick your moment — it is not eight hours of quiz." },
-      { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before the quiz." },
-      { q: "Will everyone get a certificate?", a: "Everyone who registers, joins through the official link, completes and submits the quiz, follows the rules and passes the integrity checks. One certificate per participant, distributed within 10 days of the results being announced. Registering alone does not qualify." },
-      { q: "When are results announced?", a: "After the responses are validated and the leaderboard is reviewed. Timelines are shared through the official channel." },
+      { q: "How does it run?", a: "Three rounds. Each is one paper of fifteen questions, open from 10:00 to 18:00 IST on its day and taking about fifteen minutes: Round 1 on 2 November, Round 2 on 3 November, and the final on 6 November. One attempt per round, sat on your own." },
+      { q: "What does it cost?", a: `Registering is free, and so are Rounds 1 and 2. Only the people selected for Round 3 pay a participation fee of ${QUIZ_ROUND_3_FEE} per participant, once — and that is the only payment anywhere in the event: nothing to be marked, and nothing to be certified. Somebody who is not selected for Round 3 pays nothing at all.` },
+      { q: "Why is the fee per participant and not per team?", a: "Because there are no teams. The quiz is registered for and sat individually, so the finalist fee is one payment made by one person for themselves." },
+      { q: "Is this a quiz or a hackathon?", a: "A quiz, in three sittings. There is nothing to build and nothing to hand in beforehand." },
+      { q: "How long does a round take?", a: "Fifteen questions, about fifteen minutes on average. The eight-hour window is there so you can pick your moment — it is not eight hours of quiz." },
+      { q: "What happens between rounds?", a: "Everyone who sat a round is emailed that round's result, selected or not — you do not have to guess, and you do not have to wait for a group post. The people who go through get the next round's joining link in the same email." },
+      { q: "How many people get through?", a: "Places in Rounds 2 and 3 are limited and given on score, and the number of places goes out with each round's result. Clearing a round does not by itself carry you into the next one." },
+      { q: "Are scores carried between rounds?", a: "No. Each round is ranked on its own, and the three winners come out of Round 3 alone — the earlier rounds decide who sits the final, not where anybody finishes." },
+      { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before Round 1." },
+      { q: "What certificate do I get?", a: "One, for the highest round you complete: a Round 1 Completion Certificate for a valid Round 1 attempt, a Round 2 Completion Certificate for Round 2, a Finalist Certificate for a valid Round 3 attempt, and a Winner Certificate naming your rank if you finish in the top three. Clearing a round upgrades that certificate rather than adding a second one. One per participant, within 10 days of the results being announced." },
+      { q: "When are results announced?", a: "Each of the first two rounds is emailed the evening it closes. The final result follows once the responses are validated and the leaderboard is reviewed; timelines are shared through the official channel." },
       { q: "Where are results announced?", a: "In the official group: the three winning names, and nothing further. Only those three are placed — no leaderboard goes up, no other participant is given a position, and no certificate below winner prints one. Nobody's personal details are shared without their consent." },
     ],
     stats: [
-      { label: "Questions", value: "15" },
+      { label: "Rounds", value: "3" },
+      { label: "Questions / round", value: "15" },
       { label: "Typical time", value: "15 min" },
-      { label: "Window", value: "8 hours" },
+      { label: "Window / round", value: "8 hours" },
+      { label: "Rounds 1–2", value: "Free" },
       { label: "Prize pool", value: "₹30,000" },
-      { label: "Entry fee", value: "Free" },
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
-      note: "Free to enter, individually. Registration closes before the sitting; the deadline goes out in the official channel, and the Unstop link goes here once it is live.",
+      note: `Registering is free, and individually — everyone attempts on their own. Rounds 1 and 2 are free; only the people selected for Round 3 pay a participation fee of ${QUIZ_ROUND_3_FEE} per participant, once. Registration closes before Round 1; the deadline goes out in the official channel, and the Unstop link goes here once it is live.`,
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Kiibri82NXEDIOmNhd9URn" },
@@ -2549,7 +2675,7 @@ export const events: Event[] = [
       "$100 in Inkloom AI credits for every eligible participant",
       "$500 in Adaption credits for every eligible participant",
       "100+ reward recipients across the hackathon",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-07T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2565,7 +2691,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2630,7 +2755,7 @@ export const events: Event[] = [
       "$500 in Adaption credits for every eligible participant",
       "Expert-led workshops",
       "100+ reward recipients across the hackathon",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2646,7 +2771,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2711,7 +2835,7 @@ export const events: Event[] = [
       "$500 in Adaption credits for every eligible participant",
       "Expert-led workshops",
       "100+ reward recipients across the hackathon",
-      "A National Finalist Certificate, with no position on it, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2727,7 +2851,6 @@ export const events: Event[] = [
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
-      { label: "Round 3 fee / team", value: "₹399" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
     ],

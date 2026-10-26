@@ -45,6 +45,19 @@ const threeRound = published.filter((e) =>
 /** The ones that run a single window, of whatever length. */
 const sprints = published.filter((e) => Boolean(windowBlock(e)));
 
+/**
+ * The quiz, which runs three rounds of its own.
+ *
+ * Its own label and its own set, because it shares the series' terms and
+ * none of its copy: three papers rather than three builds, sat alone rather
+ * than in a team, and a fee charged per participant. Folding it into
+ * `threeRound` would make every assertion there a branch.
+ */
+const QUIZ_ROUNDS_LABEL = "How the three quiz rounds run";
+const quizzes = published.filter((e) =>
+  e.sections?.some((sec) => sec.label === QUIZ_ROUNDS_LABEL),
+);
+
 describe("events seam", () => {
   it("returns every event", () => {
     expect(getAllEvents().length).toBeGreaterThanOrEqual(5);
@@ -562,16 +575,20 @@ describe("events seam", () => {
     }
   });
 
-  it("promises a position to the top three and to nobody else", () => {
+  it("places every finalist privately and announces only the top three", () => {
     /*
-      The announcement is three team names and a link to what each of them
-      built. Nothing else is placed: no ranking list, no leaderboard position
-      by email, and no certificate below winner carrying a placing.
+      Every finalist is placed and told where it finished, at the certificate
+      distribution and printed on its certificate. The group post carries the
+      top three only — their names, their ranks, and a link to what they
+      built — and no full ranking list goes up.
 
-      Worth a guard because the copy was wrong in one direction for months —
-      it promised every finalist its own position, by email and printed on the
-      certificate, which the certificate template has never printed. A promise
-      the renderer cannot keep is the one to catch here.
+      This guard once ran the other way, forbidding the promise, because the
+      certificate template had no position to print and a promise the renderer
+      cannot keep is the one worth catching. The renderer now prints it:
+      `position` and `positionOf` on the record, `placement()` for the
+      spelling, set on the sheet and on the verify page. So the guard is
+      inverted rather than deleted — the copy and the template have to move
+      together, and the test is what holds them together.
     */
     for (const e of published) {
       // Protocol//60 ran and its certificates are issued; its top-60
@@ -593,12 +610,25 @@ describe("events seam", () => {
         ),
       ].join(" ");
 
-      expect(words, `${e.slug} promises a placing to a non-winner`).not.toMatch(
-        /where (your|the|it) team placed|where it placed|your own position comes to you|names your position|the certificate prints it|yours reaches you|and it is printed on the certificate/i,
-      );
-      // And the thing that replaced it has to actually be said somewhere.
-      expect(words, `${e.slug} never says only the top three are placed`).toMatch(
-        /only the top three are placed/i,
+      /*
+        A full ordering is never published. The pages all say so themselves,
+        so the check is that any mention of one is a denial rather than an
+        offer — matching the promise directly would also match the sentence
+        ruling it out, which is how this assertion failed the first time.
+      */
+      if (/ranking list|leaderboard/i.test(words)) {
+        expect(words, `${e.slug} raises a ranking list without ruling it out`).toMatch(
+          /no (full )?ranking list|no leaderboard/i,
+        );
+      }
+      /*
+        Either promise is fine, but the page has to make one of them: the
+        three-round events place every finalist, and a single-window event
+        places only its top three. Saying neither leaves a reader guessing
+        whether their own result is coming.
+      */
+      expect(words, `${e.slug} says nothing about who is placed`).toMatch(
+        /every finalist is placed|only the top three are placed/i,
       );
     }
   });
@@ -717,13 +747,14 @@ describe("events seam", () => {
       the top of the page, and this is what keeps it there.
 
       Scoped to the live events that take no fee: the eleven three-round
-      events charge for Round 3 and are excluded, and a finished event is not
-      recruiting. That leaves the three single-window builds and the quiz.
+      events charge for Round 3 and are excluded, the quiz charges for its own
+      Round 3, and a finished event is not recruiting. That leaves the three
+      single-window builds.
     */
     const free = published.filter(
-      (e) => e.status !== "past" && !threeRound.includes(e),
+      (e) => e.status !== "past" && !threeRound.includes(e) && !quizzes.includes(e),
     );
-    expect(free.length).toBeGreaterThanOrEqual(4);
+    expect(free.length).toBeGreaterThanOrEqual(3);
 
     for (const e of free) {
       const fee = e.stats?.find((st) => st.label === "Entry fee");
@@ -743,19 +774,26 @@ describe("events seam", () => {
       except one collapsed round panel, which is the one place a reader
       deciding whether to enter does not look.
 
-      Three rounds and one fee go together, so this pins the two numbers in
-      the strip, the fee and what is free under the button, an answer to the
+      Three rounds and one fee go together, so this pins what is free in the
+      strip, the fee and what is free under the button, an answer to the
       question in the FAQ, and the amount on the round that charges it — plus
       that the page never quotes a second, different figure anywhere, since a
       page carrying two fees is worse than one carrying none.
+
+      The fee itself is no longer a tile in the strip: five places still name
+      it before a reader can reach the round panel — the summary, the note
+      under the register button, the FAQ, rules item 9 and Round 3 — so the
+      original worry, a fee hiding in one collapsed panel, cannot return. The
+      strip keeps "Rounds 1–2 / Free", which is the half of it a reader
+      deciding whether to enter actually needs.
     */
     expect(threeRound.length).toBe(11);
 
     for (const e of threeRound) {
       expect(
-        e.stats?.find((st) => st.label.startsWith("Round 3 fee"))?.value,
-        `${e.slug} does not print the fee`,
-      ).toBe("\u20B9399");
+        e.stats?.find((st) => st.label.startsWith("Round 3 fee")),
+        `${e.slug} still prices the fee in the stats strip`,
+      ).toBeUndefined();
       expect(
         e.stats?.find((st) => st.label === "Rounds 1\u20132")?.value,
         `${e.slug} does not say the first two rounds are free`,
@@ -797,6 +835,114 @@ describe("events seam", () => {
         roundNotes.filter((n) => n.includes("\u20B9399")).length,
         `${e.slug} does not carry the fee on the round that charges it`,
       ).toBe(1);
+    }
+  });
+
+  it("runs the quiz as three papers, and charges for the last one only", () => {
+    /*
+      The quiz was one sitting inside an eight-hour window, free throughout.
+      It now runs the hackathons' three rounds — a qualifier, a cut, a paid
+      final — on a grid of its own: each round is one paper of fifteen
+      questions, open 10:00 to 18:00 IST on its day, and the attempt itself
+      takes about fifteen minutes.
+
+      Two numbers on that page can be wrong in a way that costs somebody
+      money or a day. The fee is \u20B9299 and it is per participant, not the
+      \u20B9399 per team a hackathon charges, because nobody sits this one in a
+      team. And eight hours is the window rather than the length of the
+      paper, so the page has to keep saying which.
+    */
+    expect(quizzes.length).toBe(1);
+
+    for (const e of quizzes) {
+      const rounds = e.sections?.find((sec) => sec.label === QUIZ_ROUNDS_LABEL);
+      expect(rounds?.kind, `${e.slug} has no rounds block`).toBe("columns");
+      if (rounds?.kind !== "columns") continue;
+      expect(rounds.variant, `${e.slug} does not open one round at a time`).toBe("tabs");
+      expect(rounds.items.length, `${e.slug} does not run three rounds`).toBe(3);
+
+      /* One day each, and each one says when its window shuts. */
+      for (const item of rounds.items) {
+        expect(item.meta ?? "", `${e.slug} ${item.code} is not dated to one day`).toMatch(
+          /^\d{1,2} \w{3}$/,
+        );
+        expect(
+          `${item.blurb ?? ""} ${item.points.join(" ")}`,
+          `${e.slug} ${item.code} does not say when its window closes`,
+        ).toContain("18:00");
+      }
+
+      const words = [
+        e.summary,
+        e.brief,
+        ...e.description,
+        ...e.deliverables,
+        ...(e.faq ?? []).flatMap((f) => `${f.q} ${f.a}`),
+        ...(e.schedule ?? []).map((r) => r.what),
+        e.registration?.note ?? "",
+        ...(e.sections ?? []).flatMap((sec) =>
+          sec.kind === "list"
+            ? [sec.intro ?? "", ...sec.items]
+            : [sec.intro ?? "", ...sec.items.flatMap((i) => [i.blurb ?? "", i.note ?? "", ...i.points])],
+        ),
+      ].join(" ");
+
+      // Every amount this page attaches to the word "fee", or to a person,
+      // has to be the same amount — and never charged to a team.
+      const quoted = [
+        ...words.matchAll(/fee of \u20B9\s?([\d,]+)/g),
+        ...words.matchAll(/\u20B9\s?([\d,]+) per[- ]participant/g),
+      ].map((m) => m[1]);
+      expect(quoted.length, `${e.slug} barely names its fee`).toBeGreaterThanOrEqual(3);
+      expect(new Set(quoted), `${e.slug} quotes more than one fee`).toEqual(new Set(["299"]));
+      expect(words, `${e.slug} charges its fee per team`).not.toMatch(
+        /\u20B9\s?[\d,]+ per[- ]team/,
+      );
+
+      // The strip says what is free; it no longer says the event is.
+      expect(
+        e.stats?.find((st) => st.label === "Rounds 1\u20132")?.value,
+        `${e.slug} does not say the first two rounds are free`,
+      ).toBe("Free");
+      expect(
+        e.stats?.find((st) => st.label === "Entry fee"),
+        `${e.slug} still advertises a free entry fee`,
+      ).toBeUndefined();
+
+      const note = e.registration?.note ?? "";
+      expect(note, `${e.slug}'s note hides the fee`).toMatch(/\u20B9299 per participant/);
+      expect(note, `${e.slug}'s note hides what is free`).toMatch(/Rounds 1 and 2 are free/);
+
+      const cost = (e.faq ?? []).find((f) => /cost|fee|free/i.test(f.q));
+      expect(cost?.a ?? "", `${e.slug} answers no question about cost`).toMatch(/\u20B9299/);
+
+      // The detail page reads the amount off the paid round's note, so the
+      // fee has to sit on exactly one round: the one that charges it.
+      const roundNotes = (e.sections ?? []).flatMap((sec) =>
+        sec.kind === "columns" ? sec.items.map((i) => i.note ?? "") : [],
+      );
+      expect(
+        roundNotes.filter((n) => n.includes("\u20B9299")).length,
+        `${e.slug} does not carry the fee on the round that charges it`,
+      ).toBe(1);
+
+      // Eight hours is the window. Fifteen minutes is the paper.
+      expect(words, `${e.slug} lets the window read as the paper`).toMatch(
+        /not eight hours of quiz/,
+      );
+      expect(words, `${e.slug} does not say how long the paper takes`).toMatch(
+        /about fifteen minutes/,
+      );
+
+      // One certificate, at the highest round reached.
+      const certs = e.sections?.find((sec) => sec.label === "Certificates");
+      expect(certs?.kind, `${e.slug} has no certificates block`).toBe("list");
+      if (certs?.kind !== "list") continue;
+      const promise = `${certs.intro ?? ""} ${certs.items.join(" ")}`;
+      expect(promise, `${e.slug} does not say which certificate you hold`).toMatch(
+        /the highest round you complete/,
+      );
+      expect(promise, `${e.slug} does not cap it at one`).toMatch(/one certificate only/i);
     }
   });
 

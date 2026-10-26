@@ -5,7 +5,7 @@ import { Arrow } from "@/components/site/Arrow";
 export const metadata: Metadata = {
   title: "Event participation — terms — We Code Coders",
   description:
-    "The notice, rules and terms that apply to every We Code Coders event. A three-round event charges ₹399 per team, once, and only at Round 3; a single-round event is free from start to finish. Eligibility, payment, submissions, rankings, certificates, rewards and conduct.",
+    "The notice, rules and terms that apply to every We Code Coders event. A three-round hackathon charges ₹399 per team and the three-round quiz ₹299 per participant, once, and only at Round 3; a single-round event is free from start to finish. Eligibility, payment, submissions, rankings, certificates, rewards and conduct.",
 };
 
 /*
@@ -68,11 +68,11 @@ const INTRO: Block[] = [
   },
   {
     kind: "p",
-    text: "What an event costs follows its shape, and there are only two shapes. A three-round event charges a participation fee of ₹399 per team — one payment for the whole team, not one each — and it falls due only if the team is selected for Round 3. Registering and Rounds 1 and 2 are free, and a team that is not selected for Round 3 pays nothing. A single-round event, meaning one window and one submission, whether that window runs 48 hours or the quiz’s eight, is free from start to finish: nothing to enter, nothing to be judged, nothing to be certified.",
+    text: "What an event costs follows its shape. A three-round hackathon charges a participation fee of ₹399 per team — one payment for the whole team, not one each — and it falls due only if the team is selected for Round 3. Registering and Rounds 1 and 2 are free, and a team that is not selected for Round 3 pays nothing. The quiz runs three rounds of its own and is sat individually, so its fee is ₹299 per participant on the same terms: free to register, free for Rounds 1 and 2, and payable once only by the people selected for its final round. A single-round event, meaning one window and one submission, is free from start to finish: nothing to enter, nothing to be judged, nothing to be certified.",
   },
   {
     kind: "p",
-    text: "Sections 01 and 02 below are the fee sections. They apply to a three-round event, and only from the point a team is selected for Round 3. They do not apply to a single-round event at all, and everything that follows them applies to every event, free or paid. Which shape an event is, and what it charges, is stated on that event’s own page before anyone registers.",
+    text: "Sections 01 and 02 below are the fee sections. They apply to a three-round event, and only from the point a team or participant is selected for Round 3. They do not apply to a single-round event at all, and everything that follows them applies to every event, free or paid. Which shape an event is, and what it charges, is stated on that event’s own page before anyone registers.",
   },
   {
     kind: "p",
@@ -88,9 +88,10 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
-          "Only one kind of event here charges anything. A three-round event takes a participation fee of ₹399 per team, due once and only from a team selected for Round 3; registering and Rounds 1 and 2 are free. A single-round event charges nothing at any stage, for entry, judging or a certificate. This section and section 02 apply only to the first, and only from selection for Round 3 onwards.",
+          "Only a three-round event here charges anything. A three-round hackathon takes a participation fee of ₹399 per team, due once and only from a team selected for Round 3, and the three-round quiz takes ₹299 per participant on the same terms; registering and Rounds 1 and 2 are free in both. A single-round event charges nothing at any stage, for entry, judging or a certificate. This section and section 02 apply only to the paid rounds of the first two, and only from selection for Round 3 onwards.",
           "Only teams declared eligible or shortlisted for the applicable paid event or round may participate.",
           "Unless stated otherwise, only the team leader must make one payment on behalf of the entire team.",
+          "Where an event is sat individually rather than in teams, as the quiz is, the fee is per participant and each participant pays their own. The clauses in this section about a team leader’s single payment, and about dividing a fee between members, do not apply to it.",
           "Teams must verify their event name, team name, members and eligibility before paying.",
           "Multiple payments will not create additional entries, rankings or benefits.",
           "Payment grants access only to the applicable event or round. It does not guarantee a certificate, ranking, prize, internship, qualification or any other result.",
@@ -169,8 +170,8 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
-          "Where an event runs qualifying rounds, Round 1 and Round 2 outcomes are sent by email to every team that made a valid submission for that round, whether or not the team has been selected for the next round, at the address given at registration. Teams that qualify receive the instructions for the next round in the same email.",
-          "Where an event runs as a single round — one window of 48 hours, or the quiz’s sitting — there are no qualifying rounds and nothing to clear beforehand. The one submission made inside the window is what is judged, its outcome is the final outcome, and no fee is charged at any point.",
+          "Where an event runs qualifying rounds, Round 1 and Round 2 outcomes are sent by email to everyone who made a valid submission for that round — every team, or every participant where the event is sat individually — whether or not they have been selected for the next round, at the address given at registration. Those who qualify receive the instructions for the next round in the same email.",
+          "Where an event runs as a single round — one window of 48 hours — there are no qualifying rounds and nothing to clear beforehand. The one submission made inside the window is what is judged, its outcome is the final outcome, and no fee is charged at any point.",
           "Results are announced in the official event group. That announcement carries the winning team names together with a link to the project each of them built. No participant’s personal details, and no further material from a team’s submission, are published or passed on unless that participant or team has given consent.",
           "Only the top three are placed. The announcement carries those three team names with a link to what each of them built, and nothing further: no ranking list or leaderboard is published, no other team is told its position, and a placing is not disclosed on request.",
           "By entering, a team accepts that if it finishes in the top three its team name and a link to its submitted project may be published with the results — the GitHub repository for a hackathon judged on its code, or the live project URL where the event calls for a deployed product.",
@@ -198,7 +199,7 @@ const SECTIONS: Section[] = [
           "Qualification for Round 3 alone does not create eligibility for a Final Round or Finalist Completion Certificate.",
           "A Round 3 or Finalist Completion Certificate requires successful registration, payment and a valid final-round submission.",
           "A team that pays but withdraws or fails to submit will not receive a Round 3 Completion Certificate.",
-          "Only the certificates of the three announced winning teams name a rank. No other certificate carries a position of any kind.",
+          "Every finalist is placed, and a finalist certificate prints where that team finished. The position is given to the team itself, at the certificate distribution; only the three winning teams and their ranks are announced publicly, and no full ranking list is published.",
           "Winner certificates will be issued only to the officially announced winning teams.",
           "Certificates may be withheld for invalid submissions, false information, plagiarism, misconduct, disqualification or failure to complete mandatory requirements.",
         ],
@@ -413,8 +414,9 @@ export default function TermsPage() {
         </h1>
         <p style={{ ...TYPE.lead, margin: "1.4rem 0 0", maxWidth: "52ch" }}>
           Participation notice, rules and terms. The same for every We Code Coders event:
-          three rounds means ₹399 per team at Round 3, a single round means no fee at all,
-          and the fee sections apply only to the first.
+          three rounds means a fee at Round 3 — ₹399 per team, or ₹299 per participant on
+          the quiz — a single round means no fee at all, and the fee sections apply only to
+          the first.
         </p>
 
         <div

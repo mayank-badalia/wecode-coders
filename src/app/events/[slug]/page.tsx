@@ -155,18 +155,31 @@ export default async function EventPage({ params }: Params) {
   const roundFee = paidRound?.note?.match(/\u20B9\s?[\d,]+/)?.[0];
 
   /*
-    Whether this event runs the three rounds, which decides how acceptance is
-    worded: entering Round 1 for a hackathon, simply entering for a quiz.
+    Whether this event runs rounds, which decides how acceptance is worded:
+    entering Round 1 where there are rounds, simply entering where there is
+    one window.
   */
   const hasRounds = (event.sections ?? []).some(
     (section) => section.kind === "columns" && section.variant === "tabs",
   );
 
+  /*
+    And whether it is sat alone, which decides who the fee is charged to.
+
+    The quiz runs the same three rounds and charges at the same point, but it
+    is registered for and sat individually — so "per team, charged to teams
+    selected for it" is wrong about it twice. Keyed on the format rather than
+    on a field of its own, because being sat alone is what a quiz is.
+  */
+  const solo = event.format === "quiz";
+
   const termsCopy =
     event.status === "past"
       ? "These are the participation, certificate, judging and conduct terms that every We Code Coders event runs under, this one included."
       : hasRounds
-        ? "Entering Round 1 is acceptance. Taking part in Round 1 means you, and everyone on your team, accept these terms in full — the participation notice, the refund position, the certificate policy, judging and conduct. The link goes out with the Round 1 instructions, and every team is asked to read the whole page before submitting."
+        ? solo
+          ? "Entering Round 1 is acceptance. Sitting Round 1 means you accept these terms in full — the participation notice, the refund position, the certificate policy, judging and conduct. The link goes out with the Round 1 instructions, and everyone is asked to read the whole page before submitting."
+          : "Entering Round 1 is acceptance. Taking part in Round 1 means you, and everyone on your team, accept these terms in full — the participation notice, the refund position, the certificate policy, judging and conduct. The link goes out with the Round 1 instructions, and every team is asked to read the whole page before submitting."
         : "Entering is acceptance. Taking part means you accept these terms in full — the participation notice, the certificate policy, judging and conduct. The link goes out with the joining instructions, and everyone is asked to read the whole page beforehand.";
 
   // The title sponsor is billed on its own line, above and larger than the
@@ -947,7 +960,7 @@ export default async function EventPage({ params }: Params) {
             <p style={{ margin: "1rem 0 0", maxWidth: "62ch", lineHeight: 1.6 }}>
               {termsCopy}
               {hasPaidRound
-                ? ` This event has one paid round: Round 3, at ${roundFee ?? "the fee stated with that round"} per team, charged once and only to teams selected for it. Registering and Rounds 1 and 2 are free, and paying that fee is a further acceptance of the same terms.`
+                ? ` This event has one paid round: Round 3, at ${roundFee ?? "the fee stated with that round"} ${solo ? "per participant, charged once and only to the people" : "per team, charged once and only to teams"} selected for it. Registering and Rounds 1 and 2 are free, and paying that fee is a further acceptance of the same terms.`
                 : event.status === "past"
                   ? ""
                   : " This event is free from start to finish: one round, with nothing to pay to enter, to be judged or to be certified."}
