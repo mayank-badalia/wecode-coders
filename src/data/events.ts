@@ -2422,6 +2422,14 @@ export const events: Event[] = [
       is the only three-round event sat alone, so ₹299 is what one person
       pays for themselves, not a team's share of anything.
 
+      The amount is deliberately not in the summary or the description. The
+      top of the page is read by everyone, and almost nobody reading it will
+      ever owe this — it falls on finalists only. So the opening says there
+      is a fee and where to read it, and the amount itself sits where
+      somebody is deciding whether to pay it: the Round 3 panel, the rules,
+      the cost question, the schedule row and the line under the register
+      button.
+
       It takes the hackathons' three-round terms and not their blocks: a
       qualifier, a cut, a paid final, results emailed to everyone who sat a
       round either way, and one certificate at the highest round reached. The
@@ -2441,11 +2449,11 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online quiz on agentic AI, full-stack engineering and emerging technology, in three rounds. Each round is fifteen questions, about fifteen minutes, sat once inside an eight-hour window. Registering and Rounds 1 and 2 are free, only finalists pay ₹299 to sit the last one, and ₹30,000 in prizes is shared among the top three.",
+      "A national online quiz on agentic AI, full-stack engineering and emerging technology, in three rounds. Each round is fifteen questions, about fifteen minutes, sat once inside an eight-hour window. Registering and Rounds 1 and 2 are free, and ₹30,000 in prizes is shared among the top three.",
     description: [
       "CodeQuest Quiz India 2026 is a national online quiz for people who build. The questions span autonomous systems, the engineering behind a working product, and the technologies arriving around both.",
       "It runs as three rounds rather than one sitting. Each round is a single paper of fifteen questions, open from 10:00 to 18:00 IST on its day and taking about fifteen minutes — the eight hours are there to let you choose when to sit down, not to be spent on it. Round 1 is on 2 November, Round 2 the morning after, and the final on 6 November. Everyone who sat a round is emailed that round's result the same evening, selected or not.",
-      "Registering is free and so are Rounds 1 and 2. Only the people selected for the final round pay anything — ₹299 each, once — and the certificate you are issued is for the highest round you complete, upgraded as you clear each one.",
+      "Registering is free and so are Rounds 1 and 2. Only the people selected for the final round pay anything, once, and what that costs is stated with Round 3 below. The certificate you are issued is for the highest round you complete, upgraded as you clear each one.",
     ],
     forWho: "Students, developers, AI enthusiasts and anyone curious about how modern systems are built.",
     tags: ["agentic ai", "full-stack", "quiz", "online", "national"],
