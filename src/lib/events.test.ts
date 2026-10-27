@@ -923,6 +923,15 @@ describe("events seam", () => {
         /\u20B9\s?[\d,]+ per[- ]team/,
       );
 
+      // The funnel: more than a thousand sit Round 1, 500 reach Round 2, 50 the final.
+      expect(words, `${e.slug} does not state the funnel`).toMatch(
+        /1,000 people[^.]*500[^.]*Round 2[^.]*50[^.]*Round 3/,
+      );
+      expect(
+        e.stats?.find((st) => st.label === "Registration")?.value,
+        `${e.slug} does not say registration is free`,
+      ).toBe("Free");
+
       // The strip says what is free; it no longer says the event is.
       expect(
         e.stats?.find((st) => st.label === "Rounds 1\u20132"),

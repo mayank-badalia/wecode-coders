@@ -982,14 +982,14 @@ function quizRounds(startsAt: string): EventSection {
     variant: "tabs",
     label: "How the three quiz rounds run",
     intro:
-      "Three rounds, each one paper of fifteen questions sat inside an eight-hour window, 10:00 to 18:00 IST. One attempt per round, on your own: there is nothing to build and nothing to hand in beforehand. The Round 1 and Round 2 results are emailed to everyone who sat the paper, selected or not — you hear from us either way — and the people who go through get the joining link for the next round in the same email. Places in Rounds 2 and 3 are limited and given on score, so clearing a round does not by itself carry you into the next one.",
+      "Three rounds, each one paper of fifteen questions sat inside an eight-hour window, 10:00 to 18:00 IST. One attempt per round, on your own: there is nothing to build and nothing to hand in beforehand. The Round 1 and Round 2 results are emailed to everyone who sat the paper, selected or not — you hear from us either way — and the people who go through get the joining link for the next round in the same email. More than 1,000 people sit Round 1, only 500 qualify for Round 2, and only 50 qualify for Round 3, which is the final. Places are given on score, so clearing a round does not by itself carry you into the next one.",
     items: [
       {
         code: "01",
         meta: day(0),
         name: "Round 1 — The qualifier",
         blurb:
-          "The open paper: everyone who registered sits this one. Fifteen questions across the three subject areas, about fifteen minutes of work, at whatever point inside the eight hours suits you. The highest scorers go through to Round 2, and everyone who sat it is emailed the result the same evening.",
+          "The open paper: everyone who registered sits this one. Fifteen questions across the three subject areas, about fifteen minutes of work, at whatever point inside the eight hours suits you. More than 1,000 people sit it, and the top 500 by score go through to Round 2. Everyone who sat it is emailed the result the same evening.",
         points: [
           "One attempt, opened from the official joining link",
           "Fifteen questions, weighted evenly across the three areas",
@@ -1001,7 +1001,7 @@ function quizRounds(startsAt: string): EventSection {
         meta: day(1),
         name: "Round 2 — The cut",
         blurb:
-          "A harder paper, the morning after Round 1. The same shape — fifteen questions, about fifteen minutes, one attempt inside an eight-hour window — with the questions going further into the same three areas rather than wider. The highest scorers go through to the final, and the result is emailed the same evening again.",
+          "A harder paper, the morning after Round 1. The same shape — fifteen questions, about fifteen minutes, one attempt inside an eight-hour window — with the questions going further into the same three areas rather than wider. Only 500 people sit it, and the top 50 by score go through to the final. The result is emailed the same evening again.",
         points: [
           "One attempt, from the link in your Round 1 result email",
           "Fifteen questions, deeper in the same three areas",
@@ -1015,7 +1015,7 @@ function quizRounds(startsAt: string): EventSection {
         meta: day(4),
         name: "Round 3 — The final",
         blurb:
-          "The final paper, two clear days after Round 2. Fifteen questions again, inside the same eight-hour window, and the three winners come out of this round alone — the earlier rounds decide who sits it, not where anybody finishes. Scores are not carried forward.",
+          "The final paper, two clear days after Round 2. Only 50 people sit it. Fifteen questions again, inside the same eight-hour window, and the three winners come out of this round alone — the earlier rounds decide who sits it, not where anybody finishes. Scores are not carried forward.",
         points: [
           "One attempt, from the link in your Round 2 result email",
           "Fifteen questions, the final paper",
@@ -1571,6 +1571,7 @@ export const events: Event[] = [
     ],
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Cash prize", value: "₹25,000" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1662,6 +1663,7 @@ export const events: Event[] = [
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1749,6 +1751,7 @@ export const events: Event[] = [
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–6" },
     ],
@@ -1836,6 +1839,7 @@ export const events: Event[] = [
     faq: seriesFaq(),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1919,6 +1923,7 @@ export const events: Event[] = [
     faq: seriesFaq({ submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2002,6 +2007,7 @@ export const events: Event[] = [
     faq: seriesFaq({ submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2250,6 +2256,7 @@ export const events: Event[] = [
     faq: seriesFaq({ certificates: "from-round-2", submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2337,6 +2344,7 @@ export const events: Event[] = [
     faq: seriesFaq({ certificates: "from-round-2", submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2575,7 +2583,7 @@ export const events: Event[] = [
           "Begin and finish inside that round's eight-hour window, 10:00 to 18:00 IST. The paper takes about fifteen minutes; the window is wide so you can choose your moment, not so you can take all day over it.",
           "An attempt not submitted before the window closes does not count. There is no late window.",
           "Everyone who sat a round is emailed that round's result, selected or not. The people who go through get the next round's joining link in the same email.",
-          "Places in Rounds 2 and 3 are limited and given on score. Clearing a round does not by itself carry you into the next one, and the number of places is published with each round's result.",
+          "More than 1,000 people sit Round 1, only 500 qualify for Round 2 and only 50 qualify for Round 3, the final. Places are given on score. Clearing a round does not by itself carry you into the next one, and the number of places is published with each round's result.",
           "Each round is ranked on its own. Scores are not carried forward between rounds, and the three winners come out of Round 3 alone.",
           "Duplicate, manipulated or suspicious entries may be disqualified.",
           "Report technical problems immediately through the official support channel.",
@@ -2611,7 +2619,7 @@ export const events: Event[] = [
       { q: "Is this a quiz or a hackathon?", a: "A quiz, in three sittings. There is nothing to build and nothing to hand in beforehand." },
       { q: "How long does a round take?", a: "Fifteen questions, about fifteen minutes on average. The eight-hour window is there so you can pick your moment — it is not eight hours of quiz." },
       { q: "What happens between rounds?", a: "Everyone who sat a round is emailed that round's result, selected or not — you do not have to guess, and you do not have to wait for a group post. The people who go through get the next round's joining link in the same email." },
-      { q: "How many people get through?", a: "Places in Rounds 2 and 3 are limited and given on score, and the number of places goes out with each round's result. Clearing a round does not by itself carry you into the next one." },
+      { q: "How many people get through?", a: "More than 1,000 people sit Round 1. Only 500 qualify for Round 2 and only 50 qualify for Round 3, which is the final. Places are given on score, and the exact cut goes out with each round's result. Clearing a round does not by itself carry you into the next one." },
       { q: "Are scores carried between rounds?", a: "No. Each round is ranked on its own, and the three winners come out of Round 3 alone — the earlier rounds decide who sits the final, not where anybody finishes." },
       { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before Round 1." },
       { q: "What certificate do I get?", a: "One, for the highest round you complete — certificates start from Round 2. A Round 2 Completion Certificate is for a valid Round 2 attempt, a Finalist Certificate for a valid Round 3 attempt, and a Winner Certificate naming your rank if you finish in the top three. Clearing a round upgrades that certificate rather than adding a second one. One per participant, within 10 days of the results being announced." },
@@ -2620,6 +2628,7 @@ export const events: Event[] = [
     ],
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Questions / round", value: "15" },
       { label: "Typical time", value: "15 min" },
       { label: "Window / round", value: "8 hours" },
@@ -2730,6 +2739,7 @@ export const events: Event[] = [
     }),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2810,6 +2820,7 @@ export const events: Event[] = [
     }),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
     ],
@@ -2890,6 +2901,7 @@ export const events: Event[] = [
     }),
     stats: [
       { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
       { label: "Prize pool", value: "₹30,000" },
       { label: "Per team", value: "1–4" },
     ],
