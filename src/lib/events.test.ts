@@ -805,16 +805,14 @@ describe("events seam", () => {
         `${e.slug} still prices the fee in the stats strip`,
       ).toBeUndefined();
       expect(
-        e.stats?.find((st) => st.label === "Rounds 1\u20132")?.value,
-        `${e.slug} does not say the first two rounds are free`,
-      ).toBe("Free");
+        e.stats?.find((st) => st.label === "Rounds 1\u20132"),
+        `${e.slug} still advertises that the first two rounds are free`,
+      ).toBeUndefined();
 
       const note = e.registration?.note ?? "";
-      expect(note, `${e.slug}'s note hides that a fee exists`).toMatch(/per-team fee stated with Round 3/);
-      expect(note, `${e.slug}'s note hides what is free`).toMatch(/Rounds 1 and 2 are free/);
+      expect(note, `${e.slug}'s note talks about paying`).not.toMatch(/\bfee\b|\bpay\b|\u20B9/);
 
-      const cost = (e.faq ?? []).find((f) => /cost|fee|free/i.test(f.q));
-      expect(cost?.a ?? "", `${e.slug} answers no question about cost`).toMatch(/stated with Round 3/);
+      expect((e.faq ?? []).find((f) => /cost|fee/i.test(f.q)), `${e.slug} still has a cost question`).toBeUndefined();
 
       const words = [
         e.summary,
@@ -922,20 +920,18 @@ describe("events seam", () => {
 
       // The strip says what is free; it no longer says the event is.
       expect(
-        e.stats?.find((st) => st.label === "Rounds 1\u20132")?.value,
-        `${e.slug} does not say the first two rounds are free`,
-      ).toBe("Free");
+        e.stats?.find((st) => st.label === "Rounds 1\u20132"),
+        `${e.slug} still advertises that the first two rounds are free`,
+      ).toBeUndefined();
       expect(
         e.stats?.find((st) => st.label === "Entry fee"),
         `${e.slug} still advertises a free entry fee`,
       ).toBeUndefined();
 
       const note = e.registration?.note ?? "";
-      expect(note, `${e.slug}'s note hides that a fee exists`).toMatch(/fee, stated with Round 3/);
-      expect(note, `${e.slug}'s note hides what is free`).toMatch(/Rounds 1 and 2 are free/);
+      expect(note, `${e.slug}'s note talks about paying`).not.toMatch(/\bfee\b|\bpay\b|\u20B9/);
 
-      const cost = (e.faq ?? []).find((f) => /cost|fee|free/i.test(f.q));
-      expect(cost?.a ?? "", `${e.slug} answers no question about cost`).toMatch(/stated with Round 3/);
+      expect((e.faq ?? []).find((f) => /cost|fee/i.test(f.q)), `${e.slug} still has a cost question`).toBeUndefined();
 
       // The detail page reads the amount off the paid round's note, so the
       // fee has to sit on exactly one round: the one that charges it.

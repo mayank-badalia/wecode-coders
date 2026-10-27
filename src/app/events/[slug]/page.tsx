@@ -959,7 +959,7 @@ export default async function EventPage({ params }: Params) {
             <p style={{ margin: "1rem 0 0", maxWidth: "62ch", lineHeight: 1.6 }}>
               {termsCopy}
               {hasPaidRound
-                ? ` This event has one paid round: Round 3, with its fee stated under that round, ${solo ? "per participant, charged once and only to the people" : "per team, charged once and only to teams"} selected for it. Registering and Rounds 1 and 2 are free, and paying that fee is a further acceptance of the same terms.`
+                ? ""
                 : event.status === "past"
                   ? ""
                   : " This event is free from start to finish: one round, with nothing to pay to enter, to be judged or to be certified."}
