@@ -337,7 +337,7 @@ describe("events seam", () => {
         has to be tested first and subtracted from the wider one — testing
         them independently made every from-Round-2 page match both.
       */
-      const fromTwo = /highest you reach from Round 2 onwards/i.test(promise);
+      const fromTwo = /start from Round 2/i.test(promise);
       const upgrades = /the highest you reach/i.test(promise) && !fromTwo;
       expect([upgrades, fromTwo], `${e.slug} states no certificate scheme`).toContain(true);
       expect(upgrades && fromTwo, `${e.slug} states both schemes`).toBe(false);

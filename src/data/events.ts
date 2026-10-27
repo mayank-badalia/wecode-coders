@@ -617,7 +617,6 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
           "Round 2 Completion Certificate — for a valid Round 2 submission.",
           "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round and prints where your team placed among the finalists.",
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
-          "No certificate is issued for Round 1, including for taking part. It is a qualifying round and nothing else.",
           "Clearing a round upgrades the certificate you will be issued rather than adding another one beside it. A team that reaches Round 3 and does not take part keeps its Round 2 Completion Certificate.",
           "Every finalist is placed and every finalist is told where it finished — at the certificate distribution, and printed on the certificate. Only the top three are announced: the group post carries those three team names, their ranks, and a link to what they built. No full ranking list is published, and nobody is told a position other than its own.",
           "A Finalist or Winner Certificate requires successful registration, payment where applicable, and a valid Round 3 submission. Qualifying for the final round does not by itself earn one.",
