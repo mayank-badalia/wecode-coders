@@ -475,7 +475,7 @@ const seriesRules = (
     "Templates or code you wrote earlier must be clearly disclosed in the submission.",
     "Only work done during the event counts towards judging.",
     "AI, no-code and low-code tools are allowed, and the significant ones must be disclosed.",
-    `Registering is free and so are Rounds 1 and 2. The only money this event asks for is the Round 3 participation fee of ${ROUND_3_FEE} per team, charged once and only to teams selected for that round \u2014 not to be judged, and not to be certified. Nobody from ${(terms.organiser ?? WCC).name} will ask you for any other payment, at any other stage, through any other channel.`,
+    `Registering is free and so are Rounds 1 and 2. The only money this event asks for is the Round 3 participation fee, which is stated with Round 3 and charged once per team and only to teams selected for that round \u2014 not to be judged, and not to be certified. Nobody from ${(terms.organiser ?? WCC).name} will ask you for any other payment, at any other stage, through any other channel.`,
     "Every participant belongs to one team only.",
     "The project must be the team's own work.",
     "Plagiarised, copied or misleading submissions are disqualified.",
@@ -668,7 +668,7 @@ const seriesSections = (
 function seriesFaq(terms: SeriesTerms = {}) {
   return [
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
-    { q: "What does it cost?", a: `Registering is free, and so are Rounds 1 and 2. Only teams selected for Round 3 pay a participation fee of ${ROUND_3_FEE} per team \u2014 one payment for the whole team, not one each \u2014 and that is the only payment anywhere in the event: nothing to be judged, and nothing to be certified. A team that is not selected for Round 3 pays nothing at all.` },
+    { q: "What does it cost?", a: `Registering is free, and so are Rounds 1 and 2. Only teams selected for Round 3 pay a per-team participation fee, stated with Round 3, \u2014 one payment for the whole team, not one each \u2014 and that is the only payment anywhere in the event: nothing to be judged, and nothing to be certified. A team that is not selected for Round 3 pays nothing at all.` },
     { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
     { q: "What happens between rounds?", a: "Every team that submitted is emailed its result, selected or not — you do not have to guess, and you do not have to wait for a group post. The teams that go through get the instructions for the next stage in the same email." },
     { q: "How many teams get through?", a: "More than 1,000 teams start in Round 1 and every one of them competes. 300 go through to Round 2, 100 to the final round, and three teams win. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive." },
@@ -1516,7 +1516,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds to turn one problem statement into a product that runs. National and online, with ₹25,000 in cash and PPO opportunities for the top three teams. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "Three rounds to turn one problem statement into a product that runs. National and online, with ₹25,000 in cash and PPO opportunities for the top three teams. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "WCC Forge 48 asks for one thing: a working product. Not a deck, not a concept, not an idea you would build if you had more time — something a person can open and use.",
       "Three rounds get you there. One problem statement, released an hour before the clock starts; the plan in Round 1, a product whose central workflow runs in Round 2, and a finished one in Round 3. Each of the two build rounds is seventy-two hours.",
@@ -1586,7 +1586,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/p/wcc-forge-48-wecodecoders-1756040",
       label: "Register on Unstop",
-      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 29 October at 23:59 IST. Every member registers individually on Unstop under the same team name, and files their own submission.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Registration closes 29 October at 23:59 IST. Every member registers individually on Unstop under the same team name, and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1612,7 +1612,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon where students, developers and designers build functional technology products that address real problems. Three rounds, teams of one to four. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "A national online hackathon where students, developers and designers build functional technology products that address real problems. Three rounds, teams of one to four. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "TechCircuit is a national-level online hackathon for students, developers and designers who want to build something that actually runs.",
       "The aim is not the biggest project in the room. It is the clearest possible proof that your idea works. One reliable, well-made workflow beats a pile of half-finished features almost every time.",
@@ -1674,7 +1674,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/techcircuit-hackathon-wecodecoders-1758409",
       label: "Register on Unstop",
-      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 19 October at 23:59 IST.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1700,7 +1700,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds to turn an idea into a finished product with modern tooling. National and online, with PPO and incubation opportunities for the top three teams. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "Three rounds to turn an idea into a finished product with modern tooling. National and online, with PPO and incubation opportunities for the top three teams. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "FutureStack is a national-level online hackathon for students, developers and designers who want to turn an idea into something functional.",
       "Modern tooling is encouraged and AI tools are allowed, as long as you disclose the significant ones. What is judged is whether the thing runs and whether it helps somebody.",
@@ -1762,7 +1762,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/futurestack-hackathon-wecodecoders-1758558",
       label: "Register on Unstop",
-      note: "Teams of one to six. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 19 October at 23:59 IST.",
+      note: "Teams of one to six. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1788,7 +1788,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Three rounds, one problem statement. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "A national online hackathon focused on practical, technology-driven solutions to problems that actually matter. Three rounds, one problem statement. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "CodeAxis is a national-level online hackathon about practical solutions rather than impressive-sounding ones.",
       "A small product with one dependable workflow is a better submission than an ambitious one that cannot be demonstrated.",
@@ -1850,7 +1850,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codeaxis-hackathon-wecodecoders-1758538",
       label: "Register on Unstop",
-      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 19 October at 23:59 IST.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Registration closes 19 October at 23:59 IST.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1872,7 +1872,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds to turn an original idea into a finished, working product. National and online, with paid internship and incubation opportunities for the top three teams. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "Three rounds to turn an original idea into a finished, working product. National and online, with paid internship and incubation opportunities for the top three teams. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "Codex 48 is a national-level AI and full-stack online hackathon, run across three rounds — one original idea carried from a plan to a product that runs.",
       "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and submissions are checked.",
@@ -1934,7 +1934,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codex-48-national-level-hackathon-wecodecoders-1761082",
       label: "Register on Unstop",
-      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Every member registers individually and files their own submission.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Every member registers individually and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -1956,7 +1956,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds for students and young builders to develop and present a functional technology product. National and online, with paid internship and incubation opportunities for the top three teams. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "Three rounds for students and young builders to develop and present a functional technology product. National and online, with paid internship and incubation opportunities for the top three teams. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "CodeStar 30 is a national-level AI and full-stack online hackathon, run across three rounds.",
       "The format rewards scope discipline. Inside the problem statement you are given, build the single journey that proves your idea works rather than the five that show what it could become.",
@@ -2018,7 +2018,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codestar-30-national-level-hackathon-wecodecoders-1760472",
       label: "Register on Unstop",
-      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Every member registers individually and files their own submission.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Every member registers individually and files their own submission.",
     },
     // Chosen so the generated ground is "paper", matching the artwork the
     // hover tint and the ring's glow are pulled from.
@@ -2210,7 +2210,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon across three rounds: one problem statement, a plan, then a working product. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "A national online hackathon across three rounds: one problem statement, a plan, then a working product. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "CodeNexus India 2026 is a national-level online hackathon run across three rounds. The problem statement lands an hour before Round 1 opens, and what you submit in the final round is what decides whether you built a product.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2267,7 +2267,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codenexus-india-2026-national-hackathon-wecodecoders-1764747",
       label: "Register on Unstop",
-      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 2 November at 02:00 IST. Every member registers individually and files their own submission.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Registration closes 2 November at 02:00 IST. Every member registers individually and files their own submission.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LQXKCATzVwsCJDHOaeVCjf" },
@@ -2298,7 +2298,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "CodeTitans India 2026 is a national-level online hackathon run across three rounds, from a problem statement to a product someone could use.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2355,7 +2355,7 @@ export const events: Event[] = [
     registration: {
       href: "https://unstop.com/hackathons/codetitans-india-2026-national-hackathon-wecodecoders-1766190",
       label: "Register on Unstop",
-      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Registration closes 4 November at 20:30 IST. Every member registers individually and files their own submission.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Registration closes 4 November at 20:30 IST. Every member registers individually and files their own submission.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Lr1a3omlex7Coc4tAJ8S1C" },
@@ -2501,7 +2501,7 @@ export const events: Event[] = [
     description: [
       "CodeQuest Quiz India 2026 is a national online quiz for people who build. The questions span autonomous systems, the engineering behind a working product, and the technologies arriving around both.",
       "It runs as three rounds rather than one sitting. Each round is a single paper of fifteen questions, open from 10:00 to 18:00 IST on its day and taking about fifteen minutes — the eight hours are there to let you choose when to sit down, not to be spent on it. Round 1 is on 2 November, Round 2 the morning after, and the final on 6 November. Everyone who sat a round is emailed that round's result the same evening, selected or not.",
-      "Registering is free and so are Rounds 1 and 2. Only the people selected for the final round pay anything, once, and what that costs is stated with Round 3 below. The certificate you are issued is for the highest round you complete, upgraded as you clear each one.",
+      "Registering is free and so are Rounds 1 and 2. Only the people selected for the final round pay anything, once, and what that costs is stated with Round 3 below. Round 1 carries no certificate; from Round 2 onwards the certificate you are issued is for the highest round you complete.",
     ],
     forWho: "Students, developers, AI enthusiasts and anyone curious about how modern systems are built.",
     tags: ["agentic ai", "full-stack", "quiz", "online", "national"],
@@ -2519,7 +2519,7 @@ export const events: Event[] = [
       { when: "Mon 2 Nov, evening", what: "The Round 1 result is emailed the same day to everyone who sat it, selected or not. The people who go through get the Round 2 link in it." },
       { when: "Tue 3 Nov, 10:00", what: "Round 2 opens, the morning after Round 1. The same shape, with harder questions, and the window again closes at 18:00." },
       { when: "Tue 3 Nov, evening", what: "The Round 2 result is emailed the same day, again to everyone who sat it. Two clear days follow, 4 and 5 November." },
-      { when: "Fri 6 Nov, 10:00", what: "Round 3, the final paper, open until 18:00. Finalists pay the ₹299 participation fee before sitting it, and the three winners come out of this round." },
+      { when: "Fri 6 Nov, 10:00", what: "Round 3, the final paper, open until 18:00. Finalists pay the participation fee before sitting it, and the three winners come out of this round." },
       { when: "After", what: "Responses validated, the leaderboard reviewed, results announced and certificates issued." },
     ],
     judging: [
@@ -2534,7 +2534,7 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "$500 in Adaption Labs credits for every eligible participant",
-      "One verifiable digital certificate per participant, for the highest round you complete, within 10 days of the results being announced",
+      "One verifiable digital certificate per participant, for the highest round you complete from Round 2 onwards (Round 1 carries none), within 10 days of the results being announced",
       "100+ reward recipients across prizes, challenges and giveaways",
     ],
     sections: [
@@ -2583,7 +2583,7 @@ export const events: Event[] = [
         numbered: true,
         items: [
           "Three rounds, each sat on your own. One attempt per round, opened from the official link you are sent for it.",
-          `Registering is free and so are Rounds 1 and 2. The only money this event asks for is the Round 3 participation fee of ${QUIZ_ROUND_3_FEE} per participant, charged once and only to the people selected for that round — not to be marked, and not to be certified. Nobody from We Code Coders will ask you for any other payment, at any other stage, through any other channel.`,
+          `Registering is free and so are Rounds 1 and 2. The only money this event asks for is the Round 3 participation fee, which is stated with Round 3 and charged once per participant and only to the people selected for that round — not to be marked, and not to be certified. Nobody from We Code Coders will ask you for any other payment, at any other stage, through any other channel.`,
           "Begin and finish inside that round's eight-hour window, 10:00 to 18:00 IST. The paper takes about fifteen minutes; the window is wide so you can choose your moment, not so you can take all day over it.",
           "An attempt not submitted before the window closes does not count. There is no late window.",
           "Everyone who sat a round is emailed that round's result, selected or not. The people who go through get the next round's joining link in the same email.",
@@ -2605,10 +2605,9 @@ export const events: Event[] = [
         kind: "list",
         label: "Certificates",
         intro:
-          "Four levels, and you hold one of them: the highest round you complete. Clearing a round upgrades the certificate you will be issued rather than adding another one beside it.",
+          "Three levels, and you hold one of them: the highest round you complete from Round 2 onwards. Round 1 carries no certificate, including for taking part. Clearing a round upgrades the certificate you will be issued rather than adding another one beside it.",
         items: [
-          "Round 1 Completion Certificate — for a valid Round 1 attempt, submitted inside the window.",
-          "Round 2 Completion Certificate — for a valid Round 2 attempt.",
+          "Round 2 Completion Certificate — for a valid Round 2 attempt, submitted inside the window.",
           "Finalist Certificate — for a valid Round 3 attempt. It records that you reached the final round.",
           "Winner Certificate, naming the rank — first, second or third — for the three winners.",
           "Only the top three are placed. No other certificate prints a position, and no participant outside those three is given one anywhere else either.",
@@ -2622,7 +2621,7 @@ export const events: Event[] = [
     ],
     faq: [
       { q: "How does it run?", a: "Three rounds. Each is one paper of fifteen questions, open from 10:00 to 18:00 IST on its day and taking about fifteen minutes: Round 1 on 2 November, Round 2 on 3 November, and the final on 6 November. One attempt per round, sat on your own." },
-      { q: "What does it cost?", a: `Registering is free, and so are Rounds 1 and 2. Only the people selected for Round 3 pay a participation fee of ${QUIZ_ROUND_3_FEE} per participant, once — and that is the only payment anywhere in the event: nothing to be marked, and nothing to be certified. Somebody who is not selected for Round 3 pays nothing at all.` },
+      { q: "What does it cost?", a: `Registering is free, and so are Rounds 1 and 2. Only the people selected for Round 3 pay a participation fee, stated with Round 3, once — and that is the only payment anywhere in the event: nothing to be marked, and nothing to be certified. Somebody who is not selected for Round 3 pays nothing at all.` },
       { q: "Why is the fee per participant and not per team?", a: "Because there are no teams. The quiz is registered for and sat individually, so the finalist fee is one payment made by one person for themselves." },
       { q: "Is this a quiz or a hackathon?", a: "A quiz, in three sittings. There is nothing to build and nothing to hand in beforehand." },
       { q: "How long does a round take?", a: "Fifteen questions, about fifteen minutes on average. The eight-hour window is there so you can pick your moment — it is not eight hours of quiz." },
@@ -2630,7 +2629,7 @@ export const events: Event[] = [
       { q: "How many people get through?", a: "Places in Rounds 2 and 3 are limited and given on score, and the number of places goes out with each round's result. Clearing a round does not by itself carry you into the next one." },
       { q: "Are scores carried between rounds?", a: "No. Each round is ranked on its own, and the three winners come out of Round 3 alone — the earlier rounds decide who sits the final, not where anybody finishes." },
       { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before Round 1." },
-      { q: "What certificate do I get?", a: "One, for the highest round you complete: a Round 1 Completion Certificate for a valid Round 1 attempt, a Round 2 Completion Certificate for Round 2, a Finalist Certificate for a valid Round 3 attempt, and a Winner Certificate naming your rank if you finish in the top three. Clearing a round upgrades that certificate rather than adding a second one. One per participant, within 10 days of the results being announced." },
+      { q: "What certificate do I get?", a: "One, for the highest round you complete from Round 2 onwards. Round 1 carries no certificate, including for taking part. A Round 2 Completion Certificate is for a valid Round 2 attempt, a Finalist Certificate for a valid Round 3 attempt, and a Winner Certificate naming your rank if you finish in the top three. Clearing a round upgrades that certificate rather than adding a second one. One per participant, within 10 days of the results being announced." },
       { q: "When are results announced?", a: "Each of the first two rounds is emailed the evening it closes. The final result follows once the responses are validated and the leaderboard is reviewed; timelines are shared through the official channel." },
       { q: "Where are results announced?", a: "In the official group: the three winning names, and nothing further. Only those three are placed — no leaderboard goes up, no other participant is given a position, and no certificate below winner prints one. Nobody's personal details are shared without their consent." },
     ],
@@ -2644,7 +2643,7 @@ export const events: Event[] = [
     ],
     sponsors: SERIES_SPONSORS,
     registration: {
-      note: `Registering is free, and individually — everyone attempts on their own. Rounds 1 and 2 are free; only the people selected for Round 3 pay a participation fee of ${QUIZ_ROUND_3_FEE} per participant, once. Registration closes before Round 1; the deadline goes out in the official channel, and the Unstop link goes here once it is live.`,
+      note: `Registering is free, and individually — everyone attempts on their own. Rounds 1 and 2 are free; only the people selected for Round 3 pay a participation fee, stated with Round 3, once. Registration closes before Round 1; the deadline goes out in the official channel, and the Unstop link goes here once it is live.`,
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Kiibri82NXEDIOmNhd9URn" },
@@ -2693,7 +2692,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon across three rounds: one problem statement, a plan, then a working product. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "A HackWithPune hackathon across three rounds: one problem statement, a plan, then a working product. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "CodePuneThinkers is an online hackathon run by HackWithPune across three rounds. The problem statement lands an hour before Round 1 opens, and what you submit in the final round is what is judged.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2753,7 +2752,7 @@ export const events: Event[] = [
     ],
     sponsors: HWP_SPONSORS,
     registration: {
-      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/Dh7bUhHKdpG7UGZ4fr85Ka" },
@@ -2773,7 +2772,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon across three rounds, from one problem statement to a product that runs. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "A HackWithPune hackathon across three rounds, from one problem statement to a product that runs. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "CodersInPune is an online hackathon run by HackWithPune across three rounds, from a problem statement to something a person can open and use.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2834,7 +2833,7 @@ export const events: Event[] = [
     ],
     sponsors: HWP_SPONSORS,
     registration: {
-      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/LLeWA6XWTjR5kMKxLeUvR9" },
@@ -2854,7 +2853,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon across three rounds: one problem statement, one finished product. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a ₹399 per-team fee only at Round 3.",
+      "A HackWithPune hackathon across three rounds: one problem statement, one finished product. Teams of one to four, with ₹30,000 in prizes, paid internships and incubation for the top three. Free to enter, with a per-team fee only at Round 3.",
     description: [
       "CodeFrontier is an online hackathon run by HackWithPune across three rounds. One problem statement, an entry from every member who built, and a product at the end of it.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2915,7 +2914,7 @@ export const events: Event[] = [
     ],
     sponsors: HWP_SPONSORS,
     registration: {
-      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay ₹399 per team. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
+      note: "Teams of one to four. Registering and Rounds 1 and 2 are free; only teams selected for Round 3 pay the per-team fee stated with Round 3. Every member registers individually and files their own submission. The Unstop link and the registration deadline go here once they are confirmed.",
     },
     links: [
       { label: "Official WhatsApp group", href: "https://chat.whatsapp.com/IdQJEKGLGSrB5FGpdCAcVQ" },

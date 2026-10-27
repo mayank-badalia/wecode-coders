@@ -301,10 +301,11 @@ describe("events seam", () => {
     /*
       The eleven do not all certify the same thing, and that is deliberate.
       The five announced as three rounds upgrade a certificate at every round
-      cleared. The six announced as a single window, and given three rounds
-      afterwards, certify the final round only: their entrants were promised
-      one certificate for one submission, and issuing three where one was
-      advertised would be a different event again.
+      cleared, Round 1 included, and they are running now with that promise
+      already made. The six announced as a single window, and given three
+      rounds afterwards, certify from Round 2: Round 1 of those is a filter
+      on a field of more than a thousand teams, and a completion certificate
+      for clearing a filter is worth little to the person holding it.
 
       What must never happen is a page that carries both promises, or
       neither — a reader deciding whether Round 1 is worth their weekend
@@ -313,7 +314,7 @@ describe("events seam", () => {
       and in the lists that answer it before they get there.
     */
     const upgraded = ["code-axis", "codestar-30", "codex-48", "future-stack", "tech-circuit"];
-    const finalRoundOnly = [
+    const fromRoundTwo = [
       "codefrontier",
       "codenexus-india",
       "codepunethinkers",
@@ -322,7 +323,7 @@ describe("events seam", () => {
       "wcc-forge-48",
     ];
     expect(threeRound.map((e) => e.slug).sort()).toEqual(
-      [...upgraded, ...finalRoundOnly].sort(),
+      [...upgraded, ...fromRoundTwo].sort(),
     );
 
     for (const e of threeRound) {
@@ -331,10 +332,15 @@ describe("events seam", () => {
       if (certs?.kind !== "list") continue;
 
       const promise = `${certs.intro ?? ""} ${certs.items.join(" ")}`;
-      const upgrades = /the highest you reach/i.test(promise);
-      const finalOnly = /one certificate, earned in the final round/i.test(promise);
-      expect([upgrades, finalOnly], `${e.slug} states no certificate scheme`).toContain(true);
-      expect(upgrades && finalOnly, `${e.slug} states both schemes`).toBe(false);
+      /*
+        Both schemes now say "the highest you reach", so the narrower phrase
+        has to be tested first and subtracted from the wider one — testing
+        them independently made every from-Round-2 page match both.
+      */
+      const fromTwo = /highest you reach from Round 2 onwards/i.test(promise);
+      const upgrades = /the highest you reach/i.test(promise) && !fromTwo;
+      expect([upgrades, fromTwo], `${e.slug} states no certificate scheme`).toContain(true);
+      expect(upgrades && fromTwo, `${e.slug} states both schemes`).toBe(false);
 
       /* Everything a reader meets before the block itself has to agree. */
       const words = [
@@ -356,12 +362,16 @@ describe("events seam", () => {
           /carry no certificate|carry none/i,
         );
       } else {
-        expect(finalOnly, `${e.slug} should certify the final round only`).toBe(true);
-        expect(words, `${e.slug} does not say the early rounds carry none`).toMatch(
-          /carry no certificate|carry none/i,
+        expect(fromTwo, `${e.slug} should certify from Round 2`).toBe(true);
+        expect(words, `${e.slug} does not say Round 1 carries none`).toMatch(
+          /Round 1 carries no certificate|Round 1 carries none|no certificate is issued for Round 1/i,
         );
-        expect(words, `${e.slug} still promises a round-completion certificate`).not.toMatch(
-          /Round [12] Completion Certificate/,
+        expect(words, `${e.slug} does not issue a Round 2 certificate`).toMatch(
+          /Round 2 Completion Certificate/,
+        );
+        // Round 1 is the one that earns nothing here.
+        expect(words, `${e.slug} still promises a Round 1 certificate`).not.toMatch(
+          /Round 1 Completion Certificate/,
         );
       }
     }
@@ -800,11 +810,11 @@ describe("events seam", () => {
       ).toBe("Free");
 
       const note = e.registration?.note ?? "";
-      expect(note, `${e.slug}'s note hides the fee`).toMatch(/\u20B9399 per team/);
+      expect(note, `${e.slug}'s note hides that a fee exists`).toMatch(/per-team fee stated with Round 3/);
       expect(note, `${e.slug}'s note hides what is free`).toMatch(/Rounds 1 and 2 are free/);
 
       const cost = (e.faq ?? []).find((f) => /cost|fee|free/i.test(f.q));
-      expect(cost?.a ?? "", `${e.slug} answers no question about cost`).toMatch(/\u20B9399/);
+      expect(cost?.a ?? "", `${e.slug} answers no question about cost`).toMatch(/stated with Round 3/);
 
       const words = [
         e.summary,
@@ -817,14 +827,18 @@ describe("events seam", () => {
         ),
       ].join(" ");
 
-      // Every amount this page attaches to the word "fee", or to "per team",
-      // has to be the same amount.
-      const quoted = [
-        ...words.matchAll(/fee of \u20B9\s?([\d,]+)/g),
-        ...words.matchAll(/\u20B9\s?([\d,]+) per[- ]team/g),
-      ].map((m) => m[1]);
-      expect(quoted.length, `${e.slug} barely names the fee`).toBeGreaterThanOrEqual(4);
-      expect(new Set(quoted), `${e.slug} quotes more than one fee`).toEqual(new Set(["399"]));
+      // The amount is stated once, on the round that charges it, and nowhere
+      // else on the page: the summary, the note, the rules and the FAQ say a
+      // fee exists and point at Round 3.
+      const own = (e.sections ?? []).flatMap((sec) =>
+        sec.kind === "columns" ? sec.items.map((i) => i.note ?? "") : [],
+      ).filter((n) => n.includes("\u20B9399"));
+      expect(own.length, `${e.slug} does not carry the fee on the round that charges it`).toBe(1);
+      expect(own[0], `${e.slug}'s Round 3 does not say who pays`).toMatch(/\u20B9399 per team/);
+      expect(
+        words.split("\u20B9399").length,
+        `${e.slug} prints the fee outside Round 3`,
+      ).toBe(own[0]!.split("\u20B9399").length);
 
       // The detail page reads the amount off the paid round's note, so the
       // sentence beside the terms link only appears while that note has it.
@@ -893,8 +907,15 @@ describe("events seam", () => {
         ...words.matchAll(/fee of \u20B9\s?([\d,]+)/g),
         ...words.matchAll(/\u20B9\s?([\d,]+) per[- ]participant/g),
       ].map((m) => m[1]);
-      expect(quoted.length, `${e.slug} barely names its fee`).toBeGreaterThanOrEqual(3);
+      // Stated once, on Round 3, and nowhere else on the page.
       expect(new Set(quoted), `${e.slug} quotes more than one fee`).toEqual(new Set(["299"]));
+      const round3 = (e.sections ?? []).flatMap((sec) =>
+        sec.kind === "columns" ? sec.items.map((i) => i.note ?? "") : [],
+      ).find((n) => n.includes("\u20B9299")) ?? "";
+      expect(
+        words.split("\u20B9299").length,
+        `${e.slug} prints the fee outside Round 3`,
+      ).toBe(round3.split("\u20B9299").length);
       expect(words, `${e.slug} charges its fee per team`).not.toMatch(
         /\u20B9\s?[\d,]+ per[- ]team/,
       );
@@ -910,11 +931,11 @@ describe("events seam", () => {
       ).toBeUndefined();
 
       const note = e.registration?.note ?? "";
-      expect(note, `${e.slug}'s note hides the fee`).toMatch(/\u20B9299 per participant/);
+      expect(note, `${e.slug}'s note hides that a fee exists`).toMatch(/fee, stated with Round 3/);
       expect(note, `${e.slug}'s note hides what is free`).toMatch(/Rounds 1 and 2 are free/);
 
       const cost = (e.faq ?? []).find((f) => /cost|fee|free/i.test(f.q));
-      expect(cost?.a ?? "", `${e.slug} answers no question about cost`).toMatch(/\u20B9299/);
+      expect(cost?.a ?? "", `${e.slug} answers no question about cost`).toMatch(/stated with Round 3/);
 
       // The detail page reads the amount off the paid round's note, so the
       // fee has to sit on exactly one round: the one that charges it.

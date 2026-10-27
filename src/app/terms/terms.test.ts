@@ -43,8 +43,10 @@ describe("terms page", () => {
       This clause has now been wrong in both directions. It described only the
       finalists-only scheme while three events upgraded a certificate at each
       round; then it described only the round-wise one, on the morning six
-      single-window events were given three rounds and kept the single
-      certificate they had advertised.
+      single-window events were given three rounds. Those six now certify
+      from Round 2 — Round 1 of a field of a thousand teams is a filter, and
+      a certificate for clearing a filter is worth little — while the five
+      running events still certify every round, Round 1 included.
 
       Both are real, so the page states both and says where to find out which
       applies — that line is what a participant is pointed at in a dispute,
@@ -53,8 +55,10 @@ describe("terms page", () => {
     expect(source).toMatch(/issues certificates in one of two ways/);
     expect(source).toMatch(/stated in the certificates block on its own page/);
     expect(source).toMatch(/upgrades that certificate rather than adding a second one/);
-    expect(source).toMatch(/The second certifies the final round only/);
-    expect(source).toMatch(/carry no certificate of any kind/);
+    expect(source).toMatch(/The second certifies from Round 2/);
+    // The scheme that skips Round 1 still has to name the round it starts at.
+    expect(source).toMatch(/Round 2 Completion Certificate/);
+    expect(source).toMatch(/carries no certificate of any kind/);
   });
 
   it("states what the quiz charges, which is not what a hackathon charges", () => {
