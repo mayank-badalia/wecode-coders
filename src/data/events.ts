@@ -283,8 +283,8 @@ function seriesRounds(
       ],
       judging: forRound(2),
       note:
-        terms.certificates === "finalists"
-          ? "Rounds 1 and 2 are qualifying rounds and carry no certificate, including for taking part. If your team qualifies for Round 3 and decides not to take part, nothing is issued — the certificate is earned in the final round."
+        terms.certificates === "from-round-2"
+          ? "This is the first round that certifies. Round 1 carries no certificate, including for taking part; a valid Round 2 submission earns a Round 2 Completion Certificate. If your team qualifies for Round 3 and decides not to take part, you keep that one — stopping here does not cancel what you earned, and it is not upgraded later."
           : "If your team qualifies for Round 3 and decides not to take part, you keep a Round 2 Completion Certificate. Stopping here does not cancel what you earned — it is the only certificate you will be issued, and it is not upgraded later.",
     },
     {
@@ -508,21 +508,24 @@ const seriesRules = (
  * Which certificates an event issues.
  *
  * "rounds" issues one certificate at the highest stage a participant reached,
- * from Round 1 upwards. "finalists" issues one only for the final round:
- * Rounds 1 and 2 qualify a team to go further and earn nothing in themselves.
+ * from Round 1 upwards. "from-round-2" starts a round later: Round 1 is a
+ * qualifying round and earns nothing, the certificate is first issued for a
+ * valid Round 2 submission, and it is upgraded at the final round.
  *
  * It is a per-event decision because the two schemes promise different things
  * to the same 1,000 teams, and the promise has to be the one that event made.
  *
  * The split is by shape, not by brand. The five events announced as three
  * rounds from the start — tech-circuit, future-stack, code-axis, codex-48
- * and codestar-30 — upgrade a certificate at every round cleared. The six
- * that were announced as a single window and later given three rounds certify
- * the final round only: their entrants were promised one certificate for one
- * submission, and issuing three where one was advertised would be a different
- * event again.
+ * and codestar-30 — upgrade a certificate at every round cleared, Round 1
+ * included. They are running now, with that promise already made to the teams
+ * inside them, which is why they keep it. The six announced as a single
+ * window and later given three rounds certify from Round 2 instead: Round 1
+ * of those events is a filter on a field of more than a thousand teams, and
+ * a completion certificate for clearing a filter is worth little to the
+ * person holding it.
  */
-type CertificateScheme = "rounds" | "finalists";
+type CertificateScheme = "rounds" | "from-round-2";
 
 /**
  * Who files a submission.
@@ -553,9 +556,9 @@ const ROLE_SET =
 /**
  * The two promises that differ between events in the series.
  *
- * An object rather than two more positional arguments: "finalists" and
+ * An object rather than two more positional arguments: "from-round-2" and
  * "individual" are both bare strings, and a call site reading
- * seriesSections(date, offsets, "finalists", "individual") is one transposition
+ * seriesSections(date, offsets, "from-round-2", "individual") is one transposition
  * away from promising the wrong thing on the wrong page.
  */
 type SeriesTerms = {
@@ -601,8 +604,8 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
   kind: "list",
   label: "Certificates",
   intro:
-    terms.certificates === "finalists"
-      ? "One certificate, earned in the final round. Rounds 1 and 2 are qualifying rounds: clearing them carries your team forward, and nothing is issued for them."
+    terms.certificates === "from-round-2"
+      ? "Three levels, and you hold one of them: the highest you reach from Round 2 onwards. Round 1 is a qualifying round — clearing it carries your team forward and earns no certificate in itself."
       : "Four levels, and you hold one of them: the highest you reach. Clearing a round upgrades the certificate you will be issued rather than adding another one beside it.",
   items: [
     ...(terms.submission === "individual"
@@ -610,13 +613,15 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
           "Your certificate names the role you declared and the part you built, in the words you submitted them in. That is why every member files their own entry rather than one per team, and why a member with no entry of their own is not issued a certificate.",
         ]
       : []),
-    ...(terms.certificates === "finalists"
+    ...(terms.certificates === "from-round-2"
       ? [
+          "Round 2 Completion Certificate — for a valid Round 2 submission.",
           "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round and prints where your team placed among the finalists.",
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
-          "No certificate is issued for Round 1 or Round 2, including for taking part. A team that is not selected for the final round, or that is selected and does not take part, is not issued one.",
+          "No certificate is issued for Round 1, including for taking part. It is a qualifying round and nothing else.",
+          "Clearing a round upgrades the certificate you will be issued rather than adding another one beside it. A team that reaches Round 3 and does not take part keeps its Round 2 Completion Certificate.",
           "Every finalist is placed and every finalist is told where it finished — at the certificate distribution, and printed on the certificate. Only the top three are announced: the group post carries those three team names, their ranks, and a link to what they built. No full ranking list is published, and nobody is told a position other than its own.",
-          "A certificate requires successful registration, payment where applicable, and a valid Round 3 submission. Qualifying for the final round does not by itself earn one.",
+          "A Finalist or Winner Certificate requires successful registration, payment where applicable, and a valid Round 3 submission. Qualifying for the final round does not by itself earn one.",
           "Each participant receives one certificate only.",
         ]
       : [
@@ -682,8 +687,8 @@ function seriesFaq(terms: SeriesTerms = {}) {
     {
       q: "What certificate do I get?",
       a:
-        terms.certificates === "finalists"
-          ? "Only the final round earns one: a National Finalist Certificate for a valid Round 3 submission, or a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed: your certificate prints where your team finished, and you are told at the certificate distribution. Only the top three are announced publicly. Rounds 1 and 2 are qualifying rounds, and they carry no certificate, not even for taking part."
+        terms.certificates === "from-round-2"
+          ? "One certificate, at the highest stage you reach from Round 2 onwards: a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed: your certificate prints where your team finished, and you are told at the certificate distribution. Only the top three are announced publicly. Round 1 is a qualifying round and carries no certificate, not even for taking part."
           : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed and the certificate prints it, told to you at the certificate distribution; only the top three are announced publicly. Clearing a round upgrades that certificate rather than adding a second one.",
     },
     { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the GitHub repository or the project URL of what each of them built, whichever the team is comfortable sharing. That is the whole public announcement, and it carries their ranks. Every other finalist is told its own position privately, at the certificate distribution and printed on its certificate — no full ranking list goes up, and no team is told anybody’s position but its own. Nobody's personal details are shared without their consent." },
@@ -1535,7 +1540,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -1553,15 +1558,16 @@ export const events: Event[] = [
       "100+ reward recipients across the hackathon, giveaways and mini-challenges",
       "Special awards for exceptional projects",
       "Lovable Premium, AI tools and a .XYZ domain",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
       "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-10-30T10:00:00+05:30", LONG_BUILD_ROUNDS, {
-      certificates: "finalists",
+      certificates: "from-round-2",
       submission: "individual",
     }),
     faq: [
-      ...seriesFaq({ certificates: "finalists", submission: "individual" }),
+      ...seriesFaq({ certificates: "from-round-2", submission: "individual" }),
       { q: "Does every team member have to register?", a: "Yes, individually — and everyone must use the same team name so the entries can be matched up." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
       { q: "Are the PPO opportunities guaranteed?", a: "No. They are subject to the recruiting partner's own eligibility requirements and selection process." },
@@ -1598,7 +1604,11 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
-    endsAt: "2026-10-30T10:00:00+05:30",
+    // Round 3 opens at 00:00 on the 28th and runs seventy-two hours, so the
+    // deadline is midnight at the end of Friday the 30th. Held one minute
+    // short of it: 31 Oct 00:00 is the same moment, and would print a date
+    // range ending on a day when nothing is open.
+    endsAt: "2026-10-30T23:59:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1631,7 +1641,7 @@ export const events: Event[] = [
     schedule: [
       { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; the idea and the plan are due by 18:00 on the 21st." },
       { when: "Thu 22 Oct — Sun 25 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
-      { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Finish it — including the three improvements you named." },
+      { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Seventy-two hours to finish it — including the three improvements you named. The clock opens at 00:00 on the 28th and closes at 00:00 on the 31st, so the deadline is midnight at the end of Friday." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -1682,7 +1692,11 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
-    endsAt: "2026-10-30T10:00:00+05:30",
+    // Round 3 opens at 00:00 on the 28th and runs seventy-two hours, so the
+    // deadline is midnight at the end of Friday the 30th. Held one minute
+    // short of it: 31 Oct 00:00 is the same moment, and would print a date
+    // range ending on a day when nothing is open.
+    endsAt: "2026-10-30T23:59:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1715,7 +1729,7 @@ export const events: Event[] = [
     schedule: [
       { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; the idea and the plan are due by 18:00 on the 21st." },
       { when: "Thu 22 Oct — Sun 25 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
-      { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Finish it — including the three improvements you named." },
+      { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Seventy-two hours to finish it — including the three improvements you named. The clock opens at 00:00 on the 28th and closes at 00:00 on the 31st, so the deadline is midnight at the end of Friday." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -1766,7 +1780,11 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-20T10:00:00+05:30",
-    endsAt: "2026-10-30T10:00:00+05:30",
+    // Round 3 opens at 00:00 on the 28th and runs seventy-two hours, so the
+    // deadline is midnight at the end of Friday the 30th. Held one minute
+    // short of it: 31 Oct 00:00 is the same moment, and would print a date
+    // range ending on a day when nothing is open.
+    endsAt: "2026-10-30T23:59:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1799,7 +1817,7 @@ export const events: Event[] = [
     schedule: [
       { when: "Tue 20 Oct — Wed 21 Oct", what: "Round 1. The official PDF format goes out; the idea and the plan are due by 18:00 on the 21st." },
       { when: "Thu 22 Oct — Sun 25 Oct", what: "Round 2. Three days to turn the proposal into a product whose central workflow runs." },
-      { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Finish it — including the three improvements you named." },
+      { when: "Wed 28 Oct — Fri 30 Oct", what: "Round 3. Seventy-two hours to finish it — including the three improvements you named. The clock opens at 00:00 on the 28th and closes at 00:00 on the 31st, so the deadline is midnight at the end of Friday." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -2209,7 +2227,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -2230,14 +2248,15 @@ export const events: Event[] = [
       "$500 in Adaption Labs credits for every eligible participant",
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
       "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-02T10:00:00+05:30", LONG_BUILD_ROUNDS, {
-      certificates: "finalists",
+      certificates: "from-round-2",
       submission: "individual",
     }),
-    faq: seriesFaq({ certificates: "finalists", submission: "individual" }),
+    faq: seriesFaq({ certificates: "from-round-2", submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
@@ -2296,7 +2315,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -2317,14 +2336,15 @@ export const events: Event[] = [
       "$500 in Adaption Labs credits for every eligible participant",
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
       "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-06T10:00:00+05:30", LONG_BUILD_ROUNDS, {
-      certificates: "finalists",
+      certificates: "from-round-2",
       submission: "individual",
     }),
-    faq: seriesFaq({ certificates: "finalists", submission: "individual" }),
+    faq: seriesFaq({ certificates: "from-round-2", submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
       { label: "Rounds 1–2", value: "Free" },
@@ -2690,7 +2710,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -2711,16 +2731,17 @@ export const events: Event[] = [
       "$100 in Inkloom AI credits for every eligible participant",
       "$500 in Adaption credits for every eligible participant",
       "100+ reward recipients across the hackathon",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
       "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-07T10:00:00+05:30", LONG_BUILD_ROUNDS, {
-      certificates: "finalists",
+      certificates: "from-round-2",
       submission: "individual",
       organiser: HWP,
     }),
     faq: seriesFaq({
-      certificates: "finalists",
+      certificates: "from-round-2",
       submission: "individual",
       organiser: HWP,
     }),
@@ -2769,7 +2790,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -2791,16 +2812,17 @@ export const events: Event[] = [
       "$500 in Adaption credits for every eligible participant",
       "Expert-led workshops",
       "100+ reward recipients across the hackathon",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
       "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
-      certificates: "finalists",
+      certificates: "from-round-2",
       submission: "individual",
       organiser: HWP,
     }),
     faq: seriesFaq({
-      certificates: "finalists",
+      certificates: "from-round-2",
       submission: "individual",
       organiser: HWP,
     }),
@@ -2849,7 +2871,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "A National Finalist certificate if you reach the final round, or a Winner certificate naming the rank if you finish in the top three — Rounds 1 and 2 carry none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -2871,16 +2893,17 @@ export const events: Event[] = [
       "$500 in Adaption credits for every eligible participant",
       "Expert-led workshops",
       "100+ reward recipients across the hackathon",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
       "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
-      certificates: "finalists",
+      certificates: "from-round-2",
       submission: "individual",
       organiser: HWP,
     }),
     faq: seriesFaq({
-      certificates: "finalists",
+      certificates: "from-round-2",
       submission: "individual",
       organiser: HWP,
     }),
