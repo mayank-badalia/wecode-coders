@@ -284,7 +284,7 @@ function seriesRounds(
       judging: forRound(2),
       note:
         terms.certificates === "from-round-2"
-          ? "This is the first round that certifies. Round 1 carries no certificate, including for taking part; a valid Round 2 submission earns a Round 2 Completion Certificate. If your team qualifies for Round 3 and decides not to take part, you keep that one — stopping here does not cancel what you earned, and it is not upgraded later."
+          ? "Certificates start from Round 2: a valid Round 2 submission earns a Round 2 Completion Certificate. If your team qualifies for Round 3 and decides not to take part, you keep that one — stopping here does not cancel what you earned, and it is not upgraded later."
           : "If your team qualifies for Round 3 and decides not to take part, you keep a Round 2 Completion Certificate. Stopping here does not cancel what you earned — it is the only certificate you will be issued, and it is not upgraded later.",
     },
     {
@@ -604,7 +604,7 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
   label: "Certificates",
   intro:
     terms.certificates === "from-round-2"
-      ? "Three levels, and you hold one of them: the highest you reach from Round 2 onwards. Round 1 is a qualifying round — clearing it carries your team forward and earns no certificate in itself."
+      ? "Three levels, and you hold one of them: the highest you reach, and they start from Round 2."
       : "Four levels, and you hold one of them: the highest you reach. Clearing a round upgrades the certificate you will be issued rather than adding another one beside it.",
   items: [
     ...(terms.submission === "individual"
@@ -686,7 +686,7 @@ function seriesFaq(terms: SeriesTerms = {}) {
       q: "What certificate do I get?",
       a:
         terms.certificates === "from-round-2"
-          ? "One certificate, at the highest stage you reach from Round 2 onwards: a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed: your certificate prints where your team finished, and you are told at the certificate distribution. Only the top three are announced publicly. Round 1 is a qualifying round and carries no certificate, not even for taking part."
+          ? "One certificate, at the highest stage you reach from Round 2 onwards: a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed: your certificate prints where your team finished, and you are told at the certificate distribution. Only the top three are announced publicly."
           : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed and the certificate prints it, told to you at the certificate distribution; only the top three are announced publicly. Clearing a round upgrades that certificate rather than adding a second one.",
     },
     { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the GitHub repository or the project URL of what each of them built, whichever the team is comfortable sharing. That is the whole public announcement, and it carries their ranks. Every other finalist is told its own position privately, at the certificate distribution and printed on its certificate — no full ranking list goes up, and no team is told anybody’s position but its own. Nobody's personal details are shared without their consent." },
@@ -1538,7 +1538,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -2219,7 +2219,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -2306,7 +2306,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -2491,7 +2491,7 @@ export const events: Event[] = [
     description: [
       "CodeQuest Quiz India 2026 is a national online quiz for people who build. The questions span autonomous systems, the engineering behind a working product, and the technologies arriving around both.",
       "It runs as three rounds rather than one sitting. Each round is a single paper of fifteen questions, open from 10:00 to 18:00 IST on its day and taking about fifteen minutes — the eight hours are there to let you choose when to sit down, not to be spent on it. Round 1 is on 2 November, Round 2 the morning after, and the final on 6 November. Everyone who sat a round is emailed that round's result the same evening, selected or not.",
-      "Round 1 carries no certificate; from Round 2 onwards the certificate you are issued is for the highest round you complete.",
+      "Certificates start from Round 2, and the one you are issued is for the highest round you complete.",
     ],
     forWho: "Students, developers, AI enthusiasts and anyone curious about how modern systems are built.",
     tags: ["agentic ai", "full-stack", "quiz", "online", "national"],
@@ -2524,7 +2524,7 @@ export const events: Event[] = [
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "$500 in Adaption Labs credits for every eligible participant",
-      "One verifiable digital certificate per participant, for the highest round you complete from Round 2 onwards (Round 1 carries none), within 10 days of the results being announced",
+      "One verifiable digital certificate per participant, for the highest round you complete from Round 2 onwards, within 10 days of the results being announced",
       "100+ reward recipients across prizes, challenges and giveaways",
     ],
     sections: [
@@ -2594,7 +2594,7 @@ export const events: Event[] = [
         kind: "list",
         label: "Certificates",
         intro:
-          "Three levels, and you hold one of them: the highest round you complete from Round 2 onwards. Round 1 carries no certificate, including for taking part. Clearing a round upgrades the certificate you will be issued rather than adding another one beside it.",
+          "Three levels, and you hold one of them: the highest round you complete, and they start from Round 2. Clearing a round upgrades the certificate you will be issued rather than adding another one beside it.",
         items: [
           "Round 2 Completion Certificate — for a valid Round 2 attempt, submitted inside the window.",
           "Finalist Certificate — for a valid Round 3 attempt. It records that you reached the final round.",
@@ -2615,7 +2615,7 @@ export const events: Event[] = [
       { q: "How many people get through?", a: "Places in Rounds 2 and 3 are limited and given on score, and the number of places goes out with each round's result. Clearing a round does not by itself carry you into the next one." },
       { q: "Are scores carried between rounds?", a: "No. Each round is ranked on its own, and the three winners come out of Round 3 alone — the earlier rounds decide who sits the final, not where anybody finishes." },
       { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before Round 1." },
-      { q: "What certificate do I get?", a: "One, for the highest round you complete from Round 2 onwards. Round 1 carries no certificate, including for taking part. A Round 2 Completion Certificate is for a valid Round 2 attempt, a Finalist Certificate for a valid Round 3 attempt, and a Winner Certificate naming your rank if you finish in the top three. Clearing a round upgrades that certificate rather than adding a second one. One per participant, within 10 days of the results being announced." },
+      { q: "What certificate do I get?", a: "One, for the highest round you complete — certificates start from Round 2. A Round 2 Completion Certificate is for a valid Round 2 attempt, a Finalist Certificate for a valid Round 3 attempt, and a Winner Certificate naming your rank if you finish in the top three. Clearing a round upgrades that certificate rather than adding a second one. One per participant, within 10 days of the results being announced." },
       { q: "When are results announced?", a: "Each of the first two rounds is emailed the evening it closes. The final result follows once the responses are validated and the leaderboard is reviewed; timelines are shared through the official channel." },
       { q: "Where are results announced?", a: "In the official group: the three winning names, and nothing further. Only those three are placed — no leaderboard goes up, no other participant is given a position, and no certificate below winner prints one. Nobody's personal details are shared without their consent." },
     ],
@@ -2694,7 +2694,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -2773,7 +2773,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [
@@ -2853,7 +2853,7 @@ export const events: Event[] = [
     deliverables: [
       "A product that runs, and a repository anyone can open",
       "The thinking written down: the plan you started from and the roadmap you finished with",
-      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it. Round 1 carries none",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
       "Something to show that is yours rather than a tutorial's",
     ],
     schedule: [

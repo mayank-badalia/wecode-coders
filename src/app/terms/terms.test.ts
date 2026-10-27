@@ -55,10 +55,10 @@ describe("terms page", () => {
     expect(source).toMatch(/issues certificates in one of two ways/);
     expect(source).toMatch(/stated in the certificates block on its own page/);
     expect(source).toMatch(/upgrades that certificate rather than adding a second one/);
-    expect(source).toMatch(/The second certifies from Round 2/);
+    expect(source).toMatch(/The second starts certifying from Round 2/);
     // The scheme that skips Round 1 still has to name the round it starts at.
     expect(source).toMatch(/Round 2 Completion Certificate/);
-    expect(source).toMatch(/carries no certificate of any kind/);
+    expect(source).not.toMatch(/Round 1 is a qualifying round and carries no certificate/);
   });
 
   it("states what the quiz charges, which is not what a hackathon charges", () => {

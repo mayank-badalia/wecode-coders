@@ -363,8 +363,13 @@ describe("events seam", () => {
         );
       } else {
         expect(fromTwo, `${e.slug} should certify from Round 2`).toBe(true);
-        expect(words, `${e.slug} does not say Round 1 carries none`).toMatch(
-          /Round 1 carries no certificate|Round 1 carries none|no certificate is issued for Round 1/i,
+        // Said casually and only as a start: certificates begin at Round 2.
+        // Round 1 is not mentioned in connection with a certificate at all.
+        expect(words, `${e.slug} does not say certificates start at Round 2`).toMatch(
+          /start from Round 2/i,
+        );
+        expect(words, `${e.slug} talks about a Round 1 certificate`).not.toMatch(
+          /Round 1 (carries|is a qualifying)|no certificate (is issued )?for Round 1/i,
         );
         expect(words, `${e.slug} does not issue a Round 2 certificate`).toMatch(
           /Round 2 Completion Certificate/,
