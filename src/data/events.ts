@@ -2603,7 +2603,6 @@ export const events: Event[] = [
           "A certificate needs successful registration, joining through the official link, a submitted attempt and passing the integrity checks. Registering alone does not qualify, and neither does opening the paper without submitting it.",
           "Each participant receives one certificate only. You are not sent a separate one for every round you clear — the one you are issued is upgraded to the furthest round you completed.",
           "Somebody who completes Round 2 and does not sit Round 3 keeps the Round 2 Completion Certificate. Withdrawing from the final round does not cancel what was already earned.",
-          "A Finalist or Winner Certificate needs the Round 3 participation fee to have been paid, alongside a valid attempt in that round.",
           "Certificates are distributed within 10 days of the results being announced, not from the day the final round ends.",
         ],
       },
