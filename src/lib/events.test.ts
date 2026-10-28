@@ -838,6 +838,9 @@ describe("events seam", () => {
       ).filter((n) => n.includes("\u20B9399"));
       expect(own.length, `${e.slug} does not carry the fee on the round that charges it`).toBe(1);
       expect(own[0], `${e.slug}'s Round 3 does not say who pays`).toMatch(/\u20B9399 per team/);
+      expect(own[0], `${e.slug}'s Round 3 does not give the seats and ranks`).toMatch(
+        /top 100 teams are mailed[^.]*50 slots only[^.]*top 50 teams[^.]*rank[^.]*1,000\+ teams[^.]*Finalist Certificate/,
+      );
       expect(
         words.split("\u20B9399").length,
         `${e.slug} prints the fee outside Round 3`,
