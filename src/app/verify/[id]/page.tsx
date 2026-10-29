@@ -3,7 +3,7 @@ import QRCode from "qrcode";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { Arrow } from "@/components/site/Arrow";
 import { Certificate } from "@/components/site/Certificate";
-import { certificatesWithin, findCertificate } from "@/lib/certificates";
+import { certificatesWithin, findCertificate, placement } from "@/lib/certificates";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -131,6 +131,13 @@ export default async function VerifyPage({ params }: Params) {
                     ]]
                   : []),
                 ["Awarded as", ROLE_COPY[cert.role] ?? cert.role],
+                /*
+                  The place, in the same spelling the sheet prints, so the two
+                  can be held side by side. Only the three announced winners
+                  are public; every other position here was told to its own
+                  team and to nobody else.
+                */
+                ...(placement(cert) ? [["Placed", placement(cert) as string]] : []),
                 ...(cert.teamName ? [["Team", cert.teamName]] : []),
                 ...(cert.teamRole
                   ? [["On the team as", cert.teamRole === "leader" ? "Team Leader" : "Team Member"]]

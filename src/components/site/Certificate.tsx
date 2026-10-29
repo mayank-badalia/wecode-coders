@@ -1,6 +1,7 @@
 import {
   fitContribution,
   listRoles,
+  placement,
   type Certificate as CertificateRecord,
 } from "@/lib/certificates";
 
@@ -112,6 +113,7 @@ export function Certificate({
   const award = cert.award;
   const heldOn = award?.heldOn ? heldOnLabel(award.heldOn, award.heldThrough) : null;
   const roles = (cert.roles ?? []).filter((r) => r.trim() !== "");
+  const place = placement(cert);
   const printedContribution = cert.contribution ? fitContribution(cert.contribution) : null;
 
   return (
@@ -201,7 +203,21 @@ export function Certificate({
                 </>
               ) : null}
               {heldOn ? <>held on {heldOn}, </> : null}
-              and is recognised as <strong>{ROLE_COPY[cert.role] ?? cert.role}</strong>.
+              and is recognised as <strong>{ROLE_COPY[cert.role] ?? cert.role}</strong>
+              {/*
+                The place, where the holder has one.
+
+                It closes the same sentence rather than standing as a line of
+                its own: "recognised as a finalist, placed 7th of 100" is one
+                statement, and a separate line under it reads as a score
+                attached to the document after the fact.
+              */}
+              {place ? (
+                <>
+                  , placed <strong>{place}</strong>
+                </>
+              ) : null}
+              .
             </p>
 
             {/*

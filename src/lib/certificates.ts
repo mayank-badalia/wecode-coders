@@ -35,6 +35,29 @@ export type Certificate = {
   */
   teamRole?: "leader" | "member";
   /*
+    Where the team finished among the placed teams, 1 being first.
+
+    Every finalist is placed, not only the three that are announced: the group
+    post carries the top three and nothing else, while each team's own position
+    reaches it privately and is printed here. That split is the whole point of
+    the field — a position this record carries is not a position the event
+    published.
+
+    It is optional because most certificates have none to carry: a round
+    completion and a participation certificate place nobody. Absent means
+    unplaced, and the sheet simply omits the clause.
+  */
+  position?: number;
+  /*
+    How many teams were placed, so the number above can be read.
+
+    "7th" alone invites the reader to guess the field size, and a reader who
+    guesses low makes the holder look worse than they did. Optional for the
+    same reason, and the sheet drops the "of N" half rather than the whole
+    clause when it is missing.
+  */
+  positionOf?: number;
+  /*
     The craft the holder was responsible for, as they declared it.
 
     Short and structured, which is what lets it sit on the sheet whole: the
@@ -135,6 +158,34 @@ export const isCertificateId = (value: string) =>
   CERTIFICATE_ID_PATTERN.test(value.trim().toUpperCase());
 
 /* ------------------------------------------------ printing a record */
+
+/*
+  1 -> "1st", 11 -> "11th", 23 -> "23rd".
+
+  Teens are the whole difference: 11, 12 and 13 take "th" although they end in
+  1, 2 and 3, and a hundred finalists reach every one of them.
+*/
+export function ordinal(n: number): string {
+  const tens = n % 100;
+  if (tens >= 11 && tens <= 13) return `${n}th`;
+  const unit = n % 10;
+  return `${n}${unit === 1 ? "st" : unit === 2 ? "nd" : unit === 3 ? "rd" : "th"}`;
+}
+
+/*
+  "7th of 100" — the half-sentence both the sheet and the verify page print.
+
+  One function because the two were going to drift: the sheet said "placed 7th"
+  and the page said "Position 7", and a holder comparing the document against
+  its own record should not have to work out that those are the same fact.
+*/
+export function placement(cert: Pick<Certificate, "position" | "positionOf">): string | null {
+  if (typeof cert.position !== "number" || !Number.isFinite(cert.position)) return null;
+  if (cert.position < 1) return null;
+  const of = cert.positionOf;
+  const sized = typeof of === "number" && Number.isFinite(of) && of >= cert.position;
+  return sized ? `${ordinal(cert.position)} of ${of}` : ordinal(cert.position);
+}
 
 /*
   How much of a contribution the sheet can hold.
