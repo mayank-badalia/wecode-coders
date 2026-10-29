@@ -192,16 +192,14 @@ const COMPACT_ROUNDS: RoundOffsets = [
 ];
 
 /**
- * COMPACT_ROUNDS with the final moved back: Round 3 opens at 00:00 on 1 Nov
- * and runs seventy-two hours, closing at 00:00 on 4 Nov (the dates touch
- * four, the clock covers three days). Codex 48 and CodeStar 30 only; Round 1 and Round 2 keep
- * their dates, and the gap between Round 2's result and Round 3 grows to
- * three clear days.
+ * COMPACT_ROUNDS with the final moved back: Round 3 opens at 23:59 on 31 Oct
+ * and runs seventy-two hours, closing at 23:59 on 3 Nov. Round 1 and Round 2
+ * keep their dates.
  */
 const COMPACT_LATE_FINAL: RoundOffsets = [
   [0, 1],
   [2, 4],
-  [8, 11],
+  [7, 10],
 ];
 
 /**
@@ -1896,7 +1894,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-24T10:00:00+05:30",
-    endsAt: "2026-11-04T00:00:00+05:30",
+    endsAt: "2026-11-03T23:59:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -1930,7 +1928,7 @@ export const events: Event[] = [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Sat 24 Oct — Sun 25 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
       { when: "Mon 26 Oct, 10:00 — Wed 28 Oct, 10:00", what: "Round 2. Forty-eight hours to turn the proposal into a product whose central workflow runs. The clock runs 10:00 to 10:00, so the three dates are two days." },
-      { when: "Sun 1 Nov, 00:00 — Wed 4 Nov, 00:00", what: "Round 3. Seventy-two hours to finish it — including the three improvements you named. The clock opens at 00:00 on 1 November and closes at 00:00 on 4 November, so the deadline is midnight at the end of Tuesday 3 November (IST)." },
+      { when: "Sat 31 Oct, 23:59 — Tue 3 Nov, 23:59", what: "Round 3. Seventy-two hours to finish it — including the three improvements you named. The clock opens at 23:59 on 31 October and closes at 23:59 on 3 November, IST." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -1980,7 +1978,7 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-24T10:00:00+05:30",
-    endsAt: "2026-11-04T00:00:00+05:30",
+    endsAt: "2026-11-03T23:59:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
@@ -2014,7 +2012,7 @@ export const events: Event[] = [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Sat 24 Oct — Sun 25 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
       { when: "Mon 26 Oct, 10:00 — Wed 28 Oct, 10:00", what: "Round 2. Forty-eight hours to turn the proposal into a product whose central workflow runs. The clock runs 10:00 to 10:00, so the three dates are two days." },
-      { when: "Sun 1 Nov, 00:00 — Wed 4 Nov, 00:00", what: "Round 3. Seventy-two hours to finish it — including the three improvements you named. The clock opens at 00:00 on 1 November and closes at 00:00 on 4 November, so the deadline is midnight at the end of Tuesday 3 November (IST)." },
+      { when: "Sat 31 Oct, 23:59 — Tue 3 Nov, 23:59", what: "Round 3. Seventy-two hours to finish it — including the three improvements you named. The clock opens at 23:59 on 31 October and closes at 23:59 on 3 November, IST." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],

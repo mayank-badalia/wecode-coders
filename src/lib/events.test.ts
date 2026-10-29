@@ -1498,13 +1498,13 @@ describe("prize pool rule", () => {
 
 describe("Codex 48 and CodeStar 30 final round", () => {
   for (const slug of ["codex-48", "codestar-30"]) {
-    it(`${slug}: Round 3 runs 1 to 4 Nov, and the page says Round 3 is paid up front`, () => {
+    it(`${slug}: Round 3 runs 31 Oct 23:59 to 3 Nov 23:59, and the page says Round 3 is paid up front`, () => {
       const e = rawEvents.find((x) => x.slug === slug)!;
-      expect(e.endsAt).toBe("2026-11-04T00:00:00+05:30");
+      expect(e.endsAt).toBe("2026-11-03T23:59:00+05:30");
       const rounds = e.sections?.find((sec) => sec.kind === "columns" && sec.variant === "tabs");
       const r3 = rounds?.kind === "columns" ? rounds.items[2] : undefined;
-      expect(r3?.meta).toBe("1 Nov \u2014 4 Nov");
-      expect(e.schedule?.find((r) => /^Round 3/.test(r.what))?.when).toBe("Sun 1 Nov, 00:00 \u2014 Wed 4 Nov, 00:00");
+      expect(r3?.meta).toBe("31 Oct \u2014 3 Nov");
+      expect(e.schedule?.find((r) => /^Round 3/.test(r.what))?.when).toBe("Sat 31 Oct, 23:59 \u2014 Tue 3 Nov, 23:59");
       expect(e.summary).toMatch(/ Round 3 is \u20B9399 for 50 seats, as we have limited seats\.$/);
       expect(e.stats?.find((st) => st.label === "Registration \u00B7 Rounds 1 and 2")?.value).toBe("Free");
     });
