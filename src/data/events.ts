@@ -192,6 +192,18 @@ const COMPACT_ROUNDS: RoundOffsets = [
 ];
 
 /**
+ * COMPACT_ROUNDS with the final moved back: Round 3 opens on 1 Nov and
+ * closes on 4 Nov. Codex 48 and CodeStar 30 only; Round 1 and Round 2 keep
+ * their dates, and the gap between Round 2's result and Round 3 grows to
+ * three clear days.
+ */
+const COMPACT_LATE_FINAL: RoundOffsets = [
+  [0, 1],
+  [2, 4],
+  [8, 11],
+];
+
+/**
  * Both build rounds run a full seventy-two hours.
  *
  * Round 1 opens with the event and closes at 18:00 the next day; its result
@@ -1883,12 +1895,13 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-24T10:00:00+05:30",
-    endsAt: "2026-11-02T10:00:00+05:30",
+    endsAt: "2026-11-04T23:59:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
       "Three rounds to turn an original idea into a finished, working product. National and online, with paid internship and incubation opportunities for the top three teams.",
     description: [
+      `Registration, Round 1 and Round 2 are free. Round 3 is ${ROUND_3_FEE} per team, because we have only 50 seats for it.`,
       "Codex 48 is a national-level AI and full-stack online hackathon, run across three rounds — one original idea carried from a plan to a product that runs.",
       "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and submissions are checked.",
     ],
@@ -1917,7 +1930,7 @@ export const events: Event[] = [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Sat 24 Oct — Sun 25 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
       { when: "Mon 26 Oct, 10:00 — Wed 28 Oct, 10:00", what: "Round 2. Forty-eight hours to turn the proposal into a product whose central workflow runs. The clock runs 10:00 to 10:00, so the three dates are two days." },
-      { when: "Sat 31 Oct — Mon 2 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
+      { when: "Sun 1 Nov, 00:00 — Wed 4 Nov, 23:59", what: "Round 3. Finish it — including the three improvements you named. The clock opens at 00:00 on 1 November and submissions close at 23:59 on 4 November, IST." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -1934,14 +1947,14 @@ export const events: Event[] = [
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, {
+    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_LATE_FINAL, {
       submission: "individual",
       round2Length: "Forty-eight hours",
     }),
     faq: seriesFaq({ submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
-      { label: "Registration", value: "Free" },
+      { label: "Registration", value: "Free for Rounds 1\u20132" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1967,12 +1980,13 @@ export const events: Event[] = [
     format: "hackathon",
     status: "upcoming",
     startsAt: "2026-10-24T10:00:00+05:30",
-    endsAt: "2026-11-02T10:00:00+05:30",
+    endsAt: "2026-11-04T23:59:00+05:30",
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
       "Three rounds for students and young builders to develop and present a functional technology product. National and online, with paid internship and incubation opportunities for the top three teams.",
     description: [
+      `Registration, Round 1 and Round 2 are free. Round 3 is ${ROUND_3_FEE} per team, because we have only 50 seats for it.`,
       "CodeStar 30 is a national-level AI and full-stack online hackathon, run across three rounds.",
       "The format rewards scope discipline. Inside the problem statement you are given, build the single journey that proves your idea works rather than the five that show what it could become.",
     ],
@@ -2001,7 +2015,7 @@ export const events: Event[] = [
       { when: "Before it starts", what: "Registration open. Form a team of one to four and join the official channel." },
       { when: "Sat 24 Oct — Sun 25 Oct", what: "Round 1. The official PDF format goes out; two days to submit the idea and the plan." },
       { when: "Mon 26 Oct, 10:00 — Wed 28 Oct, 10:00", what: "Round 2. Forty-eight hours to turn the proposal into a product whose central workflow runs. The clock runs 10:00 to 10:00, so the three dates are two days." },
-      { when: "Sat 31 Oct — Mon 2 Nov", what: "Round 3. Three days to finish it — including the three improvements you named." },
+      { when: "Sun 1 Nov, 00:00 — Wed 4 Nov, 23:59", what: "Round 3. Finish it — including the three improvements you named. The clock opens at 00:00 on 1 November and submissions close at 23:59 on 4 November, IST." },
       { when: "Between rounds", what: "Every team is emailed its Round 1 and Round 2 result, selected or not. Teams that go through receive the instructions for the next stage with it." },
       { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
     ],
@@ -2018,14 +2032,14 @@ export const events: Event[] = [
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
-    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_ROUNDS, {
+    sections: seriesSections("2026-10-24T10:00:00+05:30", COMPACT_LATE_FINAL, {
       submission: "individual",
       round2Length: "Forty-eight hours",
     }),
     faq: seriesFaq({ submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
-      { label: "Registration", value: "Free" },
+      { label: "Registration", value: "Free for Rounds 1\u20132" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
