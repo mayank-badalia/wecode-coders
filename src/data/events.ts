@@ -1900,9 +1900,8 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds to turn an original idea into a finished, working product. National and online, with paid internship and incubation opportunities for the top three teams.",
+      `Three rounds to turn an original idea into a finished, working product. National and online, with paid internship and incubation opportunities for the top three teams. Round 3 is ${ROUND_3_FEE} for 50 seats, as we have limited seats.`,
     description: [
-      `Registration, Round 1 and Round 2 are free. Round 3 is ${ROUND_3_FEE} per team, because we have only 50 seats for it.`,
       "Codex 48 is a national-level AI and full-stack online hackathon, run across three rounds — one original idea carried from a plan to a product that runs.",
       "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and submissions are checked.",
     ],
@@ -1955,7 +1954,7 @@ export const events: Event[] = [
     faq: seriesFaq({ submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
-      { label: "Registration", value: "Free for Rounds 1\u20132" },
+      { label: "Registration \u00B7 Rounds 1 and 2", value: "Free" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],
@@ -1985,9 +1984,8 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "Three rounds for students and young builders to develop and present a functional technology product. National and online, with paid internship and incubation opportunities for the top three teams.",
+      `Three rounds for students and young builders to develop and present a functional technology product. National and online, with paid internship and incubation opportunities for the top three teams. Round 3 is ${ROUND_3_FEE} for 50 seats, as we have limited seats.`,
     description: [
-      `Registration, Round 1 and Round 2 are free. Round 3 is ${ROUND_3_FEE} per team, because we have only 50 seats for it.`,
       "CodeStar 30 is a national-level AI and full-stack online hackathon, run across three rounds.",
       "The format rewards scope discipline. Inside the problem statement you are given, build the single journey that proves your idea works rather than the five that show what it could become.",
     ],
@@ -2040,7 +2038,7 @@ export const events: Event[] = [
     faq: seriesFaq({ submission: "individual" }),
     stats: [
       { label: "Rounds", value: "3" },
-      { label: "Registration", value: "Free for Rounds 1\u20132" },
+      { label: "Registration \u00B7 Rounds 1 and 2", value: "Free" },
       { label: "Reward recipients", value: "100+" },
       { label: "Per team", value: "1–4" },
     ],

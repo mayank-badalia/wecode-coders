@@ -819,8 +819,11 @@ describe("events seam", () => {
 
       expect((e.faq ?? []).find((f) => /cost|fee/i.test(f.q)), `${e.slug} still has a cost question`).toBeUndefined();
 
+      // Codex 48 and CodeStar 30 state the fee and the seat limit on their
+      // summary line at the organiser's request; no other event does.
+      const summaryStatesFee = ["codex-48", "codestar-30"].includes(e.slug);
       const words = [
-        e.summary,
+        summaryStatesFee ? e.summary.replace(/ Round 3 is \u20B9399 for 50 seats, as we have limited seats\./, "") : e.summary,
         ...(e.faq ?? []).flatMap((f) => `${f.q} ${f.a}`),
         e.registration?.note ?? "",
         ...(e.sections ?? []).flatMap((sec) =>
@@ -1502,8 +1505,8 @@ describe("Codex 48 and CodeStar 30 final round", () => {
       const r3 = rounds?.kind === "columns" ? rounds.items[2] : undefined;
       expect(r3?.meta).toBe("1 Nov \u2014 4 Nov");
       expect(e.schedule?.find((r) => /^Round 3/.test(r.what))?.when).toBe("Sun 1 Nov, 00:00 \u2014 Wed 4 Nov, 00:00");
-      expect(e.description[0]).toMatch(/Round 1 and Round 2 are free\. Round 3 is \u20B9399 per team.*only 50 seats/);
-      expect(e.stats?.find((st) => st.label === "Registration")?.value).toBe("Free for Rounds 1\u20132");
+      expect(e.summary).toMatch(/ Round 3 is \u20B9399 for 50 seats, as we have limited seats\.$/);
+      expect(e.stats?.find((st) => st.label === "Registration \u00B7 Rounds 1 and 2")?.value).toBe("Free");
     });
   }
 });
