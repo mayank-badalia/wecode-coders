@@ -1472,4 +1472,23 @@ describe("events seam", () => {
     // The real slug is the giveaway a title-derived placeholder would carry.
     expect(payload).not.toContain(secret.slug);
   });
+
+
+describe("prize pool rule", () => {
+  it("closes the Rules of every event with a rupee prize pool, and only those", () => {
+    const pooled = rawEvents.filter((e) => e.stats?.some((t) => t.label === "Prize pool"));
+    expect(pooled.length).toBe(7);
+    for (const e of rawEvents) {
+      const rules = e.sections?.find((sec) => sec.kind === "list" && sec.label === "Rules");
+      const last = rules?.kind === "list" ? rules.items[rules.items.length - 1] : "";
+      if (pooled.includes(e)) {
+        expect(last, `${e.slug} does not end with the prize pool rule`).toMatch(
+          /^About the prize pool:.*cash.*AI credits.*both.*just one of them/,
+        );
+      } else {
+        expect(last, `${e.slug} should not carry it`).not.toMatch(/^About the prize pool/);
+      }
+    }
+  });
+});
 });

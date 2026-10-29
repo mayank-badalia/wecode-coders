@@ -459,6 +459,15 @@ function seriesJudging() {
  * round asks for one. The parameter stays for a single-window event that
  * ships only a deployed product.
  */
+/**
+ * The closing rule on events that state a prize pool in rupees. The pool is
+ * not always cash: it is a value shared among the winners, and each prize can
+ * be cash, AI credits, both, or one of them. Said plainly so nobody reads
+ * "₹30,000" as a promise of ₹30,000 in the bank.
+ */
+const PRIZE_POOL_RULE =
+  "About the prize pool: it is the total value of the prizes shared among the winners. A prize may be given as cash, as AI credits, as both together, or as just one of them. We will tell the winners exactly how theirs is made up, and we thank you for your understanding.";
+
 const seriesRules = (
   winnerLink = "the GitHub repository or the project URL of what each of them built, whichever the team is comfortable sharing",
   terms: SeriesTerms = {},
@@ -500,6 +509,7 @@ const seriesRules = (
     `Results go up in the official group: the three winning team names, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
     "Every finalist is placed, and every finalist is told its own position — privately, and printed on its certificate. You learn where your team finished at the certificate distribution. What goes up in the official group is the top three only: those three team names, their ranks, and a link to what each of them built. No full ranking list is published, and no team’s position is given to anyone but that team.",
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
+    ...(terms.prizePool ? [PRIZE_POOL_RULE] : []),
   ],
 });
 
@@ -563,6 +573,11 @@ const ROLE_SET =
 type SeriesTerms = {
   /** Which certificates the event issues. Defaults to "rounds". */
   certificates?: CertificateScheme;
+  /**
+   * The event states a ₹ prize pool that may be cash, AI credits or both, so
+   * its rules close by saying so. Not set for Forge 48, whose prize is cash.
+   */
+  prizePool?: boolean;
   /*
     How long Round 2 is, in the words its own blurb opens with.
 
@@ -864,6 +879,7 @@ const sprintBuild = (w: SprintWindow): EventSection => ({
 const sprintRules = (
   w: SprintWindow,
   winnerLink = "the GitHub repository of what each of them built",
+  prizePool = false,
 ): EventSection => ({
   kind: "list",
   label: "Rules",
@@ -894,6 +910,7 @@ const sprintRules = (
     `Results go up in the official group: the three winning team names, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
     "Only the top three are placed. The three winning teams are named with a link to what each of them built, and their certificates print the rank; no other team is given a position, no ranking list is published, and no certificate below winner carries a placing.",
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
+    ...(prizePool ? [PRIZE_POOL_RULE] : []),
   ],
 });
 
@@ -930,9 +947,10 @@ const sprintSections = (
   w: SprintWindow,
   winnerLink?: string,
   organiser: Organiser = WCC,
+  prizePool = false,
 ): EventSection[] => [
   sprintBuild(w),
-  sprintRules(w, winnerLink),
+  sprintRules(w, winnerLink, prizePool),
   sprintCertificates(w, organiser),
 ];
 
@@ -2251,6 +2269,7 @@ export const events: Event[] = [
     ],
     sections: seriesSections("2026-11-02T10:00:00+05:30", LONG_BUILD_ROUNDS, {
       certificates: "from-round-2",
+      prizePool: true,
       submission: "individual",
     }),
     faq: seriesFaq({ certificates: "from-round-2", submission: "individual" }),
@@ -2339,6 +2358,7 @@ export const events: Event[] = [
     ],
     sections: seriesSections("2026-11-06T10:00:00+05:30", LONG_BUILD_ROUNDS, {
       certificates: "from-round-2",
+      prizePool: true,
       submission: "individual",
     }),
     faq: seriesFaq({ certificates: "from-round-2", submission: "individual" }),
@@ -2430,7 +2450,7 @@ export const events: Event[] = [
       "A certificate for every participant who files their own submission inside the 48 hours",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
-    sections: sprintSections(H48),
+    sections: sprintSections(H48, undefined, WCC, true),
     faq: sprintFaq(H48),
     stats: [
       { label: "Prize pool", value: "₹30,000" },
@@ -2595,6 +2615,7 @@ export const events: Event[] = [
           "Results go up in the official group: the three winning names. No participant's personal details are shared or passed on unless we have their consent.",
           "Only the top three are placed. The group announcement names those three, and their certificates print the rank. No other participant is given a leaderboard position, by email or on a certificate.",
           "Scores, answer sheets, internal notes and comparative breakdowns are not shared, and there is no re-evaluation and no second attempt.",
+          PRIZE_POOL_RULE,
         ],
       },
       {
@@ -2729,6 +2750,7 @@ export const events: Event[] = [
     ],
     sections: seriesSections("2026-11-07T10:00:00+05:30", LONG_BUILD_ROUNDS, {
       certificates: "from-round-2",
+      prizePool: true,
       submission: "individual",
       organiser: HWP,
     }),
@@ -2810,6 +2832,7 @@ export const events: Event[] = [
     ],
     sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
       certificates: "from-round-2",
+      prizePool: true,
       submission: "individual",
       organiser: HWP,
     }),
@@ -2891,6 +2914,7 @@ export const events: Event[] = [
     ],
     sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
       certificates: "from-round-2",
+      prizePool: true,
       submission: "individual",
       organiser: HWP,
     }),
