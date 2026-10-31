@@ -222,6 +222,9 @@ const LONG_BUILD_ROUNDS: RoundOffsets = [
   [8, 11],
 ];
 
+/** WCC Forge 48: 100 teams into Round 2, 10 into the final, and no fee. */
+const FORGE_FUNNEL = { round2: 100, final: 10 };
+
 function seriesRounds(
   startsAt: string,
   offsets: RoundOffsets = DEFAULT_ROUNDS,
@@ -232,6 +235,8 @@ function seriesRounds(
   // event's own table.
   const forRound = (n: number) =>
     seriesJudging().filter((j) => j.round.startsWith(`Round ${n}`)).map(({ name, detail, weight }) => ({ name, detail, weight }));
+
+  const { round2, final } = terms.funnel ?? { round2: 300, final: 100 };
 
   /* Who submits, said in the intro where nobody can miss it. */
   const whoSubmits =
@@ -259,7 +264,7 @@ function seriesRounds(
       meta: span(startsAt, offsets[0]![0], offsets[0]![1]),
       name: "Round 1 — The plan",
       blurb:
-        "Two days to make the case for what you are going to build. One PDF, on the format we provide: the problem, who has it, how you intend to solve it, what you will build and in what order. This round is the thinking — you are judged on how clear, original, feasible and promising the plan is, and the code comes in the rounds that follow. More than 1,000 teams are in this round and every one of them competes; 300 go through to Round 2.",
+        `Two days to make the case for what you are going to build. One PDF, on the format we provide: the problem, who has it, how you intend to solve it, what you will build and in what order. This round is the thinking — you are judged on how clear, original, feasible and promising the plan is, and the code comes in the rounds that follow. More than 1,000 teams are in this round and every one of them competes; ${round2} go through to Round 2.`,
       points: [
         "Your reading of the problem statement you were given",
         "Who the users are",
@@ -281,7 +286,7 @@ function seriesRounds(
       meta: span(startsAt, offsets[1]![0], offsets[1]![1]),
       name: "Round 2 — The build",
       blurb:
-        `${terms.round2Length ?? "Three days"} to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not. 300 teams reach this round, and 100 of them go through to the final.`,
+        `${terms.round2Length ?? "Three days"} to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not. ${round2} teams reach this round, and ${final} of them go through to the final.`,
       points: [
         "A link to the functioning project",
         "The source-code repository",
@@ -303,7 +308,7 @@ function seriesRounds(
       meta: span(startsAt, offsets[2]![0], offsets[2]![1]),
       name: "Round 3 — The finish",
       blurb:
-        "Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product. 100 teams reach the final round, and three of them win.",
+        `Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product. ${final} teams reach the final round, and three of them win.`,
       points: [
         "The final working project link",
         "The final source-code repository",
@@ -316,8 +321,12 @@ function seriesRounds(
         ...ownRole,
       ],
       judging: forRound(3),
-      note:
-        `Teams selected for Round 3 pay a participation fee of ${ROUND_3_FEE} per team \u2014 one payment for the whole team, not one each. 100 teams are selected and qualified, and all of them are mailed, but seats are limited and we have only 50. Whoever pays first gets their seat reserved. The top 50 teams receive their specific rank on their certificate, written out of 1,000+ teams, and every finalist also receives a Finalist Certificate. The fee covers the cost of running the event: infrastructure, the time and effort of organising it, and paying the people who do that work. Registering and Rounds 1 and 2 are free, and this is the only payment anywhere in this event. It falls due only once your team is selected for Round 3, so a team that is not selected pays nothing at all. Paying it means accepting the event participation terms, which are linked under this block and are the same for every event.`,
+      ...(terms.free
+        ? {}
+        : {
+            note:
+              `Teams selected for Round 3 pay a participation fee of ${ROUND_3_FEE} per team \u2014 one payment for the whole team, not one each. 100 teams are selected and qualified, and all of them are mailed, but seats are limited and we have only 50. Whoever pays first gets their seat reserved. The top 50 teams receive their specific rank on their certificate, written out of 1,000+ teams, and every finalist also receives a Finalist Certificate. The fee covers the cost of running the event: infrastructure, the time and effort of organising it, and paying the people who do that work. Registering and Rounds 1 and 2 are free, and this is the only payment anywhere in this event. It falls due only once your team is selected for Round 3, so a team that is not selected pays nothing at all. Paying it means accepting the event participation terms, which are linked under this block and are the same for every event.`,
+          }),
     },
   ],
   };
@@ -515,8 +524,8 @@ const seriesRules = (
     "Plagiarised, copied or misleading submissions are disqualified.",
     "Respect software licences, intellectual property and user privacy.",
     "Projects must not promote illegal, harmful or discriminatory activity.",
-    "More than 1,000 teams start in Round 1 and all of them compete. Round 2 is limited to 300 teams, Round 3 to 100, and three teams win. Qualification is competitive: clearing a round's requirements does not by itself carry a team into the next one.",
-    ROLL_OUT_RULE,
+    `More than 1,000 teams start in Round 1 and all of them compete. Round 2 is limited to ${terms.funnel?.round2 ?? 300} teams, Round 3 to ${terms.funnel?.final ?? 100}, and three teams win. Qualification is competitive: clearing a round's requirements does not by itself carry a team into the next one.`,
+    ...(terms.free ? [] : [ROLL_OUT_RULE]),
     "Everything on each round's submission list has to arrive before that round's deadline.",
     ...(terms.submission === "individual"
       ? [
@@ -606,6 +615,13 @@ type SeriesTerms = {
    * its rules close by saying so. Not set for Forge 48, whose prize is cash.
    */
   prizePool?: boolean;
+  /**
+   * How many teams go through. Defaults to 300 into Round 2 and 100 into the
+   * final; WCC Forge 48 is 100 and 10.
+   */
+  funnel?: { round2: number; final: number };
+  /** No Round 3 fee and so no seat race. WCC Forge 48 only. */
+  free?: boolean;
   /*
     How long Round 2 is, in the words its own blurb opens with.
 
@@ -711,7 +727,7 @@ function seriesFaq(terms: SeriesTerms = {}) {
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
     { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
     { q: "What happens between rounds?", a: "Every team that submitted is emailed its result, selected or not — you do not have to guess, and you do not have to wait for a group post. The teams that go through get the instructions for the next stage in the same email." },
-    { q: "How many teams get through?", a: "More than 1,000 teams start in Round 1 and every one of them competes. 300 go through to Round 2, 100 to the final round, and three teams win. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive." },
+    { q: "How many teams get through?", a: `More than 1,000 teams start in Round 1 and every one of them competes. ${terms.funnel?.round2 ?? 300} go through to Round 2, ${terms.funnel?.final ?? 100} to the final round, and three teams win. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive.` },
     terms.submission === "individual"
       ? { q: "Who submits for the team?", a: `Everybody, separately. Each member files their own entry for the same project every round, names the role they held — ${ROLE_SET} — and says what they built. Nobody submits on anyone else's behalf, and a member who files no entry is not recorded as having taken part and is not issued a certificate.` }
       : { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
@@ -1609,9 +1625,11 @@ export const events: Event[] = [
     sections: seriesSections("2026-10-30T10:00:00+05:30", LONG_BUILD_ROUNDS, {
       certificates: "from-round-2",
       submission: "individual",
+      funnel: FORGE_FUNNEL,
+      free: true,
     }),
     faq: [
-      ...seriesFaq({ certificates: "from-round-2", submission: "individual" }),
+      ...seriesFaq({ certificates: "from-round-2", submission: "individual", funnel: FORGE_FUNNEL, free: true }),
       { q: "Does every team member have to register?", a: "Yes, individually — and everyone must use the same team name so the entries can be matched up." },
       { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
       { q: "Are the PPO opportunities guaranteed?", a: "No. They are subject to the recruiting partner's own eligibility requirements and selection process." },

@@ -5,7 +5,7 @@ import { Arrow } from "@/components/site/Arrow";
 export const metadata: Metadata = {
   title: "Event participation — terms — We Code Coders",
   description:
-    "The notice, rules and terms that apply to every We Code Coders event. A three-round hackathon charges ₹399 per team and the three-round quiz ₹299 per participant, once, and only at Round 3; a single-round event is free from start to finish. Eligibility, payment, submissions, rankings, certificates, rewards and conduct.",
+    "The notice, rules and terms that apply to every We Code Coders event. A three-round hackathon charges ₹399 per team and the three-round quiz ₹299 per participant, once, and only at Round 3; WCC Forge 48 and every single-round event are free from start to finish. Eligibility, payment, submissions, rankings, certificates, rewards and conduct.",
 };
 
 /*
@@ -68,7 +68,7 @@ const INTRO: Block[] = [
   },
   {
     kind: "p",
-    text: "What an event costs follows its shape. A three-round hackathon charges a participation fee of ₹399 per team — one payment for the whole team, not one each — and it falls due only if the team is selected for Round 3. Registering and Rounds 1 and 2 are free, and a team that is not selected for Round 3 pays nothing. The quiz runs three rounds of its own and is sat individually, so its fee is ₹299 per participant on the same terms: free to register, free for Rounds 1 and 2, and payable once only by the people selected for its final round. A single-round event, meaning one window and one submission, is free from start to finish: nothing to enter, nothing to be judged, nothing to be certified.",
+    text: "What an event costs follows its shape. A three-round hackathon charges a participation fee of ₹399 per team — one payment for the whole team, not one each — and it falls due only if the team is selected for Round 3. Registering and Rounds 1 and 2 are free, and a team that is not selected for Round 3 pays nothing. The quiz runs three rounds of its own and is sat individually, so its fee is ₹299 per participant on the same terms: free to register, free for Rounds 1 and 2, and payable once only by the people selected for its final round. WCC Forge 48 is the one three-round hackathon that charges nothing: it is free from start to finish. A single-round event, meaning one window and one submission, is also free from start to finish: nothing to enter, nothing to be judged, nothing to be certified.",
   },
   {
     kind: "p",
@@ -88,7 +88,7 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
-          "Only a three-round event here charges anything. A three-round hackathon takes a participation fee of ₹399 per team, due once and only from a team selected for Round 3, and the three-round quiz takes ₹299 per participant on the same terms; registering and Rounds 1 and 2 are free in both. A single-round event charges nothing at any stage, for entry, judging or a certificate. This section and section 02 apply only to the paid rounds of the first two, and only from selection for Round 3 onwards.",
+          "Only a three-round event here charges anything. A three-round hackathon takes a participation fee of ₹399 per team, due once and only from a team selected for Round 3, and the three-round quiz takes ₹299 per participant on the same terms; registering and Rounds 1 and 2 are free in both. WCC Forge 48 charges nothing either. A single-round event charges nothing at any stage, for entry, judging or a certificate. This section and section 02 apply only to the paid rounds of the first two, and only from selection for Round 3 onwards.",
           "Only teams declared eligible or shortlisted for the applicable paid event or round may participate.",
           "Round 3 seats are limited. For a three-round hackathon, a team selected for Round 3 that has not confirmed and paid within 12 hours of being mailed loses its seat, and a roll-out mail then goes to the teams ranked 51st to 100th, so that they also get an equal chance. Seats are held in the order payments are received.",
           "Unless stated otherwise, only the team leader must make one payment on behalf of the entire team.",
@@ -417,8 +417,8 @@ export default function TermsPage() {
         <p style={{ ...TYPE.lead, margin: "1.4rem 0 0", maxWidth: "52ch" }}>
           Participation notice, rules and terms. The same for every We Code Coders event:
           three rounds means a fee at Round 3 — ₹399 per team, or ₹299 per participant on
-          the quiz — a single round means no fee at all, and the fee sections apply only to
-          the first.
+          the quiz — except WCC Forge 48, which is free. A single round means no fee at
+          all, and the fee sections apply only to the paid rounds.
         </p>
 
         <div

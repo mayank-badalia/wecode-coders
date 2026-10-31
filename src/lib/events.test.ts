@@ -801,6 +801,8 @@ describe("events seam", () => {
     expect(threeRound.length).toBe(11);
 
     for (const e of threeRound) {
+      // WCC Forge 48 charges nothing, so it carries no fee note; its own test is below.
+      if (e.slug === "wcc-forge-48") continue;
       expect(
         e.stats?.find((st) => st.label.startsWith("Round 3 fee")),
         `${e.slug} still prices the fee in the stats strip`,
@@ -1507,7 +1509,7 @@ describe("closing rules", () => {
 
   it("rolls an unpaid Round 3 seat out to ranks 51 to 100 after 12 hours, on the three-round hackathons", () => {
     const three = rawEvents.filter((e) => rulesOf(e).some((r) => /Round 2 is limited to 300 teams/.test(r)));
-    expect(three.length).toBe(11); // the twelfth three-round event is the quiz, which has no team seats
+    expect(three.length).toBe(10); // Forge 48 is free and has no seat race; the quiz has no team seats
     for (const e of three) {
       expect(
         rulesOf(e).filter((r) => /within 12 hours.*roll-out mail.*51st to 100th.*equal chance/.test(r)).length,
@@ -1539,6 +1541,26 @@ describe("registration", () => {
       expect(e.registration, `${e.slug} still has a registration block`).toBeUndefined();
       expect(JSON.stringify(e), `${e.slug} links to Unstop`).not.toMatch(/unstop\.com/);
     }
+  });
+});
+
+describe("WCC Forge 48 funnel and fee", () => {
+  const forge = () => rawEvents.find((x) => x.slug === "wcc-forge-48")!;
+  const all = () => JSON.stringify(forge());
+
+  it("charges nothing anywhere on the page", () => {
+    expect(all()).not.toContain("\u20B9399");
+    expect(all()).not.toMatch(/participation fee|roll-out mail|Whoever pays first/);
+    const rounds = forge().sections?.find((sec) => sec.kind === "columns" && sec.variant === "tabs");
+    expect(rounds?.kind === "columns" ? rounds.items[2]?.note : "x").toBeUndefined();
+  });
+
+  it("takes 100 teams into Round 2 and 10 into the final", () => {
+    expect(all()).toMatch(/100 go through to Round 2/);
+    expect(all()).toMatch(/10 teams reach the final round/);
+    expect(all()).toMatch(/Round 2 is limited to 100 teams, Round 3 to 10, and three teams win/);
+    expect(all()).toMatch(/100 go through to Round 2, 10 to the final round/);
+    expect(all()).not.toMatch(/300|top 50|only 50/);
   });
 });
 });
