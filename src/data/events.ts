@@ -485,7 +485,7 @@ const PRIZE_POOL_RULE =
  * they are, and what is made public is the top three.
  */
 const TRANSPARENCY_RULE =
-  "We understand the wish for transparency, but that does not mean we share every detail of every round. We have automated the sending of mails and we follow that system as it is, as already stated on this event page. For transparency, we announce the top 3 in the official group itself, and that is the most important part.";
+  "We understand the wish for transparency, but that does not mean we share every detail of every round. We have automated the sending of mails and we follow that system as it is, as already stated on this event page. For transparency, we announce the top 3 in the official group itself, and that is the most important part. This is how much transparency we will deliver, and not more than that, because we have more events to manage. What we have promised, we will always deliver.";
 
 /**
  * Round 3 seats are first-come, so a seat nobody confirms has to move. The

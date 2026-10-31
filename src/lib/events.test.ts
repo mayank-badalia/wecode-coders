@@ -1500,7 +1500,7 @@ describe("closing rules", () => {
     for (const e of withRules) {
       const items = rulesOf(e);
       expect(items[items.length - 1], `${e.slug} does not end with the transparency rule`).toMatch(
-        /^We understand the wish for transparency.*automated.*as already stated on this event page.*announce the top 3.*official group/,
+        /^We understand the wish for transparency.*automated.*as already stated on this event page.*announce the top 3.*official group.*not more than that.*more events to manage.*what we have promised, we will always deliver/i,
       );
     }
   });
