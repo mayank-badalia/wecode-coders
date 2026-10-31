@@ -479,6 +479,21 @@ function seriesJudging() {
 const PRIZE_POOL_RULE =
   "About the prize pool: it is the total value of the prizes shared among the winners. A prize may be given as cash, as AI credits, as both together, or as just one of them. We will tell the winners exactly how theirs is made up, and we thank you for your understanding.";
 
+/**
+ * The closing rule on every event. Said politely, because it is the answer to
+ * "why can I not see my score": the mails are automated and are followed as
+ * they are, and what is made public is the top three.
+ */
+const TRANSPARENCY_RULE =
+  "We understand the wish for transparency, but that does not mean we share every detail of every round. We have automated the sending of mails and we follow that system as it is, as already stated on this event page. For transparency, we announce the top 3 in the official group itself, and that is the most important part.";
+
+/**
+ * Round 3 seats are first-come, so a seat nobody confirms has to move. The
+ * 51st to 100th teams are the ones already qualified and mailed as the pool.
+ */
+const ROLL_OUT_RULE =
+  "A team selected for the final round that has not confirmed and paid within 12 hours of being mailed loses its seat. A roll-out mail then goes to the teams ranked 51st to 100th, so that they also get an equal chance at the seats still open.";
+
 const seriesRules = (
   winnerLink = "the GitHub repository or the project URL of what each of them built, whichever the team is comfortable sharing",
   terms: SeriesTerms = {},
@@ -501,6 +516,7 @@ const seriesRules = (
     "Respect software licences, intellectual property and user privacy.",
     "Projects must not promote illegal, harmful or discriminatory activity.",
     "More than 1,000 teams start in Round 1 and all of them compete. Round 2 is limited to 300 teams, Round 3 to 100, and three teams win. Qualification is competitive: clearing a round's requirements does not by itself carry a team into the next one.",
+    ROLL_OUT_RULE,
     "Everything on each round's submission list has to arrive before that round's deadline.",
     ...(terms.submission === "individual"
       ? [
@@ -521,6 +537,7 @@ const seriesRules = (
     "Every finalist is placed, and every finalist is told its own position — privately, and printed on its certificate. You learn where your team finished at the certificate distribution. What goes up in the official group is the top three only: those three team names, their ranks, and a link to what each of them built. No full ranking list is published, and no team’s position is given to anyone but that team.",
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
     ...(terms.prizePool ? [PRIZE_POOL_RULE] : []),
+    TRANSPARENCY_RULE,
   ],
 });
 
@@ -922,6 +939,7 @@ const sprintRules = (
     "Only the top three are placed. The three winning teams are named with a link to what each of them built, and their certificates print the rank; no other team is given a position, no ranking list is published, and no certificate below winner carries a placing.",
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
     ...(prizePool ? [PRIZE_POOL_RULE] : []),
+    TRANSPARENCY_RULE,
   ],
 });
 
@@ -2627,6 +2645,7 @@ export const events: Event[] = [
           "Only the top three are placed. The group announcement names those three, and their certificates print the rank. No other participant is given a leaderboard position, by email or on a certificate.",
           "Scores, answer sheets, internal notes and comparative breakdowns are not shared, and there is no re-evaluation and no second attempt.",
           PRIZE_POOL_RULE,
+          TRANSPARENCY_RULE.replace("top 3 in", "top 3 names in"),
         ],
       },
       {

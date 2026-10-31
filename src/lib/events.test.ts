@@ -1477,20 +1477,46 @@ describe("events seam", () => {
   });
 
 
-describe("prize pool rule", () => {
-  it("closes the Rules of every event with a rupee prize pool, and only those", () => {
+describe("closing rules", () => {
+  const rulesOf = (e: (typeof rawEvents)[number]) => {
+    const rules = e.sections?.find((sec) => sec.kind === "list" && sec.label === "Rules");
+    return rules?.kind === "list" ? rules.items : [];
+  };
+
+  it("puts the prize pool rule just before the last rule on every rupee-prize-pool event, and nowhere else", () => {
     const pooled = rawEvents.filter((e) => e.stats?.some((t) => t.label === "Prize pool"));
     expect(pooled.length).toBe(7);
     for (const e of rawEvents) {
-      const rules = e.sections?.find((sec) => sec.kind === "list" && sec.label === "Rules");
-      const last = rules?.kind === "list" ? rules.items[rules.items.length - 1] : "";
-      if (pooled.includes(e)) {
-        expect(last, `${e.slug} does not end with the prize pool rule`).toMatch(
+      const items = rulesOf(e);
+      const has = items.some((r) => /^About the prize pool:/.test(r));
+      expect(has, `${e.slug} prize pool rule`).toBe(pooled.includes(e));
+      if (has) {
+        expect(items[items.length - 2], `${e.slug} prize rule is not second to last`).toMatch(
           /^About the prize pool:.*cash.*AI credits.*both.*just one of them/,
         );
-      } else {
-        expect(last, `${e.slug} should not carry it`).not.toMatch(/^About the prize pool/);
       }
+    }
+  });
+
+  it("ends the Rules of every hackathon and the quiz with the transparency rule", () => {
+    const withRules = rawEvents.filter((e) => rulesOf(e).some((r) => /^Round|^The product must be built|^Three rounds/.test(r)));
+    expect(withRules.length).toBeGreaterThanOrEqual(13);
+    for (const e of withRules) {
+      const items = rulesOf(e);
+      expect(items[items.length - 1], `${e.slug} does not end with the transparency rule`).toMatch(
+        /^We understand the wish for transparency.*automated.*as already stated on this event page.*announce the top 3.*official group/,
+      );
+    }
+  });
+
+  it("rolls an unpaid Round 3 seat out to ranks 51 to 100 after 12 hours, on the three-round hackathons", () => {
+    const three = rawEvents.filter((e) => rulesOf(e).some((r) => /Round 2 is limited to 300 teams/.test(r)));
+    expect(three.length).toBe(11); // the twelfth three-round event is the quiz, which has no team seats
+    for (const e of three) {
+      expect(
+        rulesOf(e).filter((r) => /within 12 hours.*roll-out mail.*51st to 100th.*equal chance/.test(r)).length,
+        `${e.slug} roll-out rule`,
+      ).toBe(1);
     }
   });
 });
