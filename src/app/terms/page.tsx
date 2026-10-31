@@ -90,6 +90,7 @@ const SECTIONS: Section[] = [
         items: [
           "Only a three-round event here charges anything. A three-round hackathon takes a participation fee of ₹399 per team, due once and only from a team selected for Round 3, and the three-round quiz takes ₹299 per participant on the same terms; registering and Rounds 1 and 2 are free in both. A single-round event charges nothing at any stage, for entry, judging or a certificate. This section and section 02 apply only to the paid rounds of the first two, and only from selection for Round 3 onwards.",
           "Only teams declared eligible or shortlisted for the applicable paid event or round may participate.",
+          "Round 3 seats are limited. For a three-round hackathon, a team selected for Round 3 that has not confirmed and paid within 12 hours of being mailed loses its seat, and a roll-out mail then goes to the teams ranked 51st to 100th, so that they also get an equal chance. Seats are held in the order payments are received.",
           "Unless stated otherwise, only the team leader must make one payment on behalf of the entire team.",
           "Where an event is sat individually rather than in teams, as the quiz is, the fee is per participant and each participant pays their own. The clauses in this section about a team leader’s single payment, and about dividing a fee between members, do not apply to it.",
           "Teams must verify their event name, team name, members and eligibility before paying.",

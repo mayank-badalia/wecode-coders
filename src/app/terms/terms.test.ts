@@ -94,4 +94,10 @@ describe("terms page", () => {
     expect(source).not.toMatch(/and completing payment, the team leader/);
     expect(source).toMatch(/By registering/);
   });
+
+describe("terms page: Round 3 seats", () => {
+  it("states the 12-hour window and the roll-out to ranks 51 to 100", () => {
+    expect(source).toMatch(/within 12 hours of being mailed loses its seat.*roll-out mail.*51st to 100th.*equal chance.*order payments are received/);
+  });
+});
 });
