@@ -100,4 +100,10 @@ describe("terms page: Round 3 seats", () => {
     expect(source).toMatch(/within 12 hours of being mailed loses its seat.*roll-out mail.*51st to 100th.*equal chance.*order payments are received/);
   });
 });
+
+describe("terms page: transparency", () => {
+  it("says how far transparency goes and that promises will be kept", () => {
+    expect(source).toMatch(/wish for transparency.*automated.*announce the top 3.*not more than that.*more events to manage.*What we have promised, we will always deliver/);
+  });
+});
 });
