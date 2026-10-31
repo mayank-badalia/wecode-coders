@@ -774,10 +774,6 @@ describe("events seam", () => {
     for (const e of free) {
       const fee = e.stats?.find((st) => st.label === "Entry fee");
       expect(fee?.value, `${e.slug} does not print its entry fee`).toBe("Free");
-      // And the line under the register button opens with it.
-      expect(e.registration?.note ?? "", `${e.slug}'s note does not lead with it`).toMatch(
-        /^Free to enter/,
-      );
     }
   });
 
@@ -1535,5 +1531,14 @@ describe("Codex 48 and CodeStar 30 final round", () => {
       expect(e.stats?.find((st) => st.label === "Registration \u00B7 Rounds 1 and 2")?.value).toBe("Free");
     });
   }
+});
+
+describe("registration", () => {
+  it("carries no registration block or Unstop link on any event", () => {
+    for (const e of rawEvents) {
+      expect(e.registration, `${e.slug} still has a registration block`).toBeUndefined();
+      expect(JSON.stringify(e), `${e.slug} links to Unstop`).not.toMatch(/unstop\.com/);
+    }
+  });
 });
 });
