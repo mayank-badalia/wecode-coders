@@ -1603,4 +1603,17 @@ describe("seats rule", () => {
     }
   });
 });
+
+describe("finalist definition", () => {
+  it("defines a finalist in the Rules of every three-round hackathon", () => {
+    for (const e of rawEvents) {
+      const rules = e.sections?.find((sec) => sec.kind === "list" && sec.label === "Rules");
+      const items = rules?.kind === "list" ? rules.items : [];
+      if (!items.some((r) => /Round 2 is limited to \d+ teams/.test(r))) continue;
+      const def = items.find((r) => /^A finalist is a team that is selected for Round 3/.test(r));
+      expect(def, `${e.slug} does not define a finalist`).toBeDefined();
+      if (e.slug !== "wcc-forge-48") expect(def).toMatch(/has reserved its seat/);
+    }
+  });
+});
 });

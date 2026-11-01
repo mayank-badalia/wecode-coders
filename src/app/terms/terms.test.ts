@@ -97,7 +97,7 @@ describe("terms page", () => {
 
 describe("terms page: Round 3 seats", () => {
   it("states the 12-hour window and the roll-out to ranks 51 to 100", () => {
-    expect(source).toMatch(/within 12 hours of being mailed loses its seat.*roll-out mail.*51st to 100th.*equal chance.*order payments are received/);
+    expect(source).toMatch(/within 12 hours of being mailed, we also send a roll-out mail.*51st to 100th.*equal chance.*order payments are received/);
   });
 });
 
@@ -117,7 +117,7 @@ describe("terms page: results", () => {
 
 describe("terms page: shortlists", () => {
   it("says no round's selected or shortlisted list is posted in the group", () => {
-    expect(source).toMatch(/We do not post the list of selected or shortlisted teams for Round 1, Round 2 or Round 3 in the group\. Each top 50 team is told its own position only\./);
+    expect(source).toMatch(/We do not post the list of selected or shortlisted teams for Round 1, Round 2 or Round 3 in the group\. Each finalist is told its own position\./);
   });
 });
 
@@ -131,6 +131,13 @@ describe("terms page: seat holders and extra finalists", () => {
   it("limits Round 3 and the Finalist Certificate to teams that reserved a seat, and welcomes extra finalists", () => {
     expect(source).toMatch(/Only a team that has reserved a seat is eligible to take part in Round 3 and to receive a Finalist Certificate/);
     expect(source.match(/If more teams become finalists, they are welcome too/g)?.length).toBe(2);
+  });
+});
+
+describe("terms page: what a finalist is", () => {
+  it("defines a finalist and does not say a team loses its seat", () => {
+    expect(source).toMatch(/A finalist is a team that has been selected for Round 3, has reserved its seat, and takes part in the final round/);
+    expect(source).not.toMatch(/loses its seat/);
   });
 });
 });

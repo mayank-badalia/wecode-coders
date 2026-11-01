@@ -510,8 +510,13 @@ const TRANSPARENCY_RULE =
 const SEATS_RULE =
   "100 teams are shortlisted, but only 50 seats are available. If the seats are not filled, we go on a roll-out basis, with a new round of mails every 12 hours.";
 
+const finalistRule = (terms: SeriesTerms) =>
+  terms.free
+    ? "A finalist is a team that is selected for Round 3 and takes part in the final round."
+    : "A finalist is a team that is selected for Round 3, has reserved its seat, and takes part in the final round.";
+
 const ROLL_OUT_RULE =
-  "A team selected for the final round that has not confirmed and paid within 12 hours of being mailed loses its seat. A roll-out mail then goes to the teams ranked 51st to 100th, so that they also get an equal chance at the seats still open.";
+  "If a team selected for the final round has not confirmed and paid within 12 hours of being mailed, we also send a roll-out mail to the teams ranked 51st to 100th, so that they also get an equal chance at the seats still open.";
 
 const seriesRules = (
   winnerLink = "the project URL of what each of them built",
@@ -535,6 +540,7 @@ const seriesRules = (
     "Respect software licences, intellectual property and user privacy.",
     "Projects must not promote illegal, harmful or discriminatory activity.",
     `More than 1,000 teams start in Round 1 and all of them compete. Round 2 is limited to ${terms.funnel?.round2 ?? 300} teams, Round 3 to ${terms.funnel?.final ?? 100}, and three teams win. Qualification is competitive: clearing a round's requirements does not by itself carry a team into the next one.`,
+    finalistRule(terms),
     ...(terms.free ? [] : [ROLL_OUT_RULE]),
     "Everything on each round's submission list has to arrive before that round's deadline.",
     ...(terms.submission === "individual"
