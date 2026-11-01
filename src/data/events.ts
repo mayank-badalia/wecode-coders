@@ -546,7 +546,7 @@ const seriesRules = (
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message. Where an organiser, judge or volunteer reports feeling threatened, the team is removed from the event without refund.",
     "The judges' decision is final.",
     `We will announce the top 3 teams in the official group, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
-    `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank, and only their own, by email on the day the certificates are distributed. No full ranking list is published.`,
+    `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed.`,
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
     ...(terms.prizePool ? [PRIZE_POOL_RULE] : []),
     TRANSPARENCY_RULE,
@@ -680,7 +680,7 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
           `National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round, and it prints your own rank if your team finishes in the top ${rankedCount(terms)}.`,
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
           "Clearing a round upgrades the certificate you will be issued rather than adding another one beside it. A team that reaches Round 3 and does not take part keeps its Round 2 Completion Certificate.",
-          `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank, and only their own, by email on the day the certificates are distributed, and it is printed on their certificate. No full ranking list is published.`,
+          `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed.`,
           "A Finalist or Winner Certificate requires successful registration, payment where applicable, and a valid Round 3 submission. Qualifying for the final round does not by itself earn one.",
           "Each participant receives one certificate only.",
         ]
@@ -689,7 +689,7 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
           "Round 2 Completion Certificate — for a valid Round 2 submission.",
           `National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round, and it prints your own rank if your team finishes in the top ${rankedCount(terms)}.`,
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
-          `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank, and only their own, by email on the day the certificates are distributed, and it is printed on their certificate. No full ranking list is published.`,
+          `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed.`,
           "Certificates are issued separately for each completed round. Qualification for a subsequent round does not itself create eligibility for that round's certificate.",
           "Participants who complete Round 2 but withdraw from Round 3 will remain eligible only for the Round 2 Completion Certificate.",
           "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
@@ -747,10 +747,10 @@ function seriesFaq(terms: SeriesTerms = {}) {
       q: "What certificate do I get?",
       a:
         terms.certificates === "from-round-2"
-          ? `One certificate, at the highest stage you reach from Round 2 onwards: a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed, and it is printed on their certificate. Only the top three are announced publicly.`
-          : `One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed, and it is printed on their certificate; only the top three are announced publicly. Clearing a round upgrades that certificate rather than adding a second one.`,
+          ? `One certificate, at the highest stage you reach from Round 2 onwards: a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed. Only the top three are announced publicly.`
+          : `One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed; only the top three are announced publicly. Clearing a round upgrades that certificate rather than adding a second one.`,
     },
-    { q: "Where are results announced?", a: `We will announce the top 3 teams in the official group, along with the project URL of what each of them built. That is the whole public announcement. The top ${rankedCount(terms)} teams are told their own rank, and only their own, by email on the day the certificates are distributed, and it is printed on their certificate; no full ranking list goes up. Nobody's personal details are shared without their consent.` },
+    { q: "Where are results announced?", a: `We will announce the top 3 teams in the official group, along with the project URL of what each of them built. That is the whole public announcement. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed. Nobody's personal details are shared without their consent.` },
     { q: "Who judges, and when do results and certificates arrive?", a: (terms.organiser ?? WCC).roundsFaq },
   ];
 }

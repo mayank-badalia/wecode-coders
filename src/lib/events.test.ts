@@ -1577,7 +1577,7 @@ describe("results announcement", () => {
       expect(faq, `${e.slug} FAQ mentions the repository`).not.toMatch(/repositor|GitHub/i);
       if (items.some((r) => /^Round 2 is limited|^More than 1,000 teams/.test(r))) {
         const n = e.slug === "wcc-forge-48" ? 10 : 50;
-        expect(items.join(" "), `${e.slug} rank mail`).toContain(`The top ${n} teams are told their own rank, and only their own, by email on the day the certificates are distributed`);
+        expect(items.join(" "), `${e.slug} rank mail`).toContain(`The top ${n} teams are told their own rank by email on the day the certificates are distributed.`);
       }
     }
   });
