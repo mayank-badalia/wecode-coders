@@ -328,7 +328,7 @@ function seriesRounds(
         ? {}
         : {
             note:
-              `Teams selected for Round 3 pay a participation fee of ${ROUND_3_FEE} per team \u2014 one payment for the whole team, not one each. The top 50 teams receive their specific rank on their certificate, written out of 1,000+ teams, and every finalist also receives a Finalist Certificate. The fee covers the cost of running the event: infrastructure, the time and effort of organising it, and paying the people who do that work. Registering and Rounds 1 and 2 are free, and this is the only payment anywhere in this event. It falls due only once your team is selected for Round 3, so a team that is not selected pays nothing at all. Paying it means accepting the event participation terms, which are linked under this block and are the same for every event. 100 teams are selected and qualified, and all of them are mailed, but seats are limited and we have only 50. Whoever pays first gets their seat reserved.`,
+              `Teams selected for Round 3 pay a participation fee of ${ROUND_3_FEE} per team \u2014 one payment for the whole team, not one each. Every team that confirms its seat and takes part in Round 3 receives a Finalist Certificate, and the rank it earned, written out of 1,000+ teams. The fee covers the cost of running the event: infrastructure, the time and effort of organising it, and paying the people who do that work. Registering and Rounds 1 and 2 are free, and this is the only payment anywhere in this event. It falls due only once your team is selected for Round 3, so a team that is not selected pays nothing at all. Paying it means accepting the event participation terms, which are linked under this block and are the same for every event. 100 teams are selected and qualified, and all of them are mailed, but seats are limited and we have only 50. Whoever pays first gets their seat reserved.`,
           }),
     },
   ],
@@ -681,7 +681,7 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
     ...(terms.certificates === "from-round-2"
       ? [
           "Round 2 Completion Certificate — for a valid Round 2 submission.",
-          `National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round, and it prints your own rank if your team finishes in the top ${rankedCount(terms)}.`,
+          `National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round, and it prints the rank your team earned.`,
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
           "Clearing a round upgrades the certificate you will be issued rather than adding another one beside it. A team that reaches Round 3 and does not take part keeps its Round 2 Completion Certificate.",
           `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed.`,
@@ -691,7 +691,7 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
       : [
           "Round 1 Completion Certificate — for a valid Round 1 submission.",
           "Round 2 Completion Certificate — for a valid Round 2 submission.",
-          `National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round, and it prints your own rank if your team finishes in the top ${rankedCount(terms)}.`,
+          `National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round, and it prints the rank your team earned.`,
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
           `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed.`,
           "Certificates are issued separately for each completed round. Qualification for a subsequent round does not itself create eligibility for that round's certificate.",
@@ -1626,7 +1626,7 @@ export const events: Event[] = [
       "Special awards for exceptional projects",
       "Lovable Premium, AI tools and a .XYZ domain",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 10 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-10-30T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -1718,7 +1718,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1801,7 +1801,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1884,7 +1884,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1964,7 +1964,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -2043,7 +2043,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -2278,7 +2278,7 @@ export const events: Event[] = [
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-02T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2362,7 +2362,7 @@ export const events: Event[] = [
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-06T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2743,7 +2743,7 @@ export const events: Event[] = [
       "$500 in Adaption credits for every eligible participant",
       "100+ reward recipients across the hackathon",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-07T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2822,7 +2822,7 @@ export const events: Event[] = [
       "Expert-led workshops",
       "100+ reward recipients across the hackathon",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2901,7 +2901,7 @@ export const events: Event[] = [
       "Expert-led workshops",
       "100+ reward recipients across the hackathon",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
