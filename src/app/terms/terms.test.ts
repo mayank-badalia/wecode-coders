@@ -126,4 +126,11 @@ describe("terms page: more than 50 confirmed", () => {
     expect(source).toMatch(/more than 50 teams may confirm their seat.*accommodate them too.*will not say no to them for what they have earned.*agree to compete with them as well/);
   });
 });
+
+describe("terms page: seat holders and extra finalists", () => {
+  it("limits Round 3 and the Finalist Certificate to teams that reserved a seat, and welcomes extra finalists", () => {
+    expect(source).toMatch(/Only a team that has reserved a seat is eligible to take part in Round 3 and to receive a Finalist Certificate/);
+    expect(source.match(/If more teams become finalists, they are welcome too/g)?.length).toBe(2);
+  });
+});
 });

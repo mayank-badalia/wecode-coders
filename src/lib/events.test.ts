@@ -840,7 +840,7 @@ describe("events seam", () => {
       expect(own.length, `${e.slug} does not carry the fee on the round that charges it`).toBe(1);
       expect(own[0], `${e.slug}'s Round 3 does not say who pays`).toMatch(/\u20B9399 per team/);
       expect(own[0], `${e.slug}'s Round 3 does not give the seats and ranks`).toMatch(
-        /per team.*100 teams are selected and qualified.*only 50\. Whoever pays first gets their seat reserved\.$/,
+        /per team.*100 teams are selected and qualified.*only 50\. Whoever pays first gets their seat reserved\. Only a team that has reserved a seat can take part in Round 3 and receive a Finalist Certificate\.$/,
       );
       expect(
         words.split("\u20B9399").length,
@@ -1582,7 +1582,7 @@ describe("results announcement", () => {
       expect(faq, `${e.slug} FAQ mentions the repository`).not.toMatch(/repositor|GitHub/i);
       if (items.some((r) => /^Round 2 is limited|^More than 1,000 teams/.test(r))) {
         const n = e.slug === "wcc-forge-48" ? 10 : 50;
-        expect(items.join(" "), `${e.slug} rank mail`).toContain(`The top ${n} teams are told their own rank by email on the day the certificates are distributed.`);
+        expect(items.join(" "), `${e.slug} rank mail`).toContain(`The top ${n} teams are told their own rank by email on the day the certificates are distributed.${n === 50 ? " If more teams become finalists, they are welcome too." : ""}`);
       }
     }
   });
