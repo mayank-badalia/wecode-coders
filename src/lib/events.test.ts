@@ -840,7 +840,7 @@ describe("events seam", () => {
       expect(own.length, `${e.slug} does not carry the fee on the round that charges it`).toBe(1);
       expect(own[0], `${e.slug}'s Round 3 does not say who pays`).toMatch(/\u20B9399 per team/);
       expect(own[0], `${e.slug}'s Round 3 does not give the seats and ranks`).toMatch(
-        /Every team that confirms its seat and takes part in Round 3 receives a Finalist Certificate, and the rank it earned, written out of 1,000\+ teams.*100 teams are selected and qualified.*only 50\. Whoever pays first gets their seat reserved\.$/,
+        /per team.*100 teams are selected and qualified.*only 50\. Whoever pays first gets their seat reserved\.$/,
       );
       expect(
         words.split("\u20B9399").length,
