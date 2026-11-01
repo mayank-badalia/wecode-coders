@@ -225,6 +225,9 @@ const LONG_BUILD_ROUNDS: RoundOffsets = [
 /** WCC Forge 48: 100 teams into Round 2, 10 into the final, and no fee. */
 const FORGE_FUNNEL = { round2: 100, final: 10 };
 
+/** How many finalists are told their own rank: the top 50, or all ten at Forge. */
+const rankedCount = (terms: SeriesTerms) => (terms.free ? (terms.funnel?.final ?? 10) : 50);
+
 function seriesRounds(
   startsAt: string,
   offsets: RoundOffsets = DEFAULT_ROUNDS,
@@ -504,7 +507,7 @@ const ROLL_OUT_RULE =
   "A team selected for the final round that has not confirmed and paid within 12 hours of being mailed loses its seat. A roll-out mail then goes to the teams ranked 51st to 100th, so that they also get an equal chance at the seats still open.";
 
 const seriesRules = (
-  winnerLink = "the GitHub repository or the project URL of what each of them built, whichever the team is comfortable sharing",
+  winnerLink = "the project URL of what each of them built",
   terms: SeriesTerms = {},
 ): EventSection => ({
   kind: "list",
@@ -543,7 +546,7 @@ const seriesRules = (
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message. Where an organiser, judge or volunteer reports feeling threatened, the team is removed from the event without refund.",
     "The judges' decision is final.",
     `We will announce the top 3 teams in the official group, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
-    "Every finalist is placed, and every finalist is told its own position — privately, and printed on its certificate. You learn where your team finished at the certificate distribution. What goes up in the official group is the top three only: those three team names, their ranks, and a link to what each of them built. No full ranking list is published, and no team’s position is given to anyone but that team.",
+    `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank, and only their own, by email on the day the certificates are distributed. No full ranking list is published.`,
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
     ...(terms.prizePool ? [PRIZE_POOL_RULE] : []),
     TRANSPARENCY_RULE,
@@ -674,19 +677,19 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
     ...(terms.certificates === "from-round-2"
       ? [
           "Round 2 Completion Certificate — for a valid Round 2 submission.",
-          "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round and prints where your team placed among the finalists.",
+          `National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round, and it prints your own rank if your team finishes in the top ${rankedCount(terms)}.`,
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
           "Clearing a round upgrades the certificate you will be issued rather than adding another one beside it. A team that reaches Round 3 and does not take part keeps its Round 2 Completion Certificate.",
-          "Every finalist is placed and every finalist is told where it finished — at the certificate distribution, and printed on the certificate. Only the top three are announced: the group post carries those three team names, their ranks, and a link to what they built. No full ranking list is published, and nobody is told a position other than its own.",
+          `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank, and only their own, by email on the day the certificates are distributed, and it is printed on their certificate. No full ranking list is published.`,
           "A Finalist or Winner Certificate requires successful registration, payment where applicable, and a valid Round 3 submission. Qualifying for the final round does not by itself earn one.",
           "Each participant receives one certificate only.",
         ]
       : [
           "Round 1 Completion Certificate — for a valid Round 1 submission.",
           "Round 2 Completion Certificate — for a valid Round 2 submission.",
-          "National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round and prints where your team placed among the finalists.",
+          `National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round, and it prints your own rank if your team finishes in the top ${rankedCount(terms)}.`,
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
-          "Every finalist is placed and every finalist is told where it finished — at the certificate distribution, and printed on the certificate. Only the top three are announced: the group post carries those three team names, their ranks, and a link to what they built. No full ranking list is published, and nobody is told a position other than its own.",
+          `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. The top ${rankedCount(terms)} teams are told their own rank, and only their own, by email on the day the certificates are distributed, and it is printed on their certificate. No full ranking list is published.`,
           "Certificates are issued separately for each completed round. Qualification for a subsequent round does not itself create eligibility for that round's certificate.",
           "Participants who complete Round 2 but withdraw from Round 3 will remain eligible only for the Round 2 Completion Certificate.",
           "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
@@ -744,10 +747,10 @@ function seriesFaq(terms: SeriesTerms = {}) {
       q: "What certificate do I get?",
       a:
         terms.certificates === "from-round-2"
-          ? "One certificate, at the highest stage you reach from Round 2 onwards: a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed: your certificate prints where your team finished, and you are told at the certificate distribution. Only the top three are announced publicly."
-          : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed and the certificate prints it, told to you at the certificate distribution; only the top three are announced publicly. Clearing a round upgrades that certificate rather than adding a second one.",
+          ? `One certificate, at the highest stage you reach from Round 2 onwards: a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed, and it is printed on their certificate. Only the top three are announced publicly.`
+          : `One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed, and it is printed on their certificate; only the top three are announced publicly. Clearing a round upgrades that certificate rather than adding a second one.`,
     },
-    { q: "Where are results announced?", a: "We will announce the top 3 teams in the official group, along with the GitHub repository or the project URL of what each of them built, whichever the team is comfortable sharing. That is the whole public announcement, and it carries their ranks. Every other finalist is told its own position privately, at the certificate distribution and printed on its certificate — no full ranking list goes up, and no team is told anybody’s position but its own. Nobody's personal details are shared without their consent." },
+    { q: "Where are results announced?", a: `We will announce the top 3 teams in the official group, along with the project URL of what each of them built. That is the whole public announcement. The top ${rankedCount(terms)} teams are told their own rank, and only their own, by email on the day the certificates are distributed, and it is printed on their certificate; no full ranking list goes up. Nobody's personal details are shared without their consent.` },
     { q: "Who judges, and when do results and certificates arrive?", a: (terms.organiser ?? WCC).roundsFaq },
   ];
 }
@@ -922,7 +925,7 @@ const sprintBuild = (w: SprintWindow): EventSection => ({
  */
 const sprintRules = (
   w: SprintWindow,
-  winnerLink = "the GitHub repository of what each of them built",
+  winnerLink = "the project URL of what each of them built",
   prizePool = false,
 ): EventSection => ({
   kind: "list",
@@ -1002,7 +1005,7 @@ const sprintSections = (
 /** FAQ for a single-window build. */
 function sprintFaq(
   w: SprintWindow,
-  winnerLink = "the GitHub repository of what each of them built",
+  winnerLink = "the project URL of what each of them built",
   organiser: Organiser = WCC,
 ) {
   return [
@@ -1619,7 +1622,7 @@ export const events: Event[] = [
       "Special awards for exceptional projects",
       "Lovable Premium, AI tools and a .XYZ domain",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 10 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-10-30T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -1711,7 +1714,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1794,7 +1797,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1877,7 +1880,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -1957,7 +1960,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -2036,7 +2039,7 @@ export const events: Event[] = [
       "100+ reward recipients across sponsor challenges, mini-challenges and giveaways",
       "A Round 1 Completion Certificate for every valid Round 1 submission",
       "A Round 2 Completion Certificate for every valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
       "A functional product you can put on a résumé or in a portfolio",
     ],
@@ -2271,7 +2274,7 @@ export const events: Event[] = [
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-02T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2355,7 +2358,7 @@ export const events: Event[] = [
       "$100 in Agentverse credits for every eligible participant",
       "100+ reward recipients across the hackathon",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-06T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2736,7 +2739,7 @@ export const events: Event[] = [
       "$500 in Adaption credits for every eligible participant",
       "100+ reward recipients across the hackathon",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-07T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2815,7 +2818,7 @@ export const events: Event[] = [
       "Expert-led workshops",
       "100+ reward recipients across the hackathon",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
@@ -2894,7 +2897,7 @@ export const events: Event[] = [
       "Expert-led workshops",
       "100+ reward recipients across the hackathon",
       "A Round 2 Completion Certificate for a valid Round 2 submission",
-      "A National Finalist Certificate printing where your team placed, for finalists with a valid Round 3 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing your own rank for the top 50 teams",
       "A Winner Certificate naming the rank, for the three winning teams",
     ],
     sections: seriesSections("2026-11-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {

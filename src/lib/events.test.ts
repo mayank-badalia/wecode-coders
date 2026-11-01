@@ -590,7 +590,7 @@ describe("events seam", () => {
     }
   });
 
-  it("places every finalist privately and announces only the top three", () => {
+  it("tells the top finalists their own rank privately and announces only the top three", () => {
     /*
       Every finalist is placed and told where it finished, at the certificate
       distribution and printed on its certificate. The group post carries the
@@ -643,7 +643,7 @@ describe("events seam", () => {
         whether their own result is coming.
       */
       expect(words, `${e.slug} says nothing about who is placed`).toMatch(
-        /every finalist is placed|only the top three are placed/i,
+        /teams are told their own rank|only the top three are placed/i,
       );
     }
   });
@@ -1561,6 +1561,25 @@ describe("WCC Forge 48 funnel and fee", () => {
     expect(all()).toMatch(/Round 2 is limited to 100 teams, Round 3 to 10, and three teams win/);
     expect(all()).toMatch(/100 go through to Round 2, 10 to the final round/);
     expect(all()).not.toMatch(/300|top 50|only 50/);
+  });
+});
+
+describe("results announcement", () => {
+  it("announces the top 3 with the project URL, names no repository, and tells the top 50 their own rank by mail", () => {
+    for (const e of rawEvents) {
+      if (e.status === "past" || e.format !== "hackathon") continue;
+      const rules = e.sections?.find((sec) => sec.kind === "list" && sec.label === "Rules");
+      const items = rules?.kind === "list" ? rules.items : [];
+      const announce = items.find((r) => /^We will announce the top 3 teams/.test(r)) ?? "";
+      expect(announce, `${e.slug} announcement`).toMatch(/project URL of what each of them built/);
+      expect(announce, `${e.slug} mentions the repository`).not.toMatch(/repositor|GitHub/i);
+      const faq = (e.faq ?? []).find((f) => f.q === "Where are results announced?")?.a ?? "";
+      expect(faq, `${e.slug} FAQ mentions the repository`).not.toMatch(/repositor|GitHub/i);
+      if (items.some((r) => /^Round 2 is limited|^More than 1,000 teams/.test(r))) {
+        const n = e.slug === "wcc-forge-48" ? 10 : 50;
+        expect(items.join(" "), `${e.slug} rank mail`).toContain(`The top ${n} teams are told their own rank, and only their own, by email on the day the certificates are distributed`);
+      }
+    }
   });
 });
 });

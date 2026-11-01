@@ -106,4 +106,12 @@ describe("terms page: transparency", () => {
     expect(source).toMatch(/wish for transparency.*automated.*announce the top 3.*not more than that.*more events to manage.*What we have promised, we will always deliver/);
   });
 });
+
+describe("terms page: results", () => {
+  it("announces the top 3 with the project URL and mails the top 50 their own rank", () => {
+    expect(source).toMatch(/We will announce the top 3 teams in the official event group, together with the project URL/);
+    expect(source).toMatch(/top 50 teams are told their own rank, and only their own, by email on the day the certificates are distributed/);
+    expect(source).not.toMatch(/the GitHub repository for a hackathon/);
+  });
+});
 });
