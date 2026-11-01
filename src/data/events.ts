@@ -542,7 +542,7 @@ const seriesRules = (
     "Do not ask an organiser, judge or volunteer to break a rule, waive a requirement or make an exception in your favour. You may ask once; when the answer is no, that is the answer.",
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message. Where an organiser, judge or volunteer reports feeling threatened, the team is removed from the event without refund.",
     "The judges' decision is final.",
-    `Results go up in the official group: the three winning team names, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
+    `We will announce the top 3 teams in the official group, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
     "Every finalist is placed, and every finalist is told its own position — privately, and printed on its certificate. You learn where your team finished at the certificate distribution. What goes up in the official group is the top three only: those three team names, their ranks, and a link to what each of them built. No full ranking list is published, and no team’s position is given to anyone but that team.",
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
     ...(terms.prizePool ? [PRIZE_POOL_RULE] : []),
@@ -747,7 +747,7 @@ function seriesFaq(terms: SeriesTerms = {}) {
           ? "One certificate, at the highest stage you reach from Round 2 onwards: a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed: your certificate prints where your team finished, and you are told at the certificate distribution. Only the top three are announced publicly."
           : "One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. Every finalist is placed and the certificate prints it, told to you at the certificate distribution; only the top three are announced publicly. Clearing a round upgrades that certificate rather than adding a second one.",
     },
-    { q: "Where are results announced?", a: "In the official group: the three winning team names, along with the GitHub repository or the project URL of what each of them built, whichever the team is comfortable sharing. That is the whole public announcement, and it carries their ranks. Every other finalist is told its own position privately, at the certificate distribution and printed on its certificate — no full ranking list goes up, and no team is told anybody’s position but its own. Nobody's personal details are shared without their consent." },
+    { q: "Where are results announced?", a: "We will announce the top 3 teams in the official group, along with the GitHub repository or the project URL of what each of them built, whichever the team is comfortable sharing. That is the whole public announcement, and it carries their ranks. Every other finalist is told its own position privately, at the certificate distribution and printed on its certificate — no full ranking list goes up, and no team is told anybody’s position but its own. Nobody's personal details are shared without their consent." },
     { q: "Who judges, and when do results and certificates arrive?", a: (terms.organiser ?? WCC).roundsFaq },
   ];
 }
@@ -951,7 +951,7 @@ const sprintRules = (
     "Do not ask an organiser, judge or volunteer to break a rule, waive a requirement or make an exception in your favour. You may ask once; when the answer is no, that is the answer.",
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message.",
     "The judges' decision is final.",
-    `Results go up in the official group: the three winning team names, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
+    `We will announce the top 3 teams in the official group, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
     "Only the top three are placed. The three winning teams are named with a link to what each of them built, and their certificates print the rank; no other team is given a position, no ranking list is published, and no certificate below winner carries a placing.",
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
     ...(prizePool ? [PRIZE_POOL_RULE] : []),
@@ -1018,7 +1018,7 @@ function sprintFaq(
     { q: "Can I use something I built earlier?", a: "No. The product has to be built during the window, and submissions are checked. Disclosed reusable components are fine; a finished project is not." },
     { q: "Is deployment compulsory?", a: "You need a link judges can open and use. If you cannot deploy, provide a reliable executable the judges can run." },
     { q: "Are social media posts required?", a: "No. Nothing on LinkedIn, Instagram or anywhere else is part of a submission, and no video demonstration is required." },
-    { q: "Where are results announced?", a: `In the official group: the three winning team names, along with ${winnerLink}. That is the whole announcement. Only those three are placed — no ranking list goes up, no other team is given a position, and a Certificate of Participation does not print one. Nobody's personal details are shared without their consent.` },
+    { q: "Where are results announced?", a: `We will announce the top 3 teams in the official group, along with ${winnerLink}. That is the whole announcement. Only those three are placed — no ranking list goes up, no other team is given a position, and a Certificate of Participation does not print one. Nobody's personal details are shared without their consent.` },
     { q: "When do results and certificates arrive?", a: organiser.faq },
   ];
 }
