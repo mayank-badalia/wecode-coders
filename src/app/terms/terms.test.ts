@@ -75,6 +75,10 @@ describe("terms page", () => {
     expect(source).not.toMatch(/the quiz’s eight/);
   });
 
+  it("refuses a refund for an unintentional, slight miscommunication", () => {
+    expect(source).toMatch(/slight miscommunication, including one that happened unintentionally/);
+  });
+
   it("says what a prize pool is made of", () => {
     /*
       A number against a currency symbol reads as cash everywhere else, so

@@ -124,6 +124,7 @@ const SECTIONS: Section[] = [
           "The participant experiences personal internet, electricity, device, software, travel or scheduling problems.",
           "The participant expected a benefit that was not expressly promised on the official event page.",
           "The organiser makes a reasonable operational change that does not remove the essential opportunity to participate.",
+          "There was a slight miscommunication, including one that happened unintentionally. A small slip in a message, a mail or an announcement is not a ground for a refund.",
         ],
       },
       {
