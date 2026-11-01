@@ -120,4 +120,10 @@ describe("terms page: shortlists", () => {
     expect(source).toMatch(/We do not post the list of selected or shortlisted teams for Round 1, Round 2 or Round 3 in the group\. Each top 50 team is told its own position only\./);
   });
 });
+
+describe("terms page: more than 50 confirmed", () => {
+  it("accommodates every team that confirmed and asks entrants to compete with them", () => {
+    expect(source).toMatch(/more than 50 teams may confirm their seat.*accommodate them too.*will not say no to them for what they have earned.*agree to compete with them as well/);
+  });
+});
 });

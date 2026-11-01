@@ -1489,7 +1489,10 @@ describe("closing rules", () => {
       const has = items.some((r) => /^About the prize pool:/.test(r));
       expect(has, `${e.slug} prize pool rule`).toBe(pooled.includes(e));
       if (has) {
-        expect(items[items.length - 2], `${e.slug} prize rule is not second to last`).toMatch(
+        // Followed by the transparency rule, and on the paid hackathons by the seats rule.
+        const idx = items.findIndex((r) => /^About the prize pool:/.test(r));
+        expect(items[idx + 1], `${e.slug} prize rule is not followed by the transparency rule`).toMatch(/^We understand the wish for transparency/);
+        expect(items[idx], `${e.slug} prize rule`).toMatch(
           /^About the prize pool:.*cash.*AI credits.*both.*just one of them/,
         );
       }
@@ -1500,7 +1503,9 @@ describe("closing rules", () => {
     const withRules = rawEvents.filter((e) => rulesOf(e).some((r) => /^Round|^The product must be built|^Three rounds/.test(r)));
     expect(withRules.length).toBeGreaterThanOrEqual(13);
     for (const e of withRules) {
-      const items = rulesOf(e);
+      const all = rulesOf(e);
+      // The seats rule closes the team hackathons that charge; the transparency rule is last everywhere else.
+      const items = /^100 teams are shortlisted/.test(all[all.length - 1] ?? "") ? all.slice(0, -1) : all;
       expect(items[items.length - 1], `${e.slug} does not end with the transparency rule`).toMatch(
         /^We understand the wish for transparency.*automated.*as already stated on this event page.*announce the top 3.*official group.*not more than that.*more events to manage.*what we have promised, we will always deliver/i,
       );
@@ -1578,6 +1583,22 @@ describe("results announcement", () => {
       if (items.some((r) => /^Round 2 is limited|^More than 1,000 teams/.test(r))) {
         const n = e.slug === "wcc-forge-48" ? 10 : 50;
         expect(items.join(" "), `${e.slug} rank mail`).toContain(`The top ${n} teams are told their own rank by email on the day the certificates are distributed.`);
+      }
+    }
+  });
+});
+
+describe("seats rule", () => {
+  it("closes the Rules of every paid three-round hackathon, and not Forge 48 or the rest", () => {
+    for (const e of rawEvents) {
+      const rules = e.sections?.find((sec) => sec.kind === "list" && sec.label === "Rules");
+      const items = rules?.kind === "list" ? rules.items : [];
+      const last = items[items.length - 1] ?? "";
+      const paid = items.some((r) => /^About the prize pool|^We understand the wish for transparency/.test(r)) && items.some((r) => /Round 2 is limited to 300 teams/.test(r));
+      if (paid) {
+        expect(last, e.slug).toBe("100 teams are shortlisted, but only 50 seats are available. If the seats are not filled, we go on a roll-out basis, with a new round of mails every 12 hours.");
+      } else {
+        expect(last, e.slug).not.toMatch(/^100 teams are shortlisted/);
       }
     }
   });

@@ -503,6 +503,9 @@ const TRANSPARENCY_RULE =
  * Round 3 seats are first-come, so a seat nobody confirms has to move. The
  * 51st to 100th teams are the ones already qualified and mailed as the pool.
  */
+const SEATS_RULE =
+  "100 teams are shortlisted, but only 50 seats are available. If the seats are not filled, we go on a roll-out basis, with a new round of mails every 12 hours.";
+
 const ROLL_OUT_RULE =
   "A team selected for the final round that has not confirmed and paid within 12 hours of being mailed loses its seat. A roll-out mail then goes to the teams ranked 51st to 100th, so that they also get an equal chance at the seats still open.";
 
@@ -550,6 +553,7 @@ const seriesRules = (
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
     ...(terms.prizePool ? [PRIZE_POOL_RULE] : []),
     TRANSPARENCY_RULE,
+    ...(terms.free ? [] : [SEATS_RULE]),
   ],
 });
 
