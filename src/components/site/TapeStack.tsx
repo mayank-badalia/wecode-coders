@@ -77,7 +77,7 @@ const TAPES: Tape[] = [
     direction: -1,
     top: 30,
     rotate: -6,
-    copy: <Run>Open briefs — Anyone can enter — Nothing to pay</Run>,
+    copy: <Run>Open briefs — Anyone can enter — Join from anywhere</Run>,
   },
   {
     bg: "var(--acid)",
