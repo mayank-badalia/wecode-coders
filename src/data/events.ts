@@ -2541,7 +2541,6 @@ export const events: Event[] = [
     ],
     rewards: [
       "₹30,000 in prizes, shared among the top three — awarded as cash, as AI or platform credits, or as a combination of them",
-      "n8n Pro plans for the top three",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
       "$500 in Adaption Labs credits for every eligible participant",
