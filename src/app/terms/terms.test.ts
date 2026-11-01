@@ -117,7 +117,7 @@ describe("terms page: results", () => {
 
 describe("terms page: shortlists", () => {
   it("says no round's selected or shortlisted list is posted in the group", () => {
-    expect(source).toMatch(/We do not post the list of selected or shortlisted teams for Round 1, Round 2 or Round 3 in the group/);
+    expect(source).toMatch(/We do not post the list of selected or shortlisted teams for Round 1, Round 2 or Round 3 in the group\. Each top 50 team is told its own position only\./);
   });
 });
 });
