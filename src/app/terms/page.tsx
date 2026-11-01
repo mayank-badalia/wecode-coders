@@ -172,6 +172,7 @@ const SECTIONS: Section[] = [
         kind: "clauses",
         items: [
           "Where an event runs qualifying rounds, Round 1 and Round 2 outcomes are sent by email to everyone who made a valid submission for that round — every team, or every participant where the event is sat individually — whether or not they have been selected for the next round, at the address given at registration. Those who qualify receive the instructions for the next round in the same email.",
+          "We do not post the list of selected or shortlisted teams for Round 1, Round 2 or Round 3 in the group. Each team is told its own result by email.",
           "Where an event runs as a single round — one window of 48 hours — there are no qualifying rounds and nothing to clear beforehand. The one submission made inside the window is what is judged, its outcome is the final outcome, and no fee is charged at any point.",
           "We will announce the top 3 teams in the official event group, together with the project URL of what each of them built. No participant’s personal details, and no further material from a team’s submission, are published or passed on unless that participant or team has given consent.",
           "Only the top three are announced, with the project URL of what each of them built, and nothing further is made public: no ranking list or leaderboard is published. On a three-round hackathon the top 50 teams are told their own rank, and only their own, by email on the day the certificates are distributed. A placing is not disclosed on request.",
