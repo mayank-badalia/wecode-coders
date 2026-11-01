@@ -22,14 +22,13 @@
 // codequest-quiz-india is the quiz, and it runs three rounds of its own now:
 // three papers of fifteen questions, each sat once inside an eight-hour
 // window, on the grid in quizRounds. It is the one three-round event sat
-// individually, so its fee is charged per participant and not per team.
+// individually, and it charges nothing at any round.
 //
 // What any of this costs, in one place. A three-round hackathon charges
 // ROUND_3_FEE per team, once, and only from a team selected for Round 3 —
-// registering and Rounds 1 and 2 are free. The quiz charges
-// QUIZ_ROUND_3_FEE per participant, on the same terms, at its own Round 3.
-// Every single-round event is free from start to finish. There is no fourth
-// case, and nothing else on this site asks anyone for money. Every part of
+// registering and Rounds 1 and 2 are free. The quiz, WCC Forge 48 and every
+// single-round event are free from start to finish. There is no fourth case,
+// and nothing else on this site asks anyone for money. Every part of
 // that rule is printed on each event's own page, written out in
 // src/app/terms/page.tsx, and pinned by src/lib/events.test.ts.
 //
@@ -100,20 +99,6 @@ import type { Event, EventSection } from "@/lib/types";
  * believes the lower one, and is right to.
  */
 const ROUND_3_FEE = "\u20B9399";
-
-/**
- * What the quiz's final round charges, written once.
- *
- * ₹299, and per participant rather than per team. The quiz is sat on your
- * own — there is no team to divide a payment across, and a fee written "per
- * team" on a page that says "attempt it on your own" is a question nobody
- * should have to ask us.
- *
- * A second constant rather than one shared number because these are two
- * different promises to two different sets of people, and the test suite
- * pins each amount to the pages that charge it.
- */
-const QUIZ_ROUND_3_FEE = "\u20B9299";
 
 /**
  * The three rounds.
@@ -1062,7 +1047,7 @@ function quizRounds(startsAt: string): EventSection {
     variant: "tabs",
     label: "How the three quiz rounds run",
     intro:
-      "Three rounds, each one paper of fifteen questions sat inside an eight-hour window, 10:00 to 18:00 IST. One attempt per round, on your own: there is nothing to build and nothing to hand in beforehand. The Round 1 and Round 2 results are emailed to everyone who sat the paper, selected or not — you hear from us either way — and the people who go through get the joining link for the next round in the same email. More than 1,000 people sit Round 1, only 500 qualify for Round 2, and only 50 qualify for Round 3, which is the final. Places are given on score, so clearing a round does not by itself carry you into the next one.",
+      "Three rounds, each one paper of fifteen questions sat inside an eight-hour window, 10:00 to 18:00 IST. One attempt per round, on your own: there is nothing to build and nothing to hand in beforehand. Every paper is taken in a Google Form, with a timer running in the backend through a plugin. The Round 1 and Round 2 results are emailed to everyone who sat the paper, selected or not — you hear from us either way — and the people who go through get the joining link for the next round in the same email. More than 1,000 people sit Round 1, 500 qualify for Round 2, and 10 qualify for Round 3, which is the final: those 10 are sent a mail to take part. Places are given on score, so clearing a round does not by itself carry you into the next one.",
     items: [
       {
         code: "01",
@@ -1081,7 +1066,7 @@ function quizRounds(startsAt: string): EventSection {
         meta: day(1),
         name: "Round 2 — The cut",
         blurb:
-          "A harder paper, the morning after Round 1. The same shape — fifteen questions, about fifteen minutes, one attempt inside an eight-hour window — with the questions going further into the same three areas rather than wider. Only 500 people sit it, and the top 50 by score go through to the final. The result is emailed the same evening again.",
+          "A harder paper, the morning after Round 1. The same shape — fifteen questions, about fifteen minutes, one attempt inside an eight-hour window — with the questions going further into the same three areas rather than wider. Only 500 people sit it, and the top 10 by score go through to the final. The result is emailed the same evening again.",
         points: [
           "One attempt, from the link in your Round 1 result email",
           "Fifteen questions, deeper in the same three areas",
@@ -1095,14 +1080,12 @@ function quizRounds(startsAt: string): EventSection {
         meta: day(4),
         name: "Round 3 — The final",
         blurb:
-          "The final paper, two clear days after Round 2. Only 50 people sit it. Fifteen questions again, inside the same eight-hour window, and the three winners come out of this round alone — the earlier rounds decide who sits it, not where anybody finishes. Scores are not carried forward.",
+          "The final paper, two clear days after Round 2. Only 10 people sit it, and each of them is sent a mail to take part. Fifteen questions again, inside the same eight-hour window, and the three winners come out of this round alone — the earlier rounds decide who sits it, not where anybody finishes. Scores are not carried forward.",
         points: [
           "One attempt, from the link in your Round 2 result email",
           "Fifteen questions, the final paper",
           "Submitted before the window closes at 18:00 IST",
         ],
-        note:
-          `Finalists pay a participation fee of ${QUIZ_ROUND_3_FEE} per participant — the quiz is sat on your own, so it is one payment for you and there is no team to share it with. It covers the cost of running the event: the platform, the time and effort of organising it, and paying the people who do that work. Registering and Rounds 1 and 2 are free, and this is the only payment anywhere in this event. It falls due only once you are selected for Round 3, so somebody who is not selected pays nothing at all. Paying it means accepting the event participation terms, which are linked under this block and are the same for every event.`,
       },
     ],
   };
@@ -2610,20 +2593,21 @@ export const events: Event[] = [
         numbered: true,
         items: [
           "Three rounds, each sat on your own. One attempt per round, opened from the official link you are sent for it.",
+          "Each paper is taken in a Google Form. A timer runs in the backend through a plugin, so the clock is kept for you and the form stops taking answers when it runs out.",
           "Begin and finish inside that round's eight-hour window, 10:00 to 18:00 IST. The paper takes about fifteen minutes; the window is wide so you can choose your moment, not so you can take all day over it.",
           "An attempt not submitted before the window closes does not count. There is no late window.",
           "Everyone who sat a round is emailed that round's result, selected or not. The people who go through get the next round's joining link in the same email.",
-          "More than 1,000 people sit Round 1, only 500 qualify for Round 2 and only 50 qualify for Round 3, the final. Places are given on score. Clearing a round does not by itself carry you into the next one, and the number of places is published with each round's result.",
+          "More than 1,000 people sit Round 1, 500 qualify for Round 2 and 10 qualify for Round 3, the final, and those 10 are sent a mail to take part. Places are given on score. Clearing a round does not by itself carry you into the next one, and the number of places is published with each round's result.",
           "Each round is ranked on its own. Scores are not carried forward between rounds, and the three winners come out of Round 3 alone.",
           "Duplicate, manipulated or suspicious entries may be disqualified.",
           "Report technical problems immediately through the official support channel.",
           "Organisers may review activity and response patterns to keep the event fair.",
           "Do not ask an organiser or volunteer to break a rule, waive a requirement or make an exception in your favour. You may ask once; when the answer is no, that is the answer.",
-          "Pressuring, forcing, threatening or intimidating an organiser or volunteer removes you from the event, and where the Round 3 fee has been paid it is not refunded. Where an organiser or volunteer reports feeling threatened, the entry is disqualified.",
+          "Pressuring, forcing, threatening or intimidating an organiser or volunteer removes you from the event. Where an organiser or volunteer reports feeling threatened, the entry is disqualified.",
           "Breaking the rules can cost you your leaderboard position, rewards and certificate.",
           "The organisers' decision on eligibility, ranking and disqualification is final.",
           "Results go up in the official group: the three winning names. No participant's personal details are shared or passed on unless we have their consent.",
-          "Only the top three are placed. The group announcement names those three, and their certificates print the rank. No other participant is given a leaderboard position, by email or on a certificate.",
+          "We announce the top 3 winners in the official group, and that is all. Only those three are placed, and their certificates print the rank. Nobody else is given a leaderboard position, by email or on a certificate.",
           "Scores, answer sheets, internal notes and comparative breakdowns are not shared, and there is no re-evaluation and no second attempt.",
           PRIZE_POOL_RULE,
           TRANSPARENCY_RULE.replace("top 3 in", "top 3 names in"),
@@ -2648,10 +2632,11 @@ export const events: Event[] = [
     ],
     faq: [
       { q: "How does it run?", a: "Three rounds. Each is one paper of fifteen questions, open from 10:00 to 18:00 IST on its day and taking about fifteen minutes: Round 1 on 2 November, Round 2 on 3 November, and the final on 6 November. One attempt per round, sat on your own." },
+      { q: "Where is the quiz taken?", a: "In a Google Form, one for each round. A timer runs in the backend through a plugin, so you do not have to keep time yourself." },
       { q: "Is this a quiz or a hackathon?", a: "A quiz, in three sittings. There is nothing to build and nothing to hand in beforehand." },
       { q: "How long does a round take?", a: "Fifteen questions, about fifteen minutes on average. The eight-hour window is there so you can pick your moment — it is not eight hours of quiz." },
       { q: "What happens between rounds?", a: "Everyone who sat a round is emailed that round's result, selected or not — you do not have to guess, and you do not have to wait for a group post. The people who go through get the next round's joining link in the same email." },
-      { q: "How many people get through?", a: "More than 1,000 people sit Round 1. Only 500 qualify for Round 2 and only 50 qualify for Round 3, which is the final. Places are given on score, and the exact cut goes out with each round's result. Clearing a round does not by itself carry you into the next one." },
+      { q: "How many people get through?", a: "More than 1,000 people sit Round 1. 500 qualify for Round 2 and 10 qualify for Round 3, which is the final; those 10 are sent a mail to take part. Places are given on score, and the exact cut goes out with each round's result. Clearing a round does not by itself carry you into the next one." },
       { q: "Are scores carried between rounds?", a: "No. Each round is ranked on its own, and the three winners come out of Round 3 alone — the earlier rounds decide who sits the final, not where anybody finishes." },
       { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before Round 1." },
       { q: "What certificate do I get?", a: "One, for the highest round you complete — certificates start from Round 2. A Round 2 Completion Certificate is for a valid Round 2 attempt, a Finalist Certificate for a valid Round 3 attempt, and a Winner Certificate naming your rank if you finish in the top three. Clearing a round upgrades that certificate rather than adding a second one. One per participant, within 10 days of the results being announced." },

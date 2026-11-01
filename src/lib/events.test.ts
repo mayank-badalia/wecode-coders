@@ -762,8 +762,8 @@ describe("events seam", () => {
       the top of the page, and this is what keeps it there.
 
       Scoped to the live events that take no fee: the eleven three-round
-      events charge for Round 3 and are excluded, the quiz charges for its own
-      Round 3, and a finished event is not recruiting. That leaves the three
+      events charge for Round 3 and are excluded, the quiz is free
+      throughout, and a finished event is not recruiting. That leaves the three
       single-window builds.
     */
     const free = published.filter(
@@ -859,19 +859,17 @@ describe("events seam", () => {
     }
   });
 
-  it("runs the quiz as three papers, and charges for the last one only", () => {
+  it("runs the quiz as three papers in a Google Form, free throughout", () => {
     /*
       The quiz was one sitting inside an eight-hour window, free throughout.
-      It now runs the hackathons' three rounds — a qualifier, a cut, a paid
-      final — on a grid of its own: each round is one paper of fifteen
-      questions, open 10:00 to 18:00 IST on its day, and the attempt itself
-      takes about fifteen minutes.
+      It now runs three rounds — a qualifier, a cut, a final of 10 — on a
+      grid of its own: each round is one paper of fifteen questions, open
+      10:00 to 18:00 IST on its day, taken in a Google Form with a timer in
+      the backend, and the attempt itself takes about fifteen minutes. It
+      charges nothing at any round.
 
-      Two numbers on that page can be wrong in a way that costs somebody
-      money or a day. The fee is \u20B9299 and it is per participant, not the
-      \u20B9399 per team a hackathon charges, because nobody sits this one in a
-      team. And eight hours is the window rather than the length of the
-      paper, so the page has to keep saying which.
+      Eight hours is the window rather than the length of the paper, so the
+      page has to keep saying which.
     */
     expect(quizzes.length).toBe(1);
 
@@ -908,28 +906,16 @@ describe("events seam", () => {
         ),
       ].join(" ");
 
-      // Every amount this page attaches to the word "fee", or to a person,
-      // has to be the same amount — and never charged to a team.
-      const quoted = [
-        ...words.matchAll(/fee of \u20B9\s?([\d,]+)/g),
-        ...words.matchAll(/\u20B9\s?([\d,]+) per[- ]participant/g),
-      ].map((m) => m[1]);
-      // Stated once, on Round 3, and nowhere else on the page.
-      expect(new Set(quoted), `${e.slug} quotes more than one fee`).toEqual(new Set(["299"]));
-      const round3 = (e.sections ?? []).flatMap((sec) =>
-        sec.kind === "columns" ? sec.items.map((i) => i.note ?? "") : [],
-      ).find((n) => n.includes("\u20B9299")) ?? "";
-      expect(
-        words.split("\u20B9299").length,
-        `${e.slug} prints the fee outside Round 3`,
-      ).toBe(round3.split("\u20B9299").length);
-      expect(words, `${e.slug} charges its fee per team`).not.toMatch(
-        /\u20B9\s?[\d,]+ per[- ]team/,
-      );
+      // Nothing is charged at any round, and nothing mentions a fee amount.
+      expect(words, `${e.slug} mentions a fee`).not.toMatch(/\u20B9\s?(299|399)|participation fee/);
 
-      // The funnel: more than a thousand sit Round 1, 500 reach Round 2, 50 the final.
+      // Taken in a Google Form, with the timer running in the backend.
+      expect(words, `${e.slug} does not say it is a Google Form`).toMatch(/Google Form/);
+      expect(words, `${e.slug} does not say the timer runs in the backend`).toMatch(/timer[^.]*backend[^.]*plugin/);
+
+      // The funnel: more than a thousand sit Round 1, 500 reach Round 2, 10 the final.
       expect(words, `${e.slug} does not state the funnel`).toMatch(
-        /1,000 people[^.]*500[^.]*Round 2[^.]*50[^.]*Round 3/,
+        /1,000 people[^.]*500[^.]*Round 2[^.]*10[^.]*Round 3/,
       );
       expect(
         e.stats?.find((st) => st.label === "Registration")?.value,
@@ -946,20 +932,20 @@ describe("events seam", () => {
         `${e.slug} still advertises a free entry fee`,
       ).toBeUndefined();
 
-      const note = e.registration?.note ?? "";
-      expect(note, `${e.slug}'s note talks about paying`).not.toMatch(/\bfee\b|\bpay\b|\u20B9/);
-
       expect((e.faq ?? []).find((f) => /cost|fee/i.test(f.q)), `${e.slug} still has a cost question`).toBeUndefined();
 
-      // The detail page reads the amount off the paid round's note, so the
-      // fee has to sit on exactly one round: the one that charges it.
+      // No round carries a fee note.
       const roundNotes = (e.sections ?? []).flatMap((sec) =>
         sec.kind === "columns" ? sec.items.map((i) => i.note ?? "") : [],
       );
       expect(
-        roundNotes.filter((n) => n.includes("\u20B9299")).length,
-        `${e.slug} does not carry the fee on the round that charges it`,
-      ).toBe(1);
+        roundNotes.filter((n) => /\u20B9|\bfee\b/.test(n)),
+        `${e.slug} still carries a fee on a round`,
+      ).toEqual([]);
+
+      // Only the top three are announced, and nobody else is given a position.
+      expect(words, `${e.slug} does not announce the top 3 in the group`).toMatch(/top 3 winners in the official group/);
+      expect(words, `${e.slug} sends ranks by email`).not.toMatch(/told their own rank|top 50\b/);
 
       // Eight hours is the window. Fifteen minutes is the paper.
       expect(words, `${e.slug} lets the window read as the paper`).toMatch(

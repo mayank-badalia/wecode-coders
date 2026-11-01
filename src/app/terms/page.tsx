@@ -5,7 +5,7 @@ import { Arrow } from "@/components/site/Arrow";
 export const metadata: Metadata = {
   title: "Event participation — terms — We Code Coders",
   description:
-    "The notice, rules and terms that apply to every We Code Coders event. A three-round hackathon charges ₹399 per team and the three-round quiz ₹299 per participant, once, and only at Round 3; WCC Forge 48 and every single-round event are free from start to finish. Eligibility, payment, submissions, rankings, certificates, rewards and conduct.",
+    "The notice, rules and terms that apply to every We Code Coders event. A three-round hackathon charges ₹399 per team, once, and only at Round 3; WCC Forge 48 and every single-round event are free from start to finish. Eligibility, payment, submissions, rankings, certificates, rewards and conduct.",
 };
 
 /*
@@ -68,7 +68,7 @@ const INTRO: Block[] = [
   },
   {
     kind: "p",
-    text: "What an event costs follows its shape. A three-round hackathon charges a participation fee of ₹399 per team — one payment for the whole team, not one each — and it falls due only if the team is selected for Round 3. Registering and Rounds 1 and 2 are free, and a team that is not selected for Round 3 pays nothing. The quiz runs three rounds of its own and is sat individually, so its fee is ₹299 per participant on the same terms: free to register, free for Rounds 1 and 2, and payable once only by the people selected for its final round. WCC Forge 48 is the one three-round hackathon that charges nothing: it is free from start to finish. A single-round event, meaning one window and one submission, is also free from start to finish: nothing to enter, nothing to be judged, nothing to be certified.",
+    text: "What an event costs follows its shape. A three-round hackathon charges a participation fee of ₹399 per team — one payment for the whole team, not one each — and it falls due only if the team is selected for Round 3. Registering and Rounds 1 and 2 are free, and a team that is not selected for Round 3 pays nothing. WCC Forge 48 is the one three-round hackathon that charges nothing: it is free from start to finish. A single-round event, meaning one window and one submission, is also free from start to finish: nothing to enter, nothing to be judged, nothing to be certified.",
   },
   {
     kind: "p",
@@ -88,12 +88,11 @@ const SECTIONS: Section[] = [
       {
         kind: "clauses",
         items: [
-          "Only a three-round event here charges anything. A three-round hackathon takes a participation fee of ₹399 per team, due once and only from a team selected for Round 3, and the three-round quiz takes ₹299 per participant on the same terms; registering and Rounds 1 and 2 are free in both. WCC Forge 48 charges nothing either. A single-round event charges nothing at any stage, for entry, judging or a certificate. This section and section 02 apply only to the paid rounds of the first two, and only from selection for Round 3 onwards.",
+          "Only a three-round event here charges anything. A three-round hackathon takes a participation fee of ₹399 per team, due once and only from a team selected for Round 3, and registering and Rounds 1 and 2 are free. WCC Forge 48 charges nothing either. A single-round event charges nothing at any stage, for entry, judging or a certificate. This section and section 02 apply only to the paid rounds of a three-round hackathon, and only from selection for Round 3 onwards.",
           "Only teams declared eligible or shortlisted for the applicable paid event or round may participate.",
           "Round 3 seats are limited. For a three-round hackathon, if a team selected for Round 3 has not confirmed and paid within 12 hours of being mailed, we also send a roll-out mail to the teams ranked 51st to 100th, so that they also get an equal chance. Seats are held in the order payments are received.",
           "Seats are filled on a roll-out basis, so more than 50 teams may confirm their seat. If that happens, we will accommodate them too. They have confirmed their seat, and we will not say no to them for what they have earned. By taking part, you agree to compete with them as well. Only a team that has reserved a seat is eligible to take part in Round 3 and to receive a Finalist Certificate.",
           "Unless stated otherwise, only the team leader must make one payment on behalf of the entire team.",
-          "Where an event is sat individually rather than in teams, as the quiz is, the fee is per participant and each participant pays their own. The clauses in this section about a team leader’s single payment, and about dividing a fee between members, do not apply to it.",
           "Teams must verify their event name, team name, members and eligibility before paying.",
           "Multiple payments will not create additional entries, rankings or benefits.",
           "Payment grants access only to the applicable event or round. It does not guarantee a certificate, ranking, prize, internship, qualification or any other result.",
@@ -200,7 +199,7 @@ const SECTIONS: Section[] = [
           "A three-round event issues certificates in one of two ways, and which one is stated in the certificates block on its own page. The first issues one certificate at the highest round the participant completed — Round 1 completion, Round 2 completion, National Finalist, or Winner with the rank on it. Clearing a round upgrades that certificate rather than adding a second one beside it, and no participant is issued more than one.",
           "The second starts certifying from Round 2. Where the event page states this, a valid Round 2 submission earns a Round 2 Completion Certificate, which is then upgraded at the final round. A team that reaches Round 3 and does not take part keeps the Round 2 certificate it already earned. An event announced as a single round and later run as three rounds is of this kind.",
           "Where an event issues round-completion certificates, a participant who made a valid Round 2 submission keeps the Round 2 Completion Certificate even if they later withdraw from Round 3, and that withdrawal does not cancel it.",
-          "A finalist is a team that has been selected for Round 3, has reserved its seat, and takes part in the final round. On the quiz, a finalist is a participant who has done the same.",
+          "A finalist is a team that has been selected for Round 3, has reserved its seat, and takes part in the final round.",
           "Qualification for Round 3 alone does not create eligibility for a Final Round or Finalist Completion Certificate.",
           "A Round 3 or Finalist Completion Certificate requires successful registration, payment and a valid final-round submission.",
           "A team that pays but withdraws or fails to submit will not receive a Round 3 Completion Certificate.",
@@ -419,8 +418,7 @@ export default function TermsPage() {
         </h1>
         <p style={{ ...TYPE.lead, margin: "1.4rem 0 0", maxWidth: "52ch" }}>
           Participation notice, rules and terms. The same for every We Code Coders event:
-          three rounds means a fee at Round 3 — ₹399 per team, or ₹299 per participant on
-          the quiz — except WCC Forge 48, which is free. A single round means no fee at
+          three rounds means a fee at Round 3 — ₹399 per team — except WCC Forge 48, which is free. A single round means no fee at
           all, and the fee sections apply only to the paid rounds.
         </p>
 
