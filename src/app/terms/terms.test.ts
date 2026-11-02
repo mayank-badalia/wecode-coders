@@ -79,6 +79,10 @@ describe("terms page", () => {
     expect(source).toMatch(/slight miscommunication, including one that happened unintentionally/);
   });
 
+  it("says organisers are not obliged to share every tiny detail", () => {
+    expect(source).toMatch(/We are not obliged to give every participant every tiny detail/);
+  });
+
   it("says what a prize pool is made of", () => {
     /*
       A number against a currency symbol reads as cash everywhere else, so
