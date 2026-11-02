@@ -643,7 +643,7 @@ describe("events seam", () => {
         whether their own result is coming.
       */
       expect(words, `${e.slug} says nothing about who is placed`).toMatch(
-        /teams are told their own rank|only the top three are placed/i,
+        /teams are told their own rank|only the top three are placed|finalists are each told their own rank/i,
       );
     }
   });
@@ -913,9 +913,9 @@ describe("events seam", () => {
       expect(words, `${e.slug} does not say it is a Google Form`).toMatch(/Google Form/);
       expect(words, `${e.slug} does not say the timer runs in the backend`).toMatch(/timer[^.]*backend[^.]*plugin/);
 
-      // The funnel: more than a thousand sit Round 1, 500 reach Round 2, 10 the final.
+      // The funnel: more than a thousand sit Round 1, 100 reach Round 2, 10 the final.
       expect(words, `${e.slug} does not state the funnel`).toMatch(
-        /1,000 people[^.]*500[^.]*Round 2[^.]*10[^.]*Round 3/,
+        /1,000 people[^.]*100[^.]*Round 2[^.]*10[^.]*Round 3/,
       );
       expect(
         e.stats?.find((st) => st.label === "Registration")?.value,
@@ -943,9 +943,10 @@ describe("events seam", () => {
         `${e.slug} still carries a fee on a round`,
       ).toEqual([]);
 
-      // Only the top three are announced, and nobody else is given a position.
+      // Top three in the group; the ten finalists are told their own rank by email.
       expect(words, `${e.slug} does not announce the top 3 in the group`).toMatch(/top 3 winners in the official group/);
-      expect(words, `${e.slug} sends ranks by email`).not.toMatch(/told their own rank|top 50\b/);
+      expect(words, `${e.slug} does not tell its 10 finalists their rank`).toMatch(/10 finalists are[^.]*told their own rank[^.]*email/);
+      expect(words, `${e.slug} still says 500 reach Round 2`).not.toMatch(/\b500 (people|qualify)|top 500/);
 
       // Eight hours is the window. Fifteen minutes is the paper.
       expect(words, `${e.slug} lets the window read as the paper`).toMatch(

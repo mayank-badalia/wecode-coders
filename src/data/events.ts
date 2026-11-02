@@ -1047,14 +1047,14 @@ function quizRounds(startsAt: string): EventSection {
     variant: "tabs",
     label: "How the three quiz rounds run",
     intro:
-      "Three rounds, each one paper of fifteen questions sat inside an eight-hour window, 10:00 to 18:00 IST. One attempt per round, on your own: there is nothing to build and nothing to hand in beforehand. Every paper is taken in a Google Form, with a timer running in the backend through a plugin. The Round 1 and Round 2 results are emailed to everyone who sat the paper, selected or not — you hear from us either way — and the people who go through get the joining link for the next round in the same email. More than 1,000 people sit Round 1, 500 qualify for Round 2, and 10 qualify for Round 3, which is the final: those 10 are sent a mail to take part. Places are given on score, so clearing a round does not by itself carry you into the next one.",
+      "Three rounds, each one paper of fifteen questions sat inside an eight-hour window, 10:00 to 18:00 IST. One attempt per round, on your own: there is nothing to build and nothing to hand in beforehand. Every paper is taken in a Google Form, with a timer running in the backend through a plugin. The Round 1 and Round 2 results are emailed to everyone who sat the paper, selected or not — you hear from us either way — and the people who go through get the joining link for the next round in the same email. More than 1,000 people sit Round 1, 100 qualify for Round 2, and 10 qualify for Round 3, which is the final: those 10 are sent a mail to take part. Places are given on score, so clearing a round does not by itself carry you into the next one.",
     items: [
       {
         code: "01",
         meta: day(0),
         name: "Round 1 — The qualifier",
         blurb:
-          "The open paper: everyone who registered sits this one. Fifteen questions across the three subject areas, about fifteen minutes of work, at whatever point inside the eight hours suits you. More than 1,000 people sit it, and the top 500 by score go through to Round 2. Everyone who sat it is emailed the result the same evening.",
+          "The open paper: everyone who registered sits this one. Fifteen questions across the three subject areas, about fifteen minutes of work, at whatever point inside the eight hours suits you. More than 1,000 people sit it, and the top 100 by score go through to Round 2. Everyone who sat it is emailed the result the same evening.",
         points: [
           "One attempt, opened from the official joining link",
           "Fifteen questions, weighted evenly across the three areas",
@@ -1066,7 +1066,7 @@ function quizRounds(startsAt: string): EventSection {
         meta: day(1),
         name: "Round 2 — The cut",
         blurb:
-          "A harder paper, the morning after Round 1. The same shape — fifteen questions, about fifteen minutes, one attempt inside an eight-hour window — with the questions going further into the same three areas rather than wider. Only 500 people sit it, and the top 10 by score go through to the final. The result is emailed the same evening again.",
+          "A harder paper, the morning after Round 1. The same shape — fifteen questions, about fifteen minutes, one attempt inside an eight-hour window — with the questions going further into the same three areas rather than wider. Only 100 people sit it, and the top 10 by score go through to the final. The result is emailed the same evening again.",
         points: [
           "One attempt, from the link in your Round 1 result email",
           "Fifteen questions, deeper in the same three areas",
@@ -2597,7 +2597,7 @@ export const events: Event[] = [
           "Begin and finish inside that round's eight-hour window, 10:00 to 18:00 IST. The paper takes about fifteen minutes; the window is wide so you can choose your moment, not so you can take all day over it.",
           "An attempt not submitted before the window closes does not count. There is no late window.",
           "Everyone who sat a round is emailed that round's result, selected or not. The people who go through get the next round's joining link in the same email.",
-          "More than 1,000 people sit Round 1, 500 qualify for Round 2 and 10 qualify for Round 3, the final, and those 10 are sent a mail to take part. Places are given on score. Clearing a round does not by itself carry you into the next one, and the number of places is published with each round's result.",
+          "More than 1,000 people sit Round 1, 100 qualify for Round 2 and 10 qualify for Round 3, the final, and those 10 are sent a mail to take part. Places are given on score. Clearing a round does not by itself carry you into the next one, and the number of places is published with each round's result.",
           "Each round is ranked on its own. Scores are not carried forward between rounds, and the three winners come out of Round 3 alone.",
           "Duplicate, manipulated or suspicious entries may be disqualified.",
           "Report technical problems immediately through the official support channel.",
@@ -2607,7 +2607,7 @@ export const events: Event[] = [
           "Breaking the rules can cost you your leaderboard position, rewards and certificate.",
           "The organisers' decision on eligibility, ranking and disqualification is final.",
           "Results go up in the official group: the three winning names. No participant's personal details are shared or passed on unless we have their consent.",
-          "We announce the top 3 winners in the official group, and that is all. Only those three are placed, and their certificates print the rank. Nobody else is given a leaderboard position, by email or on a certificate.",
+          "We announce the top 3 winners in the official group. The 10 finalists are each told their own rank, and only their own, by email. No leaderboard goes up and no one else is given a position.",
           "Scores, answer sheets, internal notes and comparative breakdowns are not shared, and there is no re-evaluation and no second attempt.",
           PRIZE_POOL_RULE,
           TRANSPARENCY_RULE.replace("top 3 in", "top 3 names in"),
@@ -2622,7 +2622,7 @@ export const events: Event[] = [
           "Round 2 Completion Certificate — for a valid Round 2 attempt, submitted inside the window.",
           "Finalist Certificate — for a valid Round 3 attempt. It records that you reached the final round.",
           "Winner Certificate, naming the rank — first, second or third — for the three winners.",
-          "Only the top three are placed. No other certificate prints a position, and no participant outside those three is given one anywhere else either.",
+          "Only the Winner Certificate prints a rank. The 10 finalists are told their own rank by email, and no leaderboard is published.",
           "A certificate needs successful registration, joining through the official link, a submitted attempt and passing the integrity checks. Registering alone does not qualify, and neither does opening the paper without submitting it.",
           "Each participant receives one certificate only. You are not sent a separate one for every round you clear — the one you are issued is upgraded to the furthest round you completed.",
           "Somebody who completes Round 2 and does not sit Round 3 keeps the Round 2 Completion Certificate. Withdrawing from the final round does not cancel what was already earned.",
@@ -2636,12 +2636,12 @@ export const events: Event[] = [
       { q: "Is this a quiz or a hackathon?", a: "A quiz, in three sittings. There is nothing to build and nothing to hand in beforehand." },
       { q: "How long does a round take?", a: "Fifteen questions, about fifteen minutes on average. The eight-hour window is there so you can pick your moment — it is not eight hours of quiz." },
       { q: "What happens between rounds?", a: "Everyone who sat a round is emailed that round's result, selected or not — you do not have to guess, and you do not have to wait for a group post. The people who go through get the next round's joining link in the same email." },
-      { q: "How many people get through?", a: "More than 1,000 people sit Round 1. 500 qualify for Round 2 and 10 qualify for Round 3, which is the final; those 10 are sent a mail to take part. Places are given on score, and the exact cut goes out with each round's result. Clearing a round does not by itself carry you into the next one." },
+      { q: "How many people get through?", a: "More than 1,000 people sit Round 1. 100 qualify for Round 2 and 10 qualify for Round 3, which is the final; those 10 are sent a mail to take part. Places are given on score, and the exact cut goes out with each round's result. Clearing a round does not by itself carry you into the next one." },
       { q: "Are scores carried between rounds?", a: "No. Each round is ranked on its own, and the three winners come out of Round 3 alone — the earlier rounds decide who sits the final, not where anybody finishes." },
       { q: "Can beginners take part?", a: "Yes. Recommended reading goes out in the official channel before Round 1." },
       { q: "What certificate do I get?", a: "One, for the highest round you complete — certificates start from Round 2. A Round 2 Completion Certificate is for a valid Round 2 attempt, a Finalist Certificate for a valid Round 3 attempt, and a Winner Certificate naming your rank if you finish in the top three. Clearing a round upgrades that certificate rather than adding a second one. One per participant, within 10 days of the results being announced." },
       { q: "When are results announced?", a: "Each of the first two rounds is emailed the evening it closes. The final result follows once the responses are validated and the leaderboard is reviewed; timelines are shared through the official channel." },
-      { q: "Where are results announced?", a: "In the official group: the three winning names, and nothing further. Only those three are placed — no leaderboard goes up, no other participant is given a position, and no certificate below winner prints one. Nobody's personal details are shared without their consent." },
+      { q: "Where are results announced?", a: "In the official group: the three winning names. The 10 finalists are each told their own rank, and only their own, by email. No leaderboard goes up, and nobody's personal details are shared without their consent." },
     ],
     stats: [
       { label: "Rounds", value: "3" },
