@@ -207,6 +207,16 @@ const LONG_BUILD_ROUNDS: RoundOffsets = [
   [8, 11],
 ];
 
+/**
+ * LONG_BUILD_ROUNDS with a free day between Round 1 and Round 2: Round 2 opens
+ * on day 3 rather than day 2, and Round 3 follows on day 9. CodeZen only.
+ */
+const ZEN_ROUNDS: RoundOffsets = [
+  [0, 1],
+  [3, 6],
+  [9, 12],
+];
+
 /** WCC Forge 48: 100 teams into Round 2, 10 into the final, and no fee. */
 const FORGE_FUNNEL = { round2: 100, final: 10 };
 
@@ -648,6 +658,8 @@ type SeriesTerms = {
     promise at all on somebody else's event.
   */
   organiser?: Organiser;
+  /** Largest team, in words, for the "on my own?" answer. Defaults to "four". */
+  teamMax?: "four" | "six";
 };
 
 /**
@@ -735,7 +747,7 @@ function seriesFaq(terms: SeriesTerms = {}) {
       : { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
     { q: "Do I need a working product in Round 1?", a: "No. Round 1 is one PDF on the official format — the problem, the users, the solution, the workflow, the features, the stack and the plan." },
     { q: "What are the three improvements in Round 2?", a: "At Round 2 you name the three major improvements you will make in Round 3. They have to be substantial work on the product, not cosmetic changes, and Round 3 is measured against delivering them." },
-    { q: "Can I take part on my own?", a: "Yes. Solo entries are allowed, and so are teams of up to four." },
+    { q: "Can I take part on my own?", a: `Yes. Solo entries are allowed, and so are teams of up to ${terms.teamMax ?? "four"}.` },
     { q: "Can beginners enter?", a: "Yes. The event is built for first-timers and experienced builders alike, judged on the same criteria." },
     { q: "Can my team come from different colleges?", a: "Yes. Members can be from different institutions, cities or backgrounds entirely." },
     { q: "Can I use AI tools?", a: "Yes. Disclose the significant ones in your submission." },
@@ -2922,5 +2934,384 @@ export const events: Event[] = [
     ],
     // Paper. No artwork supplied, so the generated poster is what shows.
     posterSeed: 9208,
+  },
+  {
+    locked: false,
+    slug: "codenova-india",
+    title: "CodeNova India 2026",
+    kicker: "HACKATHON — 3 ROUNDS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-11-11T10:00:00+05:30",
+    endsAt: "2026-11-22T10:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of 1 to 6, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+    description: [
+      "CodeNova India 2026 is a national online hackathon run across three rounds, from a problem statement to a product someone could use.",
+      "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "online", "three rounds"],
+    teamSize: "1 to 6. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences. Registration is open online.",
+    brief:
+      "Carry the problem statement you are given from a plan to a product that runs, across three rounds.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Until Tue 10 Nov, 12:30", what: "Registration open. Form a team of one to six and join the official group." },
+      { when: "Wed 11 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Wed 11 Nov — Thu 12 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 12th, and the result is emailed the same day." },
+      { when: "Fri 13 Nov — Mon 16 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Thu 19 Nov — Sun 22 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: seriesJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development opportunities for the top three teams",
+      "A complimentary .XYZ domain for every eligible participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption credits for every eligible participant",
+      "$100 in ASI credits for every eligible participant",
+      "100+ reward recipients across the hackathon",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
+      "A Winner Certificate naming the rank, for the three winning teams",
+    ],
+    sections: seriesSections("2026-11-11T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+      certificates: "from-round-2",
+      prizePool: true,
+      submission: "individual",
+      teamMax: "six",
+    }),
+    faq: seriesFaq({
+      certificates: "from-round-2",
+      submission: "individual",
+      teamMax: "six",
+    }),
+    stats: [
+      { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Per team", value: "1–6" },
+    ],
+    sponsors: SERIES_SPONSORS,
+    // Ink. No artwork supplied, so the generated poster is what shows.
+    // No registration or group link yet; none is invented.
+    posterSeed: 9301,
+  },
+  {
+    locked: false,
+    slug: "codezen-india",
+    title: "CodeZen India 2026",
+    kicker: "HACKATHON — 3 ROUNDS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-11-14T10:00:00+05:30",
+    endsAt: "2026-11-26T10:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of 1 to 6, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+    description: [
+      "CodeZen India 2026 is a national online hackathon run across three rounds, from a problem statement to a product someone could use.",
+      "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "online", "three rounds"],
+    teamSize: "1 to 6. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences. Registration is open online.",
+    brief:
+      "Carry the problem statement you are given from a plan to a product that runs, across three rounds.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Until Fri 13 Nov, 07:00", what: "Registration open. Form a team of one to six and join the official group." },
+      { when: "Sat 14 Nov, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Sat 14 Nov — Sun 15 Nov", what: "Round 1. The idea and the plan are due by 18:00 on the 15th, and the result is emailed the same day." },
+      { when: "Tue 17 Nov — Fri 20 Nov", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Mon 23 Nov — Thu 26 Nov", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: seriesJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development opportunities for the top three teams",
+      "A complimentary .XYZ domain for every eligible participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption credits for every eligible participant",
+      "$100 in ASI credits for every eligible participant",
+      "100+ reward recipients across the hackathon",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
+      "A Winner Certificate naming the rank, for the three winning teams",
+    ],
+    sections: seriesSections("2026-11-14T10:00:00+05:30", ZEN_ROUNDS, {
+      certificates: "from-round-2",
+      prizePool: true,
+      submission: "individual",
+      teamMax: "six",
+    }),
+    faq: seriesFaq({
+      certificates: "from-round-2",
+      submission: "individual",
+      teamMax: "six",
+    }),
+    stats: [
+      { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Per team", value: "1–6" },
+    ],
+    sponsors: SERIES_SPONSORS,
+    // Paper. No artwork supplied, so the generated poster is what shows.
+    // No registration or group link yet; none is invented.
+    posterSeed: 9302,
+  },
+  {
+    locked: false,
+    slug: "codeastra-india",
+    title: "CodeAstra India 2026",
+    kicker: "HACKATHON — 3 ROUNDS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-12-03T10:00:00+05:30",
+    endsAt: "2026-12-14T10:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A national online hackathon across three rounds: from one problem statement to a product that runs. Teams of 1 to 4, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+    description: [
+      "CodeAstra India 2026 is a national online hackathon run across three rounds, from a problem statement to a finished product.",
+      "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "online", "three rounds"],
+    teamSize: "1 to 4. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences. Registration is open online.",
+    brief:
+      "Carry the problem statement you are given from a plan to a product that runs, across three rounds.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Until Wed 2 Dec, 10:37", what: "Registration open. Form a team of one to four and join the official group." },
+      { when: "Thu 3 Dec, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Thu 3 Dec — Fri 4 Dec", what: "Round 1. The idea and the plan are due by 18:00 on the 4th, and the result is emailed the same day." },
+      { when: "Sat 5 Dec — Tue 8 Dec", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Fri 11 Dec — Mon 14 Dec", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: seriesJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development opportunities for the top three teams",
+      "A complimentary .XYZ domain for every eligible participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption credits for every eligible participant",
+      "100+ reward recipients across the hackathon",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
+      "A Winner Certificate naming the rank, for the three winning teams",
+    ],
+    sections: seriesSections("2026-12-03T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+      certificates: "from-round-2",
+      prizePool: true,
+      submission: "individual",
+    }),
+    faq: seriesFaq({
+      certificates: "from-round-2",
+      submission: "individual",
+    }),
+    stats: [
+      { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Per team", value: "1–4" },
+    ],
+    sponsors: SERIES_SPONSORS,
+    // Ink. No artwork supplied, so the generated poster is what shows.
+    // No registration or group link yet; none is invented.
+    posterSeed: 9303,
+  },
+  {
+    locked: false,
+    slug: "codecrafters-india",
+    title: "CodeCrafters India 2026",
+    kicker: "HACKATHON — 3 ROUNDS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-12-03T10:00:00+05:30",
+    endsAt: "2026-12-14T10:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A HackWithPune hackathon across three rounds: one problem statement, one finished product. Teams of 1 to 6, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+    description: [
+      "CodeCrafters India 2026 is a national online hackathon run by HackWithPune across three rounds, from a problem statement to a product that runs.",
+      "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "online", "three rounds"],
+    teamSize: "1 to 6. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences. Registration is open online.",
+    brief:
+      "Carry the problem statement you are given from a plan to a product that runs, across three rounds.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Until Wed 2 Dec, 18:30", what: "Registration open. Form a team of one to six and join the official group." },
+      { when: "Thu 3 Dec, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Thu 3 Dec — Fri 4 Dec", what: "Round 1. The idea and the plan are due by 18:00 on the 4th, and the result is emailed the same day." },
+      { when: "Sat 5 Dec — Tue 8 Dec", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Fri 11 Dec — Mon 14 Dec", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: seriesJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development opportunities for the top three teams",
+      "Letters of recommendation for the top three teams",
+      "A complimentary .XYZ domain for every eligible participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption credits for every eligible participant",
+      "100+ reward recipients across the hackathon",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
+      "A Winner Certificate naming the rank, for the three winning teams",
+    ],
+    sections: seriesSections("2026-12-03T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+      certificates: "from-round-2",
+      prizePool: true,
+      submission: "individual",
+      organiser: HWP,
+      teamMax: "six",
+    }),
+    faq: seriesFaq({
+      certificates: "from-round-2",
+      submission: "individual",
+      organiser: HWP,
+      teamMax: "six",
+    }),
+    stats: [
+      { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Per team", value: "1–6" },
+    ],
+    sponsors: HWP_SPONSORS,
+    // Ink. No artwork supplied, so the generated poster is what shows.
+    // No registration or group link yet; none is invented.
+    posterSeed: 9304,
+  },
+  {
+    locked: false,
+    slug: "codeelitepune",
+    title: "CodeElitePune Hackathon",
+    kicker: "HACKATHON — 3 ROUNDS",
+    format: "hackathon",
+    status: "upcoming",
+    startsAt: "2026-12-05T10:00:00+05:30",
+    endsAt: "2026-12-16T10:00:00+05:30",
+    mode: "online",
+    venue: { name: "Details sent to everyone who registers", place: "" },
+    summary:
+      "A HackWithPune hackathon across three rounds: from one problem statement to a product that runs. Teams of 1 to 4, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+    description: [
+      "CodeElitePune is an online hackathon run by HackWithPune across three rounds, from a problem statement to something a person can open and use.",
+      "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
+    ],
+    emphasis:
+      "The problem statement is issued by the organisers one hour before the hackathon starts. Everyone receives it at the same time, and every team builds against the same brief.",
+    forWho: "Students, developers, designers and first-time builders.",
+    tags: ["agentic ai", "full-stack", "online", "three rounds"],
+    teamSize: "1 to 4. Every participant belongs to one team only.",
+    eligibility:
+      "Undergraduate and postgraduate students across engineering, management, arts, commerce and the sciences. Registration is open online.",
+    brief:
+      "Carry the problem statement you are given from a plan to a product that runs, across three rounds.",
+    deliverables: [
+      "A product that runs, and a repository anyone can open",
+      "The thinking written down: the plan you started from and the roadmap you finished with",
+      "One certificate at the highest level you reached from Round 2 onwards — Round 2 completion, national finalist, or winner with the rank on it",
+      "Something to show that is yours rather than a tutorial's",
+    ],
+    schedule: [
+      { when: "Until Thu 3 Dec, 18:30", what: "Registration open. Form a team of one to four and join the official group." },
+      { when: "Sat 5 Dec, 09:00", what: "The problem statement and the official PDF format go out, to everyone at the same moment." },
+      { when: "Sat 5 Dec — Sun 6 Dec", what: "Round 1. The idea and the plan are due by 18:00 on the 6th, and the result is emailed the same day." },
+      { when: "Mon 7 Dec — Thu 10 Dec", what: "Round 2. Seventy-two hours from 10:00 to turn the proposal into a product whose central workflow runs; the result is emailed the day it closes." },
+      { when: "Sun 13 Dec — Wed 16 Dec", what: "Round 3. Two clear days after the Round 2 result, then seventy-two hours from 10:00 to finish it — including the three improvements you named." },
+      { when: "After the event", what: "Final results once the submitted projects and participant eligibility have been verified." },
+    ],
+    judging: seriesJudging(),
+    rewards: [
+      "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
+      "Paid internship opportunities for the top three teams",
+      "Incubation and product-development opportunities for the top three teams",
+      "Letters of recommendation for the top three teams",
+      "A complimentary .XYZ domain for every eligible participant",
+      "$100 in Inkloom AI credits for every eligible participant",
+      "$500 in Adaption credits for every eligible participant",
+      "100+ reward recipients across the hackathon",
+      "A Round 2 Completion Certificate for a valid Round 2 submission",
+      "A National Finalist Certificate for finalists with a valid Round 3 submission, printing the rank your team earned",
+      "A Winner Certificate naming the rank, for the three winning teams",
+    ],
+    sections: seriesSections("2026-12-05T10:00:00+05:30", LONG_BUILD_ROUNDS, {
+      certificates: "from-round-2",
+      prizePool: true,
+      submission: "individual",
+      organiser: HWP,
+    }),
+    faq: seriesFaq({
+      certificates: "from-round-2",
+      submission: "individual",
+      organiser: HWP,
+    }),
+    stats: [
+      { label: "Rounds", value: "3" },
+      { label: "Registration", value: "Free" },
+      { label: "Prize pool", value: "₹30,000" },
+      { label: "Per team", value: "1–4" },
+    ],
+    sponsors: HWP_SPONSORS,
+    // Paper. No artwork supplied, so the generated poster is what shows.
+    // No registration or group link yet; none is invented.
+    posterSeed: 9305,
   },
 ];

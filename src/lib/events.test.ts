@@ -315,6 +315,11 @@ describe("events seam", () => {
     */
     const upgraded = ["code-axis", "codestar-30", "codex-48", "future-stack", "tech-circuit"];
     const fromRoundTwo = [
+      "codeastra-india",
+      "codecrafters-india",
+      "codeelitepune",
+      "codenova-india",
+      "codezen-india",
       "codefrontier",
       "codenexus-india",
       "codepunethinkers",
@@ -402,6 +407,10 @@ describe("events seam", () => {
       "codepunethinkers",
       "codersinpune",
       "codefrontier",
+      "codenova-india",
+      "codeastra-india",
+      "codecrafters-india",
+      "codeelitepune",
     ];
 
     for (const slug of converted) {
@@ -798,7 +807,7 @@ describe("events seam", () => {
       strip keeps "Rounds 1–2 / Free", which is the half of it a reader
       deciding whether to enter actually needs.
     */
-    expect(threeRound.length).toBe(11);
+    expect(threeRound.length).toBe(16);
 
     for (const e of threeRound) {
       // WCC Forge 48 charges nothing, so it carries no fee note; its own test is below.
@@ -1311,7 +1320,7 @@ describe("events seam", () => {
   */
   it("judges the three-round series on identical criteria", () => {
     const series = threeRound;
-    expect(series).toHaveLength(11);
+    expect(series).toHaveLength(16);
 
     const shape = (e: (typeof series)[number]) =>
       JSON.stringify((e.judging ?? []).map((j) => [j.name, j.weight]));
@@ -1470,7 +1479,7 @@ describe("closing rules", () => {
 
   it("puts the prize pool rule just before the last rule on every rupee-prize-pool event, and nowhere else", () => {
     const pooled = rawEvents.filter((e) => e.stats?.some((t) => t.label === "Prize pool"));
-    expect(pooled.length).toBe(7);
+    expect(pooled.length).toBe(12);
     for (const e of rawEvents) {
       const items = rulesOf(e);
       const has = items.some((r) => /^About the prize pool:/.test(r));
@@ -1501,7 +1510,7 @@ describe("closing rules", () => {
 
   it("rolls an unpaid Round 3 seat out to ranks 51 to 100 after 12 hours, on the three-round hackathons", () => {
     const three = rawEvents.filter((e) => rulesOf(e).some((r) => /Round 2 is limited to 300 teams/.test(r)));
-    expect(three.length).toBe(10); // Forge 48 is free and has no seat race; the quiz has no team seats
+    expect(three.length).toBe(15); // Forge 48 is free and has no seat race; the quiz has no team seats
     for (const e of three) {
       expect(
         rulesOf(e).filter((r) => /within 12 hours.*roll-out mail.*51st to 100th.*equal chance/.test(r)).length,
