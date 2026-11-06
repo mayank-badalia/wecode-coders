@@ -105,7 +105,7 @@ describe("terms page", () => {
 
 describe("terms page: Round 3 seats", () => {
   it("states the 12-hour window and the roll-out to ranks 51 to 100", () => {
-    expect(source).toMatch(/within 12 hours of being mailed, we also send a roll-out mail.*51st to 100th.*equal chance.*order payments are received/);
+    expect(source).toMatch(/ranked 1st to 50th in Round 2 are mailed first.*within 12 hours goes to the teams ranked 51st to 100th.*every 12 hours.*order payments are received/);
   });
 });
 
@@ -116,35 +116,35 @@ describe("terms page: transparency", () => {
 });
 
 describe("terms page: results", () => {
-  it("announces the top 3 with the project URL and mails the top 50 their own rank", () => {
+  it("announces the top 3 with the project URL and mails every finalist their own rank", () => {
     expect(source).toMatch(/We will announce the top 3 teams in the official event group, together with the project URL/);
-    expect(source).toMatch(/top 50 teams are told their own rank, and only their own, by email on the day the certificates are distributed/);
+    expect(source).toMatch(/Every finalist is told their own rank, and only their own, by email on the day the certificates are distributed, and it is printed on their certificate/);
     expect(source).not.toMatch(/the GitHub repository for a hackathon/);
   });
 });
 
 describe("terms page: shortlists", () => {
   it("says no round's selected or shortlisted list is posted in the group", () => {
-    expect(source).toMatch(/We do not post the list of selected or shortlisted teams for Round 1, Round 2 or Round 3 in the group\. Each finalist is told its own position only\. That means the top 50 teams, or more if more teams become finalists, because they are welcome too\./);
+    expect(source).toMatch(/We do not post the list of selected or shortlisted teams for Round 1, Round 2 or Round 3 in the group\. Each finalist is told its own rank only\./);
   });
 });
 
 describe("terms page: more than 50 confirmed", () => {
   it("accommodates every team that confirmed and asks entrants to compete with them", () => {
-    expect(source).toMatch(/more than 50 teams may confirm their seat.*accommodate them too.*will not say no to them for what they have earned.*agree to compete with them as well/);
+    expect(source).toMatch(/more than 50 teams may confirm a seat.*accepted, up to the 100 that qualified.*agree to compete with them as well/);
   });
 });
 
 describe("terms page: seat holders and extra finalists", () => {
-  it("limits Round 3 and the Finalist Certificate to teams that reserved a seat, and welcomes extra finalists", () => {
+  it("limits Round 3 and the Finalist Certificate to teams that reserved a seat, and no longer says extra finalists are welcome", () => {
     expect(source).toMatch(/Only a team that has reserved a seat is eligible to take part in Round 3 and to receive a Finalist Certificate/);
-    expect(source.match(/If more teams become finalists, they are welcome too/g)?.length).toBe(2);
+    expect(source).not.toMatch(/welcome too/);
   });
 });
 
 describe("terms page: what a finalist is", () => {
   it("defines a finalist and does not say a team loses its seat", () => {
-    expect(source).toMatch(/A finalist is a team that has been selected for Round 3, has reserved its seat, and takes part in the final round/);
+    expect(source).toMatch(/A finalist is a team that has been selected for Round 3, has reserved its seat where the event charges a fee, and takes part in the final round/);
     expect(source).not.toMatch(/loses its seat/);
   });
 });

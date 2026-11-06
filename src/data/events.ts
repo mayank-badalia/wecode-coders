@@ -220,12 +220,9 @@ const ZEN_ROUNDS: RoundOffsets = [
 /** WCC Forge 48: 100 teams into Round 2, 10 into the final, and no fee. */
 const FORGE_FUNNEL = { round2: 100, final: 10 };
 
-/** How many finalists are told their own rank: the top 50, or all ten at Forge. */
-const rankedCount = (terms: SeriesTerms) => (terms.free ? (terms.funnel?.final ?? 10) : 50);
-
-/** The rank-mail line, with the welcome for any finalists beyond the top 50. Forge has a fixed ten. */
-const rankMailLine = (terms: SeriesTerms) =>
-  `The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed.${terms.free ? "" : " If more teams become finalists, they are welcome too."}`;
+/** The rank-mail line. Every finalist is told their own rank, and it is printed on their certificate. */
+const RANK_MAIL_LINE =
+  "Every finalist is told their own rank, and only their own, by email on the day the certificates are distributed, and it is printed on their certificate.";
 
 function seriesRounds(
   startsAt: string,
@@ -288,7 +285,7 @@ function seriesRounds(
       meta: span(startsAt, offsets[1]![0], offsets[1]![1]),
       name: "Round 2 — The build",
       blurb:
-        `${terms.round2Length ?? "Three days"} to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not. ${round2} teams reach this round, and ${final} of them go through to the final.`,
+        `${terms.round2Length ?? "Three days"} to build what you proposed. The central workflow and the essential features from Round 1 have to run end to end: a judge opens your link and uses the product. Rough edges are expected this early — a broken core is not. ${round2} teams reach this round, and ${final} of them ${terms.free ? "go through to the final" : "qualify for Round 3"}.`,
       points: [
         "A link to the functioning project",
         "The source-code repository",
@@ -310,7 +307,7 @@ function seriesRounds(
       meta: span(startsAt, offsets[2]![0], offsets[2]![1]),
       name: "Round 3 — The finish",
       blurb:
-        `Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product. ${final} teams reach the final round, and three of them win.`,
+        `Three days to turn something that works into something people would use. Finish the features you left open, tighten the interface, repair the faults you already know about, test the main journeys and write the documentation. Round 2 proved the idea runs; this round decides whether it is a product. ${terms.free ? `${final} teams reach the final round` : "The teams that reserve a seat reach the final round"}, and three of them win.`,
       points: [
         "The final working project link",
         "The final source-code repository",
@@ -327,7 +324,7 @@ function seriesRounds(
         ? {}
         : {
             note:
-              `Teams selected for Round 3 pay a participation fee of ${ROUND_3_FEE} per team \u2014 one payment for the whole team, not one each. The fee covers the cost of running the event: infrastructure, the time and effort of organising it, and paying the people who do that work. Registering and Rounds 1 and 2 are free, and this is the only payment anywhere in this event. It falls due only once your team is selected for Round 3, so a team that is not selected pays nothing at all. Paying it means accepting the event participation terms, which are linked under this block and are the same for every event. 100 teams are selected and qualified, and all of them are mailed, but seats are limited and we have only 50. Whoever pays first gets their seat reserved. Only a team that has reserved a seat can take part in Round 3 and receive a Finalist Certificate.`,
+              `Teams selected for Round 3 pay a participation fee of ${ROUND_3_FEE} per team \u2014 one payment for the whole team, not one each. The fee covers the cost of running the event: infrastructure, the time and effort of organising it, and paying the people who do that work. Registering and Rounds 1 and 2 are free, and this is the only payment anywhere in this event. It falls due only once your team is selected for Round 3, so a team that is not selected pays nothing at all. Paying it means accepting the event participation terms, which are linked under this block and are the same for every event. 100 teams qualify for Round 3, but seats are limited to 50. The teams ranked 1st to 50th in Round 2 are mailed first. A seat not confirmed within 12 hours is rolled out to the teams ranked 51st to 100th, with a new round of mails every 12 hours. Whoever pays first gets their seat reserved. Only a team that has reserved a seat can take part in Round 3 and receive a Finalist Certificate.`,
           }),
     },
   ],
@@ -500,10 +497,10 @@ const TRANSPARENCY_RULE =
 
 /**
  * Round 3 seats are first-come, so a seat nobody confirms has to move. The
- * 51st to 100th teams are the ones already qualified and mailed as the pool.
+ * 51st to 100th teams are mailed once the first 50 have had twelve hours.
  */
 const SEATS_RULE =
-  "100 teams are shortlisted, but only 50 seats are available. If the seats are not filled, we go on a roll-out basis, with a new round of mails every 12 hours.";
+  "100 teams qualify for Round 3 and 50 seats are offered first, to the teams ranked 1st to 50th in Round 2. Seats are held in the order payments are received. Seats not confirmed within 12 hours are rolled out to the teams ranked 51st to 100th, in a new round of mails every 12 hours.";
 
 const finalistRule = (terms: SeriesTerms) =>
   terms.free
@@ -511,7 +508,7 @@ const finalistRule = (terms: SeriesTerms) =>
     : "A finalist is a team that is selected for Round 3, has reserved its seat, and takes part in the final round.";
 
 const ROLL_OUT_RULE =
-  "If a team selected for the final round has not confirmed and paid within 12 hours of being mailed, we also send a roll-out mail to the teams ranked 51st to 100th, so that they also get an equal chance at the seats still open.";
+  "The teams ranked 1st to 50th in Round 2 are mailed first. Any seat not confirmed and paid for within 12 hours goes to the teams ranked 51st to 100th, and we send a new round of mails every 12 hours until the seats are filled or all 100 have been mailed.";
 
 const seriesRules = (
   winnerLink = "the project URL of what each of them built",
@@ -534,7 +531,7 @@ const seriesRules = (
     "Plagiarised, copied or misleading submissions are disqualified.",
     "Respect software licences, intellectual property and user privacy.",
     "Projects must not promote illegal, harmful or discriminatory activity.",
-    `More than 1,000 teams start in Round 1 and all of them compete. Round 2 is limited to ${terms.funnel?.round2 ?? 300} teams, Round 3 to ${terms.funnel?.final ?? 100}, and three teams win. Qualification is competitive: clearing a round's requirements does not by itself carry a team into the next one.`,
+    `More than 1,000 teams start in Round 1 and all of them compete. ${terms.free ? `Round 2 is limited to ${terms.funnel?.round2 ?? 300} teams, Round 3 to ${terms.funnel?.final ?? 100}, and three teams win.` : `Round 2 is limited to ${terms.funnel?.round2 ?? 300} teams. ${terms.funnel?.final ?? 100} teams qualify for Round 3, which has 50 seats offered first and the rest filled by roll-out. Three teams win.`} Qualification is competitive: clearing a round's requirements does not by itself carry a team into the next one.`,
     finalistRule(terms),
     ...(terms.free ? [] : [ROLL_OUT_RULE]),
     "Everything on each round's submission list has to arrive before that round's deadline.",
@@ -554,7 +551,7 @@ const seriesRules = (
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message. Where an organiser, judge or volunteer reports feeling threatened, the team is removed from the event without refund.",
     "The judges' decision is final.",
     `We will announce the top 3 teams in the official group, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
-    `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. ${rankMailLine(terms)}`,
+    `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. ${RANK_MAIL_LINE}`,
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
     ...(terms.prizePool ? [PRIZE_POOL_RULE] : []),
     TRANSPARENCY_RULE,
@@ -691,7 +688,7 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
           `National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round, and it prints the rank your team earned.`,
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
           "Clearing a round upgrades the certificate you will be issued rather than adding another one beside it. A team that reaches Round 3 and does not take part keeps its Round 2 Completion Certificate.",
-          `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. ${rankMailLine(terms)}`,
+          `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. ${RANK_MAIL_LINE}`,
           "A Finalist or Winner Certificate requires successful registration, payment where applicable, and a valid Round 3 submission. Qualifying for the final round does not by itself earn one.",
           "Each participant receives one certificate only.",
         ]
@@ -700,7 +697,7 @@ const seriesCertificates = (terms: SeriesTerms = {}): EventSection => ({
           "Round 2 Completion Certificate — for a valid Round 2 submission.",
           `National Finalist Certificate — for finalists who make a valid Round 3 submission. It records that your team reached the final round, and it prints the rank your team earned.`,
           "Winner Certificate, naming the rank — first, second or third — for the three winning teams.",
-          `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. ${rankMailLine(terms)}`,
+          `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. ${RANK_MAIL_LINE}`,
           "Certificates are issued separately for each completed round. Qualification for a subsequent round does not itself create eligibility for that round's certificate.",
           "Participants who complete Round 2 but withdraw from Round 3 will remain eligible only for the Round 2 Completion Certificate.",
           "Finalist and Final Round certificates require successful registration, payment where applicable, and a valid Round 3 submission.",
@@ -741,7 +738,7 @@ function seriesFaq(terms: SeriesTerms = {}) {
     { q: "How does it run?", a: "Three rounds: the plan, the build, then the finish. Dates for each round go out with the brief." },
     { q: "Are problem statements provided?", a: "Yes. The organisers release the problem statement one hour before the hackathon starts, to everyone at once. There is nothing to prepare against beforehand." },
     { q: "What happens between rounds?", a: "Every team that submitted is emailed its result, selected or not — you do not have to guess, and you do not have to wait for a group post. The teams that go through get the instructions for the next stage in the same email." },
-    { q: "How many teams get through?", a: `More than 1,000 teams start in Round 1 and every one of them competes. ${terms.funnel?.round2 ?? 300} go through to Round 2, ${terms.funnel?.final ?? 100} to the final round, and three teams win. Meeting a round's requirements does not by itself carry you into the next one — the places are competitive.` },
+    { q: "How many teams get through?", a: `More than 1,000 teams start in Round 1 and every one of them competes. ${terms.free ? `${terms.funnel?.round2 ?? 300} go through to Round 2, ${terms.funnel?.final ?? 100} to the final round, and three teams win.` : `${terms.funnel?.round2 ?? 300} go through to Round 2 and ${terms.funnel?.final ?? 100} qualify for Round 3, where 50 seats are offered first and the rest by roll-out. Three teams win.`} Meeting a round's requirements does not by itself carry you into the next one — the places are competitive.` },
     terms.submission === "individual"
       ? { q: "Who submits for the team?", a: `Everybody, separately. Each member files their own entry for the same project every round, names the role they held — ${ROLE_SET} — and says what they built. Nobody submits on anyone else's behalf, and a member who files no entry is not recorded as having taken part and is not issued a certificate.` }
       : { q: "Who submits for the team?", a: "The team leader, once per round. Members do not submit separately." },
@@ -758,10 +755,10 @@ function seriesFaq(terms: SeriesTerms = {}) {
       q: "What certificate do I get?",
       a:
         terms.certificates === "from-round-2"
-          ? `One certificate, at the highest stage you reach from Round 2 onwards: a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. ${rankMailLine(terms)} Only the top three are announced publicly.`
-          : `One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. The top ${rankedCount(terms)} teams are told their own rank by email on the day the certificates are distributed; only the top three are announced publicly. Clearing a round upgrades that certificate rather than adding a second one.`,
+          ? `One certificate, at the highest stage you reach from Round 2 onwards: a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. ${RANK_MAIL_LINE} Only the top three are announced publicly.`
+          : `One certificate, at the highest stage you reach: a Round 1 Completion Certificate for a valid Round 1 submission, a Round 2 Completion Certificate for a valid Round 2 submission, a National Finalist Certificate for finalists with a valid Round 3 submission, and a Winner Certificate naming your rank if you finish in the top three. ${RANK_MAIL_LINE} Only the top three are announced publicly. Clearing a round upgrades that certificate rather than adding a second one.`,
     },
-    { q: "Where are results announced?", a: `We will announce the top 3 teams in the official group, along with the project URL of what each of them built. That is the whole public announcement. ${rankMailLine(terms)} Nobody's personal details are shared without their consent.` },
+    { q: "Where are results announced?", a: `We will announce the top 3 teams in the official group, along with the project URL of what each of them built. That is the whole public announcement. ${RANK_MAIL_LINE} Nobody's personal details are shared without their consent.` },
     { q: "Who judges, and when do results and certificates arrive?", a: (terms.organiser ?? WCC).roundsFaq },
   ];
 }

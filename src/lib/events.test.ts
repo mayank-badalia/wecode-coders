@@ -652,7 +652,7 @@ describe("events seam", () => {
         whether their own result is coming.
       */
       expect(words, `${e.slug} says nothing about who is placed`).toMatch(
-        /teams are told their own rank|only the top three are placed|finalists are each told their own rank/i,
+        /teams are told their own rank|only the top three are placed|finalists are each told their own rank|finalist is told their own rank/i,
       );
     }
   });
@@ -849,7 +849,7 @@ describe("events seam", () => {
       expect(own.length, `${e.slug} does not carry the fee on the round that charges it`).toBe(1);
       expect(own[0], `${e.slug}'s Round 3 does not say who pays`).toMatch(/\u20B9399 per team/);
       expect(own[0], `${e.slug}'s Round 3 does not give the seats and ranks`).toMatch(
-        /per team.*100 teams are selected and qualified.*only 50\. Whoever pays first gets their seat reserved\. Only a team that has reserved a seat can take part in Round 3 and receive a Finalist Certificate\.$/,
+        /per team.*100 teams qualify for Round 3.*limited to 50\..*ranked 1st to 50th in Round 2 are mailed first.*ranked 51st to 100th.*Whoever pays first gets their seat reserved\. Only a team that has reserved a seat can take part in Round 3 and receive a Finalist Certificate\.$/,
       );
       expect(
         words.split("\u20B9399").length,
@@ -1501,7 +1501,7 @@ describe("closing rules", () => {
     for (const e of withRules) {
       const all = rulesOf(e);
       // The seats rule closes the team hackathons that charge; the transparency rule is last everywhere else.
-      const items = /^100 teams are shortlisted/.test(all[all.length - 1] ?? "") ? all.slice(0, -1) : all;
+      const items = /^100 teams qualify for Round 3 and 50 seats/.test(all[all.length - 1] ?? "") ? all.slice(0, -1) : all;
       expect(items[items.length - 1], `${e.slug} does not end with the transparency rule`).toMatch(
         /^We understand the wish for transparency.*automated.*as already stated on this event page.*announce the top 3.*official group.*not more than that.*more events to manage.*what we have promised, we will always deliver/i,
       );
@@ -1513,7 +1513,7 @@ describe("closing rules", () => {
     expect(three.length).toBe(15); // Forge 48 is free and has no seat race; the quiz has no team seats
     for (const e of three) {
       expect(
-        rulesOf(e).filter((r) => /within 12 hours.*roll-out mail.*51st to 100th.*equal chance/.test(r)).length,
+        rulesOf(e).filter((r) => /ranked 1st to 50th in Round 2 are mailed first.*within 12 hours.*51st to 100th.*every 12 hours/.test(r)).length,
         `${e.slug} roll-out rule`,
       ).toBe(1);
     }
@@ -1566,7 +1566,7 @@ describe("WCC Forge 48 funnel and fee", () => {
 });
 
 describe("results announcement", () => {
-  it("announces the top 3 with the project URL, names no repository, and tells the top 50 their own rank by mail", () => {
+  it("announces the top 3 with the project URL, names no repository, and tells every finalist their own rank by mail", () => {
     for (const e of rawEvents) {
       if (e.status === "past" || e.format !== "hackathon") continue;
       const rules = e.sections?.find((sec) => sec.kind === "list" && sec.label === "Rules");
@@ -1577,8 +1577,8 @@ describe("results announcement", () => {
       const faq = (e.faq ?? []).find((f) => f.q === "Where are results announced?")?.a ?? "";
       expect(faq, `${e.slug} FAQ mentions the repository`).not.toMatch(/repositor|GitHub/i);
       if (items.some((r) => /^Round 2 is limited|^More than 1,000 teams/.test(r))) {
-        const n = e.slug === "wcc-forge-48" ? 10 : 50;
-        expect(items.join(" "), `${e.slug} rank mail`).toContain(`The top ${n} teams are told their own rank by email on the day the certificates are distributed.${n === 50 ? " If more teams become finalists, they are welcome too." : ""}`);
+        expect(items.join(" "), `${e.slug} rank mail`).toContain("Every finalist is told their own rank, and only their own, by email on the day the certificates are distributed, and it is printed on their certificate.");
+        expect(items.join(" "), `${e.slug} still says top 50 or welcome too`).not.toMatch(/top 50|welcome too/);
       }
     }
   });
@@ -1592,9 +1592,9 @@ describe("seats rule", () => {
       const last = items[items.length - 1] ?? "";
       const paid = items.some((r) => /^About the prize pool|^We understand the wish for transparency/.test(r)) && items.some((r) => /Round 2 is limited to 300 teams/.test(r));
       if (paid) {
-        expect(last, e.slug).toBe("100 teams are shortlisted, but only 50 seats are available. If the seats are not filled, we go on a roll-out basis, with a new round of mails every 12 hours.");
+        expect(last, e.slug).toBe("100 teams qualify for Round 3 and 50 seats are offered first, to the teams ranked 1st to 50th in Round 2. Seats are held in the order payments are received. Seats not confirmed within 12 hours are rolled out to the teams ranked 51st to 100th, in a new round of mails every 12 hours.");
       } else {
-        expect(last, e.slug).not.toMatch(/^100 teams are shortlisted/);
+        expect(last, e.slug).not.toMatch(/^100 teams qualify for Round 3 and 50 seats/);
       }
     }
   });
