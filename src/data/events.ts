@@ -550,6 +550,7 @@ const seriesRules = (
     "Do not ask an organiser, judge or volunteer to break a rule, waive a requirement or make an exception in your favour. You may ask once; when the answer is no, that is the answer.",
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message. Where an organiser, judge or volunteer reports feeling threatened, the team is removed from the event without refund.",
     "The judges' decision is final.",
+    "Paid internship opportunities are open only to M.Tech students. A member of a winning team who is not an M.Tech student is not eligible for the internship, whatever the team's rank.",
     `We will announce the top 3 teams in the official group, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
     `The top 3 teams are announced in the official group with their project URL, and nothing further is made public. ${RANK_MAIL_LINE}`,
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
@@ -962,6 +963,7 @@ const sprintRules = (
     "Do not ask an organiser, judge or volunteer to break a rule, waive a requirement or make an exception in your favour. You may ask once; when the answer is no, that is the answer.",
     "Pressuring, forcing, threatening or intimidating an organiser, judge or volunteer disqualifies the whole team, not only the person who sent the message.",
     "The judges' decision is final.",
+    "Paid internship opportunities are open only to M.Tech students. A member of a winning team who is not an M.Tech student is not eligible for the internship, whatever the team's rank.",
     `We will announce the top 3 teams in the official group, along with ${winnerLink}. No participant's personal details, and nothing further from a team's submission, are shared or passed on unless we have that team's consent.`,
     "Only the top three are placed. The three winning teams are named with a link to what each of them built, and their certificates print the rank; no other team is given a position, no ranking list is published, and no certificate below winner carries a placing.",
     "Scores, judging sheets, internal notes and comparative breakdowns are not shared, and there is no personal feedback, re-evaluation or second presentation.",
@@ -1923,7 +1925,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      `Three rounds to turn an original idea into a finished, working product. National and online, with paid internship and incubation opportunities for the top three teams. Round 3 is ${ROUND_3_FEE} for 50 seats, as we have limited seats.`,
+      `Three rounds to turn an original idea into a finished, working product. National and online, with incubation opportunities for the top three teams, and paid internships for the M.Tech students among them. Round 3 is ${ROUND_3_FEE} for 50 seats, as we have limited seats.`,
     description: [
       "Codex 48 is a national-level AI and full-stack online hackathon, run across three rounds — one original idea carried from a plan to a product that runs.",
       "Original means built here. Research and planning beforehand are fine; a codebase that existed last week is not, and submissions are checked.",
@@ -1959,7 +1961,7 @@ export const events: Event[] = [
     ],
     judging: seriesJudging(),
     rewards: [
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
@@ -2002,7 +2004,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      `Three rounds for students and young builders to develop and present a functional technology product. National and online, with paid internship and incubation opportunities for the top three teams. Round 3 is ${ROUND_3_FEE} for 50 seats, as we have limited seats.`,
+      `Three rounds for students and young builders to develop and present a functional technology product. National and online, with incubation opportunities for the top three teams, and paid internships for the M.Tech students among them. Round 3 is ${ROUND_3_FEE} for 50 seats, as we have limited seats.`,
     description: [
       "CodeStar 30 is a national-level AI and full-stack online hackathon, run across three rounds.",
       "The format rewards scope discipline. Inside the problem statement you are given, build the single journey that proves your idea works rather than the five that show what it could become.",
@@ -2038,7 +2040,7 @@ export const events: Event[] = [
     ],
     judging: seriesJudging(),
     rewards: [
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
@@ -2082,7 +2084,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online AI and coding hackathon: forty-eight hours, one finished product. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
+      "A national online AI and coding hackathon: forty-eight hours, one finished product. Free to enter, teams of one to four, with incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodeVerse India is a national-level online AI and coding hackathon, run in a single forty-eight-hour window — one problem statement carried from an empty repository to a thing that runs.",
       "Open to undergraduates, postgraduates and students from engineering, management, arts, commerce and the sciences alike. The criteria are the same for everyone.",
@@ -2117,7 +2119,7 @@ export const events: Event[] = [
     ],
     judging: sprintJudging(),
     rewards: [
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
@@ -2162,7 +2164,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online technology hackathon: forty-eight hours to build a working solution. Free to enter, teams of one to four, with paid internship and incubation opportunities for the top three teams.",
+      "A national online technology hackathon: forty-eight hours to build a working solution. Free to enter, teams of one to four, with incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodeHack India is a national-level online technology hackathon that asks for one thing: a working solution, planned, built and finished inside forty-eight hours.",
       "Submissions are scored on the six published criteria below, and they are on this page before you start.",
@@ -2197,7 +2199,7 @@ export const events: Event[] = [
     ],
     judging: sprintJudging(),
     rewards: [
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
@@ -2241,7 +2243,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon across three rounds: one problem statement, a plan, then a working product. Teams of one to four, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A national online hackathon across three rounds: one problem statement, a plan, then a working product. Teams of one to four, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodeNexus India 2026 is a national-level online hackathon run across three rounds. The problem statement lands an hour before Round 1 opens, and what you submit in the final round is what decides whether you built a product.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2272,7 +2274,7 @@ export const events: Event[] = [
     judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
@@ -2325,7 +2327,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of one to four, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of one to four, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodeTitans India 2026 is a national-level online hackathon run across three rounds, from a problem statement to a product someone could use.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2356,7 +2358,7 @@ export const events: Event[] = [
     judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
@@ -2417,7 +2419,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon in one forty-eight-hour window: one problem statement, one working product. Free to enter, teams of one to four, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A national online hackathon in one forty-eight-hour window: one problem statement, one working product. Free to enter, teams of one to four, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "Code Conqueror India 2026 is a national-level online hackathon run in a single forty-eight-hour window. The problem statement lands an hour before the clock starts, and what you submit at the end of it is what is judged.",
       "Submissions are scored on one published sheet, out of 100, and it is on this page before you start.",
@@ -2447,7 +2449,7 @@ export const events: Event[] = [
     judging: sprintJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "A complimentary .XYZ domain for every participant",
       "$100 in Inkloom AI credits for every eligible participant",
@@ -2708,7 +2710,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon across three rounds: one problem statement, a plan, then a working product. Teams of one to four, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A HackWithPune hackathon across three rounds: one problem statement, a plan, then a working product. Teams of one to four, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodePuneThinkers is an online hackathon run by HackWithPune across three rounds. The problem statement lands an hour before Round 1 opens, and what you submit in the final round is what is judged.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2739,7 +2741,7 @@ export const events: Event[] = [
     judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "Letters of recommendation for the top three teams",
       "A complimentary .XYZ domain for every eligible participant",
@@ -2786,7 +2788,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon across three rounds, from one problem statement to a product that runs. Teams of one to four, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A HackWithPune hackathon across three rounds, from one problem statement to a product that runs. Teams of one to four, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodersInPune is an online hackathon run by HackWithPune across three rounds, from a problem statement to something a person can open and use.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2817,7 +2819,7 @@ export const events: Event[] = [
     judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "Letters of recommendation for the top three teams",
       "A complimentary .XYZ domain for every eligible participant",
@@ -2865,7 +2867,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon across three rounds: one problem statement, one finished product. Teams of one to four, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A HackWithPune hackathon across three rounds: one problem statement, one finished product. Teams of one to four, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodeFrontier is an online hackathon run by HackWithPune across three rounds. One problem statement, an entry from every member who built, and a product at the end of it.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2896,7 +2898,7 @@ export const events: Event[] = [
     judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "Letters of recommendation for the top three teams",
       "A complimentary .XYZ domain for every eligible participant",
@@ -2944,7 +2946,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of 1 to 6, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of 1 to 6, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodeNova India 2026 is a national online hackathon run across three rounds, from a problem statement to a product someone could use.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -2975,7 +2977,7 @@ export const events: Event[] = [
     judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "A complimentary .XYZ domain for every eligible participant",
       "$100 in Inkloom AI credits for every eligible participant",
@@ -3020,7 +3022,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of 1 to 6, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A national online hackathon across three rounds: read the brief, plan it, build it, finish it. Teams of 1 to 6, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodeZen India 2026 is a national online hackathon run across three rounds, from a problem statement to a product someone could use.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -3051,7 +3053,7 @@ export const events: Event[] = [
     judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "A complimentary .XYZ domain for every eligible participant",
       "$100 in Inkloom AI credits for every eligible participant",
@@ -3096,7 +3098,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A national online hackathon across three rounds: from one problem statement to a product that runs. Teams of 1 to 4, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A national online hackathon across three rounds: from one problem statement to a product that runs. Teams of 1 to 4, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodeAstra India 2026 is a national online hackathon run across three rounds, from a problem statement to a finished product.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -3127,7 +3129,7 @@ export const events: Event[] = [
     judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "A complimentary .XYZ domain for every eligible participant",
       "$100 in Inkloom AI credits for every eligible participant",
@@ -3169,7 +3171,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon across three rounds: one problem statement, one finished product. Teams of 1 to 6, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A HackWithPune hackathon across three rounds: one problem statement, one finished product. Teams of 1 to 6, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodeCrafters India 2026 is a national online hackathon run by HackWithPune across three rounds, from a problem statement to a product that runs.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -3200,7 +3202,7 @@ export const events: Event[] = [
     judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "Letters of recommendation for the top three teams",
       "A complimentary .XYZ domain for every eligible participant",
@@ -3247,7 +3249,7 @@ export const events: Event[] = [
     mode: "online",
     venue: { name: "Details sent to everyone who registers", place: "" },
     summary:
-      "A HackWithPune hackathon across three rounds: from one problem statement to a product that runs. Teams of 1 to 4, with ₹30,000 in prizes, paid internship and incubation opportunities for the top three.",
+      "A HackWithPune hackathon across three rounds: from one problem statement to a product that runs. Teams of 1 to 4, with ₹30,000 in prizes, incubation opportunities for the top three teams, and paid internships for the M.Tech students among them.",
     description: [
       "CodeElitePune is an online hackathon run by HackWithPune across three rounds, from a problem statement to something a person can open and use.",
       "Each round is scored on its own published sheet, out of 100, and all three are on this page before you start.",
@@ -3278,7 +3280,7 @@ export const events: Event[] = [
     judging: seriesJudging(),
     rewards: [
       "₹30,000 in prizes, shared among the top three teams — awarded as cash, as AI or platform credits, or as a combination of them",
-      "Paid internship opportunities for the top three teams",
+      "Paid internship opportunities for the M.Tech students in the top three teams",
       "Incubation and product-development opportunities for the top three teams",
       "Letters of recommendation for the top three teams",
       "A complimentary .XYZ domain for every eligible participant",

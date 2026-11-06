@@ -223,6 +223,7 @@ const SECTIONS: Section[] = [
           "Where an event page states a cash prize, that amount is cash. Where it states a prize pool, or an amount “in prizes”, what the pool is made up of is announced on that event’s own page or with its results, and that announcement governs.",
           "Rewards are subject to eligibility verification, sponsor approval and compliance with all event rules.",
           "Internships, interviews, incubation, credits, subscriptions, merchandise and similar benefits are governed by the conditions announced for the event.",
+          "Where an event offers paid internship opportunities, they are open only to M.Tech students. A participant who is not an M.Tech student is not eligible for an internship, whatever the team’s rank.",
           "Non-cash rewards cannot ordinarily be exchanged for money.",
           "Winners may be required to provide identity, project, eligibility or payment verification before receiving rewards.",
           "Failure to provide verification within the stated period may result in forfeiture of the applicable reward.",
