@@ -485,7 +485,7 @@ function seriesJudging() {
  * "₹30,000" as a promise of ₹30,000 in the bank.
  */
 const PRIZE_POOL_RULE =
-  "About the prize pool: it is the total value of the prizes shared among the winners. A prize may be given as cash, as AI credits, as both together, or as just one of them. We will tell the winners exactly how theirs is made up, and we thank you for your understanding.";
+  "About the prize pool: it is the total value of the prizes shared among the winners. A prize may be given as cash, as AI credits, as both together, or as just one of them.";
 
 /**
  * The closing rule on every event. Said politely, because it is the answer to
@@ -1642,7 +1642,6 @@ export const events: Event[] = [
     faq: [
       ...seriesFaq({ certificates: "from-round-2", submission: "individual", funnel: FORGE_FUNNEL, free: true }),
       { q: "Does every team member have to register?", a: "Yes, individually — and everyone must use the same team name so the entries can be matched up." },
-      { q: "How is the cash split?", a: "Across the top three teams. The exact split is announced before the hackathon begins." },
       { q: "Are the PPO opportunities guaranteed?", a: "No. They are subject to the recruiting partner's own eligibility requirements and selection process." },
     ],
     stats: [
